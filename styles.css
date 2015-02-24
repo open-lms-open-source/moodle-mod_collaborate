@@ -1,0 +1,15 @@
+.path-mod-collaborate__meetingstatus_times {
+    margin: 1em 0;
+}
+
+.path-mod-collaborate .activity-title {
+    background-image: url([[pix:mod_collaborate|icon]]);
+    background-size: 1em 1em;
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 1.5em;
+}
+
+.modtype_collaborate .activityinstance a {
+    margin-right: 0.5em;
+}
