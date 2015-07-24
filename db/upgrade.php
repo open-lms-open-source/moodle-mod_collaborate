@@ -48,7 +48,7 @@ function xmldb_collaborate_upgrade($oldversion) {
         $table = new xmldb_table('collaborate');
         $field = new xmldb_field('completionlaunch', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'grade');
 
-        // Conditionally launch add field completionlaunch.
+        // Conditionally add field completionlaunch.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
