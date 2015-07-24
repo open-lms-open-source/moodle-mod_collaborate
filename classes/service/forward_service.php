@@ -168,7 +168,7 @@ class forward_service {
      * @return bool|string
      */
     protected function forward() {
-        global $PAGE;
+        global $PAGE, $USER;
 
         $PAGE->set_url('/mod/collaborate/view.php', array(
             'id' => $this->cm->id,
@@ -184,8 +184,16 @@ class forward_service {
             );
             return false;
         } else {
+
+            if (!empty($USER->id)
+                && $this->collaborate->completionlaunch
+            ) {
+                // Completion tracking on forward.
+                $completion=new \completion_info($this->course);
+                $completion->update_state($this->cm, COMPLETION_COMPLETE, $USER->id);
+
+            }
             return $url;
         }
     }
-
 }

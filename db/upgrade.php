@@ -38,5 +38,24 @@ defined('MOODLE_INTERNAL') || die();
  * @return bool
  */
 function xmldb_collaborate_upgrade($oldversion) {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2015072400) {
+
+        // Define field completionlaunch to be added to collaborate.
+        $table = new xmldb_table('collaborate');
+        $field = new xmldb_field('completionlaunch', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'grade');
+
+        // Conditionally launch add field completionlaunch.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2015072400, 'collaborate');
+    }
+
     return true;
 }
