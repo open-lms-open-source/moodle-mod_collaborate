@@ -113,16 +113,37 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $startday = calendar_day_representation($times->start);
         $endday = calendar_day_representation($times->end);
         $endtime = calendar_time_representation($times->end);
+        $startyear = userdate($times->start, '%y');
+        $endyear = userdate($times->end, '%y');
+        $startmonth = userdate($times->start, '%m');
+        $endmonth = userdate($times->end, '%m');
 
-        $datesstr = $this->datetime($times->start);
+        $openended = date('Y-m-d', $times->end) === '3000-01-01';
 
-        if ($startday == $endday) {
+        if ($startyear === userdate(time(), '%y')
+            && ($openended  || $startyear === $endyear)
+        ) {
+            $datesstr = $this->datetime($times->start);
+        } else {
+            $visualstart = userdate($times->start, get_string('strftimedatetime', 'langconfig'));
+            $datesstr = $this->datetime($times->start, $visualstart);
+        }
+
+        if ($startday === $endday
+            && $startmonth === $endmonth
+            && $startyear === $endyear
+        ) {
             $datesstr .= ' - '.$this->datetime($times->end, $endtime);
         } else {
-            if (date('Y-m-d', $times->end) != '3000-01-01') {
-                $datesstr .= ' - ' . $this->datetime($times->end);
-            } else {
+            if ($openended) {
                 $datesstr .= ' ('.get_string('openended', 'mod_collaborate').')';
+            } else {
+                if ($startyear === $endyear) {
+                    $datesstr .= ' - ' . $this->datetime($times->end);
+                } else {
+                    $visualend = userdate($times->end, get_string('strftimedatetime', 'langconfig'));
+                    $datesstr .= ' - ' . $this->datetime($times->end, $visualend);
+                }
             }
         }
 
