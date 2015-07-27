@@ -24,28 +24,29 @@
 defined('MOODLE_INTERNAL') || die;
 
 use mod_collaborate\logging\constants;
+use mod_collaborate\trimmed_configtext;
 
 if ($ADMIN->fulltree) {
 
     $name = 'collaborate/server';
-    $title = new lang_string('configserver', 'collaborate');
-    $description = new lang_string('configserverdesc', 'collaborate');
+    $title = new \lang_string('configserver', 'collaborate');
+    $description = new \lang_string('configserverdesc', 'collaborate');
     $default = '';
-    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $setting = new trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/username';
-    $title = new lang_string('configusername', 'collaborate');
+    $title = new \lang_string('configusername', 'collaborate');
     $description = '';
     $default = '';
-    $setting = new admin_setting_configtext($name, $title, $description, $default);
+    $setting = new trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/password';
-    $title = new lang_string('configpassword', 'collaborate');
+    $title = new \lang_string('configpassword', 'collaborate');
     $description = '';
     $default = '';
-    $setting = new admin_setting_configpasswordunmask($name, $title, $description, $default);
+    $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
     $settings->add($setting);
 
     $apitest = '<div>'.get_string('apidiagnosticsavenotice', 'mod_collaborate').'</div>';
@@ -58,12 +59,12 @@ if ($ADMIN->fulltree) {
             'target' => '_blank'
         ]
     );
-    $setting = new admin_setting_heading('apidiagnostics', get_string('apidiagnostics', 'collaborate'), $apitest);
+    $setting = new \admin_setting_heading('apidiagnostics', get_string('apidiagnostics', 'collaborate'), $apitest);
     $settings->add($setting);
 
     // Add debugging settings.
     $name = 'collaborate/log';
-    $setting = new admin_setting_heading($name, get_string('debugging', 'mod_collaborate'), '');
+    $setting = new \admin_setting_heading($name, get_string('debugging', 'mod_collaborate'), '');
     $settings->add($setting);
 
     $name = 'collaborate/wsdebug';
@@ -72,19 +73,19 @@ if ($ADMIN->fulltree) {
     $checked = '1';
     $unchecked = '0';
     $default = $unchecked;
-    $setting = new admin_setting_configcheckbox($name, $title, $description, $default, $checked, $unchecked);
+    $setting = new \admin_setting_configcheckbox($name, $title, $description, $default, $checked, $unchecked);
     $settings->add($setting);
 
     // Add log range.
     $name = 'collaborate/logrange';
-    $title = new lang_string('configlogging', 'collaborate');
-    $description = new lang_string('configloggingdesc', 'collaborate');
+    $title = new \lang_string('configlogging', 'collaborate');
+    $description = new \lang_string('configloggingdesc', 'collaborate');
     $options = [
         constants::RANGE_NONE => get_string('log:none', 'mod_collaborate'),
         constants::RANGE_LIGHT => get_string('log:light', 'mod_collaborate'),
         constants::RANGE_MEDIUM => get_string('log:medium', 'mod_collaborate'),
         constants::RANGE_ALL => get_string('log:all', 'mod_collaborate'),
     ];
-    $setting = new admin_setting_configselect($name, $title, $description, 0, $options);
+    $setting = new \admin_setting_configselect($name, $title, $description, 0, $options);
     $settings->add($setting);
 }
