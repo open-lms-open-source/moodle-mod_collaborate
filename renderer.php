@@ -128,10 +128,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $datesstr = $this->datetime($times->start, $visualstart);
         }
 
-        if ($startday === $endday
-            && $startmonth === $endmonth
-            && $startyear === $endyear
-        ) {
+        if ($startday === $endday && $startmonth === $endmonth && $startyear === $endyear) {
             $datesstr .= ' - '.$this->datetime($times->end, $endtime);
         } else {
             if ($openended) {
