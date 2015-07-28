@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once $CFG->dirroot . '/mod/collaborate/backup/moodle2/restore_collaborate_stepslib.php';
+require_once ($CFG->dirroot . '/mod/collaborate/backup/moodle2/restore_collaborate_stepslib.php');
 
 /**
  * Restore task for the collaborate activity module

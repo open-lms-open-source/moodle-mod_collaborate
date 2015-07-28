@@ -120,9 +120,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $openended = date('Y-m-d', $times->end) === '3000-01-01';
 
-        if ($startyear === userdate(time(), '%y')
-            && ($openended  || $startyear === $endyear)
-        ) {
+        $startiscurrentyear = $startyear === userdate(time(), '%y');
+        if ($startiscurrentyear && ($openended  || $startyear === $endyear)) {
             $datesstr = $this->datetime($times->start);
         } else {
             $visualstart = userdate($times->start, get_string('strftimedatetime', 'langconfig'));
