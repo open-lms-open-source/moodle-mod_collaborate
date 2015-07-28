@@ -22,7 +22,8 @@ class trimmed_configtext extends \admin_setting_configtext {
     /**
      * Config text constructor
      *
-     * @param string $name unique ascii name, either 'mysetting' for settings that in config, or 'myplugin/mysetting' for ones in config_plugins.
+     * @param string $name unique ascii name, either 'mysetting' for settings that in config, or 'myplugin/mysetting'
+     * for ones in config_plugins.
      * @param string $visiblename localised
      * @param string $description long localised info
      * @param string $defaultsetting
@@ -41,11 +42,11 @@ class trimmed_configtext extends \admin_setting_configtext {
 
     public function write_setting($data) {
         if ($this->paramtype === PARAM_INT and $data === '') {
-            // do not complain if '' used instead of 0
+            // Do not complain if '' used instead of 0.
             $data = 0;
         }
         $data = trim($data);
-        // $data is a string
+        // Variable $data is a string.
         $validated = $this->validate($data);
         if ($validated !== true) {
             return $validated;

@@ -142,7 +142,7 @@ class forward_service {
         }
 
         $attendee = new HtmlAttendee($this->user->id, $role);
-        $attendee->setDisplayName(substr(fullname($this->user),0,80));
+        $attendee->setDisplayName(substr(fullname($this->user), 0, 80));
         $avatar = new \user_picture($this->user);
         // Note, we get the avatar url for the site instance and don't use the $PAGE object so that this function is
         // unit testable.
@@ -189,7 +189,7 @@ class forward_service {
                 && $this->collaborate->completionlaunch
             ) {
                 // Completion tracking on forward.
-                $completion=new \completion_info($this->course);
+                $completion = new \completion_info($this->course);
                 $completion->update_state($this->cm, COMPLETION_COMPLETE, $USER->id);
 
             }

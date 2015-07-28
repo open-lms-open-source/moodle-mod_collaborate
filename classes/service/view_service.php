@@ -104,7 +104,7 @@ class view_service {
         }
 
         // Completion tracking on view.
-        $completion=new \completion_info($this->course);
+        $completion = new \completion_info($this->course);
         $completion->set_module_viewed($this->cm);
 
         return $this->renderer->view_action($this->collaborate, $this->cm);
