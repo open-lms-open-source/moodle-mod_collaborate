@@ -214,8 +214,36 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             );
         }
 
+        if ($canparticipate) {
+            $recordings = local::get_recordings($collaborate);
+            $o .= $this->render_recordings($recordings);
+        }
+
         $o .= $OUTPUT->footer();
         return $o;
+    }
+    public function render_recordings(array $recordings) {
+        if (empty($recordings)) {
+            return '';
+        }
+        $header = get_string('recordings', 'mod_collaborate');
+        $output = "<h3>$header</h3>";
+        $output .= '<ul class="collab-recording-list">';
+        foreach ($recordings as $recording) {
+            $url = $recording->getRecordingUrl();
+            $name  = $recording->getDisplayName();
+            $datetimestart = new \DateTime($recording->getStartTs());
+            $datetimestart = userdate($datetimestart->format('U'));
+            $duration = format_time(round($recording->getDurationMillis() / 1000));
+
+            $output .= '<li class="collab-recording-list-item">';
+            $output .= '<a href="' . $url . '">'. $name.'</a>';
+            $output .= '<span class="collab-recording-timestart">'.$datetimestart .'</span>';
+            $output .= '<span class="collab-recording-duration">'.$duration.'</span>';
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
+        return $output;
     }
 
     /**

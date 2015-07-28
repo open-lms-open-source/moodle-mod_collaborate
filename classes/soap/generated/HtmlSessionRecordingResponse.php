@@ -52,6 +52,11 @@ class HtmlSessionRecordingResponse
     protected $durationMillis = null;
 
     /**
+     * @var string $recordingUrl
+     */
+    protected $recordingUrl = null;
+
+    /**
      * @var string $displayName
      */
     protected $displayName = null;
@@ -67,16 +72,18 @@ class HtmlSessionRecordingResponse
      * @param string $startTs
      * @param string $endTs
      * @param int $durationMillis
+     * @param string $recordingUrl
      * @param string $displayName
      * @param int $sessionId
      */
-    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $displayName, $sessionId)
+    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId)
     {
       $this->recordingId = $recordingId;
       $this->createdTs = $createdTs;
       $this->startTs = $startTs;
       $this->endTs = $endTs;
       $this->durationMillis = $durationMillis;
+      $this->recordingUrl = $recordingUrl;
       $this->displayName = $displayName;
       $this->sessionId = $sessionId;
     }
@@ -168,6 +175,24 @@ class HtmlSessionRecordingResponse
     public function setDurationMillis($durationMillis)
     {
       $this->durationMillis = $durationMillis;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecordingUrl()
+    {
+      return $this->recordingUrl;
+    }
+
+    /**
+     * @param string $recordingUrl
+     * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
+     */
+    public function setRecordingUrl($recordingUrl)
+    {
+      $this->recordingUrl = $recordingUrl;
       return $this;
     }
 

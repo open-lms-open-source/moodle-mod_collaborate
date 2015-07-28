@@ -13,3 +13,11 @@
 .modtype_collaborate .activityinstance a {
     margin-right: 0.5em;
 }
+
+.path-mod-collaborate .collab-recording-list {
+    list-style: none;
+}
+.path-mod-collaborate .collab-recording-list-item span {
+    font-size: smaller;
+    margin-left: 1em;
+}

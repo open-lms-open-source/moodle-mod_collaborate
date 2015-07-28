@@ -23,6 +23,8 @@
             <xs:element name="RemoveHtmlSessionSuccessResponse" type="tns:SuccessResponse"/>
             <xs:element name="RemoveRecordingSuccessResponse" type="tns:SuccessResponse"/>
             <xs:element name="RemoveHtmlSessionRecordingSuccessResponse" type="tns:SuccessResponse"/>
+            <xs:element name="RemoveHtmlSessionOccurrenceSuccessResponse" type="tns:SuccessResponse"/>
+            <xs:element name="UpdateHtmlSessionOccurrenceSuccessResponse" type="tns:SuccessResponse"/>
             <xs:element name="RemoveSessionTelephonySuccessResponse" type="tns:SuccessResponse"/>
             <xs:element name="SetRecordingSecureSignOnSuccessResponse" type="tns:SuccessResponse"/>
             <xs:element name="ClearSessionNonChairListSuccessResponse" type="tns:SuccessResponse"/>
@@ -486,7 +488,7 @@
             <xs:element name="HtmlSessionRecordingResponse" type="tns:HtmlSessionRecordingResponse"/>
             <xs:complexType name="HtmlSessionRecordingResponseCollection">
                 <xs:sequence>
-                    <xs:element minOccurs="0" maxOccurs="unbounded" name="RecordingShortResponse" type="tns:HtmlSessionRecordingResponse"/>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="HtmlSessionRecordingResponse" type="tns:HtmlSessionRecordingResponse"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="HtmlSessionRecordingResponse">
@@ -496,10 +498,50 @@
                     <xs:element minOccurs="1" maxOccurs="1" name="startTs" type="xs:string"/>
                     <xs:element minOccurs="1" maxOccurs="1" name="endTs" type="xs:string"/>
                     <xs:element minOccurs="1" maxOccurs="1" name="durationMillis" type="xs:long"/>
+                    <xs:element minOccurs="1" maxOccurs="1" name="recordingUrl" type="xs:string"/>
                     <xs:element minOccurs="1" maxOccurs="1" name="displayName" type="xs:string"/>
                     <xs:element minOccurs="1" maxOccurs="1" name="sessionId" type="xs:long"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:element name="ListHtmlSessionOccurrences" type="tns:HtmlSessionOccurrence"/>
+            <xs:complexType name="HtmlSessionOccurrence">
+                <xs:sequence>
+                    <xs:element minOccurs="1" nillable="false" maxOccurs="1" name="sessionId" type="xs:long"/>
+                    <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="startTime" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="endTime" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="ListHtmlSessionOccurrenceCollection" type="tns:HtmlSessionOccurrenceCollection"/>
+            <xs:complexType name="HtmlSessionOccurrenceCollection">
+                <xs:sequence>
+                    <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="sessionId" type="xs:long"/>
+                    <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="startTime" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="endTime" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="RemoveHtmlSessionOccurrence">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" maxOccurs="1" name="occurrenceId" type="xs:long"/>
+                        
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="UpdateHtmlSessionOccurrence">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" maxOccurs="1" name="occurrenceId" type="xs:long"/>
+                        
+                        <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="startTime" type="xs:dateTime"/>
+                        <xs:element minOccurs="0" nillable="true" maxOccurs="1" name="endTime" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
 
             <xs:element name="SetSession" type="tns:SetSession"/>
             <xs:complexType name="SetSession">
@@ -580,6 +622,10 @@
                         <xs:element minOccurs="0" maxOccurs="1" name="contextTitle" type="xs:string"/>
                         
                         <xs:element minOccurs="0" maxOccurs="1" name="recordingCallbackUrl" type="xs:string"/>
+                        
+                        <xs:element minOccurs="0" maxOccurs="1" name="sessionType" type="xs:string"/>
+                        
+                        <xs:element minOccurs="0" maxOccurs="1" name="sessionRule" type="xs:string"/>
                         
                     </xs:sequence>
                 </xs:complexType>
@@ -689,6 +735,10 @@
                         <xs:element minOccurs="0" maxOccurs="1" name="contextId" type="xs:string"/>
                         
                         <xs:element minOccurs="0" maxOccurs="1" name="contextTitle" type="xs:string"/>
+                        
+                        <xs:element minOccurs="0" maxOccurs="1" name="sessionType" type="xs:string"/>
+                        
+                        <xs:element minOccurs="0" maxOccurs="1" name="sessionRule" type="xs:string"/>
                         
                 </xs:sequence>
             </xs:complexType>
@@ -826,7 +876,19 @@
                     
                     <xs:element minOccurs="1" maxOccurs="1" name="creatorId" type="xs:string"/>
                     
+                    <xs:element minOccurs="0" maxOccurs="1" name="mustBeSupervised" type="xs:boolean"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="openChair" type="xs:boolean"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="permissionsOn" type="xs:boolean"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="raiseHandOnEnter" type="xs:boolean"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="allowInSessionInvitees" type="xs:boolean"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="contextId" type="xs:string"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="contextTitle" type="xs:string"/>
                     <xs:element minOccurs="1" maxOccurs="1" name="recordingEnabled" type="xs:boolean"/>
+                    
+                    <xs:element minOccurs="0" maxOccurs="1" name="recordingCallBackUrl" type="xs:string"/>
+                    <xs:element minOccurs="0" maxOccurs="1" name="sessionType" type="xs:string"/>
+                    
+                    <xs:element minOccurs="0" maxOccurs="1" name="sessionRule" type="xs:string"/>
                     
                 </xs:sequence>
             </xs:complexType>
@@ -907,12 +969,17 @@
                     
                     <xs:element minOccurs="0" maxOccurs="1" name="avatarUrl" type="xs:string"/>
                     
-                    <xs:sequence>
-                        
-                        <xs:element minOccurs="0" maxOccurs="unbounded" name="HtmlAttendeeLog" type="tns:HtmlAttendeeLog"/>
-                    </xs:sequence>
+                    
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="htmlAttendeeLogs" type="tns:HtmlAttendeeLogCollection"/>
                 </xs:sequence>
             </xs:complexType>
+
+            <xs:complexType name="HtmlAttendeeLogCollection">
+                <xs:sequence>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="HtmlAttendeeLog" type="tns:HtmlAttendeeLog"/>
+                </xs:sequence>
+            </xs:complexType>
+
             <xs:complexType name="HtmlAttendeeLog">
                 <xs:sequence>
                     <xs:element minOccurs="1" maxOccurs="1" name="joined" type="xs:dateTime"/>
@@ -1363,6 +1430,24 @@
     <wsdl:message name="ListHtmlSessionSoapOut">
         <wsdl:part name="parameters" element="tns:ListHtmlSessionCollection"/>
     </wsdl:message>
+    <wsdl:message name="ListHtmlSessionOccurrencesSoapIn">
+        <wsdl:part name="parameters" element="tns:ListHtmlSessionOccurrences"/>
+    </wsdl:message>
+    <wsdl:message name="ListHtmlSessionOccurrencesSoapOut">
+        <wsdl:part name="parameters" element="tns:ListHtmlSessionOccurrenceCollection"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateHtmlSessionOccurrenceSoapIn">
+        <wsdl:part name="parameters" element="tns:UpdateHtmlSessionOccurrence"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateHtmlSessionOccurrenceSoapOut">
+        <wsdl:part name="parameters" element="tns:UpdateHtmlSessionOccurrenceSuccessResponse"/>
+    </wsdl:message>
+    <wsdl:message name="RemoveHtmlSessionOccurrenceSoapIn">
+        <wsdl:part name="parameters" element="tns:RemoveHtmlSessionOccurrence"/>
+    </wsdl:message>
+    <wsdl:message name="RemoveHtmlSessionOccurrenceSoapOut">
+        <wsdl:part name="parameters" element="tns:RemoveHtmlSessionOccurrenceSuccessResponse"/>
+    </wsdl:message>
     <wsdl:message name="RemoveHtmlSessionSoapIn">
         <wsdl:part name="parameters" element="tns:RemoveHtmlSession"/>
     </wsdl:message>
@@ -1385,7 +1470,7 @@
         <wsdl:part name="parameters" element="tns:UpdateSessionAttendees"/>
     </wsdl:message>
     <wsdl:message name="UpdateSessionAttendeesSoapOut">
-        <wsdl:part name="parameters" element="tns:UrlResponse"/>
+        <wsdl:part name="parameters" element="tns:BuildSessionUrlResponse"/>
     </wsdl:message>
     <wsdl:message name="UpdateHtmlSessionAttendeeSoapIn">
         <wsdl:part name="parameters" element="tns:UpdateHtmlSessionAttendee"/>
@@ -1650,6 +1735,24 @@
             
             <wsdl:input message="tns:ListHtmlSessionAttendanceSoapIn"/>
             <wsdl:output message="tns:ListHtmlSessionAttendanceSoapOut"/>
+            <wsdl:fault message="tns:ErrorResponse" name="ErrorResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="ListHtmlSessionOccurrences">
+            
+            <wsdl:input message="tns:ListHtmlSessionOccurrencesSoapIn"/>
+            <wsdl:output message="tns:ListHtmlSessionOccurrencesSoapOut"/>
+            <wsdl:fault message="tns:ErrorResponse" name="ErrorResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="RemoveHtmlSessionOccurrence">
+            
+            <wsdl:input message="tns:RemoveHtmlSessionOccurrenceSoapIn"/>
+            <wsdl:output message="tns:RemoveHtmlSessionOccurrenceSoapOut"/>
+            <wsdl:fault message="tns:ErrorResponse" name="ErrorResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateHtmlSessionOccurrence">
+            
+            <wsdl:input message="tns:UpdateHtmlSessionOccurrenceSoapIn"/>
+            <wsdl:output message="tns:UpdateHtmlSessionOccurrenceSoapOut"/>
             <wsdl:fault message="tns:ErrorResponse" name="ErrorResponse"/>
         </wsdl:operation>
         <wsdl:operation name="SetSession">
@@ -2185,6 +2288,45 @@
         </wsdl:operation>
         <wsdl:operation name="ListHtmlSessionAttendance">
             <soap:operation soapAction="http://sas.elluminate.com/ListHtmlSessionAttendance" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <soap:header message="tns:BasicAuthorizationHeader" part="BasicAuth" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorResponse">
+                <soap:fault name="ErrorResponse" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="ListHtmlSessionOccurrences">
+            <soap:operation soapAction="http://sas.elluminate.com/ListHtmlSessionOccurrences" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <soap:header message="tns:BasicAuthorizationHeader" part="BasicAuth" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorResponse">
+                <soap:fault name="ErrorResponse" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="RemoveHtmlSessionOccurrence">
+            <soap:operation soapAction="http://sas.elluminate.com/RemoveHtmlSessionOccurrence" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+                <soap:header message="tns:BasicAuthorizationHeader" part="BasicAuth" use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ErrorResponse">
+                <soap:fault name="ErrorResponse" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateHtmlSessionOccurrence">
+            <soap:operation soapAction="http://sas.elluminate.com/UpdateHtmlSessionOccurrence" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
                 <soap:header message="tns:BasicAuthorizationHeader" part="BasicAuth" use="literal"/>

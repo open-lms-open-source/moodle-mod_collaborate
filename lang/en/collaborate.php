@@ -90,6 +90,7 @@ $string['noguestentry'] = 'Sorry, guests are not allowed to take part in discuss
 $string['openended'] = 'Duration of course';
 $string['pluginadministration'] = 'Collaborate administration';
 $string['pluginname'] = 'Collaborate';
+$string['recordings'] = 'Recordings';
 $string['sessionstart'] = 'Start';
 $string['sessionstarthelp'] = 'Participants can join the meeting 15 minutes before it starts';
 $string['starts'] = 'Starts - {$a}';

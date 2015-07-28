@@ -147,6 +147,16 @@ class UpdateHtmlSessionDetails
     protected $contextTitle = null;
 
     /**
+     * @var string $sessionType
+     */
+    protected $sessionType = null;
+
+    /**
+     * @var string $sessionRule
+     */
+    protected $sessionRule = null;
+
+    /**
      * @param int $sessionId
      */
     public function __construct($sessionId)
@@ -599,6 +609,42 @@ class UpdateHtmlSessionDetails
     public function setContextTitle($contextTitle)
     {
       $this->contextTitle = $contextTitle;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionType()
+    {
+      return $this->sessionType;
+    }
+
+    /**
+     * @param string $sessionType
+     * @return \mod_collaborate\soap\generated\UpdateHtmlSessionDetails
+     */
+    public function setSessionType($sessionType)
+    {
+      $this->sessionType = $sessionType;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionRule()
+    {
+      return $this->sessionRule;
+    }
+
+    /**
+     * @param string $sessionRule
+     * @return \mod_collaborate\soap\generated\UpdateHtmlSessionDetails
+     */
+    public function setSessionRule($sessionRule)
+    {
+      $this->sessionRule = $sessionRule;
       return $this;
     }
 

@@ -31,6 +31,7 @@ use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
 use mod_collaborate\soap\generated\HtmlAttendeeCollection;
 use mod_collaborate\soap\generated\HtmlAttendee;
+use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\api;
 
 class local {
@@ -453,6 +454,35 @@ class local {
     public static function via_ajax() {
         return !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+
+    /**
+     * get recordings
+     *
+     * @param int | object $collaborate
+     * @return array
+     */
+    public static function get_recordings($collaborate) {
+        global $DB;
+
+        if (!is_object($collaborate)) {
+            $collaborate = $DB->get_record('collaborate', array('id' => $collaborate));
+        }
+
+        $config = get_config('collaborate');
+
+        $api = api::get_api();
+        $session = new HtmlSessionRecording();
+        $session->setSessionId($collaborate->sessionid);
+        $result = $api->ListHtmlSessionRecording($session);
+        if (!$result) {
+            return [];
+        }
+        $respobjs = $result->getHtmlSessionRecordingResponse();
+        if (!is_array($respobjs) || empty($respobjs)) {
+            return [];
+        }
+        return $respobjs;
     }
 
 }
