@@ -64,7 +64,7 @@ class view_controller extends controller_abstract {
 
         $this->set_properties();
 
-        $PAGE->set_url(new \moodle_url('/mod/collaborate/view.php', ['action' => $this->action]));
+        $PAGE->set_url(new \moodle_url('/mod/collaborate/view.php', ['id' => $this->cm->id, 'action' => $this->action]));
 
         parent::init();
 
