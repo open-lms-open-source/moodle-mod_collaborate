@@ -264,4 +264,44 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         }
         return html_writer::table($table);
     }
+
+    /**
+     * Render recent activity
+     *
+     * @author: Guy Thomas
+     * @param $activity
+     * @param $courseid
+     * @param $detail
+     * @param $modnames
+     * @return string
+     */
+    public function recent_activity($activity, $courseid, $detail, $modnames){
+        global $CFG, $OUTPUT;
+
+        $o = '';
+        $o.= '<table border="0" cellpadding="3" cellspacing="0" class="assignment-recent">';
+
+        $o.= '<tr><td class="userpicture" valign="top">';
+        $o.= $OUTPUT->user_picture($activity->user);
+        $o.= '</td><td>';
+
+        if ($detail) {
+            $modname = $modnames[$activity->type];
+            $o.= '<div class="title">';
+            $o.= '<img src="' . $OUTPUT->pix_url('icon', 'assign') . '" '.
+                'class="icon" alt="' . $modname . '">';
+            $o.= '<a href="' . $CFG->wwwroot . '/mod/assign/view.php?id=' . $activity->cmid . '">';
+            $o.= $activity->name;
+            $o.= '</a>';
+            $o.= '</div>';
+        }
+
+        $o.= '<div class="user">';
+        $o.= "<a href=\"$CFG->wwwroot/user/view.php?id={$activity->user->id}&amp;course=$courseid\">";
+        $o.= "{$activity->user->fullname}</a>  - " . userdate($activity->timestamp);
+        $o.= '</div>';
+
+        $o.= '</td></tr></table>';
+        return $o;
+    }
 }

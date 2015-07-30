@@ -392,3 +392,84 @@ function collaborate_cm_info_view(cm_info $cm) {
     $o = html_writer::tag('span', $renderer->meeting_times($times), ['class' => 'label label-info']);
     $cm->set_after_link($o);
 }
+
+/**
+ * Print recent activity from all assignments in a given course
+ *
+ * This is used by course/recent.php
+ * @param stdClass $activity
+ * @param int $courseid
+ * @param bool $detail
+ * @param array $modnames
+ */
+function collaborate_print_recent_mod_activity($activity, $courseid, $detail, $modnames) {
+    global $PAGE;
+    $renderer = $PAGE->get_renderer('collaborate');
+    echo $renderer->recent_activity($activity, $courseid, $detail, $modnames);
+}
+
+/**
+ * Returns all collaborate instances since a given time.
+ *
+ * @param array $activities The activity information is returned in this array
+ * @param int $index The current index in the activities array
+ * @param int $timestart The earliest activity to show
+ * @param int $courseid Limit the search to this course
+ * @param int $cmid The course module id
+ * @param int $userid Optional user id
+ * @param int $groupid Optional group id
+ * @return void
+ */
+function collaborate_get_recent_mod_activity(&$activities,
+                                        &$index,
+                                        $timestart,
+                                        $courseid,
+                                        $cmid,
+                                        $userid=0,
+                                        $groupid=0) {
+    global $DB;
+
+    $logmanger = get_log_manager();
+    $readers = $logmanger->get_readers('\core\log\sql_select_reader');
+    $reader = reset($readers);
+    if (empty($reader)) {
+        return false; // No log reader found.
+    }
+
+    $modinfo = get_fast_modinfo($courseid);
+    $cminfo = $modinfo->get_cm($cmid);
+    $cmcontext = context_module::instance($cmid);
+
+    $select = "courseid = :courseid AND eventname = :eventname AND objectid = :objectid AND timecreated > :since";
+    $params = array('since' => $timestart,
+            'objectid' => $cminfo->instance,
+            'courseid' => $courseid,
+            'eventname' => '\mod_collaborate\event\session_launched');
+    if (!empty($userid)) {
+        $select.=' AND userid = :userid';
+        $params['userid'] = $userid;
+    }
+
+    $events = $reader->get_events_select($select, $params, 'timecreated DESC', 0, 999);
+
+    $userfields = user_picture::fields('', null);
+
+    foreach ($events as $event) {
+        $eventdata = $event->get_data();
+        $user = $DB->get_record('user', ['id' => $eventdata['userid']], $userfields);
+
+        $viewfullnames   = has_capability('moodle/site:viewfullnames', $cmcontext);
+
+        $activity = new stdClass();
+        $activity->type         = 'collaborate';
+        $activity->cmid         = $cmid;
+        $activity->name         = format_string($cminfo->name, true);
+        $activity->sectionnum   = $cminfo->sectionnum;
+        $activity->timestamp    = $eventdata['timecreated'];
+        $activity->user         = $user;
+        $activity->user->fullname = fullname($user, $viewfullnames);
+        $activity->grade        = null;
+        $activities[$index++]   = $activity;
+    }
+
+}
