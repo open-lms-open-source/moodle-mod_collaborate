@@ -446,17 +446,41 @@ function collaborate_get_recent_mod_activity(&$activities,
             'courseid' => $courseid,
             'eventname' => '\mod_collaborate\event\session_launched');
     if (!empty($userid)) {
-        $select.=' AND userid = :userid';
+        $select .= ' AND userid = :userid';
         $params['userid'] = $userid;
     }
 
     $events = $reader->get_events_select($select, $params, 'timecreated DESC', 0, 999);
 
-    $userfields = user_picture::fields('', null);
+    if (empty($userid)) {
+        $userfields = user_picture::fields('u', null);
+        list($esql, $params) = get_enrolled_sql($cmcontext, '', 0, true);
+        $sql = "SELECT $userfields
+                  FROM {user} u
+                  JOIN ($esql) e
+                    ON e.id = u.id";
+        $users = $DB->get_records_sql($sql, $params);
+    } else {
+        $users = [$userid => $DB->get_record('user', ['id' => $userid])];
+    }
 
     foreach ($events as $event) {
         $eventdata = $event->get_data();
-        $user = $DB->get_record('user', ['id' => $eventdata['userid']], $userfields);
+
+        $user = false;
+        if (isset($users[$eventdata['userid']])) {
+            $user = $users[$eventdata['userid']];
+        } else {
+            // User not enrolled, if not for specific group then just get user.
+            if (empty($groupid)) {
+                $userfields = user_picture::fields('', null);
+                $user = $DB->get_record('user', ['id' => $eventdata['userid']], $userfields);
+            }
+        }
+
+        if (empty($user)) {
+            continue;
+        }
 
         $viewfullnames   = has_capability('moodle/site:viewfullnames', $cmcontext);
 
