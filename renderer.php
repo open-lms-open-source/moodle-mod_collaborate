@@ -239,7 +239,10 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $output .= '<ul class="collab-recording-list">';
         foreach ($recordings as $recording) {
             $url = $recording->getRecordingUrl();
-            $name = str_replace('record_', '', get_string('recording', 'collaborate', $recording->getDisplayName()));
+            $name = $recording->getDisplayName();
+            if (strpos($name, 'record_') === 0) {
+                $name = str_replace('record_', '', get_string('recording', 'collaborate', $name));
+            }
             $datetimestart = new \DateTime($recording->getStartTs());
             $datetimestart = userdate($datetimestart->getTimestamp());
             $duration = format_time(round($recording->getDurationMillis() / 1000));
