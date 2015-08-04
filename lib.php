@@ -394,7 +394,7 @@ function collaborate_cm_info_view(cm_info $cm) {
 }
 
 /**
- * Print recent activity from all assignments in a given course
+ * Print recent activity from all collaborate instances in a given course
  *
  * This is used by course/recent.php
  * @param stdClass $activity
