@@ -267,6 +267,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
     /**
      * Render recent activity
+     * This code is copied
      *
      * @author: Guy Thomas
      * @param $activity
@@ -275,33 +276,33 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @param $modnames
      * @return string
      */
-    public function recent_activity($activity, $courseid, $detail, $modnames){
+    public function recent_activity($activity, $courseid, $detail, $modnames) {
         global $CFG, $OUTPUT;
 
         $o = '';
-        $o.= '<table border="0" cellpadding="3" cellspacing="0" class="assignment-recent">';
+        $o .= '<table border="0" cellpadding="3" cellspacing="0" class="collaborate-recent">';
 
-        $o.= '<tr><td class="userpicture" valign="top">';
-        $o.= $OUTPUT->user_picture($activity->user);
-        $o.= '</td><td>';
+        $o .= '<tr><td class="userpicture" valign="top">';
+        $o .= $OUTPUT->user_picture($activity->user);
+        $o .= '</td><td>';
 
         if ($detail) {
             $modname = $modnames[$activity->type];
-            $o.= '<div class="title">';
-            $o.= '<img src="' . $OUTPUT->pix_url('icon', 'assign') . '" '.
+            $o .= '<div class="title">';
+            $o .= '<img src="' . $OUTPUT->pix_url('icon', 'collaborate') . '" '.
                 'class="icon" alt="' . $modname . '">';
-            $o.= '<a href="' . $CFG->wwwroot . '/mod/assign/view.php?id=' . $activity->cmid . '">';
-            $o.= $activity->name;
-            $o.= '</a>';
-            $o.= '</div>';
+            $o .= '<a href="' . $CFG->wwwroot . '/mod/collaborate/view.php?id=' . $activity->cmid . '">';
+            $o .= $activity->name;
+            $o .= '</a>';
+            $o .= '</div>';
         }
 
-        $o.= '<div class="user">';
-        $o.= "<a href=\"$CFG->wwwroot/user/view.php?id={$activity->user->id}&amp;course=$courseid\">";
-        $o.= "{$activity->user->fullname}</a>  - " . userdate($activity->timestamp);
-        $o.= '</div>';
+        $o .= '<div class="user">';
+        $o .= "<a href=\"$CFG->wwwroot/user/view.php?id={$activity->user->id}&amp;course=$courseid\">";
+        $o .= "{$activity->user->fullname}</a>  - " . userdate($activity->timestamp);
+        $o .= '</div>';
 
-        $o.= '</td></tr></table>';
+        $o .= '</td></tr></table>';
         return $o;
     }
 }

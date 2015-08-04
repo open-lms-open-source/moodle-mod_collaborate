@@ -420,13 +420,8 @@ function collaborate_print_recent_mod_activity($activity, $courseid, $detail, $m
  * @param int $groupid Optional group id
  * @return void
  */
-function collaborate_get_recent_mod_activity(&$activities,
-                                        &$index,
-                                        $timestart,
-                                        $courseid,
-                                        $cmid,
-                                        $userid=0,
-                                        $groupid=0) {
+function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid,
+                                             $cmid, $userid=0, $groupid=0) {
     global $DB;
 
     $logmanger = get_log_manager();
@@ -441,10 +436,13 @@ function collaborate_get_recent_mod_activity(&$activities,
     $cmcontext = context_module::instance($cmid);
 
     $select = "courseid = :courseid AND eventname = :eventname AND objectid = :objectid AND timecreated > :since";
-    $params = array('since' => $timestart,
-            'objectid' => $cminfo->instance,
-            'courseid' => $courseid,
-            'eventname' => '\mod_collaborate\event\session_launched');
+    $params = array(
+        'since' => $timestart,
+        'objectid'     => $cminfo->instance,
+        'courseid'     => $courseid,
+        'eventname'    => '\mod_collaborate\event\session_launched'
+    );
+
     if (!empty($userid)) {
         $select .= ' AND userid = :userid';
         $params['userid'] = $userid;
