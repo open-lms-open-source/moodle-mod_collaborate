@@ -216,12 +216,20 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         if ($canparticipate) {
             $recordings = local::get_recordings($collaborate);
+            $o .= '<hr />';
             $o .= $this->render_recordings($recordings);
         }
 
         $o .= $OUTPUT->footer();
         return $o;
     }
+
+    /**
+     * Render recordings.
+     *
+     * @param array $recordings
+     * @return string
+     */
     public function render_recordings(array $recordings) {
         if (empty($recordings)) {
             return '';
@@ -233,11 +241,11 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $url = $recording->getRecordingUrl();
             $name  = $recording->getDisplayName();
             $datetimestart = new \DateTime($recording->getStartTs());
-            $datetimestart = userdate($datetimestart->format('U'));
+            $datetimestart = userdate($datetimestart->getTimestamp());
             $duration = format_time(round($recording->getDurationMillis() / 1000));
 
             $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a href="' . $url . '">'. $name.'</a>';
+            $output .= '<a href="' . $url . '" target="_blank">'. format_string($name).'</a>';
             $output .= '<span class="collab-recording-timestart">'.$datetimestart .'</span>';
             $output .= '<span class="collab-recording-duration">'.$duration.'</span>';
             $output .= '</li>';
