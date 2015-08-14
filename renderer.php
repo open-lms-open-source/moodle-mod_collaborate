@@ -234,6 +234,11 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         if (empty($recordings)) {
             return '';
         }
+
+        usort($recordings, function($a, $b) {
+            return ($a->getStartTs() > $b->getStartTs());
+        });
+
         $header = get_string('recordings', 'mod_collaborate');
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
