@@ -245,8 +245,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         foreach ($recordings as $recording) {
             $url = $recording->getRecordingUrl();
             $name = $recording->getDisplayName();
-            if (strpos($name, 'record_') === 0) {
-                $name = str_replace('record_', '', get_string('recording', 'collaborate', $name));
+            if (preg_match('/^recording_\d+$/', $name)) {
+                $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
             }
             $datetimestart = new \DateTime($recording->getStartTs());
             $datetimestart = userdate($datetimestart->getTimestamp());
