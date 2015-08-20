@@ -93,6 +93,10 @@ class SASDefaultAdapter extends \SoapClient
       'HtmlSessionRecording' => 'mod_collaborate\\soap\\generated\\HtmlSessionRecording',
       'HtmlSessionRecordingResponseCollection' => 'mod_collaborate\\soap\\generated\\HtmlSessionRecordingResponseCollection',
       'HtmlSessionRecordingResponse' => 'mod_collaborate\\soap\\generated\\HtmlSessionRecordingResponse',
+      'HtmlSessionOccurrence' => 'mod_collaborate\\soap\\generated\\HtmlSessionOccurrence',
+      'HtmlSessionOccurrenceCollection' => 'mod_collaborate\\soap\\generated\\HtmlSessionOccurrenceCollection',
+      'RemoveHtmlSessionOccurrence' => 'mod_collaborate\\soap\\generated\\RemoveHtmlSessionOccurrence',
+      'UpdateHtmlSessionOccurrence' => 'mod_collaborate\\soap\\generated\\UpdateHtmlSessionOccurrence',
       'SetSession' => 'mod_collaborate\\soap\\generated\\SetSession',
       'SetHtmlSession' => 'mod_collaborate\\soap\\generated\\SetHtmlSession',
       'UpdateSession' => 'mod_collaborate\\soap\\generated\\UpdateSession',
@@ -115,6 +119,7 @@ class SASDefaultAdapter extends \SoapClient
       'HtmlRoom' => 'mod_collaborate\\soap\\generated\\HtmlRoom',
       'HtmlAttendeeCollection' => 'mod_collaborate\\soap\\generated\\HtmlAttendeeCollection',
       'HtmlAttendee' => 'mod_collaborate\\soap\\generated\\HtmlAttendee',
+      'HtmlAttendeeLogCollection' => 'mod_collaborate\\soap\\generated\\HtmlAttendeeLogCollection',
       'HtmlAttendeeLog' => 'mod_collaborate\\soap\\generated\\HtmlAttendeeLog',
       'AttendeeResponseCollection' => 'mod_collaborate\\soap\\generated\\AttendeeResponseCollection',
       'AttendeeResponse' => 'mod_collaborate\\soap\\generated\\AttendeeResponse',
@@ -450,6 +455,33 @@ class SASDefaultAdapter extends \SoapClient
     public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters)
     {
       return $this->__soapCall('ListHtmlSessionAttendance', array($parameters));
+    }
+
+    /**
+     * @param HtmlSessionOccurrence $parameters
+     * @return HtmlSessionOccurrenceCollection
+     */
+    public function ListHtmlSessionOccurrences(HtmlSessionOccurrence $parameters)
+    {
+      return $this->__soapCall('ListHtmlSessionOccurrences', array($parameters));
+    }
+
+    /**
+     * @param RemoveHtmlSessionOccurrence $parameters
+     * @return SuccessResponse
+     */
+    public function RemoveHtmlSessionOccurrence(RemoveHtmlSessionOccurrence $parameters)
+    {
+      return $this->__soapCall('RemoveHtmlSessionOccurrence', array($parameters));
+    }
+
+    /**
+     * @param UpdateHtmlSessionOccurrence $parameters
+     * @return SuccessResponse
+     */
+    public function UpdateHtmlSessionOccurrence(UpdateHtmlSessionOccurrence $parameters)
+    {
+      return $this->__soapCall('UpdateHtmlSessionOccurrence', array($parameters));
     }
 
     /**
