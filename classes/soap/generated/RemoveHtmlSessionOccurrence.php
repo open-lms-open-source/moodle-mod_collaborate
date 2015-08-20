@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * SOAP API / element: HtmlSessionRecordingResponseCollection
+ * SOAP API / element: RemoveHtmlSessionOccurrence
  *
  * @package   mod_collaborate
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
@@ -23,35 +23,37 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionRecordingResponseCollection
+class RemoveHtmlSessionOccurrence
 {
 
     /**
-     * @var HtmlSessionRecordingResponse[] $HtmlSessionRecordingResponse
+     * @var int $occurrenceId
      */
-    protected $HtmlSessionRecordingResponse = null;
+    protected $occurrenceId = null;
 
-    
-    public function __construct()
+    /**
+     * @param int $occurrenceId
+     */
+    public function __construct($occurrenceId)
     {
-    
+      $this->occurrenceId = $occurrenceId;
     }
 
     /**
-     * @return HtmlSessionRecordingResponse[]
+     * @return int
      */
-    public function getHtmlSessionRecordingResponse()
+    public function getOccurrenceId()
     {
-      return $this->HtmlSessionRecordingResponse;
+      return $this->occurrenceId;
     }
 
     /**
-     * @param HtmlSessionRecordingResponse[] $HtmlSessionRecordingResponse
-     * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection
+     * @param int $occurrenceId
+     * @return \mod_collaborate\soap\generated\RemoveHtmlSessionOccurrence
      */
-    public function setHtmlSessionRecordingResponse(array $HtmlSessionRecordingResponse)
+    public function setOccurrenceId($occurrenceId)
     {
-      $this->HtmlSessionRecordingResponse = $HtmlSessionRecordingResponse;
+      $this->occurrenceId = $occurrenceId;
       return $this;
     }
 

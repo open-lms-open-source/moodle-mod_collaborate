@@ -210,8 +210,52 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             );
         }
 
+        if ($canparticipate) {
+            $recordings = local::get_recordings($collaborate);
+            $o .= '<hr />';
+            $o .= $this->render_recordings($recordings);
+        }
+
         $o .= $OUTPUT->footer();
         return $o;
+    }
+
+    /**
+     * Render recordings.
+     *
+     * @param array $recordings
+     * @return string
+     */
+    public function render_recordings(array $recordings) {
+        if (empty($recordings)) {
+            return '';
+        }
+
+        usort($recordings, function($a, $b) {
+            return ($a->getStartTs() > $b->getStartTs());
+        });
+
+        $header = get_string('recordings', 'mod_collaborate');
+        $output = "<h3>$header</h3>";
+        $output .= '<ul class="collab-recording-list">';
+        foreach ($recordings as $recording) {
+            $url = $recording->getRecordingUrl();
+            $name = $recording->getDisplayName();
+            if (preg_match('/^recording_\d+$/', $name)) {
+                $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
+            }
+            $datetimestart = new \DateTime($recording->getStartTs());
+            $datetimestart = userdate($datetimestart->getTimestamp());
+            $duration = format_time(round($recording->getDurationMillis() / 1000));
+
+            $output .= '<li class="collab-recording-list-item">';
+            $output .= '<a href="' . $url . '" target="_blank">'. format_string($name).'</a>';
+            $output .= '<span class="collab-recording-timestart">'.$datetimestart .'</span>';
+            $output .= '<span class="collab-recording-duration">'.$duration.'</span>';
+            $output .= '</li>';
+        }
+        $output .= '</ul>';
+        return $output;
     }
 
     /**

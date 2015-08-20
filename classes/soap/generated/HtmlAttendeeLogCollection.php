@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * SOAP API / element: HtmlSessionRecordingResponseCollection
+ * SOAP API / element: HtmlAttendeeLogCollection
  *
  * @package   mod_collaborate
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
@@ -23,13 +23,13 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionRecordingResponseCollection
+class HtmlAttendeeLogCollection
 {
 
     /**
-     * @var HtmlSessionRecordingResponse[] $HtmlSessionRecordingResponse
+     * @var HtmlAttendeeLog[] $HtmlAttendeeLog
      */
-    protected $HtmlSessionRecordingResponse = null;
+    protected $HtmlAttendeeLog = null;
 
     
     public function __construct()
@@ -38,20 +38,20 @@ class HtmlSessionRecordingResponseCollection
     }
 
     /**
-     * @return HtmlSessionRecordingResponse[]
+     * @return HtmlAttendeeLog[]
      */
-    public function getHtmlSessionRecordingResponse()
+    public function getHtmlAttendeeLog()
     {
-      return $this->HtmlSessionRecordingResponse;
+      return $this->HtmlAttendeeLog;
     }
 
     /**
-     * @param HtmlSessionRecordingResponse[] $HtmlSessionRecordingResponse
-     * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection
+     * @param HtmlAttendeeLog[] $HtmlAttendeeLog
+     * @return \mod_collaborate\soap\generated\HtmlAttendeeLogCollection
      */
-    public function setHtmlSessionRecordingResponse(array $HtmlSessionRecordingResponse)
+    public function setHtmlAttendeeLog(array $HtmlAttendeeLog)
     {
-      $this->HtmlSessionRecordingResponse = $HtmlSessionRecordingResponse;
+      $this->HtmlAttendeeLog = $HtmlAttendeeLog;
       return $this;
     }
 

@@ -147,6 +147,16 @@ class SetHtmlSession
     protected $recordingCallbackUrl = null;
 
     /**
+     * @var string $sessionType
+     */
+    protected $sessionType = null;
+
+    /**
+     * @var string $sessionRule
+     */
+    protected $sessionRule = null;
+
+    /**
      * @param string $name
      * @param \DateTime $startTime
      * @param \DateTime $endTime
@@ -605,6 +615,42 @@ class SetHtmlSession
     public function setRecordingCallbackUrl($recordingCallbackUrl)
     {
       $this->recordingCallbackUrl = $recordingCallbackUrl;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionType()
+    {
+      return $this->sessionType;
+    }
+
+    /**
+     * @param string $sessionType
+     * @return \mod_collaborate\soap\generated\SetHtmlSession
+     */
+    public function setSessionType($sessionType)
+    {
+      $this->sessionType = $sessionType;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionRule()
+    {
+      return $this->sessionRule;
+    }
+
+    /**
+     * @param string $sessionRule
+     * @return \mod_collaborate\soap\generated\SetHtmlSession
+     */
+    public function setSessionRule($sessionRule)
+    {
+      $this->sessionRule = $sessionRule;
       return $this;
     }
 

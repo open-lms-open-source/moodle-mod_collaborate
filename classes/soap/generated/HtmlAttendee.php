@@ -47,9 +47,9 @@ class HtmlAttendee
     protected $avatarUrl = null;
 
     /**
-     * @var HtmlAttendeeLog[] $HtmlAttendeeLog
+     * @var HtmlAttendeeLogCollection[] $htmlAttendeeLogs
      */
-    protected $HtmlAttendeeLog = null;
+    protected $htmlAttendeeLogs = null;
 
     /**
      * @param string $userId
@@ -134,20 +134,20 @@ class HtmlAttendee
     }
 
     /**
-     * @return HtmlAttendeeLog[]
+     * @return HtmlAttendeeLogCollection[]
      */
-    public function getHtmlAttendeeLog()
+    public function getHtmlAttendeeLogs()
     {
-      return $this->HtmlAttendeeLog;
+      return $this->htmlAttendeeLogs;
     }
 
     /**
-     * @param HtmlAttendeeLog[] $HtmlAttendeeLog
+     * @param HtmlAttendeeLogCollection[] $htmlAttendeeLogs
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setHtmlAttendeeLog(array $HtmlAttendeeLog)
+    public function setHtmlAttendeeLogs(array $htmlAttendeeLogs)
     {
-      $this->HtmlAttendeeLog = $HtmlAttendeeLog;
+      $this->htmlAttendeeLogs = $htmlAttendeeLogs;
       return $this;
     }
 

@@ -117,9 +117,59 @@ class HtmlSession
     protected $creatorId = null;
 
     /**
+     * @var boolean $mustBeSupervised
+     */
+    protected $mustBeSupervised = null;
+
+    /**
+     * @var boolean $openChair
+     */
+    protected $openChair = null;
+
+    /**
+     * @var boolean $permissionsOn
+     */
+    protected $permissionsOn = null;
+
+    /**
+     * @var boolean $raiseHandOnEnter
+     */
+    protected $raiseHandOnEnter = null;
+
+    /**
+     * @var boolean $allowInSessionInvitees
+     */
+    protected $allowInSessionInvitees = null;
+
+    /**
+     * @var string $contextId
+     */
+    protected $contextId = null;
+
+    /**
+     * @var string $contextTitle
+     */
+    protected $contextTitle = null;
+
+    /**
      * @var boolean $recordingEnabled
      */
     protected $recordingEnabled = null;
+
+    /**
+     * @var string $recordingCallBackUrl
+     */
+    protected $recordingCallBackUrl = null;
+
+    /**
+     * @var string $sessionType
+     */
+    protected $sessionType = null;
+
+    /**
+     * @var string $sessionRule
+     */
+    protected $sessionRule = null;
 
     /**
      * @param int $sessionId
@@ -506,6 +556,132 @@ class HtmlSession
     /**
      * @return boolean
      */
+    public function getMustBeSupervised()
+    {
+      return $this->mustBeSupervised;
+    }
+
+    /**
+     * @param boolean $mustBeSupervised
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setMustBeSupervised($mustBeSupervised)
+    {
+      $this->mustBeSupervised = $mustBeSupervised;
+      return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getOpenChair()
+    {
+      return $this->openChair;
+    }
+
+    /**
+     * @param boolean $openChair
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setOpenChair($openChair)
+    {
+      $this->openChair = $openChair;
+      return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getPermissionsOn()
+    {
+      return $this->permissionsOn;
+    }
+
+    /**
+     * @param boolean $permissionsOn
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setPermissionsOn($permissionsOn)
+    {
+      $this->permissionsOn = $permissionsOn;
+      return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getRaiseHandOnEnter()
+    {
+      return $this->raiseHandOnEnter;
+    }
+
+    /**
+     * @param boolean $raiseHandOnEnter
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setRaiseHandOnEnter($raiseHandOnEnter)
+    {
+      $this->raiseHandOnEnter = $raiseHandOnEnter;
+      return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getAllowInSessionInvitees()
+    {
+      return $this->allowInSessionInvitees;
+    }
+
+    /**
+     * @param boolean $allowInSessionInvitees
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setAllowInSessionInvitees($allowInSessionInvitees)
+    {
+      $this->allowInSessionInvitees = $allowInSessionInvitees;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContextId()
+    {
+      return $this->contextId;
+    }
+
+    /**
+     * @param string $contextId
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setContextId($contextId)
+    {
+      $this->contextId = $contextId;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContextTitle()
+    {
+      return $this->contextTitle;
+    }
+
+    /**
+     * @param string $contextTitle
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setContextTitle($contextTitle)
+    {
+      $this->contextTitle = $contextTitle;
+      return $this;
+    }
+
+    /**
+     * @return boolean
+     */
     public function getRecordingEnabled()
     {
       return $this->recordingEnabled;
@@ -518,6 +694,60 @@ class HtmlSession
     public function setRecordingEnabled($recordingEnabled)
     {
       $this->recordingEnabled = $recordingEnabled;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecordingCallBackUrl()
+    {
+      return $this->recordingCallBackUrl;
+    }
+
+    /**
+     * @param string $recordingCallBackUrl
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setRecordingCallBackUrl($recordingCallBackUrl)
+    {
+      $this->recordingCallBackUrl = $recordingCallBackUrl;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionType()
+    {
+      return $this->sessionType;
+    }
+
+    /**
+     * @param string $sessionType
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setSessionType($sessionType)
+    {
+      $this->sessionType = $sessionType;
+      return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionRule()
+    {
+      return $this->sessionRule;
+    }
+
+    /**
+     * @param string $sessionRule
+     * @return \mod_collaborate\soap\generated\HtmlSession
+     */
+    public function setSessionRule($sessionRule)
+    {
+      $this->sessionRule = $sessionRule;
       return $this;
     }
 
