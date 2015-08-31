@@ -1,1 +1,0 @@
-# moodle-mod_collaborate
