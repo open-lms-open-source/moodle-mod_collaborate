@@ -71,11 +71,14 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Round time up if necessary.
         $minutes = date('i', $time);
-        if ($minutes >= 30) {
-            $time += (60 - $minutes) * 60;
+        $rminutes = 0; // New minutes to use in rounding.
+        if ($minutes >= 45) {
+            $time = strtotime('+1 hour', $time);
+        } else if ($minutes >= 15) {
+            $rminutes = 30;
         }
-        // Remove minutes.
-        $time = strtotime(date('Y-m-d H:0', $time));
+        $time = mktime(date('H', $time), $rminutes, 0, date('n'), date('j'), date('Y'));
+
 
         // Get timezone to show against start time label.
         $tzones = get_list_of_timezones();
