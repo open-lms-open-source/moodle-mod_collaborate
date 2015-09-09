@@ -193,6 +193,24 @@ class local {
     }
 
     /**
+     * Is this module configured?
+     * @return bool
+     */
+    public static function configured() {
+        $config = get_config('collaborate');
+
+        if (!empty ($config)
+            && !empty($config->server)
+            && !empty($config->username)
+            && !empty($config->password)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Verify that the api works.
      *
      * @return bool
@@ -203,12 +221,8 @@ class local {
         if ($apiverified !== null) {
             return $apiverified;
         }
-        $config = get_config('collaborate');
 
-        if (!empty($config->server)
-            && !empty($config->username)
-            && !empty($config->password)
-        ) {
+        if (self::configured()) {
             $param = new ServerConfiguration();
             try {
                 $api = api::get_api(true);

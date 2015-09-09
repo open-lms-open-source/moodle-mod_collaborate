@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
+use mod_collaborate\local;
+
 /**
  * Module instance settings form
  *
@@ -46,6 +48,10 @@ class mod_collaborate_mod_form extends moodleform_mod {
         global $USER, $CFG;
 
         $mform = $this->_form;
+
+        if (!local::configured()) {
+            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
+        }
 
         $mform->addElement('hidden', 'sessionid');
         $mform->setType('sessionid', PARAM_INT);

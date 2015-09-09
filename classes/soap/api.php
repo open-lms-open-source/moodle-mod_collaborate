@@ -20,6 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\logging\loggerdb;
 use mod_collaborate\logging\constants;
+use mod_collaborate\local;
 
 require_once($CFG->dirroot.'/mod/collaborate/vendor/psr/log/Psr/Log/LoggerAwareTrait.php');
 
@@ -64,8 +65,8 @@ class api extends generated\SASDefaultAdapter {
 
         $config = get_config('collaborate');
 
-        if (empty($config)) {
-            print_error('error:noconfiguration', 'mod_collaborate');
+        if (!local::configured()) {
+            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
         }
 
         // Set wsdl to local version.
