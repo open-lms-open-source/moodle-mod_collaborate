@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * View services
+ * Visit service - abstract class used for any service involved in visiting the session - i.e. viewing or forwarding.
  *
  * @package   mod_collaborate
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
@@ -26,9 +26,6 @@ namespace mod_collaborate\service;
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\event\course_module_viewed;
-use mod_collaborate\service\abstract_visit_service;
-
 require_once(__DIR__.'/../../lib.php');
 
 /**
@@ -36,12 +33,34 @@ require_once(__DIR__.'/../../lib.php');
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class view_service extends abstract_visit_service {
+abstract class abstract_visit_service {
 
     /**
-     * @var \mod_collaborate_renderer
+     * @var \cm_info
      */
-    protected $renderer;
+    protected $cm;
+
+    /**
+     * @var \stdClass
+     */
+    protected $course;
+
+    /**
+     * @var \stdClass
+     */
+    protected $collaborate;
+
+
+    /**
+     * @var \context_module
+     */
+    protected $context;
+
+    /**
+     * @var \stdClass
+     */
+    protected $user;
+
 
     /**
      * Cosntructor.
@@ -56,37 +75,26 @@ class view_service extends abstract_visit_service {
                                 \context_module $context,
                                 \stdClass $user) {
 
-        global $PAGE;
-
-        // Force general render target in case this is called via cli or via ajax.
-        $this->renderer = $PAGE->get_renderer('mod_collaborate', null, RENDERER_TARGET_GENERAL);
-
-        parent::__construct($collaborate, $cm, $context, $user);
+        $this->collaborate = $collaborate;
+        $this->cm = $cm;
+        $this->context = $context;
+        $this->course = $cm->get_course();
+        $this->user = $user;
     }
 
     /**
-     * Handle view action.
+     * Ensure a session exists for moderators.
      *
-     * @return string
      * @throws \coding_exception
      */
-    public function handle_view() {
-        $event = course_module_viewed::create(array(
-            'objectid' => $this->cm->instance,
-            'context' => $this->context,
-        ));
-        $event->add_record_snapshot('course', $this->course);
-        $event->add_record_snapshot($this->cm->modname, $this->collaborate);
-        $event->trigger();
-
-        // If a collaborate session hasn't been created yet and we can moderate or add, then create it now.
-        $this->moderator_ensure_session();
-
-        // Completion tracking on view.
-        $completion = new \completion_info($this->course);
-        $completion->set_module_viewed($this->cm, $this->user->id);
-
-        return $this->renderer->view_action($this->collaborate, $this->cm);
+    protected function moderator_ensure_session() {
+        if ($this->collaborate->sessionid === null) {
+            $canmoderate = has_capability('mod/collaborate:moderate', $this->context);
+            $canadd = has_capability('mod/collaborate:addinstance', $this->context);
+            $capscreate = ($canmoderate || $canadd);
+            if ($capscreate) {
+                collaborate_update_instance($this->collaborate);
+            }
+        }
     }
-
 }
