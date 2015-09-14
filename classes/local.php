@@ -211,6 +211,16 @@ class local {
     }
 
     /**
+     * Make sure module is configured or throw error.
+     * @throws \moodle_exception
+     */
+    public static function require_configured() {
+        if (!static::configured()) {
+            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
+        }
+    }
+
+    /**
      * Verify that the api works.
      *
      * @return bool
@@ -222,7 +232,7 @@ class local {
             return $apiverified;
         }
 
-        if (self::configured()) {
+        if (static::configured()) {
             $param = new ServerConfiguration();
             try {
                 $api = api::get_api(true);
