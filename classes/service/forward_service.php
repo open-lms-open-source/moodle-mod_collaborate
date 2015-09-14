@@ -31,7 +31,7 @@ use mod_collaborate\soap\generated\HtmlAttendee;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 use mod_collaborate\event;
 use mod_collaborate\logging;
-use mod_collaborate\service\abstract_visit_service;
+use mod_collaborate\service\base_visit_service;
 
 require_once(__DIR__.'/../../lib.php');
 
@@ -40,7 +40,7 @@ require_once(__DIR__.'/../../lib.php');
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class forward_service extends abstract_visit_service {
+class forward_service extends base_visit_service {
 
     /**
      * @var int
@@ -64,10 +64,9 @@ class forward_service extends abstract_visit_service {
      */
     public function __construct(\stdClass $collaborate,
                                 \cm_info $cm,
-                                \context_module $context,
                                 \stdClass $user) {
 
-        parent::__construct($collaborate, $cm, $context, $user);
+        parent::__construct($collaborate, $cm, $user);
 
         $this->api = api::get_api();
     }

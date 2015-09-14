@@ -33,7 +33,7 @@ require_once(__DIR__.'/../../lib.php');
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class abstract_visit_service {
+abstract class base_visit_service {
 
     /**
      * @var \cm_info
@@ -72,12 +72,11 @@ abstract class abstract_visit_service {
      */
     public function __construct(\stdClass $collaborate,
                                 \cm_info $cm,
-                                \context_module $context,
                                 \stdClass $user) {
 
         $this->collaborate = $collaborate;
         $this->cm = $cm;
-        $this->context = $context;
+        $this->context = \context_module::instance($this->cm->id);
         $this->course = $cm->get_course();
         $this->user = $user;
     }

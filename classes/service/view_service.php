@@ -27,7 +27,7 @@ namespace mod_collaborate\service;
 defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\event\course_module_viewed;
-use mod_collaborate\service\abstract_visit_service;
+use mod_collaborate\service\base_visit_service;
 
 require_once(__DIR__.'/../../lib.php');
 
@@ -36,7 +36,7 @@ require_once(__DIR__.'/../../lib.php');
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class view_service extends abstract_visit_service {
+class view_service extends base_visit_service {
 
     /**
      * @var \mod_collaborate_renderer
@@ -53,7 +53,6 @@ class view_service extends abstract_visit_service {
      */
     public function __construct(\stdClass $collaborate,
                                 \cm_info $cm,
-                                \context_module $context,
                                 \stdClass $user) {
 
         global $PAGE;
@@ -61,7 +60,7 @@ class view_service extends abstract_visit_service {
         // Force general render target in case this is called via cli or via ajax.
         $this->renderer = $PAGE->get_renderer('mod_collaborate', null, RENDERER_TARGET_GENERAL);
 
-        parent::__construct($collaborate, $cm, $context, $user);
+        parent::__construct($collaborate, $cm, $user);
     }
 
     /**

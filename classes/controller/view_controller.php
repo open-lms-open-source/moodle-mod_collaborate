@@ -33,15 +33,6 @@ use mod_collaborate\service\forward_service;
 require_once(__DIR__.'/controller_abstract.php');
 
 class view_controller extends controller_abstract {
-    /**
-     * @var view_service
-     */
-    protected $viewservice;
-
-    /**
-     * @var forward_service
-     */
-    protected $forwardservice;
 
     /**
      * @var stdClass
@@ -70,11 +61,6 @@ class view_controller extends controller_abstract {
 
         require_once(__DIR__.'/../../lib.php');
 
-        // Note, we pass the page object course module and context instead of using $this->cm
-        // as the intialise function populates the PAGE object.
-        $renderer = $PAGE->get_renderer('mod_collaborate');
-        $this->viewservice = new view_service($this->collaborate, $PAGE->cm, $PAGE->context, $renderer);
-        $this->forwardservice = new forward_service($this->collaborate, $PAGE->cm, $PAGE->context, $USER);
     }
 
     /**
@@ -121,7 +107,9 @@ class view_controller extends controller_abstract {
      * @return void
      */
     public function view_action() {
-        global $PAGE;
+        global $PAGE, $USER;
+
+        $viewservice = new view_service($this->collaborate, $PAGE->cm, $USER);
 
         // Set up the page header.
         $PAGE->set_title(format_string($this->collaborate->name));
@@ -130,17 +118,19 @@ class view_controller extends controller_abstract {
             'id' => $PAGE->cm->id,
             'action'    => 'view'
         ));
-        echo $this->viewservice->handle_view();
+        echo $viewservice->handle_view();
     }
 
     /**
      * Forward to collaborate meeting session.
      */
     public function forward_action() {
-        global $PAGE;
+        global $PAGE, $USER;
+
+        $forwardservice = new forward_service($this->collaborate, $PAGE->cm, $USER);
 
         $PAGE->set_cacheable(false);
-        $url = $this->forwardservice->handle_forward();
+        $url = $forwardservice->handle_forward();
         if ($url) {
             redirect($url, get_string('joiningmeeting', 'mod_collaborate'));
         }
