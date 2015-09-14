@@ -66,9 +66,8 @@ abstract class base_visit_service {
      * Cosntructor.
      *
      * @param \stdClass $collaborate
-     * @param \stdClass $cm
-     * @param \context_module $context
-     * @param \mod_collaborate_renderer $renderer
+     * @param \cm_info $cm
+     * @param \stdClass $user
      */
     public function __construct(\stdClass $collaborate,
                                 \cm_info $cm,

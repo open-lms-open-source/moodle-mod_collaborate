@@ -47,8 +47,8 @@ class view_service extends base_visit_service {
      * Cosntructor.
      *
      * @param \stdClass $collaborate
-     * @param \stdClass $cm
-     * @param \context_module $context
+     * @param \cm_info  $cm
+     * @param \stdClass $user
      * @param \mod_collaborate_renderer $renderer
      */
     public function __construct(\stdClass $collaborate,

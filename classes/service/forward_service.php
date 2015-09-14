@@ -57,7 +57,6 @@ class forward_service extends base_visit_service {
      *
      * @param \stdClass $collaborate
      * @param \cm_info $cm
-     * @param \context_module $context;
      * @param \stdClass $user;
      * @throws \coding_exception
      * @throws \require_login_exception
