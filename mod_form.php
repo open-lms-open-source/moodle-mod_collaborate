@@ -49,9 +49,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
-        if (!local::configured()) {
-            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
-        }
+        local::require_configured();
 
         $mform->addElement('hidden', 'sessionid');
         $mform->setType('sessionid', PARAM_INT);
