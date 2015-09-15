@@ -98,5 +98,5 @@ $string['starts'] = 'Starts - {$a}';
 $string['testapi'] = 'Test API';
 $string['timezone'] = 'Timezone: {$a}';
 $string['unrestored'] = 'A moderator must view or join the session before you can access it.';
-
+$string['verifyingapi'] = 'Verifying API connection. Please wait...';
 

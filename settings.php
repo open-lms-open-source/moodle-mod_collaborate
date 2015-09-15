@@ -26,6 +26,18 @@ defined('MOODLE_INTERNAL') || die;
 use mod_collaborate\logging\constants;
 use mod_collaborate\trimmed_configtext;
 
+$PAGE->requires->jquery();
+$module = array(
+    'name' => 'mod_collaborate',
+    'fullpath' => '/mod/collaborate/settings.js',
+    'strings' => array(
+        array('connectionfailed', 'mod_collaborate'),
+        array('connectionverified', 'mod_collaborate'),
+        array('verifyingapi', 'mod_collaborate')
+    )
+);
+$PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+
 if ($ADMIN->fulltree) {
 
     $name = 'collaborate/server';
@@ -49,16 +61,18 @@ if ($ADMIN->fulltree) {
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
     $settings->add($setting);
 
-    $apitest = '<div>'.get_string('apidiagnosticsavenotice', 'mod_collaborate').'</div>';
+    $apitest = '<div id="api_diag">';
+    $apitest .= '<div id="api_diag_notice">'.get_string('apidiagnosticsavenotice', 'mod_collaborate').'</div>';
     $apitest .= html_writer::link(
         new moodle_url('/mod/collaborate/testapi.php'),
         get_string('testapi', 'mod_collaborate'),
         [
-            'class'  => 'btn btn-primary',
+            'class'  => 'api_diag_btn btn btn-primary',
             'role'   => 'button',
             'target' => '_blank'
         ]
     );
+    $apitest .= '</div>';
     $setting = new \admin_setting_heading('apidiagnostics', get_string('apidiagnostics', 'collaborate'), $apitest);
     $settings->add($setting);
 

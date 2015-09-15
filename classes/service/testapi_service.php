@@ -53,12 +53,35 @@ class testapi_service {
     }
 
     /**
-     * Handle testing api.
+     * Test the api and return array for ajax request
+     *
+     * @return array
+     */
+    protected function testapi_ajax() {
+        $result = ['success' => local::api_verified(true)];
+        return ($result);
+    }
+
+    /**
+     * Test the api and return html
      *
      * @return string
+     */
+    protected function testapi_render() {
+        return $this->renderer->connection_verified(local::api_verified(true));
+    }
+
+    /**
+     * Handle testing api.
+     *
+     * @return string|array
      * @throws \coding_exception
      */
     public function handle_testapi() {
-        return $this->renderer->connection_verified(local::api_verified(true));
+        if (AJAX_SCRIPT) {
+            return $this->testapi_ajax();
+        } else {
+            return $this->testapi_render();
+        }
     }
 }
