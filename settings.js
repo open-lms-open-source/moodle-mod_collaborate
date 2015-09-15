@@ -20,7 +20,9 @@ M.mod_collaborate.settings.init = function(Y, contextid) {
         $('#api_diag .api-connection-status').append($('#api_diag .api_diag_btn'));
     }
     M.mod_collaborate.settings.applyClickApiTest();
-    if ($('#id_s_collaborate_server') + $('#id_s_collaborate_username') + $('#id_s_collaborate_password') !== '') {
+    if ($('#id_s_collaborate_server').val() +
+        $('#id_s_collaborate_username').val() +
+        $('#id_s_collaborate_password').val() !== '') {
         M.mod_collaborate.settings.testApi();
     }
     M.mod_collaborate.settings.initialised = true;
