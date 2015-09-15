@@ -26,23 +26,23 @@ defined('MOODLE_INTERNAL') || die;
 use mod_collaborate\logging\constants;
 use mod_collaborate\trimmed_configtext;
 
-if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
-    $PAGE->requires->jquery();
-    $module = array(
-        'name' => 'mod_collaborate',
-        'fullpath' => '/mod/collaborate/settings.js',
-        'strings' => [
-            ['connectionfailed', 'mod_collaborate'],
-            ['connectionverified', 'mod_collaborate'],
-            ['connectionverifiedchanged', 'mod_collaborate'],
-            ['verifyingapi', 'mod_collaborate'],
-            ['connectionstatusunknown', 'mod_collaborate']
-        ]
-    );
-    $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
-}
-
 if ($ADMIN->fulltree) {
+
+    if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
+        $PAGE->requires->jquery();
+        $module = array(
+            'name' => 'mod_collaborate',
+            'fullpath' => '/mod/collaborate/settings.js',
+            'strings' => [
+                ['connectionfailed', 'mod_collaborate'],
+                ['connectionverified', 'mod_collaborate'],
+                ['connectionverifiedchanged', 'mod_collaborate'],
+                ['verifyingapi', 'mod_collaborate'],
+                ['connectionstatusunknown', 'mod_collaborate']
+            ]
+        );
+        $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+    }
 
     $name = 'collaborate/server';
     $title = new \lang_string('configserver', 'collaborate');

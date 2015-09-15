@@ -22,11 +22,11 @@
     margin-left: 1em;
 }
 
-.api-connection-status {
+#page-admin-setting-modsettingcollaborate .api-connection-status {
     margin-top:1em;
 }
 
-.api-connection-status.spinner:after {
+#page-admin-setting-modsettingcollaborate .api-connection-status.spinner:after {
     content: ' ';
     display:inline-block;
     height:1.2em;
@@ -36,10 +36,10 @@
     margin-left:1.2em;
 }
 
-.api-connection-status .api_diag_btn {
+#page-admin-setting-modsettingcollaborate .api-connection-status .api_diag_btn {
     float: right;
 }
 
-.api-connection-status.spinner .api_diag_btn {
+#page-admin-setting-modsettingcollaborate .api-connection-status.spinner .api_diag_btn {
     display: none;
 }
