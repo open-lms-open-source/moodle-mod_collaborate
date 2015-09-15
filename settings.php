@@ -34,6 +34,7 @@ if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
         'strings' => [
             ['connectionfailed', 'mod_collaborate'],
             ['connectionverified', 'mod_collaborate'],
+            ['connectionverifiedchanged', 'mod_collaborate'],
             ['verifyingapi', 'mod_collaborate'],
             ['connectionstatusunknown', 'mod_collaborate']
         ]

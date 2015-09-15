@@ -53,6 +53,7 @@ $string['configwsdl'] = 'WSDL URL';
 $string['configwsdldesc'] = 'Default .wsdl to use when creating a new Blackboard Collaborate session.';
 $string['connectionfailed'] = 'Connection failed';
 $string['connectionverified'] = 'Connection verified';
+$string['connectionverifiedchanged'] = 'Connection verified - please save your settings.';
 $string['connectionstatusunknown'] = 'Connection status unknown';
 $string['crontask'] = 'Collaborate scheduled task';
 $string['debugging'] = 'Debugging';

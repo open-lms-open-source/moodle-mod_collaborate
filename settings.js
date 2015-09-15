@@ -14,11 +14,12 @@ M.mod_collaborate.settings.init = function(Y, contextid) {
     if (!M.mod_collaborate.settings.initialised) {
         var msg = M.util.get_string('connectionstatusunknown', 'mod_collaborate');
         var statushtml = '<div class="api-connection-status alert alert-info">' +
-            '<span class="api-connection-msg">' + msg +'</span>' +
+            '<span class="api-connection-msg">' + msg + '</span>' +
             '</div>';
         $('#api_diag').append(statushtml);
         $('#api_diag .api-connection-status').append($('#api_diag .api_diag_btn'));
     }
+    M.mod_collaborate.settings.applySettingChangeCheck();
     M.mod_collaborate.settings.applyClickApiTest();
     if ($('#id_s_collaborate_server').val() +
         $('#id_s_collaborate_username').val() +
@@ -62,7 +63,11 @@ M.mod_collaborate.settings.testApi = function() {
         },
         success: function(data) {
             if (data.success) {
-                api_msg('connectionverified', 'alert-success');
+                if (!M.mod_collaborate.settings.modified) {
+                    api_msg('connectionverified', 'alert-success');
+                } else {
+                    api_msg('connectionverifiedchanged', 'alert-success');
+                }
             } else {
                 api_msg('connectionfailed', 'alert-danger');
             }
@@ -84,4 +89,22 @@ M.mod_collaborate.settings.applyClickApiTest = function() {
         e.preventDefault();
         M.mod_collaborate.settings.testApi();
     });
+}
+
+/**
+ * Apply listener for when settings changed.
+ *
+ * @author Guy Thomas
+ */
+M.mod_collaborate.settings.applySettingChangeCheck = function() {
+    var settingfields = [
+        '#id_s_collaborate_server',
+        '#id_s_collaborate_username',
+        '#id_s_collaborate_password'
+    ];
+    for (var s in settingfields) {
+        $(settingfields[s]).keypress(function(e) {
+            M.mod_collaborate.settings.modified = true;
+        });
+    }
 }
