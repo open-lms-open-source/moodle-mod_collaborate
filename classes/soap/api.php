@@ -54,7 +54,7 @@ class api extends generated\SASDefaultAdapter {
     /**
      * Constructor
      *
-     * @param array $options     *
+     * @param array $options
      * @param string $wsdl - just here to match base class.
      * @param bool $config - custom config passed in on construct.
      */

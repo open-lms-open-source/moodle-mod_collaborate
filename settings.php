@@ -26,17 +26,19 @@ defined('MOODLE_INTERNAL') || die;
 use mod_collaborate\logging\constants;
 use mod_collaborate\trimmed_configtext;
 
-$PAGE->requires->jquery();
-$module = array(
-    'name' => 'mod_collaborate',
-    'fullpath' => '/mod/collaborate/settings.js',
-    'strings' => array(
-        array('connectionfailed', 'mod_collaborate'),
-        array('connectionverified', 'mod_collaborate'),
-        array('verifyingapi', 'mod_collaborate')
-    )
-);
-$PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
+    $PAGE->requires->jquery();
+    $module = array(
+        'name' => 'mod_collaborate',
+        'fullpath' => '/mod/collaborate/settings.js',
+        'strings' => array(
+            array('connectionfailed', 'mod_collaborate'),
+            array('connectionverified', 'mod_collaborate'),
+            array('verifyingapi', 'mod_collaborate')
+        )
+    );
+    $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+}
 
 if ($ADMIN->fulltree) {
 
