@@ -31,11 +31,12 @@ if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
     $module = array(
         'name' => 'mod_collaborate',
         'fullpath' => '/mod/collaborate/settings.js',
-        'strings' => array(
-            array('connectionfailed', 'mod_collaborate'),
-            array('connectionverified', 'mod_collaborate'),
-            array('verifyingapi', 'mod_collaborate')
-        )
+        'strings' => [
+            ['connectionfailed', 'mod_collaborate'],
+            ['connectionverified', 'mod_collaborate'],
+            ['verifyingapi', 'mod_collaborate'],
+            ['connectionstatusunknown', 'mod_collaborate']
+        ]
     );
     $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
 }
@@ -75,7 +76,7 @@ if ($ADMIN->fulltree) {
         ]
     );
     $apitest .= '</div>';
-    $setting = new \admin_setting_heading('apidiagnostics', get_string('apidiagnostics', 'collaborate'), $apitest);
+    $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
     $settings->add($setting);
 
     // Add debugging settings.

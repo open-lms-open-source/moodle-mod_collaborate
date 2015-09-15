@@ -35,3 +35,11 @@
     background-size: 1.2em 1.2em;
     margin-left:1.2em;
 }
+
+.api-connection-status .api_diag_btn {
+    float: right;
+}
+
+.api-connection-status.spinner .api_diag_btn {
+    display: none;
+}

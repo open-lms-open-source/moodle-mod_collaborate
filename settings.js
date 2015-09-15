@@ -11,10 +11,25 @@ M.mod_collaborate.settings = M.mod_collaborate.settings || {};
  */
 M.mod_collaborate.settings.init = function(Y, contextid) {
     M.cfg.context = contextid;
+    if (!M.mod_collaborate.settings.initialised) {
+        var msg = M.util.get_string('connectionstatusunknown', 'mod_collaborate');
+        var statushtml = '<div class="api-connection-status alert alert-info">' +
+            '<span class="api-connection-msg">' + msg +'</span>' +
+            '</div>';
+        $('#api_diag').append(statushtml);
+        $('#api_diag .api-connection-status').append($('#api_diag .api_diag_btn'));
+    }
     M.mod_collaborate.settings.applyClickApiTest();
+    if ($('#id_s_collaborate_server') + $('#id_s_collaborate_username') + $('#id_s_collaborate_password') !== '') {
+        M.mod_collaborate.settings.testApi();
+    }
+    M.mod_collaborate.settings.initialised = true;
 }
 
-M.mod_collaborate.settings.onClickApiTest = function() {
+/**
+ * Test api.
+ */
+M.mod_collaborate.settings.testApi = function() {
 
     /**
      * Render new api status message.
@@ -24,8 +39,12 @@ M.mod_collaborate.settings.onClickApiTest = function() {
      */
     var api_msg = function(stringkey, alertclass) {
         var msg = M.util.get_string(stringkey, 'mod_collaborate');
-        $('#api_diag .api-connection-status').remove();
-        $('#api_diag').append('<div class="api-connection-status alert ' + alertclass + '">' + msg + '</div>');
+        var classes = ['alert-info', 'alert-danger', 'alert-success', 'spinner'];
+        for (var c in classes) {
+            $('#api_diag .api-connection-status').removeClass(classes[c]);
+        }
+        $('#api_diag .api-connection-status').addClass(alertclass);
+        $('#api_diag .api-connection-msg').html(msg);
     }
 
     api_msg('verifyingapi', 'alert-info spinner');
@@ -61,6 +80,6 @@ M.mod_collaborate.settings.applyClickApiTest = function() {
     $('#api_diag_notice').hide();
     $('.api_diag_btn').click(function(e){
         e.preventDefault();
-        M.mod_collaborate.settings.onClickApiTest();
+        M.mod_collaborate.settings.testApi();
     });
 }
