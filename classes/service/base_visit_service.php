@@ -63,7 +63,7 @@ abstract class base_visit_service {
 
 
     /**
-     * Cosntructor.
+     * Constructor.
      *
      * @param \stdClass $collaborate
      * @param \cm_info $cm
