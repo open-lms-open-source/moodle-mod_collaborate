@@ -54,15 +54,16 @@ class api extends generated\SASDefaultAdapter {
     /**
      * Constructor
      *
-     * @param array $options
+     * @param array $options     *
      * @param string $wsdl - just here to match base class.
+     * @param bool $config - custom config passed in on construct.
      */
-    public function __construct(array $options = array(), $wsdl = null) {
+    public function __construct(array $options = array(), $wsdl = null, $config = false) {
 
         $logger = new loggerdb();
         $this->setLogger($logger);
 
-        $config = get_config('collaborate');
+        $config = $config ? $config : get_config('collaborate');
 
         if (empty($config)) {
             print_error('error:noconfiguration', 'mod_collaborate');
@@ -118,12 +119,12 @@ class api extends generated\SASDefaultAdapter {
      *
      * @return api
      */
-    public static function get_api($reset = false) {
+    public static function get_api($reset = false, $options = [], $wsdl = null, $config = false) {
         static $api;
         if ($api && !$reset) {
             return $api;
         }
-        $api = new api();
+        $api = new api($options, $wsdl, $config);
         return $api;
     }
 

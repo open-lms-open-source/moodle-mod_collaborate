@@ -28,10 +28,19 @@
 
 use mod_collaborate\controller\api_controller;
 
+if ((!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+        && strcasecmp($_SERVER['HTTP_X_REQUESTED_WITH'], 'XMLHttpRequest') === 0)
+    || !empty($_POST['yuiformsubmit']) // Handle yui form submissions.
+) {
+    define('AJAX_SCRIPT', true);
+    define('NO_DEBUG_DISPLAY', true);
+}
+
 require_once(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
 
 global $PAGE;
 
 $apic = new api_controller('test');
+
 echo $apic->test_action();

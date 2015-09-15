@@ -25,19 +25,25 @@ M.mod_collaborate.settings.onClickApiTest = function() {
     var api_msg = function(stringkey, alertclass) {
         var msg = M.util.get_string(stringkey, 'mod_collaborate');
         $('#api_diag .api-connection-status').remove();
-        $('#api_diag').append('<div class="api-connection-status alert '+alertclass+'">'+msg+'</div>');
+        $('#api_diag').append('<div class="api-connection-status alert ' + alertclass + '">' + msg + '</div>');
     }
 
-    api_msg('verifyingapi', 'alert-info');
+    api_msg('verifyingapi', 'alert-info spinner');
 
     $.ajax({
-        url: M.cfg.wwwroot+'/mod/collaborate/rest.php',
+        url: M.cfg.wwwroot + '/mod/collaborate/testapi.php',
         context: document.body,
-        data: {'action':
-            'contextid' : M.cfg.context},
+        data: {
+            'contextid' : M.cfg.context,
+            'server' : $('#id_s_collaborate_server').val().trim(),
+            'username'  : $('#id_s_collaborate_username').val().trim(),
+            'password'  : $('#id_s_collaborate_password').val() // Never trim passwords!
+        },
         success: function(data) {
             if (data.success) {
                 api_msg('connectionverified', 'alert-success');
+            } else {
+                api_msg('connectionfailed', 'alert-danger');
             }
         },
         error: function() {

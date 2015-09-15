@@ -25,3 +25,13 @@
 .api-connection-status {
     margin-top:1em;
 }
+
+.api-connection-status.spinner:after {
+    content: ' ';
+    display:inline-block;
+    height:1.2em;
+    width:1.2em;
+    background-image:url([[pix:i/loading]]);
+    background-size: 1.2em 1.2em;
+    margin-left:1.2em;
+}

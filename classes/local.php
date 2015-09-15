@@ -195,15 +195,17 @@ class local {
     /**
      * Verify that the api works.
      *
+     * @param bool $silent
+     * @param bool|stdClass $config
      * @return bool
      */
-    public static function api_verified($silent = false) {
+    public static function api_verified($silent = false, $config = false) {
         static $apiverified = null;
         // Only do this once! settings.php was calling this 3 times, hence the static to stop this!
         if ($apiverified !== null) {
             return $apiverified;
         }
-        $config = get_config('collaborate');
+        $config = $config ? $config : get_config('collaborate');
 
         if (!empty($config->server)
             && !empty($config->username)
@@ -211,7 +213,7 @@ class local {
         ) {
             $param = new ServerConfiguration();
             try {
-                $api = api::get_api(true);
+                $api = api::get_api(true, [], null, $config);
             } catch (\Exception $e) {
                 $api = false;
             }

@@ -44,22 +44,60 @@ class testapi_service {
     protected $renderer;
 
     /**
+     * @var bool
+     */
+    protected $server = false;
+
+    /**
+     * @var bool
+     */
+    protected $username = false;
+
+    /**
+     * @var bool
+     */
+    protected $password = false;
+
+    /**
      * Constructor.
      *
      * @param \mod_collaborate_renderer $renderer
      */
     public function __construct(\mod_collaborate_renderer $renderer) {
         $this->renderer = $renderer;
+
+        $this->server = optional_param('server', false, PARAM_URL);
+        $this->username  = optional_param('username', false, PARAM_ALPHANUMEXT);
+        $this->password  = optional_param('password', false, PARAM_RAW);
+    }
+
+    /**
+     * Is the api verified?
+     * Pass in config if it's available.
+     *
+     * @return bool
+     */
+    protected function api_verified() {
+        $apidetscomplete = $this->server !== false && $this->username !== false && $this->password !== false;
+        $config = false;
+        if ($apidetscomplete) {
+            $config = (object) [
+                'server'   => $this->server,
+                'username' => $this->username,
+                'password' => $this->password
+            ];
+        }
+        return local::api_verified(true, $config);
     }
 
     /**
      * Test the api and return array for ajax request
      *
-     * @return array
+     * @return string
      */
     protected function testapi_ajax() {
-        $result = ['success' => local::api_verified(true)];
-        return ($result);
+        $result = ['success' => self::api_verified()];
+        return (json_encode($result));
     }
 
     /**
@@ -68,7 +106,7 @@ class testapi_service {
      * @return string
      */
     protected function testapi_render() {
-        return $this->renderer->connection_verified(local::api_verified(true));
+        return $this->renderer->connection_verified(self::api_verified());
     }
 
     /**
