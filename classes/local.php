@@ -469,6 +469,11 @@ class local {
             $collaborate = $DB->get_record('collaborate', array('id' => $collaborate));
         }
 
+        if ($collaborate->sessionid === null) {
+            // Session has not been initialised - possibly a duplicated session.
+            return [];
+        }
+
         $config = get_config('collaborate');
 
         $api = api::get_api();

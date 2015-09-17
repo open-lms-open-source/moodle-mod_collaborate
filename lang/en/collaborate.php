@@ -97,5 +97,6 @@ $string['sessionstarthelp'] = 'Participants can join the meeting 15 minutes befo
 $string['starts'] = 'Starts - {$a}';
 $string['testapi'] = 'Test API';
 $string['timezone'] = 'Timezone: {$a}';
-$string['unrestored'] = 'A moderator must enter the session before you can access it.';
+$string['unrestored'] = 'A moderator must view or join the session before you can access it.';
+
 
