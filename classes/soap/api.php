@@ -66,9 +66,7 @@ class api extends generated\SASDefaultAdapter {
 
         $config = $config ? $config : get_config('collaborate');
 
-        if (!local::configured()) {
-            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
-        }
+        local::require_configured();
 
         // Set wsdl to local version.
         $wsdlurl = new \moodle_url('/mod/collaborate/wsdl.xml');
