@@ -31,6 +31,7 @@ use mod_collaborate\soap\generated\HtmlAttendee;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 use mod_collaborate\event;
 use mod_collaborate\logging;
+use mod_collaborate\service\base_visit_service;
 
 require_once(__DIR__.'/../../lib.php');
 
@@ -39,7 +40,7 @@ require_once(__DIR__.'/../../lib.php');
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class forward_service {
+class forward_service extends base_visit_service {
 
     /**
      * @var int
@@ -47,57 +48,24 @@ class forward_service {
     protected $id;
 
     /**
-     * @var \cm_info
-     */
-    protected $cm;
-
-    /**
-     * @var \stdClass
-     */
-    protected $course;
-
-    /**
-     * @var \stdClass
-     */
-    protected $context;
-
-    /**
-     * @var \stdClass
-     */
-    protected $collaborate;
-
-    /**
      * @var api
      */
     protected $api;
-
-    /**
-     * @var \stdClass
-     */
-    protected $user;
-
 
     /**
      * Constructor
      *
      * @param \stdClass $collaborate
      * @param \cm_info $cm
-     * @param \context_module $context;
      * @param \stdClass $user;
      * @throws \coding_exception
      * @throws \require_login_exception
      */
-    public function __construct(\stdClass $collaborate, \cm_info $cm, \context_module $context, \stdClass $user) {
-        global $DB;
+    public function __construct(\stdClass $collaborate,
+                                \cm_info $cm,
+                                \stdClass $user) {
 
-        $this->collaborate = $collaborate;
-        $this->course = $cm->get_course();
-        $this->cm = $cm;
-        $this->id = $cm->instance;
-        $this->context = $context;
-        $this->user = $user;
-
-        $this->collaborate = $DB->get_record('collaborate', array('id' => $this->id), '*', MUST_EXIST);
+        parent::__construct($collaborate, $cm, $user);
 
         $this->api = api::get_api();
     }
@@ -107,6 +75,9 @@ class forward_service {
      * @throws \coding_exception
      */
     public function handle_forward() {
+        // If a collaborate session hasn't been created yet and we can moderate or add, then create it now.
+        $this->moderator_ensure_session();
+
         return $this->forward();
     }
 
