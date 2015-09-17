@@ -39,11 +39,6 @@ class api extends generated\SASDefaultAdapter {
     /**
      * @var bool
      */
-    protected $configured = true;
-
-    /**
-     * @var bool
-     */
     protected $usable = true;
 
     /**
@@ -74,12 +69,6 @@ class api extends generated\SASDefaultAdapter {
         // Set service end point if populated.
         if (!empty($config->server)) {
             $options['location'] = $config->server;
-        }
-
-        if (empty($config->username) || empty($config->password) || empty($options['location'])) {
-            $this->configured = false;
-            $this->usable = false;
-            return;
         }
 
         $options['login'] = $config->username;
@@ -282,11 +271,7 @@ class api extends generated\SASDefaultAdapter {
         $start = microtime(true);
 
         if (!$this->usable) {
-            if ($this->configured) {
-                $key = 'error:apifailure';
-            } else {
-                $key = 'error:noconfiguration';
-            }
+            $key = 'error:apifailure';
             $this->process_error($key, constants::SEV_CRITICAL);
             if ($this->silent) {
                 return false;
