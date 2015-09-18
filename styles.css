@@ -26,7 +26,7 @@
     margin-top:1em;
 }
 
-#page-admin-setting-modsettingcollaborate .api-connection-status.spinner:after {
+#page-admin-setting-modsettingcollaborate .api-connection-status .spinner:after {
     content: ' ';
     display:inline-block;
     height:1.2em;
@@ -40,6 +40,10 @@
     float: right;
 }
 
-#page-admin-setting-modsettingcollaborate .api-connection-status.spinner .api_diag_btn {
+#page-admin-setting-modsettingcollaborate .api-connection-status .spinner .api_diag_btn {
+    display: none;
+}
+
+#api_diag .noticetemplate {
     display: none;
 }

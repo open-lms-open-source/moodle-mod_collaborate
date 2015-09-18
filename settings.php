@@ -67,16 +67,22 @@ if ($ADMIN->fulltree) {
 
     $apitest = '<div id="api_diag">';
     $apitest .= '<div id="api_diag_notice">'.get_string('apidiagnosticsavenotice', 'mod_collaborate').'</div>';
-    $apitest .= html_writer::link(
+    $apitest .= '<span class="button api_diag_btn">'.html_writer::link(
         new moodle_url('/mod/collaborate/testapi.php'),
         get_string('testapi', 'mod_collaborate'),
         [
-            'class'  => 'api_diag_btn btn btn-primary',
+            'class'  => 'btn btn-primary',
             'role'   => 'button',
             'target' => '_blank'
         ]
-    );
+    ).'</span>'; // Span is there just so it looks like a button in Express.
+    $apitest .= $OUTPUT->notification('', 'noticetemplate alert alert-danger notifyproblem');
+    $apitest .= $OUTPUT->notification('', 'noticetemplate alert alert-success notifysuccess');
+    $apitest .= $OUTPUT->notification('', 'noticetemplate alert alert-info');
+    $apitest .= '<div class="api-connection-status"></div>';
     $apitest .= '</div>';
+
+
     $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
     $settings->add($setting);
 
