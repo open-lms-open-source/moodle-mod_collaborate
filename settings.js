@@ -34,7 +34,7 @@ M.mod_collaborate.settings = {
     api_msg : function (stringkey, alertclass, extraclasses) {
         var msg = M.util.get_string(stringkey, 'mod_collaborate');
 
-        var msgcontainer = $('#api_diag .noticetemplate.'+alertclass).clone();
+        var msgcontainer = $('#api_diag .noticetemplate.' + alertclass).clone();
         msgcontainer.removeClass('noticetemplate'); // Essential, this isn't a template anymore!
         $(msgcontainer).addClass(extraclasses);
 
@@ -115,8 +115,3 @@ M.mod_collaborate.settings = {
         }
     }
 }
-
-
-
-
-
