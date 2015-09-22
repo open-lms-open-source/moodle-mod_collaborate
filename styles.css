@@ -40,10 +40,15 @@
     float: right;
 }
 
+
 #page-admin-setting-modsettingcollaborate .api-connection-status .spinner .api_diag_btn {
     display: none;
 }
 
 #api_diag .noticetemplate {
+    display: none;
+}
+
+#api_diag .noticetemplate_problem, #api_diag .noticetemplate_success, #api_diag .noticetemplate_message {
     display: none;
 }

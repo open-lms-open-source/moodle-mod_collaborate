@@ -13,7 +13,7 @@ M.mod_collaborate.settings = {
     init : function(Y, contextid) {
         M.cfg.context = contextid;
         if (!M.mod_collaborate.settings.initialised) {
-            this.api_msg('connectionstatusunknown', 'alert-info');
+            this.api_msg('connectionstatusunknown', 'message');
         }
         M.mod_collaborate.settings.applySettingChangeCheck();
         M.mod_collaborate.settings.applyClickApiTest();
@@ -34,13 +34,11 @@ M.mod_collaborate.settings = {
     api_msg : function (stringkey, alertclass, extraclasses) {
         var msg = M.util.get_string(stringkey, 'mod_collaborate');
 
-        var msgcontainer = $('#api_diag .noticetemplate.' + alertclass).clone();
-        msgcontainer.removeClass('noticetemplate'); // Essential, this isn't a template anymore!
+        var msgcontainer = $('#api_diag .noticetemplate_' + alertclass).children().first().clone();
+
         $(msgcontainer).addClass(extraclasses);
-
         $(msgcontainer).html('<span class="api-connection-msg">' + msg + '</span>');
-
-        $(msgcontainer).append($('#api_diag .api_diag_btn'));
+        //$(msgcontainer).append($('#api_diag .api_diag_btn'));
 
         // Wipe out existing connection status msg container.
         $('#api_diag .api-connection-status').empty();
@@ -56,7 +54,7 @@ M.mod_collaborate.settings = {
     testApi : function() {
 
         var self = this;
-        self.api_msg('verifyingapi', 'alert-info', 'spinner');
+        self.api_msg('verifyingapi', 'message', 'spinner');
 
         $.ajax({
             url: M.cfg.wwwroot + '/mod/collaborate/testapi.php',
@@ -70,16 +68,16 @@ M.mod_collaborate.settings = {
             success: function (data) {
                 if (data.success) {
                     if (!M.mod_collaborate.settings.modified) {
-                        self.api_msg('connectionverified', 'alert-success');
+                        self.api_msg('connectionverified', 'success');
                     } else {
-                        self.api_msg('connectionverifiedchanged', 'alert-success');
+                        self.api_msg('connectionverifiedchanged', 'success');
                     }
                 } else {
-                    self.api_msg('connectionfailed', 'alert-danger');
+                    self.api_msg('connectionfailed', 'problem');
                 }
             },
             error: function () {
-                self.api_msg('connectionfailed', 'alert-danger');
+                self.api_msg('connectionfailed', 'problem');
             }
         });
     },
@@ -90,7 +88,6 @@ M.mod_collaborate.settings = {
      * @author Guy Thomas
      */
     applyClickApiTest : function() {
-        $('#api_diag_notice').hide();
         $('.api_diag_btn').click(function(e){
             e.preventDefault();
             M.mod_collaborate.settings.testApi();

@@ -36,13 +36,23 @@ if ($ADMIN->fulltree) {
             'strings' => [
                 ['connectionfailed', 'mod_collaborate'],
                 ['connectionverified', 'mod_collaborate'],
-                ['connectionverifiedchanged', 'mod_collaborate'],
                 ['verifyingapi', 'mod_collaborate'],
                 ['connectionstatusunknown', 'mod_collaborate']
             ]
         );
         $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
     }
+
+    $apitest = '<div id="api_diag">';
+    $apitest .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'notifyproblem').'</div>';
+    $apitest .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'notifysuccess').'</div>';
+    $apitest .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'notifymessage').'</div>';
+    $apitest .= '<div class="api-connection-status"></div>';
+    $apitest .= '</div>';
+
+
+    $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
+    $settings->add($setting);
 
     $name = 'collaborate/server';
     $title = new \lang_string('configserver', 'collaborate');
@@ -63,27 +73,6 @@ if ($ADMIN->fulltree) {
     $description = '';
     $default = '';
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
-    $settings->add($setting);
-
-    $apitest = '<div id="api_diag">';
-    $apitest .= '<div id="api_diag_notice">'.get_string('apidiagnosticsavenotice', 'mod_collaborate').'</div>';
-    $apitest .= '<span class="button api_diag_btn">'.html_writer::link(
-        new moodle_url('/mod/collaborate/testapi.php'),
-        get_string('testapi', 'mod_collaborate'),
-        [
-            'class'  => 'btn btn-primary',
-            'role'   => 'button',
-            'target' => '_blank'
-        ]
-    ).'</span>'; // Span is there just so it looks like a button in Express.
-    $apitest .= $OUTPUT->notification('', 'noticetemplate alert alert-danger notifyproblem');
-    $apitest .= $OUTPUT->notification('', 'noticetemplate alert alert-success notifysuccess');
-    $apitest .= $OUTPUT->notification('', 'noticetemplate alert alert-info');
-    $apitest .= '<div class="api-connection-status"></div>';
-    $apitest .= '</div>';
-
-
-    $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
     $settings->add($setting);
 
     // Add debugging settings.
