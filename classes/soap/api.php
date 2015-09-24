@@ -59,7 +59,7 @@ class api extends generated\SASDefaultAdapter {
         $logger = new loggerdb();
         $this->setLogger($logger);
 
-        $config = $config ? $config : get_config('collaborate');
+        $config = $config ?: get_config('collaborate');
 
         local::require_configured();
 

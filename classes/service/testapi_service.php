@@ -63,12 +63,12 @@ class testapi_service {
      *
      * @param \mod_collaborate_renderer $renderer
      */
-    public function __construct(\mod_collaborate_renderer $renderer) {
+    public function __construct(\mod_collaborate_renderer $renderer,
+                                $server = false, $username = false, $password = false) {
         $this->renderer = $renderer;
-
-        $this->server = optional_param('server', false, PARAM_URL);
-        $this->username  = optional_param('username', false, PARAM_ALPHANUMEXT);
-        $this->password  = optional_param('password', false, PARAM_RAW);
+        $this->server = $server;
+        $this->username  = $username;
+        $this->password  = $password;
     }
 
     /**
@@ -97,7 +97,7 @@ class testapi_service {
      */
     protected function testapi_ajax() {
         $result = ['success' => self::api_verified()];
-        return (json_encode($result));
+        return json_encode($result);
     }
 
     /**

@@ -41,18 +41,13 @@ if ($ADMIN->fulltree) {
             ]
         );
         $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+
+        $renderer = $PAGE->get_renderer('mod_collaborate');
+        $apitest = $renderer->api_diagnostics();
+
+        $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
+        $settings->add($setting);
     }
-
-    $apitest = '<div id="api_diag">';
-    $apitest .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'notifyproblem').'</div>';
-    $apitest .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'notifysuccess').'</div>';
-    $apitest .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'notifymessage').'</div>';
-    $apitest .= '<div class="api-connection-status"></div>';
-    $apitest .= '</div>';
-
-
-    $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
-    $settings->add($setting);
 
     $name = 'collaborate/server';
     $title = new \lang_string('configserver', 'collaborate');
