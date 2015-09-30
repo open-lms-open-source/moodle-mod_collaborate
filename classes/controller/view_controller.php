@@ -107,7 +107,7 @@ class view_controller extends controller_abstract {
      * @return void
      */
     public function view_action() {
-        global $PAGE, $USER, $OUTPUT;
+        global $PAGE, $USER;
 
         $viewservice = new view_service($this->collaborate, $PAGE->cm, $USER);
 
@@ -118,12 +118,7 @@ class view_controller extends controller_abstract {
             'id' => $PAGE->cm->id,
             'action'    => 'view'
         ));
-
-        // We get the content of the page before we output the header - otherwise set_module_viewed does not work.
-        $view = $viewservice->handle_view();
-        echo $OUTPUT->header();
-        echo $view;
-        echo $OUTPUT->footer();
+        echo $viewservice->handle_view();
     }
 
     /**

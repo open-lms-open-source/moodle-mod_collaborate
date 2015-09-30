@@ -189,14 +189,14 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      */
     public function render_view_action(view_action $viewaction) {
         global $OUTPUT;
-
+        $o = $OUTPUT->header();
         $collaborate = $viewaction->get_collaborate();
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
         $unrestored = $collaborate->sessionid == null && $canparticipate;
 
-        $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
+        $o .= '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
         $times = local::get_times($collaborate, true);
         $o .= self::meeting_status($times, $cm, $canmoderate, $canparticipate, $unrestored);
 
@@ -216,6 +216,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $o .= $this->render_recordings($recordings);
         }
 
+        $o .= $OUTPUT->footer();
         return $o;
     }
 
