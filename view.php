@@ -34,7 +34,7 @@ $action = optional_param('action', 'view', PARAM_ALPHA);
 
 $vc = new view_controller($action);
 if ($action == 'view') {
-    echo $vc->view_action();
+    $vc->view_action();
 } else if ($action == 'forward') {
     $vc->forward_action();
 } else {
