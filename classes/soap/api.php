@@ -58,14 +58,13 @@ class api extends generated\SASDefaultAdapter {
      * @param string $wsdl - just here to match base class.
      */
     public function __construct(array $options = array(), $wsdl = null) {
-
         $logger = new loggerdb();
         $this->setLogger($logger);
 
         $config = get_config('collaborate');
 
         if (empty($config)) {
-            print_error('error:noconfiguration', 'mod_collaborate');
+            $this->process_error('error:noconfiguration', constants::SEV_CRITICAL);
         }
 
         // Set wsdl to local version.
@@ -183,6 +182,8 @@ class api extends generated\SASDefaultAdapter {
      * @throws \moodle_exception
      */
     public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
+        global $COURSE;
+
         $errorstring = get_string($errorkey, 'mod_collaborate');
 
         if (!empty($debuginfo)) {
@@ -223,7 +224,8 @@ class api extends generated\SASDefaultAdapter {
         }
 
         // Developer orinetated error message.
-        print_error($errorkey, 'mod_collaborate', '', null, $debuginfo);
+        $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
+        throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
     }
 
     /**
