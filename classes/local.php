@@ -193,25 +193,53 @@ class local {
     }
 
     /**
-     * Verify that the api works.
-     *
+     * Is this module configured?
      * @return bool
      */
-    public static function api_verified($silent = false) {
+    public static function configured() {
+        $config = get_config('collaborate');
+
+        if (!empty ($config)
+            && !empty($config->server)
+            && !empty($config->username)
+            && !empty($config->password)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Make sure module is configured or throw error.
+     * @throws \moodle_exception
+     */
+    public static function require_configured() {
+        if (!static::configured()) {
+            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
+        }
+    }
+
+    /**
+     * Verify that the api works.
+     *
+     * @param bool $silent
+     * @param bool|stdClass $config
+     * @return bool
+     */
+    public static function api_verified($silent = false, $config = false) {
         static $apiverified = null;
         // Only do this once! settings.php was calling this 3 times, hence the static to stop this!
         if ($apiverified !== null) {
             return $apiverified;
         }
-        $config = get_config('collaborate');
 
-        if (!empty($config->server)
-            && !empty($config->username)
-            && !empty($config->password)
-        ) {
+        $config = $config ? $config : get_config('collaborate');
+
+        if (static::configured()) {
             $param = new ServerConfiguration();
             try {
-                $api = api::get_api(true);
+                $api = api::get_api(true, [], null, $config);
             } catch (\Exception $e) {
                 $api = false;
             }

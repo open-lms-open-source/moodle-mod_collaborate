@@ -45,7 +45,12 @@ class api_controller extends controller_abstract {
         $PAGE->set_url('/mod/collaborate/testapi.php');
 
         $renderer = $PAGE->get_renderer('mod_collaborate');
-        $this->testapiservice = new testapi_service($renderer);
+
+        $server = optional_param('server', false, PARAM_URL);
+        $username  = optional_param('username', false, PARAM_ALPHANUMEXT);
+        $password  = optional_param('password', false, PARAM_RAW);
+
+        $this->testapiservice = new testapi_service($renderer, $server, $username, $password);
     }
 
     /**

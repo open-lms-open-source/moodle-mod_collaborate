@@ -21,3 +21,34 @@
     font-size: smaller;
     margin-left: 1em;
 }
+
+#page-admin-setting-modsettingcollaborate .api-connection-status {
+    margin-top:1em;
+}
+
+#page-admin-setting-modsettingcollaborate .api-connection-status .spinner:after {
+    content: ' ';
+    display:inline-block;
+    height:1.2em;
+    width:1.2em;
+    background-image:url([[pix:i/loading]]);
+    background-size: 1.2em 1.2em;
+    margin-left:1.2em;
+}
+
+#page-admin-setting-modsettingcollaborate .api-connection-status .api_diag_btn {
+    float: right;
+}
+
+
+#page-admin-setting-modsettingcollaborate .api-connection-status .spinner .api_diag_btn {
+    display: none;
+}
+
+#api_diag .noticetemplate {
+    display: none;
+}
+
+#api_diag .noticetemplate_problem, #api_diag .noticetemplate_success, #api_diag .noticetemplate_message {
+    display: none;
+}

@@ -51,8 +51,9 @@ $string['configwsdebug'] = 'Web Services Debugging';
 $string['configwsdebugdesc'] = 'Turn on Web Services debugging: useful when you are receiving Fault errors using this module but prints out a lot of extra information';
 $string['configwsdl'] = 'WSDL URL';
 $string['configwsdldesc'] = 'Default .wsdl to use when creating a new Blackboard Collaborate session.';
-$string['connectionfailed'] = 'API connection failed';
-$string['connectionverified'] = 'API connection verified';
+$string['connectionfailed'] = 'Connection failed - please check credentials';
+$string['connectionverified'] = 'Credentials verified';
+$string['connectionstatusunknown'] = 'Connection status unknown';
 $string['crontask'] = 'Collaborate scheduled task';
 $string['debugging'] = 'Debugging';
 $string['duration'] = 'Duration';
@@ -95,8 +96,8 @@ $string['recordings'] = 'Recordings';
 $string['sessionstart'] = 'Start';
 $string['sessionstarthelp'] = 'Participants can join the meeting 15 minutes before it starts';
 $string['starts'] = 'Starts - {$a}';
-$string['testapi'] = 'Test API';
+$string['testapi'] = 'Test connection';
 $string['timezone'] = 'Timezone: {$a}';
 $string['unrestored'] = 'A moderator must view or join the session before you can access it.';
-
+$string['verifyingapi'] = 'Verifying API connection. Please wait...';
 

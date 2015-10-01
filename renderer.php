@@ -348,4 +348,21 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $o .= '</td></tr></table>';
         return $o;
     }
+
+    /**
+     * API diagnostics - status + msg templates.
+     *
+     * @return string
+     */
+    public function api_diagnostics() {
+        global $OUTPUT;
+
+        $o = '<div id="api_diag">';
+        $o .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'notifyproblem').'</div>';
+        $o .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'notifysuccess').'</div>';
+        $o .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'notifymessage').'</div>';
+        $o .= '<div class="api-connection-status"></div>';
+        $o .= '</div>';
+        return $o;
+    }
 }
