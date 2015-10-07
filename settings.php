@@ -49,6 +49,10 @@ if ($ADMIN->fulltree) {
         $settings->add($setting);
     }
 
+    $name = 'collaborate/apisettings';
+    $setting = new \admin_setting_heading($name, get_string('apisettings', 'mod_collaborate'), '');
+    $settings->add($setting);
+
     $name = 'collaborate/server';
     $title = new \lang_string('configserver', 'collaborate');
     $description = new \lang_string('configserverdesc', 'collaborate');
