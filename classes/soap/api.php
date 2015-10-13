@@ -172,6 +172,8 @@ class api extends generated\SASDefaultAdapter {
      * @throws \moodle_exception
      */
     public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
+        global $COURSE;
+        
         $errorstring = get_string($errorkey, 'mod_collaborate');
 
         if (!empty($debuginfo)) {
@@ -212,7 +214,8 @@ class api extends generated\SASDefaultAdapter {
         }
 
         // Developer orinetated error message.
-        print_error($errorkey, 'mod_collaborate', '', null, $debuginfo);
+        $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
+        throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
     }
 
     /**
