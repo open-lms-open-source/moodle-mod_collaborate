@@ -200,10 +200,10 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $times = local::get_times($collaborate, true);
         $o .= self::meeting_status($times, $cm, $canmoderate, $canparticipate, $unrestored);
 
-        $o .= '<hr />';
 
         // Conditions to show the intro can change to look for own settings or whatever.
-        if ($collaborate->intro) {
+        if (!empty($collaborate->intro)) {
+            $o .= '<hr />';
             $o .= $OUTPUT->box(
                 format_module_intro('collaborate', $collaborate, $cm->id),
                 'generalbox mod_introbox', 'collaborateintro'
@@ -212,8 +212,10 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         if ($canparticipate) {
             $recordings = local::get_recordings($collaborate);
-            $o .= '<hr />';
-            $o .= $this->render_recordings($recordings);
+            if (!empty($recordings)) {
+                $o .= '<hr />';
+                $o .= $this->render_recordings($recordings);
+            }
         }
 
         return $o;
