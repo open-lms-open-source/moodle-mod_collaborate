@@ -67,9 +67,8 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
-        // Adding the standard "intro" and "introformat" fields. Note has to be required as description is required by
-        // API.
-        $this->add_intro_editor(true);
+        // Adding the standard "intro" and "introformat" fields.
+        $this->standard_intro_elements();
 
         $time = time();
 
