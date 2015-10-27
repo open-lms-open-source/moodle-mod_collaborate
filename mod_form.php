@@ -84,7 +84,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
 
         // Get timezone to show against start time label.
-        $tzones = get_list_of_timezones();
+        $tzones = core_date::get_list_of_timezones();
         if (isset($tzones[$USER->timezone])) {
             $tzone = $tzones[$USER->timezone];
         } else {
