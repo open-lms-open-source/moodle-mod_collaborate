@@ -10,8 +10,8 @@
     padding-left: 1.5em;
 }
 
-.modtype_collaborate .activityinstance a {
-    margin-right: 0.5em;
+.modtype_collaborate .activityinstance a + span.label{
+    margin-left: 0.5em;
 }
 
 .path-mod-collaborate .collab-recording-list {
