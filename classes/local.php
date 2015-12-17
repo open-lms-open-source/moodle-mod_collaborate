@@ -260,12 +260,15 @@ class local {
             $result = false;
         }
         $apiverified = false;
-        if (!empty($result)
-            && !empty($result->getServerConfigurationResponse()[0])
-            && !empty($result->getServerConfigurationResponse()[0]->getTimeZone())
-        ) {
-            $apiverified = true;
-        }
+        if (!empty($result)) {
+            $configresp = $result->getServerConfigurationResponse();
+            if (!empty($configresp[0])) {
+                $tzone = $configresp[0]->getTimeZone();
+                if (!empty($tzone)) {
+                    $apiverified = true;
+                }
+             }
+         }
         return ($apiverified);
     }
 
