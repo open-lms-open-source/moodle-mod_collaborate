@@ -232,11 +232,11 @@ class local {
             $result = false;
         }
         $apiverified = false;
-        if (!empty($result)
-            && !empty($result->getServerConfigurationResponse()[0])
-            && !empty($result->getServerConfigurationResponse()[0]->getTimeZone())
-        ) {
-            $apiverified = true;
+        if (!empty($result)) {
+            $response = $result->getServerConfigurationResponse();
+            if (!empty($response[0]) && $response[0]->getTimeZone()) {
+                $apiverified = true;
+            }
         }
         return ($apiverified);
     }
