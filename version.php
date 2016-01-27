@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_collaborate';
-$plugin->version = 2015101600;
-$plugin->release = 'v1.0';
-$plugin->requires = 2014051200;
+$plugin->version = 2016012600;
+$plugin->release = '2.9.3 (Build: 20160204)';
+$plugin->requires = 2015051103;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array();
