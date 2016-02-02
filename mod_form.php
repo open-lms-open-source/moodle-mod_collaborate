@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
+use mod_collaborate\local;
+
 /**
  * Module instance settings form
  *
@@ -47,6 +49,8 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         $mform = $this->_form;
 
+        local::require_configured();
+
         $mform->addElement('hidden', 'sessionid');
         $mform->setType('sessionid', PARAM_INT);
 
@@ -63,26 +67,35 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
-        // Adding the standard "intro" and "introformat" fields. Note has to be required as description is required by
-        // API.
-        $this->add_intro_editor(true);
+        // Adding the standard "intro" and "introformat" fields.
+        $this->standard_intro_elements();
 
         $time = time();
 
         // Round time up if necessary.
         $minutes = date('i', $time);
-        if ($minutes >= 30) {
-            $time += (60 - $minutes) * 60;
+        $rminutes = 0; // New minutes to use in rounding.
+        if ($minutes >= 45) {
+            $time = strtotime('+1 hour', $time);
+        } else if ($minutes >= 15) {
+            $rminutes = 30;
         }
-        // Remove minutes.
-        $time = strtotime(date('Y-m-d H:0', $time));
+        $time = mktime(date('H', $time), $rminutes, 0, date('n'), date('j'), date('Y'));
+
 
         // Get timezone to show against start time label.
-        $tzones = get_list_of_timezones();
+        $tzones = core_date::get_list_of_timezones();
         if (isset($tzones[$USER->timezone])) {
             $tzone = $tzones[$USER->timezone];
         } else {
-            $tzone = $tzones[date_default_timezone_get()];
+            $defaulttz = date_default_timezone_get();
+            if (isset($tzones[$defaulttz])) {
+                // Great, moodle has a textual representation of this timezone that we can use.
+                $tzone = $tzones[$defaulttz];
+            } else {
+                // We can't find this timezone in the list of moodle timezones, so let's just use it as is.
+                $tzone = $defaulttz;
+            }
         }
         $tzonestr = ' (' . get_string('timezone', 'mod_collaborate', $tzone).')';
 

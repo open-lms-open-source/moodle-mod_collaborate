@@ -189,21 +189,21 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      */
     public function render_view_action(view_action $viewaction) {
         global $OUTPUT;
-        $o = $OUTPUT->header();
+
         $collaborate = $viewaction->get_collaborate();
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
         $unrestored = $collaborate->sessionid == null && $canparticipate;
 
-        $o .= '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
+        $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
         $times = local::get_times($collaborate, true);
         $o .= self::meeting_status($times, $cm, $canmoderate, $canparticipate, $unrestored);
 
-        $o .= '<hr />';
 
         // Conditions to show the intro can change to look for own settings or whatever.
-        if ($collaborate->intro) {
+        if (!empty($collaborate->intro)) {
+            $o .= '<hr />';
             $o .= $OUTPUT->box(
                 format_module_intro('collaborate', $collaborate, $cm->id),
                 'generalbox mod_introbox', 'collaborateintro'
@@ -212,11 +212,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         if ($canparticipate) {
             $recordings = local::get_recordings($collaborate);
-            $o .= '<hr />';
-            $o .= $this->render_recordings($recordings);
+            if (!empty($recordings)) {
+                $o .= '<hr />';
+                $o .= $this->render_recordings($recordings);
+            }
         }
 
-        $o .= $OUTPUT->footer();
         return $o;
     }
 
@@ -307,5 +308,63 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $table->data[] = $row;
         }
         return html_writer::table($table);
+    }
+
+    /**
+     * Render recent activity
+     * This code is copied
+     *
+     * @author: Guy Thomas
+     * @param $activity
+     * @param $courseid
+     * @param $detail
+     * @param $modnames
+     * @return string
+     */
+    public function recent_activity($activity, $courseid, $detail, $modnames) {
+        global $CFG, $OUTPUT;
+
+        $o = '';
+        $o .= '<table border="0" cellpadding="3" cellspacing="0" class="collaborate-recent">';
+
+        $o .= '<tr><td class="userpicture" valign="top">';
+        $o .= $OUTPUT->user_picture($activity->user);
+        $o .= '</td><td>';
+
+        if ($detail) {
+            $modname = $modnames[$activity->type];
+            $o .= '<div class="title">';
+            $o .= '<img src="' . $OUTPUT->pix_url('icon', 'collaborate') . '" '.
+                'class="icon" alt="' . $modname . '">';
+            $o .= '<a href="' . $CFG->wwwroot . '/mod/collaborate/view.php?id=' . $activity->cmid . '">';
+            $o .= $activity->name;
+            $o .= '</a>';
+            $o .= '</div>';
+        }
+
+        $o .= '<div class="user">';
+        $o .= "<a href=\"$CFG->wwwroot/user/view.php?id={$activity->user->id}&amp;course=$courseid\">";
+        $o .= "{$activity->user->fullname}</a>  - " . userdate($activity->timestamp);
+        $o .= '</div>';
+
+        $o .= '</td></tr></table>';
+        return $o;
+    }
+
+    /**
+     * API diagnostics - status + msg templates.
+     *
+     * @return string
+     */
+    public function api_diagnostics() {
+        global $OUTPUT;
+
+        $o = '<div id="api_diag">';
+        $o .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'notifyproblem').'</div>';
+        $o .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'notifysuccess').'</div>';
+        $o .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'notifymessage').'</div>';
+        $o .= '<div class="api-connection-status"></div>';
+        $o .= '</div>';
+        return $o;
     }
 }

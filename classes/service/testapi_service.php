@@ -44,21 +44,82 @@ class testapi_service {
     protected $renderer;
 
     /**
+     * @var bool
+     */
+    protected $server = false;
+
+    /**
+     * @var bool
+     */
+    protected $username = false;
+
+    /**
+     * @var bool
+     */
+    protected $password = false;
+
+    /**
      * Constructor.
      *
      * @param \mod_collaborate_renderer $renderer
      */
-    public function __construct(\mod_collaborate_renderer $renderer) {
+    public function __construct(\mod_collaborate_renderer $renderer,
+                                $server = false, $username = false, $password = false) {
         $this->renderer = $renderer;
+        $this->server = $server;
+        $this->username  = $username;
+        $this->password  = $password;
+    }
+
+    /**
+     * Is the api verified?
+     * Pass in config if it's available.
+     *
+     * @return bool
+     */
+    protected function api_verified() {
+        $apidetscomplete = $this->server !== false && $this->username !== false && $this->password !== false;
+        $config = false;
+        if ($apidetscomplete) {
+            $config = (object) [
+                'server'   => $this->server,
+                'username' => $this->username,
+                'password' => $this->password
+            ];
+        }
+        return local::api_verified(true, $config);
+    }
+
+    /**
+     * Test the api and return array for ajax request
+     *
+     * @return string
+     */
+    protected function testapi_ajax() {
+        $result = ['success' => self::api_verified()];
+        return json_encode($result);
+    }
+
+    /**
+     * Test the api and return html
+     *
+     * @return string
+     */
+    protected function testapi_render() {
+        return $this->renderer->connection_verified(self::api_verified());
     }
 
     /**
      * Handle testing api.
      *
-     * @return string
+     * @return string|array
      * @throws \coding_exception
      */
     public function handle_testapi() {
-        return $this->renderer->connection_verified(local::api_verified(true));
+        if (AJAX_SCRIPT) {
+            return $this->testapi_ajax();
+        } else {
+            return $this->testapi_render();
+        }
     }
 }

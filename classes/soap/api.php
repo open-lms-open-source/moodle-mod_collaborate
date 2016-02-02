@@ -20,6 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\logging\loggerdb;
 use mod_collaborate\logging\constants;
+use mod_collaborate\local;
 
 require_once($CFG->dirroot.'/mod/collaborate/vendor/psr/log/Psr/Log/LoggerAwareTrait.php');
 
@@ -38,11 +39,6 @@ class api extends generated\SASDefaultAdapter {
     /**
      * @var bool
      */
-    protected $configured = true;
-
-    /**
-     * @var bool
-     */
     protected $usable = true;
 
     /**
@@ -56,17 +52,16 @@ class api extends generated\SASDefaultAdapter {
      *
      * @param array $options
      * @param string $wsdl - just here to match base class.
+     * @param bool $config - custom config passed in on construct.
      */
-    public function __construct(array $options = array(), $wsdl = null) {
+    public function __construct(array $options = array(), $wsdl = null, $config = false) {
 
         $logger = new loggerdb();
         $this->setLogger($logger);
 
-        $config = get_config('collaborate');
+        $config = $config ?: get_config('collaborate');
 
-        if (empty($config)) {
-            print_error('error:noconfiguration', 'mod_collaborate');
-        }
+        local::require_configured();
 
         // Set wsdl to local version.
         $wsdlurl = new \moodle_url('/mod/collaborate/wsdl.xml');
@@ -75,12 +70,6 @@ class api extends generated\SASDefaultAdapter {
         // Set service end point if populated.
         if (!empty($config->server)) {
             $options['location'] = $config->server;
-        }
-
-        if (empty($config->username) || empty($config->password) || empty($options['location'])) {
-            $this->configured = false;
-            $this->usable = false;
-            return;
         }
 
         $options['login'] = $config->username;
@@ -118,12 +107,12 @@ class api extends generated\SASDefaultAdapter {
      *
      * @return api
      */
-    public static function get_api($reset = false) {
+    public static function get_api($reset = false, $options = [], $wsdl = null, $config = false) {
         static $api;
         if ($api && !$reset) {
             return $api;
         }
-        $api = new api();
+        $api = new api($options, $wsdl, $config);
         return $api;
     }
 
@@ -183,6 +172,8 @@ class api extends generated\SASDefaultAdapter {
      * @throws \moodle_exception
      */
     public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
+        global $COURSE;
+        
         $errorstring = get_string($errorkey, 'mod_collaborate');
 
         if (!empty($debuginfo)) {
@@ -223,7 +214,8 @@ class api extends generated\SASDefaultAdapter {
         }
 
         // Developer orinetated error message.
-        print_error($errorkey, 'mod_collaborate', '', null, $debuginfo);
+        $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
+        throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
     }
 
     /**
@@ -283,11 +275,7 @@ class api extends generated\SASDefaultAdapter {
         $start = microtime(true);
 
         if (!$this->usable) {
-            if ($this->configured) {
-                $key = 'error:apifailure';
-            } else {
-                $key = 'error:noconfiguration';
-            }
+            $key = 'error:apifailure';
             $this->process_error($key, constants::SEV_CRITICAL);
             if ($this->silent) {
                 return false;

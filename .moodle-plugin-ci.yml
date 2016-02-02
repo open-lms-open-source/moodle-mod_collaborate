@@ -1,0 +1,4 @@
+filter:
+  notPaths:
+    - "vendor"
+    - "classes/soap/generated"

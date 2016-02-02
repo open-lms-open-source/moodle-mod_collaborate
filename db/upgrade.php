@@ -57,5 +57,18 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2015072400, 'collaborate');
     }
 
+    if ($oldversion < 2015101600) {
+
+        // Changing nullability of field intro on table collaborate to null.
+        $table = new xmldb_table('collaborate');
+        $field = new xmldb_field('intro', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name');
+
+        // Launch change of nullability for field intro.
+        $dbman->change_field_notnull($table, $field);
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2015101600, 'collaborate');
+    }
+
     return true;
 }

@@ -28,6 +28,31 @@ use mod_collaborate\trimmed_configtext;
 
 if ($ADMIN->fulltree) {
 
+    if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
+        $PAGE->requires->jquery();
+        $module = array(
+            'name' => 'mod_collaborate',
+            'fullpath' => '/mod/collaborate/settings.js',
+            'strings' => [
+                ['connectionfailed', 'mod_collaborate'],
+                ['connectionverified', 'mod_collaborate'],
+                ['verifyingapi', 'mod_collaborate'],
+                ['connectionstatusunknown', 'mod_collaborate']
+            ]
+        );
+        $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+
+        $renderer = $PAGE->get_renderer('mod_collaborate');
+        $apitest = $renderer->api_diagnostics();
+
+        $setting = new \admin_setting_heading('apidiagnostics', '', $apitest);
+        $settings->add($setting);
+    }
+
+    $name = 'collaborate/apisettings';
+    $setting = new \admin_setting_heading($name, get_string('apisettings', 'mod_collaborate'), '');
+    $settings->add($setting);
+
     $name = 'collaborate/server';
     $title = new \lang_string('configserver', 'collaborate');
     $description = new \lang_string('configserverdesc', 'collaborate');
@@ -47,19 +72,6 @@ if ($ADMIN->fulltree) {
     $description = '';
     $default = '';
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
-    $settings->add($setting);
-
-    $apitest = '<div>'.get_string('apidiagnosticsavenotice', 'mod_collaborate').'</div>';
-    $apitest .= html_writer::link(
-        new moodle_url('/mod/collaborate/testapi.php'),
-        get_string('testapi', 'mod_collaborate'),
-        [
-            'class'  => 'btn btn-primary',
-            'role'   => 'button',
-            'target' => '_blank'
-        ]
-    );
-    $setting = new \admin_setting_heading('apidiagnostics', get_string('apidiagnostics', 'collaborate'), $apitest);
     $settings->add($setting);
 
     // Add debugging settings.
