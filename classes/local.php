@@ -128,10 +128,11 @@ class local {
             $event->eventtype   = 'due';
             $event->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
             if (!empty($event->timeend)) {
-                // ask if duration is set to "duration of course", then replace 
-                // the timeend (just in calendar) by a constant of 2 mins to avoid all entries creation.
-                if($event->timeend==32503708800){
-                    $event->timeend = ($event->timestart + intval(120));
+                // Ask if duration is set to "duration of course", then replace the
+                // timeend (just in calendar) by the timestart creating a timeduration of 0.
+                $lastsdurationofcourse = 32503708800;
+                if($event->timeend == $lastsdurationofcourse){
+                    $event->timeend = $event->timestart;
                 }
                 $event->timeduration = ($event->timeend - $event->timestart);
             } else {
