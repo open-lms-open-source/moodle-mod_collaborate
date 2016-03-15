@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Common local functions used by the collaborate module.
+ * Test Collaborate interaction with Moodle calendar.
  *
  * @package   mod_collaborate
  * @category  phpunit
@@ -59,7 +59,6 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $collabactivity->timecreated = $now;
         $collabactivity->timestart = $collabactivity->timecreated;
         $collabactivity->duration = $duration;
-        $this->assertEquals($collabactivity->timecreated, $collabactivity->timestart);
 
         $finishingtime = local::timeend_from_duration($collabactivity->timestart, $duration);
         $collabactivity->timeend = $finishingtime;
@@ -104,7 +103,6 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $collabactivity->timecreated = $now;
         $collabactivity->timestart = $collabactivity->timecreated;
         $collabactivity->duration = $duration;
-        $this->assertEquals($collabactivity->timecreated, $collabactivity->timestart);
 
         $finishingtime = local::timeend_from_duration($collabactivity->timestart, $duration);
         $collabactivity->timeend = $finishingtime;
