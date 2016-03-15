@@ -130,7 +130,7 @@ class local {
             if (!empty($event->timeend)) {
                 // Ask if duration is set to "duration of course", then replace the
                 // timeend (just in calendar) by the timestart creating a timeduration of 0.
-                $lastsdurationofcourse = 32503708800;
+                $lastsdurationofcourse = strtotime('3000-01-01 00:00');
                 if($event->timeend == $lastsdurationofcourse){
                     $event->timeend = $event->timestart;
                 }
