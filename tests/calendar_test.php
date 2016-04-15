@@ -32,6 +32,8 @@ require_once($CFG->dirroot.'/calendar/lib.php');
 
 class mod_collaborate_calendar_testcase extends advanced_testcase {
 
+    private $user;
+
     protected function setUp() {
         global $USER;
         // The user we are going to test this on.
@@ -39,12 +41,12 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $this->user = $USER;
     }
 
-     public function test_collabcalendar_duration_onehour() {
-        global $DB, $COURSE;
+    public function test_collabcalendar_duration_onehour() {
+        global $DB;
 
         // This scenario is for creating a collaborate session with duration set to 1 hour.
 
-     	$this->resetAfterTest(true);
+        $this->resetAfterTest(true);
 
         $course1 = $this->getDataGenerator()->create_course();
         $duration = 3600; // Setting duration of the activity to one hour.
@@ -81,10 +83,10 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $this->assertEquals($collabactivity->id, $calendarevent->instance);
         $this->assertEquals($collabactivity->timestart, $calendarevent->timestart);
         $this->assertEquals($duration, $calendarevent->timeduration);
-     }
+    }
 
-     public function test_collabcalendar_duration_durationofcourse() {
-     	 global $DB, $COURSE;
+    public function test_collabcalendar_duration_durationofcourse() {
+        global $DB;
 
         // This scenario is for creating a collaborate session with duration set to "duration of course".
 
@@ -128,5 +130,5 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $this->assertEquals($collabactivity->timestart, $calendarevent->timestart);
         $this->assertNotEquals($duration, $calendarevent->timeduration);
         $this->assertEquals(0, $calendarevent->timeduration);
-     }
- }
+    }
+}

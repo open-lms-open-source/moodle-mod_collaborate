@@ -173,7 +173,7 @@ class api extends generated\SASDefaultAdapter {
      */
     public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
         global $COURSE;
-        
+
         $errorstring = get_string($errorkey, 'mod_collaborate');
 
         if (!empty($debuginfo)) {

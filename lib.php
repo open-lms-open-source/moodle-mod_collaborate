@@ -428,7 +428,7 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
     $readers = $logmanger->get_readers('\core\log\sql_reader');
     $reader = reset($readers);
     if (empty($reader)) {
-        return false; // No log reader found.
+        return; // No log reader found.
     }
 
     $modinfo = get_fast_modinfo($courseid);

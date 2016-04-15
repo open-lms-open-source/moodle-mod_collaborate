@@ -35,23 +35,23 @@ require_once(__DIR__.'/controller_abstract.php');
 class view_controller extends controller_abstract {
 
     /**
-     * @var stdClass
+     * @var \stdClass
      */
     protected $cm;
 
     /**
-     * @var stdClass | bool
+     * @var \stdClass|bool
      */
     protected $course;
 
     /**
-     * @var stdClass | bool
+     * @var \stdClass|bool
      */
     protected $collaborate;
 
 
     public function init() {
-        global $PAGE, $USER;
+        global $PAGE;
 
         $this->set_properties();
 

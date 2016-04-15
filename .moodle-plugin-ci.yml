@@ -1,4 +1,4 @@
 filter:
   notPaths:
     - "vendor"
-    - "classes/soap/generated"
+    - "classes/soap"

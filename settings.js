@@ -17,9 +17,7 @@ M.mod_collaborate.settings = {
         }
         M.mod_collaborate.settings.applySettingChangeCheck();
         M.mod_collaborate.settings.applyClickApiTest();
-        if ($('#id_s_collaborate_server').val() +
-            $('#id_s_collaborate_username').val() +
-            $('#id_s_collaborate_password').val() !== '') {
+        if ($('#id_s_collaborate_server').val() + $('#id_s_collaborate_username').val() + $('#id_s_collaborate_password').val() !== '') {
             M.mod_collaborate.settings.testApi();
         }
         M.mod_collaborate.settings.initialised = true;
@@ -38,12 +36,11 @@ M.mod_collaborate.settings = {
 
         $(msgcontainer).addClass(extraclasses);
         $(msgcontainer).html('<span class="api-connection-msg">' + msg + '</span>');
-        //$(msgcontainer).append($('#api_diag .api_diag_btn'));
 
         // Wipe out existing connection status msg container.
         $('#api_diag .api-connection-status').empty();
 
-        // Put in new msg container
+        // Put in new msg container.
         $('#api_diag .api-connection-status').append($(msgcontainer));
 
     },
@@ -106,9 +103,9 @@ M.mod_collaborate.settings = {
             '#id_s_collaborate_password'
         ];
         for (var s in settingfields) {
-            $(settingfields[s]).keypress(function(e) {
+            $(settingfields[s]).keypress(function() {
                 M.mod_collaborate.settings.modified = true;
             });
         }
     }
-}
+};

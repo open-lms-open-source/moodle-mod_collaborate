@@ -131,7 +131,7 @@ class local {
                 // Ask if duration is set to "duration of course", then replace the
                 // timeend (just in calendar) by the timestart creating a timeduration of 0.
                 $lastsdurationofcourse = strtotime('3000-01-01 00:00');
-                if($event->timeend == $lastsdurationofcourse){
+                if ($event->timeend == $lastsdurationofcourse) {
                     $event->timeend = $event->timestart;
                 }
                 $event->timeduration = ($event->timeend - $event->timestart);
@@ -273,8 +273,8 @@ class local {
                 if (!empty($tzone)) {
                     $apiverified = true;
                 }
-             }
-         }
+            }
+        }
         return ($apiverified);
     }
 
@@ -510,8 +510,6 @@ class local {
             // Session has not been initialised - possibly a duplicated session.
             return [];
         }
-
-        $config = get_config('collaborate');
 
         $api = api::get_api();
         $session = new HtmlSessionRecording();

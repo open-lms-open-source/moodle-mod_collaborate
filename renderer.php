@@ -197,9 +197,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $unrestored = $collaborate->sessionid == null && $canparticipate;
 
         $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
-        $times = local::get_times($collaborate, true);
+        $times = local::get_times($collaborate);
         $o .= self::meeting_status($times, $cm, $canmoderate, $canparticipate, $unrestored);
-
 
         // Conditions to show the intro can change to look for own settings or whatever.
         if (!empty($collaborate->intro)) {

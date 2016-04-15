@@ -39,7 +39,7 @@ class api_controller extends controller_abstract {
         parent::init();
 
         // Set up the page header.
-        $PAGE->set_context(\CONTEXT_SYSTEM::instance());
+        $PAGE->set_context(\context_system::instance());
         $PAGE->set_title(get_string('apidiagnostics', 'mod_collaborate'));
         $PAGE->set_heading(get_string('apidiagnostics', 'mod_collaborate'));
         $PAGE->set_url('/mod/collaborate/testapi.php');

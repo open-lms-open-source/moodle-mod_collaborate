@@ -23,6 +23,9 @@
  */
 
 namespace mod_collaborate\event;
+
+use core\event\base;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
@@ -39,7 +42,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class session_launched extends \core\event\base {
+class session_launched extends base {
 
     /**
      * Init method.
