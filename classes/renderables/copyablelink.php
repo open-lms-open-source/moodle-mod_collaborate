@@ -13,21 +13,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+ 
 /**
- * Version information for Collaborate plugin.
- *
- * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * Copyable link
+ * @author    gthomas2
+ * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_collaborate\renderables;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2016041500;
-$plugin->release = '2.9.3 (Build: 20160204)';
-$plugin->requires = 2015051103;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+class copyablelink implements \renderable{
+    public function __construct($label, $id, $url) {
+        $this->label = $label;
+        $this->id = $id;
+        $this->url = $url;
+    }
+}

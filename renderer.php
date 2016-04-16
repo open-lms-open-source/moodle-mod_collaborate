@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/calendar/lib.php');
 
 use mod_collaborate\renderables\view_action;
+use mod_collaborate\renderables\copyablelink;
 use mod_collaborate\local;
 
 class mod_collaborate_renderer extends plugin_renderer_base {
@@ -70,7 +71,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @param bool $canparticipate
      * @return string
      */
-    public function meeting_status($times, $cm, $canmoderate = false, $canparticipate = false, $unrestored = false) {
+    public function meeting_status($times,
+                                   $cm,
+                                   $canmoderate = false,
+                                   $canparticipate = false,
+                                   $unrestored = false,
+                                   $allowguestaccess = false) {
         global $OUTPUT;
 
         $o = '<div class = "path-mod-collaborate__meetingstatus">';
@@ -88,7 +94,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                         'class' => 'btn btn-success',
                         'target' => '_blank'
                     ]);
-                } else {
+                } else if (!$allowguestaccess) {
                     $o .= $OUTPUT->notification(get_string('noguestentry', 'collaborate'));
                 }
             }
@@ -215,6 +221,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 $o .= '<hr />';
                 $o .= $this->render_recordings($recordings);
             }
+        }
+
+        $guesturl = $viewaction->get_guest_url();
+        if ($guesturl) {
+            $clink = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturl);
+            $o .= $this->render($clink);
         }
 
         return $o;
@@ -348,6 +360,15 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $o .= '</td></tr></table>';
         return $o;
+    }
+
+    /**
+     * @param $url
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_copyablelink(copyablelink $clink) {
+        return $this->render_from_template('collaborate/copyablelink', $clink);
     }
 
     /**

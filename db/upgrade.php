@@ -70,5 +70,62 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2015101600, 'collaborate');
     }
 
+    if ($oldversion < 2016041500) {
+
+        // Define field guestaccessenabled to be added to collaborate.
+        $table = new xmldb_table('collaborate');
+        $field = new xmldb_field('guestaccessenabled',
+                XMLDB_TYPE_INTEGER,
+                '1',
+                null,
+                XMLDB_NOTNULL,
+                null,
+                '0',
+                'completionlaunch'
+        );
+
+        // Conditionally add guestaccessenabled field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field guestrole to be added to collaborate.
+        $field = new xmldb_field(
+                'guestrole',
+                XMLDB_TYPE_CHAR,
+                '2',
+                null,
+                XMLDB_NOTNULL,
+                null,
+                'pr',
+                'guestaccessenabled'
+        );
+
+        // Conditionally add guestrole field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field guesturl to be added to collaborate.
+        $field = new xmldb_field(
+            'guesturl',
+            XMLDB_TYPE_CHAR,
+            '255',
+            null,
+            null,
+            null,
+            null,
+            'guestrole'
+        );
+
+        // Conditionally add guestrole field.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2016041500, 'collaborate');
+    }
+
     return true;
 }

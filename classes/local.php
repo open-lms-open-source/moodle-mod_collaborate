@@ -443,6 +443,14 @@ class local {
         $htmlsession->setDescription(strip_tags($description));
         $htmlsession->setBoundaryTime(self::boundary_time());
         $htmlsession->setMustBeSupervised(true);
+        $htmlsession->setAllowGuest($data->guestaccessenabled);
+        switch ($data->guestrole) {
+            case 'pa' : $guestrole = 'Participant'; break;
+            case 'pr' : $guestrole = 'Presenter'; break;
+            case 'mo' : $guestrole = 'Moderator'; break;
+            default : $guestrole = 'P';
+        }
+
 
         // Add attendees to html session.
         $attendees = new HtmlAttendeeCollection();

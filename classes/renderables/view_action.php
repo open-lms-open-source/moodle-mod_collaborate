@@ -46,6 +46,11 @@ class view_action implements \renderable{
     /**
      * @var bool
      */
+    protected $canadd;
+
+    /**
+     * @var bool
+     */
     protected $canmoderate;
 
     /**
@@ -57,6 +62,7 @@ class view_action implements \renderable{
         $this->collaborate = $collaborate;
         $this->cm = $cm;
         $this->context = \context_module::instance($cm->id);
+        $this->canadd = has_capability('mod/collaborate:addinstance', $this->context);
         $this->canmoderate = has_capability('mod/collaborate:moderate', $this->context);
         $this->canparticipate = has_capability('mod/collaborate:participate', $this->context);
     }
@@ -85,6 +91,13 @@ class view_action implements \renderable{
     /**
      * @return bool
      */
+    public function get_canadd() {
+        return $this->canadd;
+    }
+
+    /**
+     * @return bool
+     */
     public function get_canmoderate() {
         return $this->canmoderate;
     }
@@ -94,6 +107,22 @@ class view_action implements \renderable{
      */
     public function get_canparticipate() {
         return $this->canparticipate;
+    }
+
+    /**
+     * Get guest url if appropriate.
+     * Return null if it should not be viewed.
+     *
+     * @return string $url
+     */
+    public function get_guest_url() {
+        $canview = $this->canadd || $this->canmoderate;
+        $guestaccessallowed = !empty($this->collaborate->guestaccessenabled);
+        if ($canview && $guestaccessallowed && !empty($this->collaborate->guesturl)) {
+            return $this->collaborate->guesturl;
+        } else {
+            return '';
+        }
     }
 
 }

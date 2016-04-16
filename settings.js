@@ -6,7 +6,7 @@ M.mod_collaborate = M.mod_collaborate || {};
 M.mod_collaborate.settings = M.mod_collaborate.settings || {};
 
 /**
- * Initialise advanced forum javascript.
+ * Initialise collaborate javascript.
  * @param Y
  */
 M.mod_collaborate.settings = {
@@ -17,7 +17,9 @@ M.mod_collaborate.settings = {
         }
         M.mod_collaborate.settings.applySettingChangeCheck();
         M.mod_collaborate.settings.applyClickApiTest();
-        if ($('#id_s_collaborate_server').val() + $('#id_s_collaborate_username').val() + $('#id_s_collaborate_password').val() !== '') {
+        if ($('#id_s_collaborate_server').val() +
+            $('#id_s_collaborate_username').val() +
+            $('#id_s_collaborate_password').val() !== '') {
             M.mod_collaborate.settings.testApi();
         }
         M.mod_collaborate.settings.initialised = true;
@@ -103,7 +105,7 @@ M.mod_collaborate.settings = {
             '#id_s_collaborate_password'
         ];
         for (var s in settingfields) {
-            $(settingfields[s]).keypress(function() {
+            $(settingfields[s]).keypress(function(e) {
                 M.mod_collaborate.settings.modified = true;
             });
         }
