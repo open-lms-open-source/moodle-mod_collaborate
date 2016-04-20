@@ -34,7 +34,7 @@ class view_action implements \renderable{
     protected $collaborate;
 
     /**
-     * @var \stdClass
+     * @var \cm_info
      */
     protected $cm;
 
@@ -75,7 +75,7 @@ class view_action implements \renderable{
     }
 
     /**
-     * @return \stdClass
+     * @return \cm_info
      */
     public function get_cm() {
         return $this->cm;

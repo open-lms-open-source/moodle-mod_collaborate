@@ -61,6 +61,7 @@ $string['copiedlink'] = 'Link copied to clipboard.';
 $string['copylink'] = 'Copy link';
 $string['crontask'] = 'Collaborate scheduled task';
 $string['debugging'] = 'Debugging';
+$string['downloads'] = 'downloads';
 $string['duration'] = 'Duration';
 $string['ends'] = 'Ends - {$a}';
 $string['error:apicallfailed'] = 'API call failed ({$a})';
@@ -111,4 +112,5 @@ $string['testapi'] = 'Test connection';
 $string['timezone'] = 'Timezone: {$a}';
 $string['unrestored'] = 'A moderator must view or join the session before you can access it.';
 $string['verifyingapi'] = 'Verifying API connection. Please wait...';
+$string['views'] = 'views';
 

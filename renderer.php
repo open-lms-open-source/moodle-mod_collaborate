@@ -31,6 +31,7 @@ require_once($CFG->dirroot.'/calendar/lib.php');
 
 use mod_collaborate\renderables\view_action;
 use mod_collaborate\renderables\copyablelink;
+use mod_collaborate\renderables\recording_counts;
 use mod_collaborate\local;
 
 class mod_collaborate_renderer extends plugin_renderer_base {
@@ -189,7 +190,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     }
 
     /**
-     * @param view_action $actionview
+     * @param view_action $viewaction
      * @return string
      * @throws coding_exception
      */
@@ -218,8 +219,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         if ($canparticipate) {
             $recordings = local::get_recordings($collaborate);
             if (!empty($recordings)) {
+                $recordingcounts = [];
+                if ($canmoderate) {
+                    $recordingcounthelper = new \mod_collaborate\recording_count_helper($cm, $recordings);
+                    $recordingcounts = $recordingcounthelper->get_recording_counts();
+                }
                 $o .= '<hr />';
-                $o .= $this->render_recordings($recordings);
+                $o .= $this->render_recordings($recordings, $cm, $recordingcounts);
             }
         }
 
@@ -235,10 +241,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     /**
      * Render recordings.
      *
-     * @param array $recordings
+     * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[] $recordings
+     * @param \cm_info $cm
+     * @param recording_counts[] $recordingcounts
      * @return string
      */
-    public function render_recordings(array $recordings) {
+    public function render_recordings(array $recordings, $cm, $recordingcounts = []) {
         if (empty($recordings)) {
             return '';
         }
@@ -251,8 +259,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
         foreach ($recordings as $recording) {
-            $url = $recording->getRecordingUrl();
+            $recurl = $recording->getRecordingUrl();
+            $recparams = [];
+            parse_str(parse_url($recurl, PHP_URL_QUERY), $recparams);
+            $origmediaurl = $recparams['original_media_url'];
+
             $name = $recording->getDisplayName();
+            $recid = $recording->getRecordingId();
             if (preg_match('/^recording_\d+$/', $name)) {
                 $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
             }
@@ -260,10 +273,18 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $datetimestart = userdate($datetimestart->getTimestamp());
             $duration = format_time(round($recording->getDurationMillis() / 1000));
 
+            $params = ['c' => $cm->instance, 't' => 'v', 'rid' => $recid, 'url' => urlencode($recurl), 'sesskey' => sesskey()];
+            $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+            $params = ['c' => $cm->instance, 't' => 'd', 'rid' => $recid, 'url' => $origmediaurl, 'sesskey' => sesskey()];
+            $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
             $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a href="' . $url . '" target="_blank">'. format_string($name).'</a>';
-            $output .= '<span class="collab-recording-timestart">'.$datetimestart .'</span>';
-            $output .= '<span class="collab-recording-duration">'.$duration.'</span>';
+            $output .= '<a title="Watch recording" href="' . $viewurl->out() . '" target="_blank">'. format_string($name).'</a> ';
+            $output .= '['.$duration.']';
+            $output .= '<a title="Download recording" href="' . $dlurl->out() . '" target="_blank"><img role="presetation" height="32" width="32" alt="" src="'. $this->output->pix_url('download', 'collaborate').'" ></a><br>';
+            $output .= $datetimestart .'<br>';
+            if (!empty($recordingcounts[$recid])) {
+                $output .= $this->render($recordingcounts[$recid]);
+            }
             $output .= '</li>';
         }
         $output .= '</ul>';
@@ -386,5 +407,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $o .= '<div class="api-connection-status"></div>';
         $o .= '</div>';
         return $o;
+    }
+
+    /**
+     * @param recording_counts $counts
+     * @return string
+     */
+    public function render_recording_counts(recording_counts $counts) {
+        return $counts->views . ' ' . get_string('views', 'collaborate').' · '.$counts->downloads . ' ' . get_string('downloads', 'collaborate');
     }
 }

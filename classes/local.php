@@ -516,7 +516,7 @@ class local {
      * get recordings
      *
      * @param int | object $collaborate
-     * @return array
+     * @return soap\generated\HtmlSessionRecordingResponse[]
      */
     public static function get_recordings($collaborate) {
         global $DB;
