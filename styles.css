@@ -71,13 +71,14 @@
     margin: 0 0 2px 0;
 }
 
-.path-mod-collaborate .copyablelink sub {
+.path-mod-collaborate .copyablelink div{
     margin-top: 1em;
     display: none;
+    text-align: right;
 }
 
 .path-mod-collaborate .copyablelink.enabled label,
-.path-mod-collaborate .copyablelink.copied sub {
+.path-mod-collaborate .copyablelink.copied div {
     display: block;
 }
 

@@ -97,6 +97,7 @@ define(['jquery'], function($) {
                 e.preventDefault();
                 copyText($(this).parent('form').find('input'));
                 $(this).parent('form').addClass('copied');
+                $(this).parent('form').find('div').focus();
             });
         }
     };
