@@ -53,11 +53,19 @@
     display: none;
 }
 
+.path-mod-collaborate .copyablelink {
+    margin-top: 1em;
+}
+
 .path-mod-collaborate .copyablelink input {
     width: calc(100% - 2.5em);;
 }
 
 .path-mod-collaborate .copyablelink a {
+    display: none;
+}
+
+.path-mod-collaborate .copyablelink button {
     display: none;
 }
 
@@ -69,6 +77,7 @@
     border-radius: 0;
     border: 0;
     margin: 0 0 2px 0;
+    cursor: copy;
 }
 
 .path-mod-collaborate .copyablelink div{
@@ -84,7 +93,6 @@
 
 body:not(.theme-snap) .copyablelink.enabled button {
     background: #7700C2;
-    cursor: copy;
 }
 
 .path-mod-collaborate .copyablelink.enabled button span {

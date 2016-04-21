@@ -26,6 +26,7 @@ namespace mod_collaborate;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
 use mod_collaborate\soap\generated\SetHtmlSession;
 use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
@@ -443,14 +444,24 @@ class local {
         $htmlsession->setDescription(strip_tags($description));
         $htmlsession->setBoundaryTime(self::boundary_time());
         $htmlsession->setMustBeSupervised(true);
-        $htmlsession->setAllowGuest($data->guestaccessenabled);
-        switch ($data->guestrole) {
-            case 'pa' : $guestrole = 'Participant'; break;
-            case 'pr' : $guestrole = 'Presenter'; break;
-            case 'mo' : $guestrole = 'Moderator'; break;
-            default : $guestrole = 'P';
+        $allowguests = !empty($data->guestaccessenabled) && $data->guestaccessenabled == 1;
+        $htmlsession->setAllowGuest($allowguests);
+        if ($allowguests) {
+            switch ($data->guestrole) {
+                case 'pa' :
+                    $guestrole = 'Participant';
+                    break;
+                case 'pr' :
+                    $guestrole = 'Presenter';
+                    break;
+                case 'mo' :
+                    $guestrole = 'Moderator';
+                    break;
+                default :
+                    $guestrole = 'P';
+            }
+            $htmlsession->setGuestRole($guestrole);
         }
-
 
         // Add attendees to html session.
         $attendees = new HtmlAttendeeCollection();
@@ -531,6 +542,39 @@ class local {
             return [];
         }
         return $respobjs;
+    }
+
+    /**
+     * Get / cache guest url.
+     *
+     * @param stdClass $collaborate - collaborate record.
+     * @param bool $forcesoap - force a soap call.
+     */
+    public static function guest_url(\stdClass $collaborate, $forcesoap = false) {
+        global $DB;
+
+        if (empty($collaborate->guestaccessenabled)) {
+            return;
+        }
+
+        if (!empty($collaborate->guesturl) && !$forcesoap) {
+            return $collaborate->guesturl;
+        }
+
+        // Get guest url.
+        $api = api::get_api();
+        $param = new BuildHtmlSessionUrl($collaborate->sessionid);
+        $sessionurl = $api->BuildHtmlSessionUrl($param);
+        $url = $sessionurl->getUrl();
+
+        // Update collaborate record with guest url.
+        $record = (object) [
+            'id' => $collaborate->id,
+            'guesturl' => $url
+        ];
+        $DB->update_record('collaborate', $record);
+
+        return $url;
     }
 
 }

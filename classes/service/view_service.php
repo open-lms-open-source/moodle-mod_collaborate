@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use mod_collaborate\event\course_module_viewed;
 use mod_collaborate\service\base_visit_service;
 use mod_collaborate\soap\api;
-use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
+use mod_collaborate\local;
 
 require_once(__DIR__.'/../../lib.php');
 
@@ -99,28 +99,7 @@ class view_service extends base_visit_service {
      * Set guest url.
      */
     protected function set_guest_url() {
-        global $DB;
-
-        if (empty($this->collaborate->guestaccessenabled)) {
-            return;
-        }
-
-        if (!empty($this->collaborate->guesturl)) {
-            return;
-        }
-
-        // Get guest url.
-        $api = api::get_api();
-        $param = new BuildHtmlSessionUrl($this->collaborate->sessionid);
-        $sessionurl = $api->BuildHtmlSessionUrl($param);
-        $url = $sessionurl->getUrl();
-
-        // Update collaborate record with guest url.
-        $record = (object) [
-            'id' => $this->collaborate->id,
-            'guesturl' => $url
-        ];
-        $DB->update_record('collaborate', $record);
+        $url = local::guest_url($this->collaborate);
         $this->collaborate->guesturl = $url;
     }
 

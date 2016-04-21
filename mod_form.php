@@ -124,7 +124,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
             'mo'  => get_string('moderator', 'mod_collaborate')
         ];
         $mform->addElement('select', 'guestrole', get_string('guestrole', 'mod_collaborate'), $options);
-        $mform->setDefault('guestrole', 'pa');
+        $mform->setDefault('guestrole', 'pr');
         $mform->disabledIf('guestrole', 'guestaccessenabled');
 
         // Add standard grading elements.

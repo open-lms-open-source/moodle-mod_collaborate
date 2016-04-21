@@ -138,9 +138,15 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     if (empty($collaborate->id)) {
         $collaborate->id = $collaborate->instance;
     }
+
     $collaborate->timemodified = time();
     $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
     $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+
+    if (empty($collaborate->guestaccessenabled)) {
+        // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
+        $collaborate->guestaccessenabled = 0;
+    }
 
     $result = $DB->update_record('collaborate', $collaborate);
 
