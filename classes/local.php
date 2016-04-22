@@ -222,7 +222,7 @@ class local {
      * @throws \moodle_exception
      */
     public static function require_configured() {
-        if (!static::configured()) {
+        if (!static::configured() && !self::duringtesting()) {
             throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
         }
     }
@@ -575,6 +575,17 @@ class local {
         $DB->update_record('collaborate', $record);
 
         return $url;
+    }
+
+    /**
+     * Is this script running during testing?
+     *
+     * @return bool
+     */
+    public static function duringtesting() {
+        $runningphpunittest = defined('PHPUNIT_TEST') && PHPUNIT_TEST;
+        $runningbehattest = defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING;
+        return ($runningphpunittest || $runningbehattest);
     }
 
 }
