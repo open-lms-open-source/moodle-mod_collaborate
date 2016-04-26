@@ -82,8 +82,8 @@ function collaborate_supports($feature) {
  */
 function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
     global $DB, $COURSE;
-
-    $data = $mform->get_submitted_data();
+    
+    $data = clone($collaborate);
     $data->timeend = local::timeend_from_duration($data->timestart, $data->duration);
     $sessionid = local::api_create_session($data, $COURSE);
 

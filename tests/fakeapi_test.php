@@ -35,6 +35,8 @@ use mod_collaborate\soap\generated\SuccessResponse;
 use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\ServerConfigurationResponse;
 use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
+use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
+use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\local;
 
 class mod_collaborate_fakeapi_testcase extends advanced_testcase {
@@ -144,6 +146,52 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $param->setUserId(100);
         $userurl = $api->BuildHtmlSessionUrl($param);
         $this->assertNotContains('&mode=guest', $userurl->getUrl());
+    }
+
+    public function test_updatehtmlsessionattendee() {
+        $this->resetAfterTest();
+
+        $api = fakeapi::get_api();
+        $userid = 100;
+        $sessionid = 2;
+        $htmlattendee = new HtmlAttendee($userid, 'Presenter');
+        $updateattendee = new UpdateHtmlSessionAttendee($sessionid, $htmlattendee);
+        $result = $api->UpdateHtmlSessionAttendee($updateattendee);
+        $this->assertContains('id=2&userid=100', $result->getUrl());
+    }
+
+    public function test_listhtmlsessionrecording() {
+        $this->resetAfterTest();
+
+        $api = fakeapi::get_api();
+        $recording = new HtmlSessionRecording();
+        $recording->setSessionId(100);
+        $result = $api->ListHtmlSessionRecording($recording);
+        $recordings = $result->getHtmlSessionRecordingResponse();
+        $this->assertCount(2, $recordings);
+
+        $recordingurl = $recordings[0]->getRecordingUrl();
+        $this->assertContains('original_media_url=', $recordingurl);
+        $querystring = parse_url($recordingurl, PHP_URL_QUERY);
+        $params = [];
+        parse_str($querystring, $params);
+        $this->assertNotEmpty($params['original_media_url']);
+        $orginalmediadecoded = urldecode($params['original_media_url']);
+        $this->assertNotEmpty($orginalmediadecoded);
+        $this->assertEquals('Recording 1', $recordings[0]->getDisplayName());
+
+        $recordingurl = $recordings[1]->getRecordingUrl();
+        $this->assertContains('original_media_url=', $recordingurl);
+        $querystring = parse_url($recordingurl, PHP_URL_QUERY);
+        $params = [];
+        parse_str($querystring, $params);
+        $this->assertNotEmpty($params['original_media_url']);
+        $orginalmediadecoded = urldecode($params['original_media_url']);
+        $this->assertNotEmpty($orginalmediadecoded);
+        $this->assertEquals('Recording 2', $recordings[1]->getDisplayName());
+
+        $noresults = $api->ListHtmlSessionRecording($recording, true);
+        $this->assertEmpty($noresults->getHtmlSessionRecordingResponse());
     }
 
  }

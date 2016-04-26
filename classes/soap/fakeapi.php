@@ -28,6 +28,7 @@ use mod_collaborate\soap\api;
 use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
 use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionCollection;
+use mod_collaborate\soap\generated\HtmlSessionRecordingResponse;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\generated\SetHtmlSession;
 use mod_collaborate\soap\generated\SuccessResponse;
@@ -36,6 +37,10 @@ use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\ServerConfigurationResponseCollection;
 use mod_collaborate\soap\generated\ServerConfigurationResponse;
 use mod_collaborate\soap\generated\UrlResponse;
+use mod_collaborate\soap\generated\HtmlSessionRecording;
+use mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection;
+use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
+
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -87,7 +92,7 @@ class fakeapi extends api {
      * @param bool $reset
      * @param array $options
      * @param string $wsdl
-     * @param bool|stdClass $config
+     * @param bool|\stdClass $config
      * @return fakeapi
      */
     public static function get_api($reset = false, $options = [], $wsdl = null, $config = false) {
@@ -112,6 +117,7 @@ class fakeapi extends api {
      * Note - this only ever gets used with testing code, so it's OK that its terrible :-).
      *
      * @param string|object $object
+     * @return int
      */
     protected function fakeid($object) {
         if (is_string($object)) {
@@ -172,6 +178,7 @@ class fakeapi extends api {
      *
      * @param object $objecta
      * @param object $objectb
+     * @throws \coding_exception
      */
     protected function updateclass($objecta, $objectb) {
         if (!is_object($objecta)) {
@@ -271,7 +278,7 @@ class fakeapi extends api {
     }
 
     /**
-     * @param BuildHtmlSessionUrl $parameters
+     * @param BuildHtmlSessionUrl $param
      * @return UrlResponse
      */
     public function BuildHtmlSessionUrl(BuildHtmlSessionUrl $param) {
@@ -282,6 +289,49 @@ class fakeapi extends api {
             $url = $CFG->wwwroot.'/mod/collaborate/tests/fixtures/fakeurl.php?id='.$param->getSessionId();
         }
         $response = new UrlResponse($url);
+        return $response;
+    }
+
+    /**
+     * @param UpdateHtmlSessionAttendee $parameters
+     * @return UrlResponse
+     */
+    public function UpdateHtmlSessionAttendee(UpdateHtmlSessionAttendee $parameters) {
+        $sessid = $parameters->getSessionId();
+        $userid = $parameters->getHtmlAttendee()->getUserId();
+        $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php', ['id' => $sessid, 'userid' => $userid]);
+
+        return new UrlResponse($url->out(false));
+    }
+
+    /**
+     * @param HtmlSessionRecording $parameters
+     * @param bool $returnnone
+     * @return HtmlSessionRecordingResponseCollection
+     */
+    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters, $returnnone = false) {
+        $recordings = [];
+        if (!$returnnone) {
+            $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
+            $param = urlencode($url->out(false));
+            $url->param('original_media_url', $param);
+
+            $daysago = new \DateTimeImmutable('3 days ago');
+            $starttime = $daysago->format(\DateTime::ATOM);
+            $endtime = $daysago->add(new \DateInterval('PT1H'))->format(\DateTime::ATOM);
+            $sessid = $parameters->getSessionId();
+
+            $starttime2 = $daysago->add(new \DateInterval('P1D'))->format(\DateTime::ATOM);
+            $endtime2 = $daysago->add(new \DateInterval('P1DT1H'))->format(\DateTime::ATOM);
+
+            $recordings = [
+                new HtmlSessionRecordingResponse(1, $endtime, $starttime, $endtime, 60, $url->out(false), 'Recording 1', $sessid),
+                new HtmlSessionRecordingResponse(2, $endtime2, $starttime2, $endtime2, 60, $url->out(false), 'Recording 2', $sessid),
+            ];
+        }
+        $response = new HtmlSessionRecordingResponseCollection();
+        $response->setHtmlSessionRecordingResponse($recordings);
+
         return $response;
     }
 }

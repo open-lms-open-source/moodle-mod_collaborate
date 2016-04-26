@@ -118,7 +118,7 @@ class local {
 
         if ($event->id) {
             $calendarevent = \calendar_event::load($event->id);
-            $calendarevent->update($event);
+            $calendarevent->update($event, false);
         } else {
             unset($event->id);
             $event->courseid    = $collaborate->course;
@@ -139,7 +139,7 @@ class local {
             } else {
                 $event->timeduration = 0;
             }
-            \calendar_event::create($event);
+            \calendar_event::create($event, false);
         }
     }
 
