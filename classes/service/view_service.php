@@ -90,15 +90,16 @@ class view_service extends base_visit_service {
         $completion = new \completion_info($this->course);
         $completion->set_module_viewed($this->cm, $this->user->id);
 
-        $this->set_guest_url();
+        // Apply guest url to collaborate property.
+        $this->apply_guest_url();
 
         return $this->renderer->view_action($this->collaborate, $this->cm);
     }
 
     /**
-     * Set guest url.
+     * Apply guest url to collaborate property.
      */
-    protected function set_guest_url() {
+    protected function apply_guest_url() {
         $url = local::guest_url($this->collaborate);
         $this->collaborate->guesturl = $url;
     }

@@ -31,6 +31,7 @@ define(['jquery'], function($) {
      * @returns {bool}
      */
     var canCopy = function() {
+        // We have to test for either supported or enabled as this is not consistent across browsers.
         return document.queryCommandSupported('copy') ||
                document.queryCommandEnabled('copy');
     };
@@ -40,8 +41,10 @@ define(['jquery'], function($) {
      */
     var deselectText = function() {
         if (document.selection) {
+            // Internet Explorer clear selection.
             document.selection.empty();
         } else {
+            // All other browsers clear selection.
             var selection = window.getSelection();
             selection.removeAllRanges();
         }
@@ -54,7 +57,7 @@ define(['jquery'], function($) {
      */
     var copyText = function(element) {
         // Based on code found at:
-        // http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse
+        // http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse .
         if (element instanceof $) {
             element = element[0];
         }
@@ -88,7 +91,7 @@ define(['jquery'], function($) {
     };
 
     /**
-     * Apply click to copy events.
+     * Apply "click to copy" events.
      */
     var applyClickToCopy = function() {
         if (canCopy()) {

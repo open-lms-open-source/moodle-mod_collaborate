@@ -193,5 +193,4 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $noresults = $api->ListHtmlSessionRecording($recording, true);
         $this->assertEmpty($noresults->getHtmlSessionRecordingResponse());
     }
-
- }
+}

@@ -10,7 +10,7 @@
     padding-left: 1.5em;
 }
 
-.modtype_collaborate .activityinstance a + span.label{
+.modtype_collaborate .activityinstance a + span.label {
     margin-left: 0.5em;
 }
 
@@ -80,7 +80,7 @@
     cursor: copy;
 }
 
-.path-mod-collaborate .copyablelink div{
+.path-mod-collaborate .copyablelink div {
     margin-top: 1em;
     display: none;
     text-align: right;
@@ -95,7 +95,7 @@ body:not(.theme-snap) .copyablelink.enabled button {
     background: #7700C2;
 }
 
-.path-mod-collaborate .copyablelink.enabled button span {
+.path-mod-collaborate .copyablelink.enabled button span.copyicon {
     position: absolute;
     display: inline-block;
     width: 1em;

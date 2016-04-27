@@ -458,7 +458,7 @@ class local {
                     $guestrole = 'Moderator';
                     break;
                 default :
-                    $guestrole = 'P';
+                    $guestrole = 'Participant';
             }
             $htmlsession->setGuestRole($guestrole);
         }

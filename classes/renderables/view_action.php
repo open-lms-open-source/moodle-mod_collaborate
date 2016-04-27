@@ -111,7 +111,7 @@ class view_action implements \renderable{
 
     /**
      * Get guest url if appropriate.
-     * Return null if it should not be viewed.
+     * Return empty string if it should not be viewed.
      *
      * @return string $url
      */

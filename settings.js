@@ -17,9 +17,10 @@ M.mod_collaborate.settings = {
         }
         M.mod_collaborate.settings.applySettingChangeCheck();
         M.mod_collaborate.settings.applyClickApiTest();
-        if ($('#id_s_collaborate_server').val() +
-            $('#id_s_collaborate_username').val() +
-            $('#id_s_collaborate_password').val() !== '') {
+        var checkapistr = $('#id_s_collaborate_server').val();
+        checkapistr += $('#id_s_collaborate_username').val();
+        checkapistr += $('#id_s_collaborate_password').val();
+        if (checkapistr !== '') {
             M.mod_collaborate.settings.testApi();
         }
         M.mod_collaborate.settings.initialised = true;
