@@ -41,10 +41,12 @@ class mod_collaborate_recordingstub {
         $this->id = $id;
     }
 
+    // @codingStandardsIgnoreStart.
     /**
      * @return int
      */
     public function getRecordingId() {
         return $this->id;
     }
+    // @codingStandardsIgnoreEnd.
 }

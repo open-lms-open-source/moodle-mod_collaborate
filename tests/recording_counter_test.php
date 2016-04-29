@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for the recording_count_helper class.
+ * Unit tests for the recording_counter class.
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee
@@ -24,22 +24,22 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\recording_count_helper;
+use mod_collaborate\recording_counter;
 
 require_once(__DIR__ . '/fixtures/recordingstub.php');
 
 /**
- * Unit tests for the recording_count_helper class.
+ * Unit tests for the recording_counter class.
  *
  * @package    mod_collaborate
  * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_collaborate_recording_count_helper_testcase extends advanced_testcase {
+class mod_collaborate_recording_counter_testcase extends advanced_testcase {
     public function setUp() {
         $this->resetAfterTest();
     }
-    
+
     public function test_get_recording_counts_legacy_store() {
         $logmanager = get_log_manager(true);
         $reader = new logstore_legacy\log\store($logmanager);
@@ -49,18 +49,8 @@ class mod_collaborate_recording_count_helper_testcase extends advanced_testcase 
             new mod_collaborate_recordingstub(1),
             new mod_collaborate_recordingstub(2),
         ];
-        $cache = cache::make('mod_collaborate', 'recordingcounts');
-        $recordinghelper = new recording_count_helper($cminfo, $recordings, $reader, $cache);
-        $counts = $recordinghelper->get_recording_counts();
-        $this->assert_empty_counts($counts);
-
-        // Simulate firing view and download events by loading data and deleting cache.
-        $data = include(__DIR__.'/fixtures/legacylogs.php');
-        $this->loadDataSet($this->createArrayDataSet($data));
-        $cache->delete($cminfo->id);
-
-        $counts = $recordinghelper->get_recording_counts();
-        $this->assert_counts($counts);
+        $this->setExpectedException('coding_exception', 'Standard log store must be enabled and used');
+        new recording_counter($cminfo, $recordings, $reader);
     }
 
     public function test_get_recording_counts_standard_store() {
@@ -73,7 +63,7 @@ class mod_collaborate_recording_count_helper_testcase extends advanced_testcase 
             new mod_collaborate_recordingstub(2),
         ];
         $cache = cache::make('mod_collaborate', 'recordingcounts');
-        $recordinghelper = new recording_count_helper($cminfo, $recordings, $reader, $cache);
+        $recordinghelper = new recording_counter($cminfo, $recordings, $reader, $cache);
         $counts = $recordinghelper->get_recording_counts();
         $this->assert_empty_counts($counts);
 

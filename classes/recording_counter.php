@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class recording_count_helper {
+class recording_counter {
 
     /**
      * @var \cm_info
@@ -54,11 +54,12 @@ class recording_count_helper {
     private $reader;
 
     /**
-     * recording_count_helper constructor.
+     * recording_counter constructor.
      * @param \cm_info $cm
      * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[] $recordings
      * @param sql_reader|null $reader
      * @param \cache|null $cache
+     * @throws \coding_exception
      */
     public function __construct($cm, $recordings, sql_reader $reader = null, \cache $cache = null) {
         $this->cm = $cm;
@@ -68,7 +69,13 @@ class recording_count_helper {
             /** @var \core\log\manager $logmanager */
             $logmanager = get_log_manager();
             $readers = $logmanager->get_readers('core\\log\\sql_reader');
-            $reader = reset($readers);
+
+            do {
+                $reader = reset($readers);
+            } while (!($reader instanceof \logstore_standard\log\store) and !empty($reader));
+        }
+        if (!$reader instanceof \logstore_standard\log\store) {
+            throw new \coding_exception('Standard log store must be enabled and used');
         }
         $this->reader = $reader;
 
@@ -111,36 +118,20 @@ class recording_count_helper {
         $params = [
             'course' => $this->cm->course,
             'cmid'   => $this->cm->id,
+            'component' => 'mod_collaborate',
+            'target' => 'recording',
+            'viewaction' => 'viewed',
+            'downloadaction' => 'downloaded'
         ];
-        $legacylogused = false;
-        if ($this->reader instanceof \logstore_standard\log\store) {
-            $where = 'courseid = :course AND component = :component AND contextinstanceid = :cmid AND target = :target'
-                . 'AND (action = :downloadaction OR action = :viewaction)';
-
-            $params['component'] = 'mod_collaborate';
-            $params['target'] = 'recording';
-            $params['viewaction'] = 'viewed';
-            $params['downloadaction'] = 'downloaded';
-        } else if ($this->reader instanceof \logstore_legacy\log\store) {
-            $legacylogused = true;
-            $where = 'course = :course AND module = :module AND cmid = :cmid AND (action = :downloadaction OR action = :viewaction)';
-
-            $params['module'] = 'collaborate';
-            $params['downloadaction'] = 'recording_downloaded';
-            $params['viewaction'] = 'recording_viewed';
-        } else {
-            throw new \coding_exception('Unsupported log store in use');
-        }
+        $where = 'courseid = :course AND component = :component AND contextinstanceid = :cmid AND target = :target'
+            . 'AND (action = :downloadaction OR action = :viewaction)';
 
         $events = $this->reader->get_events_select($where, $params, '', 0, 0);
 
         foreach ($events as $event) {
             $eventdata = $event->get_data();
-            if ($legacylogused) {
-                $recordingid = $eventdata['other']['info'];
-            } else {
-                $recordingid = $eventdata['other']['recordingid'];
-            }
+            $recordingid = $eventdata['other']['recordingid'];
+
             if (empty($recordingid)) {
                 continue;
             }

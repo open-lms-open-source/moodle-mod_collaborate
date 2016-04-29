@@ -221,7 +221,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             if (!empty($recordings)) {
                 $recordingcounts = [];
                 if ($canmoderate) {
-                    $recordingcounthelper = new \mod_collaborate\recording_count_helper($cm, $recordings);
+                    $recordingcounthelper = new \mod_collaborate\recording_counter($cm, $recordings);
                     $recordingcounts = $recordingcounthelper->get_recording_counts();
                 }
                 $o .= '<hr />';
@@ -258,6 +258,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $header = get_string('recordings', 'mod_collaborate');
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
+        $dlstr = get_string('downloadrec', 'collaborate');
+        $viewstr = get_string('viewrec', 'collaborate');
+
         foreach ($recordings as $recording) {
             $recurl = $recording->getRecordingUrl();
             $recparams = [];
@@ -278,9 +281,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $params = ['c' => $cm->instance, 't' => 'd', 'rid' => $recid, 'url' => $origmediaurl, 'sesskey' => sesskey()];
             $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
             $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a title="Watch recording" href="' . $viewurl->out() . '" target="_blank">'. format_string($name).'</a> ';
+            $output .= '<a title="'.$viewstr.'" href="' . $viewurl->out() . '" target="_blank">'.
+                    format_string($name).'</a> ';
             $output .= '['.$duration.']';
-            $output .= '<a title="Download recording" href="' . $dlurl->out() . '" target="_blank"><img role="presetation" height="32" width="32" alt="" src="'. $this->output->pix_url('download', 'collaborate').'" ></a><br>';
+            $output .= '<a title="'.$dlstr.'" href="' . $dlurl->out() . '" target="_blank">'.
+                    '<img role="presetation" height="32" width="32" alt="" src="'.
+                    $this->output->pix_url('download', 'collaborate').'" ></a><br>';
             $output .= $datetimestart .'<br>';
             if (!empty($recordingcounts[$recid])) {
                 $output .= $this->render($recordingcounts[$recid]);
@@ -414,6 +420,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return string
      */
     public function render_recording_counts(recording_counts $counts) {
-        return $counts->views . ' ' . get_string('views', 'collaborate').' · '.$counts->downloads . ' ' . get_string('downloads', 'collaborate');
+        return get_string('recordingcounts', 'mod_collaborate', $counts);
     }
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Fixture for recording_count_helper_test.
+ * Fixture for recording_counter_test.
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee

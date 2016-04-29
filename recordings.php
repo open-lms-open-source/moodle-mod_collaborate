@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-use mod_collaborate\event\recording_downloaded;
-use mod_collaborate\event\recording_viewed;
-
 /**
  * Recording redirect script. Handles Collaborate recording views and downloads and fires events.
  *
@@ -25,6 +22,10 @@ use mod_collaborate\event\recording_viewed;
  * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use mod_collaborate\event\recording_downloaded;
+use mod_collaborate\event\recording_viewed;
+
 require_once(__DIR__ .'/../../config.php');
 
 $instanceid = required_param('c', PARAM_INT);

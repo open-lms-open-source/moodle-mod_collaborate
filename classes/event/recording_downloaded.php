@@ -49,8 +49,8 @@ class recording_downloaded extends base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '$this->userid' downloaded the recording with id '".$this->other['recordingid']."' for the Collab with " .
-        "course module id '$this->contextinstanceid'.";
+        return "The user with id '$this->userid' downloaded the recording with id '".$this->other['recordingid'].
+                "' for the Collab with course module id '$this->contextinstanceid'.";
     }
 
     /**
@@ -68,7 +68,7 @@ class recording_downloaded extends base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/collaborate/view.php', array('id' => $this->contextinstanceid, 'action' => 'view'));
+        return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->contextinstanceid, 'action' => 'view']);
     }
 
     /**
@@ -83,20 +83,5 @@ class recording_downloaded extends base {
      */
     public static function get_objectid_mapping() {
         return ['db' => 'collaborate', 'restore' => 'collaborate'];
-    }
-
-    /**
-     * @return array
-     */
-    public function get_legacy_logdata() {
-        $logdata = [
-            $this->courseid,
-            'collaborate',
-            $this->target . '_' . $this->action,
-            'view.php?id='.$this->contextinstanceid.'&action=view',
-            $this->other['recordingid'],
-            $this->contextinstanceid
-        ];
-        return $logdata;
     }
 }
