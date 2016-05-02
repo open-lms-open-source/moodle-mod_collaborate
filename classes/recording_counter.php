@@ -24,7 +24,6 @@
  */
 namespace mod_collaborate;
 
-use core\log\sql_reader;
 use mod_collaborate\renderables\recording_counts;
 
 defined('MOODLE_INTERNAL') || die();
@@ -39,6 +38,16 @@ defined('MOODLE_INTERNAL') || die();
 class recording_counter {
 
     /**
+     * @const int
+     */
+    const VIEW = 1;
+
+    /**
+     * @const int
+     */
+    const DOWNLOAD = 2;
+
+    /**
      * @var \cm_info
      */
     private $cm;
@@ -49,35 +58,28 @@ class recording_counter {
     private $recordings = [];
 
     /**
-     * @var sql_reader
+     * @var \moodle_database|null
      */
-    private $reader;
+    private $db;
 
     /**
      * recording_counter constructor.
      * @param \cm_info $cm
      * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[] $recordings
-     * @param sql_reader|null $reader
+     * @param \moodle_database|null $db
      * @param \cache|null $cache
      * @throws \coding_exception
      */
-    public function __construct($cm, $recordings, sql_reader $reader = null, \cache $cache = null) {
+    public function __construct($cm, $recordings, \moodle_database $db = null, \cache $cache = null) {
+        global $DB;
+
         $this->cm = $cm;
         $this->recordings = $recordings;
 
-        if (is_null($reader)) {
-            /** @var \core\log\manager $logmanager */
-            $logmanager = get_log_manager();
-            $readers = $logmanager->get_readers('core\\log\\sql_reader');
-
-            do {
-                $reader = reset($readers);
-            } while (!($reader instanceof \logstore_standard\log\store) and !empty($reader));
+        if (is_null($db)) {
+            $db = $DB;
         }
-        if (!$reader instanceof \logstore_standard\log\store) {
-            throw new \coding_exception('Standard log store must be enabled and used');
-        }
-        $this->reader = $reader;
+        $this->db = $db;
 
         if (is_null($cache)) {
             $cache = \cache::make('mod_collaborate', 'recordingcounts');
@@ -91,13 +93,13 @@ class recording_counter {
     public function get_recording_counts() {
         $numrecordings = count($this->recordings);
         // Try the cache first.
-        $counts = $this->cache->get($this->cm->id);
+        $counts = $this->cache->get($this->cm->instance);
         if (empty($counts) or (count($counts) != $numrecordings)) {
             // Miss on the cache, query for the counts.
             $counts = $this->query_counts();
 
             // Set the cache with the results.
-            $this->cache->set($this->cm->id, $counts);
+            $this->cache->set($this->cm->instance, $counts);
         }
         return $counts;
     }
@@ -116,34 +118,33 @@ class recording_counter {
         }
 
         $params = [
-            'course' => $this->cm->course,
-            'cmid'   => $this->cm->id,
-            'component' => 'mod_collaborate',
-            'target' => 'recording',
-            'viewaction' => 'viewed',
-            'downloadaction' => 'downloaded'
+            'instanceid' => $this->cm->instance,
         ];
-        $where = 'courseid = :course AND component = :component AND contextinstanceid = :cmid AND target = :target'
-            . 'AND (action = :downloadaction OR action = :viewaction)';
 
-        $events = $this->reader->get_events_select($where, $params, '', 0, 0);
+        $sql = <<<EOL
+  SELECT recordingid, action, COUNT(action) numactions
+    FROM {collaborate_recording_info}
+   WHERE instanceid = :instanceid
+GROUP BY instanceid, recordingid, action
+EOL;
 
-        foreach ($events as $event) {
-            $eventdata = $event->get_data();
-            $recordingid = $eventdata['other']['recordingid'];
+        $rs = $this->db->get_recordset_sql($sql, $params);
+        if (!$rs->valid()) {
+            return $recordingcounts;
+        }
 
-            if (empty($recordingid)) {
-                continue;
-            }
+        foreach ($rs as $recordingid => $event) {
             if (empty($recordingcounts[$recordingid])) {
                 $recordingcounts[$recordingid] = new recording_counts($recordingid);
             }
-            if ($eventdata['action'] == $params['viewaction']) {
-                $recordingcounts[$recordingid]->views++;
-            } else if ($eventdata['action'] == $params['downloadaction']) {
-                $recordingcounts[$recordingid]->downloads++;
+            if ($event->action == self::VIEW) {
+                $recordingcounts[$recordingid]->views = $event->numactions;
+            } else if ($event->action == self::DOWNLOAD) {
+                $recordingcounts[$recordingid]->downloads = $event->numactions;
             }
         }
+
+        $rs->close();
 
         return $recordingcounts;
     }

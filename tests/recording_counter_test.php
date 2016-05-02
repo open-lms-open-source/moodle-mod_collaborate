@@ -40,30 +40,14 @@ class mod_collaborate_recording_counter_testcase extends advanced_testcase {
         $this->resetAfterTest();
     }
 
-    public function test_get_recording_counts_legacy_store() {
-        $logmanager = get_log_manager(true);
-        $reader = new logstore_legacy\log\store($logmanager);
-
-        $cminfo = (object) ['id' => 1, 'course' => 1];
-        $recordings = [
-            new mod_collaborate_recordingstub(1),
-            new mod_collaborate_recordingstub(2),
-        ];
-        $this->setExpectedException('coding_exception', 'Standard log store must be enabled and used');
-        new recording_counter($cminfo, $recordings, $reader);
-    }
-
-    public function test_get_recording_counts_standard_store() {
-        $logmanager = get_log_manager(true);
-        $reader = new logstore_standard\log\store($logmanager);
-
-        $cminfo = (object) ['id' => 1, 'course' => 1];
+    public function test_get_recording_counts() {
+        $cminfo = (object) ['id' => 1, 'course' => 1, 'instance' => 1];
         $recordings = [
             new mod_collaborate_recordingstub(1),
             new mod_collaborate_recordingstub(2),
         ];
         $cache = cache::make('mod_collaborate', 'recordingcounts');
-        $recordinghelper = new recording_counter($cminfo, $recordings, $reader, $cache);
+        $recordinghelper = new recording_counter($cminfo, $recordings, null, $cache);
         $counts = $recordinghelper->get_recording_counts();
         $this->assert_empty_counts($counts);
 

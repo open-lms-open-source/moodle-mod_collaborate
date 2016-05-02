@@ -32,6 +32,7 @@ require_once($CFG->dirroot.'/calendar/lib.php');
 use mod_collaborate\renderables\view_action;
 use mod_collaborate\renderables\copyablelink;
 use mod_collaborate\renderables\recording_counts;
+use mod_collaborate\recording_counter;
 use mod_collaborate\local;
 
 class mod_collaborate_renderer extends plugin_renderer_base {
@@ -221,7 +222,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             if (!empty($recordings)) {
                 $recordingcounts = [];
                 if ($canmoderate) {
-                    $recordingcounthelper = new \mod_collaborate\recording_counter($cm, $recordings);
+                    $recordingcounthelper = new recording_counter($cm, $recordings);
                     $recordingcounts = $recordingcounthelper->get_recording_counts();
                 }
                 $o .= '<hr />';
@@ -276,9 +277,11 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $datetimestart = userdate($datetimestart->getTimestamp());
             $duration = format_time(round($recording->getDurationMillis() / 1000));
 
-            $params = ['c' => $cm->instance, 't' => 'v', 'rid' => $recid, 'url' => urlencode($recurl), 'sesskey' => sesskey()];
+            $params = ['c' => $cm->instance, 't' => recording_counter::VIEW, 'rid' => $recid,
+                       'url' => urlencode($recurl), 'sesskey' => sesskey()];
             $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
-            $params = ['c' => $cm->instance, 't' => 'd', 'rid' => $recid, 'url' => $origmediaurl, 'sesskey' => sesskey()];
+            $params = ['c' => $cm->instance, 't' => recording_counter::DOWNLOAD, 'rid' => $recid,
+                       'url' => $origmediaurl, 'sesskey' => sesskey()];
             $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
             $output .= '<li class="collab-recording-list-item">';
             $output .= '<a title="'.$viewstr.'" href="' . $viewurl->out() . '" target="_blank">'.

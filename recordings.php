@@ -25,12 +25,13 @@
 
 use mod_collaborate\event\recording_downloaded;
 use mod_collaborate\event\recording_viewed;
+use mod_collaborate\recording_counter;
 
 require_once(__DIR__ .'/../../config.php');
 
 $instanceid = required_param('c', PARAM_INT);
 $urlencoded = required_param('url', PARAM_TEXT);
-$type = required_param('t', PARAM_ALPHA);
+$action = required_param('t', PARAM_INT);
 $recordingid = required_param('rid', PARAM_INT);
 
 $collab = $DB->get_record('collaborate', ['id' => $instanceid], '*', MUST_EXIST);
@@ -44,6 +45,9 @@ require_sesskey();
 
 $url = urldecode($urlencoded);
 
+$record = ['instanceid' => $collab->id, 'recordingid' => $recordingid, 'action' => $action];
+$DB->insert_record('collaborate_recording_info', (object) $record);
+
 $data = [
     'contextid' => $context->id,
     'objectid' => $collab->id,
@@ -53,9 +57,9 @@ $data = [
 ];
 
 // Create the appropriate event based on view or recording and trigger.
-if ($type == 'd') {
+if ($action == recording_counter::DOWNLOAD) {
     $event = recording_downloaded::create($data);
-} else if ($type == 'v') {
+} else if ($action == recording_counter::VIEW) {
     $event = recording_viewed::create($data);
 } else {
     throw new coding_exception('Only view or download is allowed for type');
@@ -63,6 +67,6 @@ if ($type == 'd') {
 $event->trigger();
 
 // Delete the cached recording counts.
-cache::make('mod_collaborate', 'recordingcounts')->delete($cm->id);
+cache::make('mod_collaborate', 'recordingcounts')->delete($collab->id);
 
 redirect($url);

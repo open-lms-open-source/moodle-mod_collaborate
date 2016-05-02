@@ -127,5 +127,31 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2016041500, 'collaborate');
     }
 
+    if ($oldversion < 2016041501) {
+
+        // Define table collaborate_recording_info to be created.
+        $table = new xmldb_table('collaborate_recording_info');
+
+        // Adding fields to table collaborate_recording_info.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('instanceid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('recordingid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('action', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table collaborate_recording_info.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Adding indexes to table collaborate_recording_info.
+        $table->add_index('instanceid-recordingid-action', XMLDB_INDEX_NOTUNIQUE, ['instanceid', 'recordingid', 'action']);
+
+        // Conditionally launch create table for collaborate_recording_info.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2016041501, 'collaborate');
+    }
+
     return true;
 }
