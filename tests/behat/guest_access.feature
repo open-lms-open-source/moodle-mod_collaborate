@@ -23,16 +23,16 @@ Feature: Guest access can be provided for a Collaborate session
     And I turn editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
-      | Allow Guest Access | 1 |
+      | Allow Collaborate guest access | 1 |
     And I follow "Test collab"
-    Then I should see "Guest Link"
+    Then I should see "Collaborate guest link"
     And "#guestlink" "css_element" should exist
     And I click on "Copy link" "button"
     Then I should see "Link copied to clipboard."
     And I navigate to "Edit settings" node in "Collaborate administration"
-    And I set the field "Allow Guest Access" to "0"
+    And I set the field "Allow Collaborate guest access" to "0"
     And I press "Save and display"
-    Then I should not see "Guest Link"
+    Then I should not see "Collaborate guest link"
     And "#guestlink" "css_element" should not exist
 
   Scenario: Teacher can create Collaborate instance with Guest Role default of "Presenter"
@@ -41,10 +41,10 @@ Feature: Guest access can be provided for a Collaborate session
     And I turn editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 2 |
-      | Allow Guest Access | 1 |
+      | Allow Collaborate guest access | 1 |
     And I follow "Test collab"
     And I navigate to "Edit settings" node in "Collaborate administration"
-    Then the field "Guest Role" matches value "Presenter"
+    Then the field "Collaborate guest role" matches value "Presenter"
 
   Scenario: Teacher select Guest Role for a Collaborate instance
     Given I log in as "teacher1"
@@ -52,8 +52,8 @@ Feature: Guest access can be provided for a Collaborate session
     And I turn editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 2 |
-      | Allow Guest Access | 1 |
-      | Guest Role         | Participant |
+      | Allow Collaborate guest access | 1 |
+      | Collaborate guest role         | Participant |
     And I follow "Test collab"
     And I navigate to "Edit settings" node in "Collaborate administration"
-    Then the field "Guest Role" matches value "Participant"
+    Then the field "Collaborate guest role" matches value "Participant"
