@@ -284,10 +284,10 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                        'url' => $origmediaurl, 'sesskey' => sesskey()];
             $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
             $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a title="'.$viewstr.'" href="' . $viewurl->out() . '" target="_blank">'.
+            $output .= '<a title="'.s($viewstr).'" href="' . $viewurl->out() . '" target="_blank">'.
                     format_string($name).'</a> ';
             $output .= '['.$duration.']';
-            $output .= '<a title="'.$dlstr.'" href="' . $dlurl->out() . '" target="_blank">'.
+            $output .= '<a title="'.s($dlstr).'" href="' . $dlurl->out() . '" target="_blank">'.
                     '<img role="presetation" height="32" width="32" alt="" src="'.
                     $this->output->pix_url('download', 'collaborate').'" ></a><br>';
             $output .= $datetimestart .'<br>';

@@ -210,7 +210,7 @@ function collaborate_delete_instance($id) {
     $DB->delete_records('collaborate_recording_info', ['id' => $collaborate->id]);
 
     // Delete the cached recording counts.
-    cache::make('mod_collaborate', 'recordingcounts')->delete($collab->id);
+    cache::make('mod_collaborate', 'recordingcounts')->delete($collaborate->id);
 
     collaborate_grade_item_delete($collaborate);
 

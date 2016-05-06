@@ -52,7 +52,7 @@ class mod_collaborate_recording_counter_testcase extends advanced_testcase {
         $this->assert_empty_counts($counts);
 
         // Simulate firing view and download events by loading data and deleting cache.
-        $data = include(__DIR__.'/fixtures/standardlogs.php');
+        $data = include(__DIR__.'/fixtures/collabrecordinginfo.php');
         $this->loadDataSet($this->createArrayDataSet($data));
         $cache->delete($cminfo->id);
 

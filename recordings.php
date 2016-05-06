@@ -45,9 +45,6 @@ require_sesskey();
 
 $url = urldecode($urlencoded);
 
-$record = ['instanceid' => $collab->id, 'recordingid' => $recordingid, 'action' => $action];
-$DB->insert_record('collaborate_recording_info', (object) $record);
-
 $data = [
     'contextid' => $context->id,
     'objectid' => $collab->id,
@@ -56,7 +53,7 @@ $data = [
     ],
 ];
 
-// Create the appropriate event based on view or recording and trigger.
+// Create the appropriate event based on view or recording.
 if ($action == recording_counter::DOWNLOAD) {
     $event = recording_downloaded::create($data);
 } else if ($action == recording_counter::VIEW) {
@@ -64,6 +61,12 @@ if ($action == recording_counter::DOWNLOAD) {
 } else {
     throw new coding_exception('Only view or download is allowed for type');
 }
+
+// Insert a record to the collab recording info table.
+$record = ['instanceid' => $collab->id, 'recordingid' => $recordingid, 'action' => $action];
+$DB->insert_record('collaborate_recording_info', (object) $record);
+
+// Trigger the event.
 $event->trigger();
 
 // Delete the cached recording counts.
