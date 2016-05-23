@@ -215,18 +215,20 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             );
         }
 
+        // Guest url.
+        $guesturl = $viewaction->get_guest_url();
+        if ($guesturl) {
+            $clink = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturl);
+            $o .= $this->render($clink);
+        }
+
+        // Recordings.
         if ($canparticipate) {
             $recordings = local::get_recordings($collaborate);
             if (!empty($recordings)) {
                 $o .= '<hr />';
                 $o .= $this->render_recordings($recordings);
             }
-        }
-
-        $guesturl = $viewaction->get_guest_url();
-        if ($guesturl) {
-            $clink = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturl);
-            $o .= $this->render($clink);
         }
 
         return $o;
