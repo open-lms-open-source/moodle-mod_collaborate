@@ -35,7 +35,7 @@ Feature: Guest access can be provided for a Collaborate session
     Then I should not see "Collaborate guest link"
     And "#guestlink" "css_element" should not exist
 
-  Scenario: Teacher can create Collaborate instance with Guest Role default of "Presenter"
+  Scenario: Teacher can create Collaborate instance with Collaborate guest role default of "Presenter"
     Given I log in as "teacher1"
     And I follow "Course 1"
     And I turn editing mode on
@@ -46,7 +46,7 @@ Feature: Guest access can be provided for a Collaborate session
     And I navigate to "Edit settings" node in "Collaborate administration"
     Then the field "Collaborate guest role" matches value "Presenter"
 
-  Scenario: Teacher select Guest Role for a Collaborate instance
+  Scenario: Teacher select Collaborate guest role for a Collaborate instance
     Given I log in as "teacher1"
     And I follow "Course 1"
     And I turn editing mode on
