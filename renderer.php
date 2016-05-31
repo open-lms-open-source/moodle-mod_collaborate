@@ -261,14 +261,10 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $header = get_string('recordings', 'mod_collaborate');
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
-        $dlstr = get_string('downloadrec', 'collaborate');
         $viewstr = get_string('viewrec', 'collaborate');
 
         foreach ($recordings as $recording) {
             $recurl = $recording->getRecordingUrl();
-            $recparams = [];
-            parse_str(parse_url($recurl, PHP_URL_QUERY), $recparams);
-            $origmediaurl = $recparams['original_media_url'];
 
             $name = $recording->getDisplayName();
             $recid = $recording->getRecordingId();
@@ -282,17 +278,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $params = ['c' => $cm->instance, 't' => recording_counter::VIEW, 'rid' => $recid,
                        'url' => urlencode($recurl), 'sesskey' => sesskey()];
             $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
-            $params = ['c' => $cm->instance, 't' => recording_counter::DOWNLOAD, 'rid' => $recid,
-                       'url' => $origmediaurl, 'sesskey' => sesskey()];
-            $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+
             $output .= '<li class="collab-recording-list-item">';
             $output .= '<a title="'.s($viewstr).'" href="' . $viewurl->out() . '" target="_blank">'.
                     format_string($name).'</a> ';
             $output .= '['.$duration.']';
-            $output .= '<a title="'.s($dlstr).'" href="' . $dlurl->out() . '" target="_blank">'.
-                    '<img role="presetation" height="32" width="32" alt="" src="'.
-                    $this->output->pix_url('download', 'collaborate').'" ></a><br>';
-            $output .= $datetimestart .'<br>';
+            $output .= '<br>' . $datetimestart .'<br>';
             if (!empty($recordingcounts[$recid])) {
                 $output .= $this->render($recordingcounts[$recid]);
             }

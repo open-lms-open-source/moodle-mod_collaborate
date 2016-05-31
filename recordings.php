@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_collaborate\event\recording_downloaded;
 use mod_collaborate\event\recording_viewed;
 use mod_collaborate\recording_counter;
 
@@ -54,12 +53,10 @@ $data = [
 ];
 
 // Create the appropriate event based on view or recording.
-if ($action == recording_counter::DOWNLOAD) {
-    $event = recording_downloaded::create($data);
-} else if ($action == recording_counter::VIEW) {
+if ($action == recording_counter::VIEW) {
     $event = recording_viewed::create($data);
 } else {
-    throw new coding_exception('Only view or download is allowed for type');
+    throw new coding_exception('Only view is allowed for type');
 }
 
 // Insert a record to the collab recording info table.

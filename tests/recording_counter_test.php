@@ -69,13 +69,11 @@ class mod_collaborate_recording_counter_testcase extends advanced_testcase {
         $recording1 = $counts[1];
         $this->assertInstanceOf('mod_collaborate\\renderables\\recording_counts', $recording1);
         $this->assertEquals(2, $recording1->views);
-        $this->assertEquals(2, $recording1->downloads);
 
         $this->assertArrayHasKey(2, $counts);
         $recording2 = $counts[2];
         $this->assertInstanceOf('mod_collaborate\\renderables\\recording_counts', $recording2);
         $this->assertEquals(0, $recording2->views);
-        $this->assertEquals(1, $recording2->downloads);
     }
 
     /**
@@ -86,7 +84,6 @@ class mod_collaborate_recording_counter_testcase extends advanced_testcase {
         foreach ($counts as $count) {
             $this->assertInstanceOf('mod_collaborate\\renderables\\recording_counts', $count);
             $this->assertEquals(0, $count->views);
-            $this->assertEquals(0, $count->downloads);
         }
     }
 }

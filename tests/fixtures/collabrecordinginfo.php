@@ -39,29 +39,5 @@ return [
             'recordingid' => 1,
             'action' => mod_collaborate\recording_counter::VIEW,
         ],
-        [
-            'id' => 3,
-            'instanceid' => 1,
-            'recordingid' => 1,
-            'action' => mod_collaborate\recording_counter::DOWNLOAD,
-        ],
-        [
-            'id' => 4,
-            'instanceid' => 1,
-            'recordingid' => 1,
-            'action' => mod_collaborate\recording_counter::DOWNLOAD,
-        ],
-        [
-            'id' => 5,
-            'instanceid' => 1,
-            'recordingid' => 2,
-            'action' => mod_collaborate\recording_counter::DOWNLOAD,
-        ],
-        [
-            'id' => 6,
-            'instanceid' => 2,
-            'recordingid' => 1,
-            'action' => mod_collaborate\recording_counter::DOWNLOAD,
-        ],
     ]
 ];

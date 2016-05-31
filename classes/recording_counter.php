@@ -43,11 +43,6 @@ class recording_counter {
     const VIEW = 1;
 
     /**
-     * @const int
-     */
-    const DOWNLOAD = 2;
-
-    /**
      * @var \cm_info
      */
     private $cm;
@@ -139,8 +134,6 @@ EOL;
             }
             if ($event->action == self::VIEW) {
                 $recordingcounts[$recordingid]->views = $event->numactions;
-            } else if ($event->action == self::DOWNLOAD) {
-                $recordingcounts[$recordingid]->downloads = $event->numactions;
             }
         }
 

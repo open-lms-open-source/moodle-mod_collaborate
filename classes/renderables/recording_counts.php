@@ -45,11 +45,6 @@ class recording_counts implements \renderable {
     public $views = 0;
 
     /**
-     * @var int
-     */
-    public $downloads = 0;
-
-    /**
      * recording_counts constructor.
      * @param int $recordingid
      */
