@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_collaborate session launched event.
+ * Recording viewed event.
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @author     Sam Chaffee
+ * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace mod_collaborate\event;
 
 use core\event\base;
@@ -29,24 +29,13 @@ use core\event\base;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_collaborate session launched event class.
- *
- * @property-read array $other {
- *      Extra information about event properties.
- *
- *      - int session: Session id of the Collab activity.
- * }
+ * Recording viewed event.
  *
  * @package    mod_collaborate
- * @since      Moodle 2.8
- * @copyright  Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class session_launched extends base {
-
-    /**
-     * Init method.
-     */
+class recording_viewed extends base {
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
@@ -59,8 +48,8 @@ class session_launched extends base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '$this->userid' launched the session with id '".$this->other['session']."' for the Collab with " .
-            "course module id '$this->contextinstanceid'.";
+        return "The user with id '$this->userid' viewed the recording with id '".$this->other['recordingid'].
+                "' for the Collab with course module id '$this->contextinstanceid'.";
     }
 
     /**
@@ -69,7 +58,7 @@ class session_launched extends base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventsessionlaunched', 'mod_collaborate');
+        return get_string('eventrecordingviewed', 'mod_collaborate');
     }
 
     /**
@@ -78,30 +67,20 @@ class session_launched extends base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/collaborate/view.php', array('id' => $this->contextinstanceid, 'action' => 'forward'));
+        return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->contextinstanceid, 'action' => 'view']);
     }
 
     /**
-     * Replace add_to_log() statement.
-     *
-     * @return array of parameters to be passed to legacy add_to_log() function.
+     * @return bool
      */
-    protected function get_legacy_logdata() {
-        return array($this->courseid, 'collaborate', 'launch', 'view.php?id=' . $this->contextinstanceid,
-                $this->other['session']);
+    public static function get_other_mapping() {
+        return false;
     }
 
     /**
-     * Custom validation.
-     *
-     * @throws \coding_exception
-     * @return void
+     * @return array
      */
-    protected function validate_data() {
-        parent::validate_data();
-
-        if (empty($this->other['session'])) {
-            throw new \coding_exception('The \'session\' value must be set in other.');
-        }
+    public static function get_objectid_mapping() {
+        return ['db' => 'collaborate', 'restore' => 'collaborate'];
     }
 }

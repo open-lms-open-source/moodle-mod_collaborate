@@ -123,6 +123,7 @@ class forward_service extends base_visit_service {
         $attendee->setAvatarUrl(new \SoapVar('<ns1:avatarUrl><![CDATA['.$avatarurl.']]></ns1:avatarUrl>', XSD_ANYXML));
 
         $satts = new UpdateHtmlSessionAttendee($sessionid, $attendee);
+        $satts->setLocale(current_language());
         $result = $this->api->UpdateHtmlSessionAttendee($satts);
 
         if (!$result || !method_exists($result, 'getUrl')) {

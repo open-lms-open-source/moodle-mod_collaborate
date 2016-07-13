@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\event\course_module_viewed;
 use mod_collaborate\service\base_visit_service;
+use mod_collaborate\soap\api;
+use mod_collaborate\local;
 
 require_once(__DIR__.'/../../lib.php');
 
@@ -70,6 +72,9 @@ class view_service extends base_visit_service {
      * @throws \coding_exception
      */
     public function handle_view() {
+        global $PAGE;
+        $PAGE->requires->js_call_amd('mod_collaborate/collaborate', 'init');
+
         $event = course_module_viewed::create(array(
             'objectid' => $this->cm->instance,
             'context' => $this->context,
@@ -85,7 +90,18 @@ class view_service extends base_visit_service {
         $completion = new \completion_info($this->course);
         $completion->set_module_viewed($this->cm, $this->user->id);
 
+        // Apply guest url to collaborate property.
+        $this->apply_guest_url();
+
         return $this->renderer->view_action($this->collaborate, $this->cm);
+    }
+
+    /**
+     * Apply guest url to collaborate property.
+     */
+    protected function apply_guest_url() {
+        $url = local::guest_url($this->collaborate);
+        $this->collaborate->guesturl = $url;
     }
 
 }

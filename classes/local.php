@@ -26,6 +26,7 @@ namespace mod_collaborate;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
 use mod_collaborate\soap\generated\SetHtmlSession;
 use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
@@ -117,7 +118,7 @@ class local {
 
         if ($event->id) {
             $calendarevent = \calendar_event::load($event->id);
-            $calendarevent->update($event);
+            $calendarevent->update($event, false);
         } else {
             unset($event->id);
             $event->courseid    = $collaborate->course;
@@ -128,11 +129,17 @@ class local {
             $event->eventtype   = 'due';
             $event->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
             if (!empty($event->timeend)) {
+                // Ask if duration is set to "duration of course", then replace the
+                // timeend (just in calendar) by the timestart creating a timeduration of 0.
+                $lastsdurationofcourse = strtotime('3000-01-01 00:00');
+                if ($event->timeend == $lastsdurationofcourse) {
+                    $event->timeend = $event->timestart;
+                }
                 $event->timeduration = ($event->timeend - $event->timestart);
             } else {
                 $event->timeduration = 0;
             }
-            \calendar_event::create($event);
+            \calendar_event::create($event, false);
         }
     }
 
@@ -215,7 +222,7 @@ class local {
      * @throws \moodle_exception
      */
     public static function require_configured() {
-        if (!static::configured()) {
+        if (!static::configured() && !self::duringtesting()) {
             throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
         }
     }
@@ -267,8 +274,8 @@ class local {
                 if (!empty($tzone)) {
                     $apiverified = true;
                 }
-             }
-         }
+            }
+        }
         return ($apiverified);
     }
 
@@ -437,6 +444,24 @@ class local {
         $htmlsession->setDescription(strip_tags($description));
         $htmlsession->setBoundaryTime(self::boundary_time());
         $htmlsession->setMustBeSupervised(true);
+        $allowguests = !empty($data->guestaccessenabled) && $data->guestaccessenabled == 1;
+        $htmlsession->setAllowGuest($allowguests);
+        if ($allowguests) {
+            switch ($data->guestrole) {
+                case 'pa' :
+                    $guestrole = 'Participant';
+                    break;
+                case 'pr' :
+                    $guestrole = 'Presenter';
+                    break;
+                case 'mo' :
+                    $guestrole = 'Moderator';
+                    break;
+                default :
+                    $guestrole = 'Participant';
+            }
+            $htmlsession->setGuestRole($guestrole);
+        }
 
         // Add attendees to html session.
         $attendees = new HtmlAttendeeCollection();
@@ -491,7 +516,7 @@ class local {
      * get recordings
      *
      * @param int | object $collaborate
-     * @return array
+     * @return soap\generated\HtmlSessionRecordingResponse[]
      */
     public static function get_recordings($collaborate) {
         global $DB;
@@ -505,8 +530,6 @@ class local {
             return [];
         }
 
-        $config = get_config('collaborate');
-
         $api = api::get_api();
         $session = new HtmlSessionRecording();
         $session->setSessionId($collaborate->sessionid);
@@ -519,6 +542,50 @@ class local {
             return [];
         }
         return $respobjs;
+    }
+
+    /**
+     * Get / cache guest url.
+     *
+     * @param stdClass $collaborate - collaborate record.
+     * @param bool $forcesoap - force a soap call.
+     */
+    public static function guest_url(\stdClass $collaborate, $forcesoap = false) {
+        global $DB;
+
+        if (empty($collaborate->guestaccessenabled)) {
+            return;
+        }
+
+        if (!empty($collaborate->guesturl) && !$forcesoap) {
+            return $collaborate->guesturl;
+        }
+
+        // Get guest url.
+        $api = api::get_api();
+        $param = new BuildHtmlSessionUrl($collaborate->sessionid);
+        $sessionurl = $api->BuildHtmlSessionUrl($param);
+        $url = $sessionurl->getUrl();
+
+        // Update collaborate record with guest url.
+        $record = (object) [
+            'id' => $collaborate->id,
+            'guesturl' => $url
+        ];
+        $DB->update_record('collaborate', $record);
+
+        return $url;
+    }
+
+    /**
+     * Is this script running during testing?
+     *
+     * @return bool
+     */
+    public static function duringtesting() {
+        $runningphpunittest = defined('PHPUNIT_TEST') && PHPUNIT_TEST;
+        $runningbehattest = defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING;
+        return ($runningphpunittest || $runningbehattest);
     }
 
 }

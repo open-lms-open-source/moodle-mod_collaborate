@@ -82,7 +82,6 @@ class mod_collaborate_mod_form extends moodleform_mod {
         }
         $time = mktime(date('H', $time), $rminutes, 0, date('n'), date('j'), date('Y'));
 
-
         // Get timezone to show against start time label.
         $tzones = core_date::get_list_of_timezones();
         if (isset($tzones[$USER->timezone])) {
@@ -114,6 +113,20 @@ class mod_collaborate_mod_form extends moodleform_mod {
         ];
         $mform->addElement('select', 'duration', get_string('duration', 'mod_collaborate'), $options);
         $mform->setDefault('duration', HOURSECS);
+
+        // Guest access enabled yes / no.
+        $mform->addElement('checkbox', 'guestaccessenabled',
+                get_string('guestaccessenabled', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+
+        // Guest role.
+        $options = [
+            'pa'  => get_string('participant', 'mod_collaborate'),
+            'pr'  => get_string('presenter', 'mod_collaborate'),
+            'mo'  => get_string('moderator', 'mod_collaborate')
+        ];
+        $mform->addElement('select', 'guestrole', get_string('guestrole', 'mod_collaborate'), $options);
+        $mform->setDefault('guestrole', 'pr');
+        $mform->disabledIf('guestrole', 'guestaccessenabled');
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

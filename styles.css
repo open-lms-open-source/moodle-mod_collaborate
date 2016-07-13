@@ -10,7 +10,7 @@
     padding-left: 1.5em;
 }
 
-.modtype_collaborate .activityinstance a + span.label{
+.modtype_collaborate .activityinstance a + span.label {
     margin-left: 0.5em;
 }
 
@@ -52,3 +52,64 @@
 #api_diag .noticetemplate_problem, #api_diag .noticetemplate_success, #api_diag .noticetemplate_message {
     display: none;
 }
+
+.path-mod-collaborate .copyablelink {
+    margin-top: 1em;
+}
+
+.path-mod-collaborate .copyablelink input {
+    width: calc(100% - 2.5em);;
+}
+
+.path-mod-collaborate .copyablelink a {
+    display: none;
+}
+
+.path-mod-collaborate .copyablelink button {
+    display: none;
+}
+
+.path-mod-collaborate .copyablelink.enabled button {
+    position: relative;
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 0;
+    border: 0;
+    margin: 0 0 2px 0;
+    cursor: copy;
+}
+
+.path-mod-collaborate .copyablelink div {
+    margin-top: 1em;
+    display: none;
+    text-align: right;
+}
+
+.path-mod-collaborate .copyablelink.enabled label,
+.path-mod-collaborate .copyablelink.copied div {
+    display: block;
+}
+
+body:not(.theme-snap) .copyablelink.enabled button {
+    background: #7700C2;
+}
+
+.path-mod-collaborate .copyablelink.enabled button span.copyicon {
+    position: absolute;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    top: calc(50% - .5em);
+    left: calc(50% - .5em);
+    filter: brightness(100);
+    -webkit-filter: brightness(100);
+    background: url(/theme/image.php/clean/core/1460987426/e/copy) no-repeat center center;
+    background-size: 100%;
+}
+
+.path-mod-collaborate .copyablelink.enabled {
+    background-color: #eee;
+    padding: 1em;
+}
+

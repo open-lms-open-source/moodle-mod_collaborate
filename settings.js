@@ -6,7 +6,7 @@ M.mod_collaborate = M.mod_collaborate || {};
 M.mod_collaborate.settings = M.mod_collaborate.settings || {};
 
 /**
- * Initialise advanced forum javascript.
+ * Initialise collaborate javascript.
  * @param Y
  */
 M.mod_collaborate.settings = {
@@ -17,9 +17,10 @@ M.mod_collaborate.settings = {
         }
         M.mod_collaborate.settings.applySettingChangeCheck();
         M.mod_collaborate.settings.applyClickApiTest();
-        if ($('#id_s_collaborate_server').val() +
-            $('#id_s_collaborate_username').val() +
-            $('#id_s_collaborate_password').val() !== '') {
+        var checkapistr = $('#id_s_collaborate_server').val();
+        checkapistr += $('#id_s_collaborate_username').val();
+        checkapistr += $('#id_s_collaborate_password').val();
+        if (checkapistr !== '') {
             M.mod_collaborate.settings.testApi();
         }
         M.mod_collaborate.settings.initialised = true;
@@ -38,12 +39,11 @@ M.mod_collaborate.settings = {
 
         $(msgcontainer).addClass(extraclasses);
         $(msgcontainer).html('<span class="api-connection-msg">' + msg + '</span>');
-        //$(msgcontainer).append($('#api_diag .api_diag_btn'));
 
         // Wipe out existing connection status msg container.
         $('#api_diag .api-connection-status').empty();
 
-        // Put in new msg container
+        // Put in new msg container.
         $('#api_diag .api-connection-status').append($(msgcontainer));
 
     },
@@ -111,4 +111,4 @@ M.mod_collaborate.settings = {
             });
         }
     }
-}
+};

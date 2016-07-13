@@ -30,6 +30,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/calendar/lib.php');
 
 use mod_collaborate\renderables\view_action;
+use mod_collaborate\renderables\copyablelink;
+use mod_collaborate\renderables\recording_counts;
+use mod_collaborate\recording_counter;
 use mod_collaborate\local;
 
 class mod_collaborate_renderer extends plugin_renderer_base {
@@ -70,7 +73,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @param bool $canparticipate
      * @return string
      */
-    public function meeting_status($times, $cm, $canmoderate = false, $canparticipate = false, $unrestored = false) {
+    public function meeting_status($times,
+                                   $cm,
+                                   $canmoderate = false,
+                                   $canparticipate = false,
+                                   $unrestored = false,
+                                   $allowguestaccess = false) {
         global $OUTPUT;
 
         $o = '<div class = "path-mod-collaborate__meetingstatus">';
@@ -88,7 +96,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                         'class' => 'btn btn-success',
                         'target' => '_blank'
                     ]);
-                } else {
+                } else if (!$allowguestaccess) {
                     $o .= $OUTPUT->notification(get_string('noguestentry', 'collaborate'));
                 }
             }
@@ -183,7 +191,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     }
 
     /**
-     * @param view_action $actionview
+     * @param view_action $viewaction
      * @return string
      * @throws coding_exception
      */
@@ -197,9 +205,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $unrestored = $collaborate->sessionid == null && $canparticipate;
 
         $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
-        $times = local::get_times($collaborate, true);
+        $times = local::get_times($collaborate);
         $o .= self::meeting_status($times, $cm, $canmoderate, $canparticipate, $unrestored);
-
 
         // Conditions to show the intro can change to look for own settings or whatever.
         if (!empty($collaborate->intro)) {
@@ -210,11 +217,24 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             );
         }
 
+        // Guest url.
+        $guesturl = $viewaction->get_guest_url();
+        if ($guesturl) {
+            $clink = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturl);
+            $o .= $this->render($clink);
+        }
+
+        // Recordings.
         if ($canparticipate) {
             $recordings = local::get_recordings($collaborate);
             if (!empty($recordings)) {
+                $recordingcounts = [];
+                if ($canmoderate) {
+                    $recordingcounthelper = new recording_counter($cm, $recordings);
+                    $recordingcounts = $recordingcounthelper->get_recording_counts();
+                }
                 $o .= '<hr />';
-                $o .= $this->render_recordings($recordings);
+                $o .= $this->render_recordings($recordings, $cm, $recordingcounts);
             }
         }
 
@@ -224,10 +244,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     /**
      * Render recordings.
      *
-     * @param array $recordings
+     * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[] $recordings
+     * @param \cm_info $cm
+     * @param recording_counts[] $recordingcounts
      * @return string
      */
-    public function render_recordings(array $recordings) {
+    public function render_recordings(array $recordings, $cm, $recordingcounts = []) {
         if (empty($recordings)) {
             return '';
         }
@@ -239,9 +261,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $header = get_string('recordings', 'mod_collaborate');
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
+        $viewstr = get_string('viewrec', 'collaborate');
+
         foreach ($recordings as $recording) {
-            $url = $recording->getRecordingUrl();
+            $recurl = $recording->getRecordingUrl();
+
             $name = $recording->getDisplayName();
+            $recid = $recording->getRecordingId();
             if (preg_match('/^recording_\d+$/', $name)) {
                 $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
             }
@@ -249,10 +275,18 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $datetimestart = userdate($datetimestart->getTimestamp());
             $duration = format_time(round($recording->getDurationMillis() / 1000));
 
+            $params = ['c' => $cm->instance, 't' => recording_counter::VIEW, 'rid' => $recid,
+                       'url' => urlencode($recurl), 'sesskey' => sesskey()];
+            $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+
             $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a href="' . $url . '" target="_blank">'. format_string($name).'</a>';
-            $output .= '<span class="collab-recording-timestart">'.$datetimestart .'</span>';
-            $output .= '<span class="collab-recording-duration">'.$duration.'</span>';
+            $output .= '<a title="'.s($viewstr).'" href="' . $viewurl->out() . '" target="_blank">'.
+                    format_string($name).'</a> ';
+            $output .= '['.$duration.']';
+            $output .= '<br>' . $datetimestart .'<br>';
+            if (!empty($recordingcounts[$recid])) {
+                $output .= $this->render($recordingcounts[$recid]);
+            }
             $output .= '</li>';
         }
         $output .= '</ul>';
@@ -352,6 +386,15 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     }
 
     /**
+     * @param $url
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_copyablelink(copyablelink $clink) {
+        return $this->render_from_template('collaborate/copyablelink', $clink);
+    }
+
+    /**
      * API diagnostics - status + msg templates.
      *
      * @return string
@@ -366,5 +409,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $o .= '<div class="api-connection-status"></div>';
         $o .= '</div>';
         return $o;
+    }
+
+    /**
+     * @param recording_counts $counts
+     * @return string
+     */
+    public function render_recording_counts(recording_counts $counts) {
+        return get_string('recordingcounts', 'mod_collaborate', $counts);
     }
 }

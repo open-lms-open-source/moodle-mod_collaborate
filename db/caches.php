@@ -15,19 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for Collaborate plugin.
+ * Cache definitions for Collaborate mod.
  *
- * @package   mod_collaborate
- * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_collaborate
+ * @author     Sam Chaffee
+ * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2016041501;
-$plugin->release = '3.0.4 (Build: 20160509)';
-$plugin->requires = 2015111604; // Requires this Moodle version (3.0.4).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+$definitions = [
+    'recordingcounts' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+    ]
+];

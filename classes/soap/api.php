@@ -25,6 +25,7 @@ use mod_collaborate\local;
 require_once($CFG->dirroot.'/mod/collaborate/vendor/psr/log/Psr/Log/LoggerAwareTrait.php');
 
 use Psr\Log\LoggerAwareTrait;
+use mod_collaborate\soap\fakeapi;
 
 /**
  * The collab api.
@@ -104,7 +105,10 @@ class api extends generated\SASDefaultAdapter {
 
     /**
      * Get api.
-     *
+     * @param bool $reset
+     * @param array $options
+     * @param string $wsdl
+     * @param bool|stdClass $config
      * @return api
      */
     public static function get_api($reset = false, $options = [], $wsdl = null, $config = false) {
@@ -112,7 +116,11 @@ class api extends generated\SASDefaultAdapter {
         if ($api && !$reset) {
             return $api;
         }
-        $api = new api($options, $wsdl, $config);
+        if (local::duringtesting()) {
+            $api = new fakeapi($options, $wsdl, $config);
+        } else {
+            $api = new api($options, $wsdl, $config);
+        }
         return $api;
     }
 
@@ -173,7 +181,7 @@ class api extends generated\SASDefaultAdapter {
      */
     public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
         global $COURSE;
-        
+
         $errorstring = get_string($errorkey, 'mod_collaborate');
 
         if (!empty($debuginfo)) {

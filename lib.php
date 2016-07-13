@@ -83,7 +83,7 @@ function collaborate_supports($feature) {
 function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
     global $DB, $COURSE;
 
-    $data = $mform->get_submitted_data();
+    $data = clone($collaborate);
     $data->timeend = local::timeend_from_duration($data->timestart, $data->duration);
     $sessionid = local::api_create_session($data, $COURSE);
 
@@ -138,9 +138,15 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     if (empty($collaborate->id)) {
         $collaborate->id = $collaborate->instance;
     }
+
     $collaborate->timemodified = time();
     $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
     $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+
+    if (empty($collaborate->guestaccessenabled)) {
+        // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
+        $collaborate->guestaccessenabled = 0;
+    }
 
     $result = $DB->update_record('collaborate', $collaborate);
 
@@ -199,6 +205,12 @@ function collaborate_delete_instance($id) {
 
     // Delete main record.
     $DB->delete_records('collaborate', array('id' => $collaborate->id));
+
+    // Delete the recording counts info.
+    $DB->delete_records('collaborate_recording_info', ['id' => $collaborate->id]);
+
+    // Delete the cached recording counts.
+    cache::make('mod_collaborate', 'recordingcounts')->delete($collaborate->id);
 
     collaborate_grade_item_delete($collaborate);
 
@@ -428,7 +440,7 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
     $readers = $logmanger->get_readers('\core\log\sql_reader');
     $reader = reset($readers);
     if (empty($reader)) {
-        return false; // No log reader found.
+        return; // No log reader found.
     }
 
     $modinfo = get_fast_modinfo($courseid);
