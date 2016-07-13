@@ -18,7 +18,7 @@
  * Version information for Collaborate plugin.
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,8 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_collaborate';
 $plugin->version = 2016041501;
-$plugin->release = '2.9.3 (Build: 20160204)';
-$plugin->requires = 2015051103;
+$plugin->release = '3.0.4 (Build: 20160509)';
+$plugin->requires = 2015111604; // Requires this Moodle version (3.0.4).
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array();
