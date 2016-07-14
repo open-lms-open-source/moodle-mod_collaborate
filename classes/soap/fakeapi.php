@@ -157,7 +157,7 @@ class fakeapi extends api {
      */
     protected function getobject($id, $classname) {
         $key = 'object_'.$classname.'_'.$id;
-        return unserialize(get_config('collaborate', $key));
+        return unserialize(base64_decode(get_config('collaborate', $key)));
     }
 
     /**
@@ -170,7 +170,7 @@ class fakeapi extends api {
     protected function setobject($id, $object) {
         $classname = $this->get_class($object);
         $key = 'object_'.$classname.'_'.$id;
-        set_config($key, serialize($object), 'collaborate');
+        set_config($key, base64_encode(serialize($object)), 'collaborate');
     }
 
     /**
