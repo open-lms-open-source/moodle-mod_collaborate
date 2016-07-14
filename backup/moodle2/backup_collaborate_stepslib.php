@@ -42,7 +42,10 @@ class backup_collaborate_activity_structure_step extends backup_activity_structu
 
         // Define the root element describing the collaborate instance.
         $collaborate = new backup_nested_element('collaborate', array('id'), array(
-            'name', 'intro', 'introformat', 'grade', 'timestart', 'timeend', 'duration', 'boundaryminutes', 'sessionid'));
+            'name', 'intro', 'introformat', 'grade', 'timestart', 'timeend',
+            'duration', 'boundaryminutes', 'sessionid', 'completionlaunch',
+            'guestaccessenabled', 'guestrole', 'guesturl',
+        ));
 
         // If we had more elements, we would build the tree here.
 
