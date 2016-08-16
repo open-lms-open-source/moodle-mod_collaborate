@@ -243,26 +243,6 @@ function collaborate_user_outline($course, $user, $mod, $collaborate) {
 /* Gradebook API */
 
 /**
- * Is a given scale used by the instance of collaborate?
- *
- * This function returns if a scale is being used by one collaborate
- * if it has support for grading and scales.
- *
- * @param int $collaborateid ID of an instance of this module
- * @param int $scaleid ID of the scale
- * @return bool true if the scale is used by the given collaborate instance
- */
-function collaborate_scale_used($collaborateid, $scaleid) {
-    global $DB;
-
-    if ($scaleid and $DB->record_exists('collaborate', array('id' => $collaborateid, 'grade' => -$scaleid))) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * Checks if scale is being used by any instance of collaborate.
  *
  * This is used to find out if scale used anywhere.
