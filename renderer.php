@@ -164,9 +164,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         global $OUTPUT;
 
         if ($verified) {
-            $apistatus = $OUTPUT->notification(get_string('connectionverified', 'collaborate'), 'notifysuccess');
+            $apistatus = $OUTPUT->notification(get_string('connectionverified', 'collaborate'), 'success');
         } else {
-            $apistatus = $OUTPUT->notification(get_string('connectionfailed', 'collaborate'), 'notifyproblem');
+            $apistatus = $OUTPUT->notification(get_string('connectionfailed', 'collaborate'), 'error');
         }
 
         $o = $OUTPUT->header();
@@ -403,9 +403,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         global $OUTPUT;
 
         $o = '<div id="api_diag">';
-        $o .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'notifyproblem').'</div>';
-        $o .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'notifysuccess').'</div>';
-        $o .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'notifymessage').'</div>';
+        $o .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'error').'</div>';
+        $o .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'success').'</div>';
+        $o .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'info').'</div>';
         $o .= '<div class="api-connection-status"></div>';
         $o .= '</div>';
         return $o;
