@@ -83,6 +83,57 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $this->assertEquals($collabactivity->id, $calendarevent->instance);
         $this->assertEquals($collabactivity->timestart, $calendarevent->timestart);
         $this->assertEquals($duration, $calendarevent->timeduration);
+
+        // Now lets change the start time and duration and see if it updates correctly.
+        $now = time() + 1000;
+        $duration = 5400;
+
+        // Update our calculations.
+        $collabactivity->timestart = $now;
+        $collabactivity->duration = $duration;
+        $finishingtime = local::timeend_from_duration($collabactivity->timestart, $duration);
+        $collabactivity->timeend = $finishingtime;
+        $this->assertEquals(($collabactivity->timestart + intval($duration)), $collabactivity->timeend);
+
+        // Update the calendar.
+        local::update_calendar($collabactivity);
+
+        // Get the new event.
+        $calendarevent = \calendar_event::load($eventid);
+
+        // Check it.
+        $this->assertEquals($eventid, $calendarevent->id);
+        $this->assertEquals($collabactivity->name, $calendarevent->name);
+        $this->assertEquals($course1->id, $calendarevent->courseid);
+        $this->assertEquals('collaborate', $calendarevent->modulename);
+        $this->assertEquals($collabactivity->id, $calendarevent->instance);
+        $this->assertEquals($collabactivity->timestart, $calendarevent->timestart);
+        $this->assertEquals($duration, $calendarevent->timeduration);
+
+        // Now lets change it to a duration of course setting.
+        $duration = 9999;
+        $now = time() + 2000;
+
+        $collabactivity->timestart = $now;
+        $collabactivity->duration = $duration;
+        $finishingtime = local::timeend_from_duration($collabactivity->timestart, $duration);
+        $collabactivity->timeend = $finishingtime;
+        $this->assertNotEquals(($collabactivity->timestart + $duration), $collabactivity->timeend);
+
+        // Update the calendar.
+        local::update_calendar($collabactivity);
+
+        // Get the new event.
+        $calendarevent = \calendar_event::load($eventid);
+
+        // Check it.
+        $this->assertEquals($eventid, $calendarevent->id);
+        $this->assertEquals($collabactivity->name, $calendarevent->name);
+        $this->assertEquals($course1->id, $calendarevent->courseid);
+        $this->assertEquals('collaborate', $calendarevent->modulename);
+        $this->assertEquals($collabactivity->id, $calendarevent->instance);
+        $this->assertEquals($collabactivity->timestart, $calendarevent->timestart);
+        $this->assertEquals(0, $calendarevent->timeduration);
     }
 
     public function test_collabcalendar_duration_durationofcourse() {

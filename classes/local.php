@@ -99,6 +99,18 @@ class local {
         $event->id = $DB->get_field('event', 'id', $params);
         $event->name = $collaborate->name;
         $event->timestart = $collaborate->timestart;
+        $event->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
+        if (!empty($event->timeend)) {
+            // Ask if duration is set to "duration of course", then replace the
+            // timeend (just in calendar) by the timestart creating a timeduration of 0.
+            $lastsdurationofcourse = strtotime('3000-01-01 00:00');
+            if ($event->timeend == $lastsdurationofcourse) {
+                $event->timeend = $event->timestart;
+            }
+            $event->timeduration = ($event->timeend - $event->timestart);
+        } else {
+            $event->timeduration = 0;
+        }
 
         // Convert the links to pluginfile. It is a bit hacky but at this stage the files
         // might not have been saved in the module area yet.
@@ -127,18 +139,6 @@ class local {
             $event->modulename  = 'collaborate';
             $event->instance    = $collaborate->id;
             $event->eventtype   = 'due';
-            $event->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
-            if (!empty($event->timeend)) {
-                // Ask if duration is set to "duration of course", then replace the
-                // timeend (just in calendar) by the timestart creating a timeduration of 0.
-                $lastsdurationofcourse = strtotime('3000-01-01 00:00');
-                if ($event->timeend == $lastsdurationofcourse) {
-                    $event->timeend = $event->timestart;
-                }
-                $event->timeduration = ($event->timeend - $event->timestart);
-            } else {
-                $event->timeduration = 0;
-            }
             \calendar_event::create($event, false);
         }
     }
