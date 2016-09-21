@@ -65,8 +65,7 @@ class api extends generated\SASDefaultAdapter {
         local::require_configured();
 
         // Set wsdl to local version.
-        $wsdlurl = new \moodle_url('/mod/collaborate/wsdl.xml');
-        $wsdl = $wsdlurl->out(false);
+        $wsdl = __DIR__ . '/../../wsdl.xml';
 
         // Set service end point if populated.
         if (!empty($config->server)) {
