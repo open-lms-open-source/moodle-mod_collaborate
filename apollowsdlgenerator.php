@@ -24,8 +24,8 @@
 
 define('CLI_SCRIPT', true);
 
-require(__DIR__.'/vendor/autoload.php');
 require_once(__DIR__.'../../../config.php');
+require(__DIR__.'/vendor/autoload.php');
 
 $wsdl = 'http://testing.dev/apollo.xml?wsdl';
 $outputdir = __DIR__.'/classes/soap/generated';
