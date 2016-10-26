@@ -69,7 +69,6 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Adding the standard "intro" and "introformat" fields.
         $this->standard_intro_elements();
-        $mform->setDefault('grade[modgrade_type]', 'none');
 
         $time = time();
 
@@ -131,6 +130,11 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
+        /** @var MoodleQuickForm_modgrade $modgrade */
+        $modgrade = $mform->getElement('grade');
+        if (empty($modgrade->isupdate)) {
+            $mform->setDefault('grade[modgrade_type]', 'none');
+        }
 
         // Add standard elements, common to all modules.
         $this->standard_coursemodule_elements();
