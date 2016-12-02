@@ -21,10 +21,10 @@
 # @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 @mod @mod_collaborate
-Feature: Have a sensible default grade type when creating a Collaborate instance
-  In order to quickly add Collaborate instances
+Feature: Set one action as a completion condition for a Collab activity
+  In order to ensure students are participating on sessions
   As a teacher
-  I want the grade type set to "None"
+  I need to set a minimum number of conditions to mark the Collab activity as completed
 
   Background:
     Given the following "users" exist:
