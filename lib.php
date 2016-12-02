@@ -63,6 +63,8 @@ function collaborate_supports($feature) {
             return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return true;
         default:
             return null;
     }
@@ -486,4 +488,41 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
         $activities[$index++]   = $activity;
     }
 
+}
+
+/**
+ * Obtains the automatic completion state for this module based on any conditions
+ * in Collaborate settings.
+ *
+ * @param object $course Course
+ * @param object $cm Course-module
+ * @param int $userid User ID
+ * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+ * @return bool True if completed, false if not, $type if conditions not set.
+ */
+
+function collaborate_get_completion_state($course, $cm, $userid, $type) {
+
+    global $USER, $DB;
+
+    // Collab completion is marked individually on Moodle.
+    if ($USER->id != $userid) {
+        return false;
+    }
+
+    $sessionsearcharray = array('id' => $cm->instance,
+        'course' => $cm->course);
+    $sessionsearch = $DB->get_record('collaborate', $sessionsearcharray);
+
+    if (!empty($USER->id) && $sessionsearch->completionlaunch) {
+        $context = context_course::instance($course->id);
+
+        // Teachers and managers should not activate the student's launch completion.
+        if (!has_capability('mod/collaborate:addinstance', $context)) {
+            return true;
+        }
+        return false;
+    }
+    // Automatic view completion.
+    return true;
 }
