@@ -144,13 +144,12 @@ class local {
     }
 
     /**
-     * Convert servertime to utc time or vise-a-versa
-     *
+     * Convert a time on the server - e.g. in db - to a UTC time.
      * @param int|\DateTime $time
-     * @param bool $fromutc
+     *
      * @return bool|int
      */
-    private static function process_time($time, $fromutc = false) {
+    public static function servertime_to_utc($time) {
 
         if ($time instanceof \DateTime) {
             $time = clone ($time); // Clone to break reference.
@@ -171,32 +170,8 @@ class local {
         } else if ($time instanceof \DateTime) {
             $time = $time->getTimestamp();
         }
-        $servertzoneoffset = date('Z');
-        if ($fromutc) {
-            $time += $servertzoneoffset;
-        } else {
-            $time -= $servertzoneoffset;
-        }
-        return $time;
-    }
 
-    /**
-     * Convert a time on the server - e.g. in db - to a UTC time.
-     * @param int|\DateTime $time
-     *
-     * @return bool|int
-     */
-    public static function servertime_to_utc($time) {
-        return self::process_time($time, false);
-    }
-
-    /**
-     * Convert a UTC time to a server time.
-     * @param int|\DateTime $time
-     * @return bool|int
-     */
-    public static function utc_to_servertime($time) {
-        return self::process_time($time, true);
+        return strtotime(gmdate('Y-m-d H:i:s', $time));
     }
 
     /**
@@ -423,7 +398,7 @@ class local {
      * @param null $sessionid
      * @return SetHtmlSession|UpdateHtmlSessionDetails
      */
-    protected static function el_html_session($data, $course, $sessionid = null) {
+    private static function el_html_session($data, $course, $sessionid = null) {
         global $USER;
 
         // Main variables for session.
