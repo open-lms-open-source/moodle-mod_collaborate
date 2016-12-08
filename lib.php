@@ -505,14 +505,19 @@ function collaborate_get_completion_state($course, $cm, $userid, $type) {
 
     global $USER, $DB;
 
-    // Collab completion is marked individually on Moodle.
-    if ($USER->id != $userid) {
-        return false;
-    }
-
     $sessionsearcharray = array('id' => $cm->instance,
         'course' => $cm->course);
     $sessionsearch = $DB->get_record('collaborate', $sessionsearcharray);
+
+    // If grade completion is set, we skip this function and let core work.
+    if (!empty($USER->id) && $sessionsearch->grade > 0 && !$sessionsearch->completionlaunch) {
+        return true;
+    }
+
+    // Launch and view completion are marked individually for Collab on Moodle.
+    if ($USER->id != $userid) {
+        return false;
+    }
 
     if (!empty($USER->id) && $sessionsearch->completionlaunch) {
         $context = context_course::instance($course->id);
