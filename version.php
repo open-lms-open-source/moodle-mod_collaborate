@@ -25,9 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_collaborate';
-$plugin->version = 2016041501;
-$plugin->release = '3.0.4 (Build: 20160509)';
-$plugin->requires = 2015111604; // Requires this Moodle version (3.0.4).
+$plugin->version = 2016121300;
+$plugin->release = '3.1.3';
+$plugin->requires = 2016052300;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array();
