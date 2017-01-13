@@ -22,51 +22,22 @@
  * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+use mod_collaborate\controller\recordings_controller;
 
-use mod_collaborate\event\recording_viewed;
-use mod_collaborate\recording_counter;
+require_once(__DIR__.'/../../config.php');
+require_once(__DIR__.'/lib.php');
 
-require_once(__DIR__ .'/../../config.php');
+$action = optional_param('action', 'view', PARAM_ALPHAEXT);
 
-$instanceid = required_param('c', PARAM_INT);
-$urlencoded = required_param('url', PARAM_TEXT);
-$action = required_param('t', PARAM_INT);
-$recordingid = required_param('rid', PARAM_INT);
-
-$collab = $DB->get_record('collaborate', ['id' => $instanceid], '*', MUST_EXIST);
-$course = $DB->get_record('course', ['id' => $collab->course], '*', MUST_EXIST);
-$cm = get_coursemodule_from_instance('collaborate', $collab->id, $course->id, false, MUST_EXIST);
-$context = context_module::instance($cm->id);
-
-require_login($course, true, $cm);
-require_capability('mod/collaborate:participate', $context);
-require_sesskey();
-
-$url = urldecode($urlencoded);
-
-$data = [
-    'contextid' => $context->id,
-    'objectid' => $collab->id,
-    'other' => [
-        'recordingid' => $recordingid,
-    ],
-];
-
-// Create the appropriate event based on view or recording.
-if ($action == recording_counter::VIEW) {
-    $event = recording_viewed::create($data);
+$vc = new recordings_controller($action);
+if ($action === 'view') {
+    $vc->view_action();
+} else if ($action === 'delete') {
+    $vc->delete_action();
+} else if ($action === 'delete_confirmation') {
+    $vc->delete_confirmation_action();
 } else {
-    throw new coding_exception('Only view is allowed for type');
+    print_error('error:unknownaction', 'mod_collaborate');
 }
 
-// Insert a record to the collab recording info table.
-$record = ['instanceid' => $collab->id, 'recordingid' => $recordingid, 'action' => $action];
-$DB->insert_record('collaborate_recording_info', (object) $record);
 
-// Trigger the event.
-$event->trigger();
-
-// Delete the cached recording counts.
-cache::make('mod_collaborate', 'recordingcounts')->delete($collab->id);
-
-redirect($url);

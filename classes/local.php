@@ -33,7 +33,9 @@ use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
 use mod_collaborate\soap\generated\HtmlAttendeeCollection;
 use mod_collaborate\soap\generated\HtmlAttendee;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
+use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\api;
+use mod_collaborate\event\recording_deleted;
 
 class local {
     /**
@@ -517,6 +519,46 @@ class local {
             return [];
         }
         return $respobjs;
+    }
+
+    /**
+     * Delete recording
+     *
+     * @param int $recordingid
+     * @param string $recordingname
+     * @param \cm_info $cm
+     */
+    public static function delete_recording($recordingid, $recordingname, \cm_info $cm) {
+        global $DB;
+
+        $api = api::get_api();
+
+        $delrec = new RemoveHtmlSessionRecording($recordingid);
+        // Note, this is returning 'null' at the moment, so no way to return success boolean.
+        $api->RemoveHtmlSessionRecording($delrec);
+
+        // Recording deleted, log this event!
+        $data = [
+            'context' => $cm->context,
+            'objectid' => intval($cm->instance),
+            'other' => [
+                'recordingid' => $recordingid,
+                'recordingname' => $recordingname
+            ],
+        ];
+        error_log(var_export($data, true));
+        $event = recording_deleted::create($data);
+
+        // Delete recording info (view counts, etc).
+        $record = ['instanceid' => $cm->instance, 'recordingid' => $recordingid];
+        $DB->delete_records('collaborate_recording_info', $record);
+
+        // Delete the cached recording counts.
+        \cache::make('mod_collaborate', 'recordingcounts')->delete($cm->instance);
+
+        // Trigger the event.
+        $event->trigger();
+
     }
 
     /**

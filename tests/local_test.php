@@ -22,6 +22,9 @@
  */
 
 use mod_collaborate\testables\local;
+use mod_collaborate\soap\fakeapi;
+use mod_collaborate\soap\generated\HtmlSessionRecording;
+use mod_collaborate\recording_counter;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -95,4 +98,66 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertEquals('2017-11-05 12:00:00', $am4toutc);
     }
 
+    public function test_delete_recording() {
+        global $DB;
+
+        $this->resetAfterTest();
+        $sink = $this->redirectEvents();
+
+        $course = $this->getDataGenerator()->create_course();
+
+        /** @var mod_collaborate_generator $generator */
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_collaborate');
+        $generator->create_instance(['course' => $course->id]);
+        $collab = $generator->create_instance(['course' => $course->id]);
+        $cm = get_coursemodule_from_instance('collaborate', $collab->id);
+        $modinfo = get_fast_modinfo($course);
+        $cm = $modinfo->get_cm($cm->id);
+
+        $api = fakeapi::get_api();
+        $sessionid = $collab->sessionid;
+
+        // Add two test recordings.
+        $rec1 = $api->add_test_recording($sessionid);
+        $api->add_test_recording($sessionid);
+
+        // Assert 2 recordings.
+        $recording = new HtmlSessionRecording();
+        $recording->setSessionId($sessionid);
+        $result = $api->ListHtmlSessionRecording($recording);
+        $recordings = $result->getHtmlSessionRecordingResponse();
+        $this->assertCount(2, $recordings);
+
+        // Insert a record to the collab recording info table.
+        $record = ['instanceid' => $collab->id, 'recordingid' => $rec1->getRecordingId(), 'action' => 1];
+        $DB->insert_record('collaborate_recording_info', (object) $record);
+        $recordinghelper = new recording_counter($cm, $recordings, null, null);
+        $counts = $recordinghelper->get_recording_counts();
+
+        // Assert first recording is viewed once.
+        $this->assertEquals(1, reset($counts)->views);
+
+        // Assert that there are 2 recording counts.
+        $this->assertCount(2, $counts);
+
+        // Delete recording.
+        local::delete_recording($rec1->getRecordingId(), $rec1->getDisplayName(), $cm);
+
+        // Assert 1 recording.
+        $result = $api->ListHtmlSessionRecording($recording);
+        $recordings = $result->getHtmlSessionRecordingResponse();
+        $this->assertCount(1, $recordings);
+
+        // Assert recording_deleted event triggered.
+        $events = $sink->get_events();
+        $event = end($events);
+        $this->assertInstanceOf('mod_collaborate\\event\\recording_deleted', $event);
+
+        // Assert recording count data has disappeared for $rec1.
+        $recordinghelper = new recording_counter($cm, $recordings, null, null);
+        $counts = $recordinghelper->get_recording_counts();
+        $this->assertCount(1, $counts);
+        $rowcount = $DB->count_records('collaborate_recording_info', ['recordingid' => $rec1->getRecordingId()]);
+        $this->assertEquals(0, $rowcount);
+    }
 }

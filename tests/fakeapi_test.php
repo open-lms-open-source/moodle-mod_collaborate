@@ -37,6 +37,7 @@ use mod_collaborate\soap\generated\ServerConfigurationResponse;
 use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
+use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\local;
 
 class mod_collaborate_fakeapi_testcase extends advanced_testcase {
@@ -164,8 +165,12 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $this->resetAfterTest();
 
         $api = fakeapi::get_api();
+        $sessionid = 100;
+        // Add two test recordings.
+        $api->add_test_recording($sessionid);
+        $api->add_test_recording($sessionid);
         $recording = new HtmlSessionRecording();
-        $recording->setSessionId(100);
+        $recording->setSessionId($sessionid);
         $result = $api->ListHtmlSessionRecording($recording);
         $recordings = $result->getHtmlSessionRecordingResponse();
         $this->assertCount(2, $recordings);
@@ -190,7 +195,34 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $this->assertNotEmpty($orginalmediadecoded);
         $this->assertEquals('Recording 2', $recordings[1]->getDisplayName());
 
-        $noresults = $api->ListHtmlSessionRecording($recording, true);
+        $recording = new HtmlSessionRecording();
+        $recording->setSessionId(101);
+        $noresults = $api->ListHtmlSessionRecording($recording);
         $this->assertEmpty($noresults->getHtmlSessionRecordingResponse());
+    }
+
+    public function test_removehtmlsessionrecording() {
+        $this->resetAfterTest();
+
+        $api = fakeapi::get_api();
+        $sessionid = 100;
+        // Add two test recordings.
+        $rec1 = $api->add_test_recording($sessionid);
+        $rec2 = $api->add_test_recording($sessionid);
+        $recording = new HtmlSessionRecording();
+        $recording->setSessionId($sessionid);
+        $result = $api->ListHtmlSessionRecording($recording);
+        $recordings = $result->getHtmlSessionRecordingResponse();
+        $this->assertCount(2, $recordings);
+
+        // Delete the first recording.
+        $removerecording = new RemoveHtmlSessionRecording($rec1->getRecordingId());
+        $api->RemoveHtmlSessionRecording($removerecording);
+
+        // Make sure recordings list only contains 1 recording and that it has the undeleted items id.
+        $result = $api->ListHtmlSessionRecording($recording);
+        $recordings = $result->getHtmlSessionRecordingResponse();
+        $this->assertCount(1, $recordings);
+        $this->assertEquals($rec2->getRecordingId(), $recordings[0]->getRecordingId());
     }
 }

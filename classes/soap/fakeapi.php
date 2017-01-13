@@ -39,6 +39,7 @@ use mod_collaborate\soap\generated\ServerConfigurationResponse;
 use mod_collaborate\soap\generated\UrlResponse;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection;
+use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 
 
@@ -115,7 +116,7 @@ class fakeapi extends api {
     /**
      * Generate a fakeid for an object.
      * Note - this only ever gets used with testing code, so it's OK that its terrible :-).
-     *
+     * Also note - not to be used to procure alcohol.
      * @param string|object $object
      * @return int
      */
@@ -139,23 +140,40 @@ class fakeapi extends api {
      * Delete object.
      * Only used for testing.
      *
-     * @param int $id
      * @param string $classname
+     * @param int $id
+     * @pram null|int $parentid
      */
-    protected function deleteobject($id, $classname) {
+    protected function deleteobject($classname, $id, $parentid = null) {
         $key = 'object_'.$classname.'_'.$id;
+        $object = $this->getobject($classname, $id);
+        if (isset($object->parentid) && empty($parentid)) {
+            $parentid = $object->parentid;
+        }
         set_config($key, null, 'collaborate');
+
+        if ($parentid !== null) {
+            $pkey = 'object_parent_' . $classname . '_' . $parentid;
+            $parentobj = get_config('collaborate', $pkey);
+            if (!empty($parentobj)) {
+                $arr = unserialize(base64_decode($parentobj));
+            } else {
+                $arr = [];
+            }
+            unset($arr[$key]);
+            set_config($pkey, base64_encode(serialize($arr)), 'collaborate');
+        }
     }
 
     /**
      * Get object.
      * Only used for testing.
      *
-     * @param int $id
      * @param string $classname
+     * @param int $id
      * @return mixed
      */
-    protected function getobject($id, $classname) {
+    protected function getobject($classname, $id) {
         $key = 'object_'.$classname.'_'.$id;
         return unserialize(base64_decode(get_config('collaborate', $key)));
     }
@@ -164,13 +182,28 @@ class fakeapi extends api {
      * Set / update an object in config.
      * Only used for testing.
      *
+     * @param \stdClass $object
      * @param int $id
-     * @param object $object
+     * @param int|null $parentid
      */
-    protected function setobject($id, $object) {
+    protected function setobject($object, $id, $parentid = null) {
         $classname = $this->get_class($object);
         $key = 'object_'.$classname.'_'.$id;
+        if ($parentid) {
+            $object->parentid = $parentid;
+        }
         set_config($key, base64_encode(serialize($object)), 'collaborate');
+        if ($parentid !== null) {
+            $pkey = 'object_parent_'.$classname.'_'.$parentid;
+            $parentobj = get_config('collaborate', $pkey);
+            if (empty($parentobj)) {
+                $arr = [];
+            } else {
+                $arr = unserialize(base64_decode($parentobj));
+            }
+            $arr[$key] = $object;
+            set_config($pkey, base64_encode(serialize($arr)), 'collaborate');
+        }
     }
 
     /**
@@ -233,7 +266,7 @@ class fakeapi extends api {
             $parameters->getCreatorId(),
             true
         )]);
-        $this->setobject($fakeid, $ret->getHtmlSession()[0]);
+        $this->setobject($ret->getHtmlSession()[0], $fakeid);
         return $ret;
     }
 
@@ -244,7 +277,7 @@ class fakeapi extends api {
     public function UpdateHtmlSession(UpdateHtmlSessionDetails $parameters) {
 
         /* @var $existing HtmlSession*/
-        $existing = $this->getobject($parameters->getSessionId(), 'HtmlSession');
+        $existing = $this->getobject('HtmlSession', $parameters->getSessionId());
 
         // Modify existing HtmlSession class with update parameters.
         $this->updateclass($existing, $parameters);
@@ -252,7 +285,7 @@ class fakeapi extends api {
         $ret = new HtmlSessionCollection();
         $ret->setHtmlSession([$existing]);
 
-        $this->setobject($existing->getSessionId(), $existing);
+        $this->setobject($existing, $existing->getSessionId());
 
         return $ret;
     }
@@ -262,7 +295,7 @@ class fakeapi extends api {
      * @return SuccessResponse
      */
     public function RemoveHtmlSession(RemoveHtmlSession $parameters) {
-        $this->deleteobject($parameters->getSessionId(), 'HtmlSession');
+        $this->deleteobject('HtmlSession', $parameters->getSessionId());
         return new SuccessResponse(true);
     }
 
@@ -305,33 +338,63 @@ class fakeapi extends api {
     }
 
     /**
+     * @param int $sessionid
+     * @param null|int $id
+     * @param null|string $starttime date formatted as \DateTime::ATOM
+     * @param null|string $endtime date formatted as \DateTime::ATOM
+     * @param null|string $recordingname
+     */
+    public function add_test_recording($sessionid, $id = null, $starttime = null, $endtime = null, $recordingname = null) {
+        if (!$id) {
+            $id = $this->fakeid('HtmlSessionRecordingResponse');
+        }
+        $recordingname = $recordingname === null ? 'Recording '.$id : $recordingname;
+        $dti = new \DateTimeImmutable();
+        $createdtime = $dti->format(\DateTime::ATOM);
+        if ($starttime === null) {
+            $dti = new \DateTimeImmutable('+' . $id . ' days');
+            $starttime = $dti->format(\DateTime::ATOM);
+        }
+        if ($endtime === null) {
+            $dti = new \DateTime($starttime);
+            $dti->add(new \DateInterval('PT1H'));
+            $endtime = $dti->format(\DateTime::ATOM);
+        }
+        $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
+        $param = urlencode($url->out(false));
+        $url->param('original_media_url', $param);
+        $durationms = (strtotime($endtime) - strtotime($starttime)) * 1000;
+        $object = new HtmlSessionRecordingResponse(
+            $id, $createdtime, $starttime, $endtime, $durationms, $url->out(false), $recordingname, $sessionid
+        );
+        $this->setobject($object, $id, $sessionid);
+        return $object;
+    }
+
+    /**
      * @param HtmlSessionRecording $parameters
-     * @param bool $returnnone
      * @return HtmlSessionRecordingResponseCollection
      */
-    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters, $returnnone = false) {
-        $recordings = [];
-        if (!$returnnone) {
-            $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
-            $param = urlencode($url->out(false));
-            $url->param('original_media_url', $param);
+    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters) {
 
-            $daysago = new \DateTimeImmutable('3 days ago');
-            $starttime = $daysago->format(\DateTime::ATOM);
-            $endtime = $daysago->add(new \DateInterval('PT1H'))->format(\DateTime::ATOM);
-            $sessid = $parameters->getSessionId();
-
-            $starttime2 = $daysago->add(new \DateInterval('P1D'))->format(\DateTime::ATOM);
-            $endtime2 = $daysago->add(new \DateInterval('P1DT1H'))->format(\DateTime::ATOM);
-
-            $recordings = [
-                new HtmlSessionRecordingResponse(1, $endtime, $starttime, $endtime, 60, $url->out(false), 'Recording 1', $sessid),
-                new HtmlSessionRecordingResponse(2, $endtime2, $starttime2, $endtime2, 60, $url->out(false), 'Recording 2', $sessid),
-            ];
+        $recordings = $this->getobject('parent_HtmlSessionRecordingResponse', $parameters->getSessionId());
+        if (empty($recordings)) {
+            $recordings = [];
         }
+        $recordings = array_values($recordings);
         $response = new HtmlSessionRecordingResponseCollection();
         $response->setHtmlSessionRecordingResponse($recordings);
 
         return $response;
+    }
+
+    /**
+     * @param RemoveHtmlSessionRecording $parameters
+     * @return null
+     */
+    public function RemoveHtmlSessionRecording(RemoveHtmlSessionRecording $parameters) {
+        $recordingid = $parameters->getRecordingId();
+        $this->deleteobject('HtmlSessionRecordingResponse', $recordingid);
+        return null;
     }
 }

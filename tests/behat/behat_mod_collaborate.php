@@ -25,6 +25,9 @@
 
 require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
+use Behat\Gherkin\Node\TableNode as TableNode;
+use mod_collaborate\soap\fakeapi;
+
 class behat_mod_collaborate extends behat_base {
 
     /**
@@ -33,9 +36,56 @@ class behat_mod_collaborate extends behat_base {
      */
 
     public function i_change_to_main_window() {
-        global $CFG;
         $session = $this->getSession();
         $mainwindow = $session->getWindowName();
         $session->switchToWindow($mainwindow);
+    }
+
+    /**
+     * Creates fake recordings for testing purposes.
+     * @param string $sessionname
+     * @param TableNode $data
+     * @Given /^the following fake recordings exist for session "(?P<element_string>(?:[^"]|\\")*)":$/
+     */
+    public function the_following_fake_recordings_exist($sessionname, TableNode $data) {
+        global $DB;
+        $sessionrow = $DB->get_record('collaborate', ['name' => $sessionname]);
+        $sessionid = $sessionrow->sessionid;
+        $api = fakeapi::get_api();
+        $table = $data->getHash();
+        foreach ($table as $rkey => $row) {
+
+            if (isset($row['starttime'])) {
+                $dti = new \DateTimeImmutable($row['starttime']);
+            } else {
+                $dti = new \DateTimeImmutable('+1 hours');
+            }
+            $starttime = $dti->format(\DateTime::ATOM);
+
+            if (isset($row['endtime'])) {
+                $dti = new \DateTimeImmutable($row['endtime']);
+            } else {
+                $dti = new \DateTimeImmutable('+1 hours');
+            }
+            $endtime = $dti->format(\DateTime::ATOM);
+
+            $rowdefaults = [
+                'id' => null,
+                'starttime' => $starttime,
+                'endtime' => $endtime,
+                'name' => null
+            ];
+
+            $row = (object) array_replace($rowdefaults, $row);
+            $trimname = trim($row->name);
+
+            if (empty($trimname)) {
+                $row->name = null;
+            }
+
+            $api->add_test_recording(
+                $sessionid, $row->id, $row->starttime, $row->endtime, $row->name
+            );
+        }
     }
 }

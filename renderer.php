@@ -280,9 +280,16 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
 
             $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a title="'.s($viewstr).'" href="' . $viewurl->out() . '" target="_blank">'.
-                    format_string($name).'</a> ';
+            $output .= '<a alt="'.s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
+                    format_string($name) . '</a> ';
             $output .= '['.$duration.']';
+
+            $deleteparams = ['action' => 'delete', 'rname' => $name];
+            $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params + $deleteparams);
+
+            $output .= '<a alt="' . s(get_string('deleterecording', 'mod_collaborate', $name)) .
+                    '" class="mod-collaborate-delete" href="' . $deleteurl .'" role="button"></a>';
+
             $output .= '<br>' . $datetimestart .'<br>';
             if (!empty($recordingcounts[$recid])) {
                 $output .= $this->render($recordingcounts[$recid]);
