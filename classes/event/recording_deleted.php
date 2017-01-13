@@ -48,7 +48,7 @@ class recording_deleted extends base {
         return "The user with id '$this->userid' deleted the recording with id '".$this->other['recordingid'].
         "' for the Collab with course module id '$this->contextinstanceid'.";
     }
-    
+
     public static function get_name() {
         return get_string('eventrecordingdeleted', 'mod_collaborate');
     }

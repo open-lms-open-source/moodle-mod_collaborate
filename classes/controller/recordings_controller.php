@@ -47,7 +47,7 @@ class recordings_controller extends controller_abstract {
      * @var \stdClass|bool
      */
     protected $collaborate;
-    
+
     public function init() {
         global $PAGE;
 
@@ -69,7 +69,7 @@ class recordings_controller extends controller_abstract {
     protected function set_properties() {
         global $DB;
 
-        $c  = required_param('c', PARAM_INT);  // collaborate instance ID.
+        $c  = required_param('c', PARAM_INT);  // Collaborate instance ID.
 
         $this->collaborate = $DB->get_record('collaborate', array('id' => $c), '*', MUST_EXIST);
         $this->course = $DB->get_record('course', array('id' => $this->collaborate->course), '*', MUST_EXIST);

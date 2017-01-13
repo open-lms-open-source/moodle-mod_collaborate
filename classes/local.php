@@ -546,7 +546,6 @@ class local {
                 'recordingname' => $recordingname
             ],
         ];
-        error_log(var_export($data, true));
         $event = recording_deleted::create($data);
 
         // Delete recording info (view counts, etc).
