@@ -87,13 +87,13 @@ class mod_collaborate_mod_form extends moodleform_mod {
         if (isset($tzones[$USER->timezone])) {
             $tzone = $tzones[$USER->timezone];
         } else {
-            $defaulttz = date_default_timezone_get();
+            $defaulttz = core_date::get_server_timezone();
             if (isset($tzones[$defaulttz])) {
                 // Great, moodle has a textual representation of this timezone that we can use.
                 $tzone = $tzones[$defaulttz];
             } else {
                 // We can't find this timezone in the list of moodle timezones, so let's just use it as is.
-                $tzone = $defaulttz;
+                throw new moodle_exception('invalidservertimezone', 'collaborate');
             }
         }
         $tzonestr = ' (' . get_string('timezone', 'mod_collaborate', $tzone).')';
