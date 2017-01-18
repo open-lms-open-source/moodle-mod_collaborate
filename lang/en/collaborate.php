@@ -36,6 +36,7 @@ $string['chair'] = 'Chair';
 $string['cachedef_recordingcounts'] = 'Cache for Collaborate recording views and downloads';
 $string['collaborate'] = 'Collaborate';
 $string['collaborate:addinstance'] = 'Add Collaborate instance';
+$string['collaborate:deleterecordings'] = 'Delete recordings';
 $string['collaborate:moderate']  = 'Moderate Collaborate instance';
 $string['collaborate:participate']  = 'Join Collaborate instance';
 $string['collaborate:view'] = 'View Collaborate instance';

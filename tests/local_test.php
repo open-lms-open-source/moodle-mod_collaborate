@@ -105,6 +105,11 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $sink = $this->redirectEvents();
 
         $course = $this->getDataGenerator()->create_course();
+        $teacher = $this->getDataGenerator()->create_user();
+
+        // Enrol user to created course.
+        $editteacherrole = $DB->get_field('role', 'id', array('shortname' => 'editingteacher'));
+        $this->getDataGenerator()->enrol_user($teacher->id, $course->id, $editteacherrole);
 
         /** @var mod_collaborate_generator $generator */
         $generator = $this->getDataGenerator()->get_plugin_generator('mod_collaborate');
@@ -141,6 +146,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertCount(2, $counts);
 
         // Delete recording.
+        $this->setUser($teacher);
         local::delete_recording($rec1->getRecordingId(), $rec1->getDisplayName(), $cm);
 
         // Assert 1 recording.
@@ -159,5 +165,38 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertCount(1, $counts);
         $rowcount = $DB->count_records('collaborate_recording_info', ['recordingid' => $rec1->getRecordingId()]);
         $this->assertEquals(0, $rowcount);
+    }
+
+    public function test_delete_recording_without_capability() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $student = $this->getDataGenerator()->create_user();
+
+        // Enrol student.
+        $studentrole = $DB->get_field('role', 'id', array('shortname' => 'student'));
+        $this->getDataGenerator()->enrol_user($student->id, $course->id, $studentrole);
+
+        /** @var mod_collaborate_generator $generator */
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_collaborate');
+        $generator->create_instance(['course' => $course->id]);
+        $collab = $generator->create_instance(['course' => $course->id]);
+        $cm = get_coursemodule_from_instance('collaborate', $collab->id);
+        $modinfo = get_fast_modinfo($course);
+        $cm = $modinfo->get_cm($cm->id);
+
+        $api = fakeapi::get_api();
+        $sessionid = $collab->sessionid;
+
+        // Add test recordings.
+        $rec = $api->add_test_recording($sessionid);
+        $api->add_test_recording($sessionid);
+
+        // Assert delete recording fails with capability failure.
+        $this->setUser($student);
+        $this->setExpectedException('required_capability_exception');
+        local::delete_recording($rec->getRecordingId(), $rec->getDisplayName(), $cm);
     }
 }

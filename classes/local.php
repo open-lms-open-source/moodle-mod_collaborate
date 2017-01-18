@@ -531,6 +531,8 @@ class local {
     public static function delete_recording($recordingid, $recordingname, \cm_info $cm) {
         global $DB;
 
+        require_capability('mod/collaborate:deleterecordings', $cm->context);
+
         $api = api::get_api();
 
         $delrec = new RemoveHtmlSessionRecording($recordingid);

@@ -60,6 +60,10 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log out
     And I log in as "student1"
     And I follow "Course 1"
+    And I follow "Test collab"
+    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recording1" in the ".collab-recording-list" "css_element"
+    And I should see "Recording2" in the ".collab-recording-list" "css_element"
     And ".mod-collaborate-delete[alt='Delete recording \"Recording1\"']" "css_element" should not exist
     And I log out
     # Log back in as teacher and test delete recording options visible.
