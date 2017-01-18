@@ -283,12 +283,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $output .= '<a alt="'.s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
                     format_string($name) . '</a> ';
             $output .= '['.$duration.']';
-            
+
             if (has_capability('mod/collaborate:deleterecordings', $cm->context)) {
                 $deleteparams = ['action' => 'delete', 'rname' => $name];
                 $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params + $deleteparams);
 
-                $output .= '<a alt="' . s(get_string('deleterecording', 'mod_collaborate', $name)) .
+                $deldesc = s(get_string('deleterecording', 'mod_collaborate', $name));
+                $output .= '<a aria-label="'.$deldesc.'" title="' . $deldesc .
                     '" class="mod-collaborate-delete" href="' . $deleteurl . '" role="button"></a>';
             }
 
