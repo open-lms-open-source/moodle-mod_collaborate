@@ -88,7 +88,6 @@ $string['hour'] = '1 Hour';
 $string['hourminutes'] = '1 Hour and {$a->minutes} Minutes';
 $string['hours'] = '{$a} Hours';
 $string['hoursminutes'] = '{$a->hours} Hours and {$a->minutes} Minutes';
-$string['joiningmeeting'] = 'Joining session';
 $string['lastjoined'] = 'Last Joined: {$a}';
 $string['lastleft'] = 'Last Left: {$a}';
 $string['log:all'] = 'All';

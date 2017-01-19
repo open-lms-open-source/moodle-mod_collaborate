@@ -137,7 +137,7 @@ class view_controller extends controller_abstract {
         $PAGE->set_cacheable(false);
         $url = $forwardservice->handle_forward();
         if ($url) {
-            redirect($url, get_string('joiningmeeting', 'mod_collaborate'));
+            redirect($url);
         }
     }
 }
