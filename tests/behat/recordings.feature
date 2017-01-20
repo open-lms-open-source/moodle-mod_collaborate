@@ -50,7 +50,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I should see "Recordings" in the "h3" "css_element"
     And I should see "Recording1" in the ".collab-recording-list" "css_element"
     And I should see "Recording2" in the ".collab-recording-list" "css_element"
-    And I click on ".mod-collaborate-delete[alt='Delete recording \"Recording1\"']" "css_element"
+    And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element"
     And I should see "Are you sure you want to delete the recording entitled \"Recording1\"?"
     # Test canceling delete recording.
     And I press "Cancel"
@@ -64,14 +64,14 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I should see "Recordings" in the "h3" "css_element"
     And I should see "Recording1" in the ".collab-recording-list" "css_element"
     And I should see "Recording2" in the ".collab-recording-list" "css_element"
-    And ".mod-collaborate-delete[alt='Delete recording \"Recording1\"']" "css_element" should not exist
+    And ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element" should not exist
     And I log out
     # Log back in as teacher and test delete recording options visible.
     And I log in as "teacher1"
     And I follow "Course 1"
     And I follow "Test collab"
     # Test delete recording.
-    And I click on ".mod-collaborate-delete[alt='Delete recording \"Recording1\"']" "css_element"
+    And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element"
     And I should see "Are you sure you want to delete the recording entitled \"Recording1\"?"
     And I press "Continue"
     And I should see "The recording entitled \"Recording1\" has been deleted."
@@ -79,7 +79,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I should not see "Recording1" in the ".collab-recording-list" "css_element"
     And I should see "Recording2" in the ".collab-recording-list" "css_element"
     # Test deleting final recording.
-    And I click on ".mod-collaborate-delete[alt='Delete recording \"Recording2\"']" "css_element"
+    And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording2\"']" "css_element"
     And I should see "Are you sure you want to delete the recording entitled \"Recording2\"?"
     When I press "Continue"
     Then I should see "The recording entitled \"Recording2\" has been deleted."
