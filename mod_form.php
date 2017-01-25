@@ -93,7 +93,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
                 $tzone = $tzones[$defaulttz];
             } else {
                 // We can't find this timezone in the list of moodle timezones, so let's just use it as is.
-                throw new moodle_exception('invalidservertimezone', 'collaborate');
+                throw new moodle_exception('error:invalidservertimezone', 'collaborate');
             }
         }
         $tzonestr = ' (' . get_string('timezone', 'mod_collaborate', $tzone).')';
