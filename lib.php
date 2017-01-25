@@ -87,7 +87,11 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
 
     $data = clone($collaborate);
     $data->timeend = local::timeend_from_duration($data->timestart, $data->duration);
-    $sessionid = local::api_create_session($data, $COURSE);
+    if (PHPUNIT_TEST && isset($data->sessionid)) {
+        $sessionid = $data->sessionid;
+    } else {
+        $sessionid = local::api_create_session($data, $COURSE);
+    }
 
     $collaborate->timecreated = time();
     $collaborate->timestart = $data->timestart;

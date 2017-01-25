@@ -134,7 +134,11 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertCount(2, $recordings);
 
         // Insert a record to the collab recording info table.
-        $record = ['instanceid' => $collab->id, 'recordingid' => $rec1->getRecordingId(), 'action' => 1];
+        $record = [
+            'instanceid'  => $collab->id,
+            'recordingid' => $rec1->getRecordingId(),
+            'action'      => mod_collaborate\recording_counter::VIEW
+        ];
         $DB->insert_record('collaborate_recording_info', (object) $record);
         $recordinghelper = new recording_counter($cm, $recordings, null, null);
         $counts = $recordinghelper->get_recording_counts();

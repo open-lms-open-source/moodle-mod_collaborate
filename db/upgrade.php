@@ -31,6 +31,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+include_once('upgradelib.php');
+
 /**
  * Execute collaborate upgrade from the given old version
  *
@@ -41,6 +43,8 @@ function xmldb_collaborate_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
+
+    $upgradelib = new collaborate_update_manager();
 
     if ($oldversion < 2015072400) {
 
@@ -151,6 +155,82 @@ function xmldb_collaborate_upgrade($oldversion) {
 
         // Collaborate savepoint reached.
         upgrade_mod_savepoint(true, 2016041501, 'collaborate');
+    }
+
+    if ($oldversion < 2016121304) {
+
+        // Define table collaborate_sessionlink to be created.
+        $table = new xmldb_table('collaborate_sessionlink');
+
+        // Adding fields to table collaborate_sessionlink.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('collaborateid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('groupid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('sessionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table collaborate_sessionlink.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('collaborateid', XMLDB_KEY_FOREIGN, array('collaborateid'), 'collaborate', array('id'));
+        $table->add_key('groupid', XMLDB_KEY_FOREIGN, array('groupid'), 'groups', array('id'));
+
+        // Adding indexes to table collaborate_sessionlink.
+        $table->add_index('sessionid', XMLDB_INDEX_UNIQUE, array('sessionid'));
+
+        // Conditionally launch create table for collaborate_sessionlink.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Add new sessionlinkid field and foreign key to recording info table.
+        // Define field sessionlinkid to be added to collaborate_recording_info.
+        $table = new xmldb_table('collaborate_recording_info');
+        $field = new xmldb_field('sessionlinkid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, 0, 'id');
+        // Conditionally launch add field sessionlinkid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define key sessionlinkid (foreign) to be added to collaborate_recording_info.
+        $key = new xmldb_key('sessionlinkid', XMLDB_KEY_FOREIGN, array('sessionlinkid'), 'collaborate_sessionlink', array('id'));
+        // Launch add key sessionlinkid.
+        try {
+            $dbman->add_key($table, $key);
+        } catch (Exception $e) {
+            // Let's assume key already exists - /MDL-57761
+        }
+
+        // Add new composite key.
+        $index = new xmldb_index('sessionlinkid-recordingid-action', XMLDB_INDEX_NOTUNIQUE, array('sessionlinkid', 'recordingid', 'action'));
+
+        // Conditionally launch add index sessionlinkid-recordingid-action.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2016121304, 'collaborate');
+    }
+
+    if ($oldversion < 2016121305) {
+        $upgradelib->migrate_recording_info_instanceid_to_sessionlink();
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2016121305, 'collaborate');
+    }
+
+    if ($oldversion < 2016121306) {
+
+        // Define index instanceid-recordingid-action (not unique) to be dropped form collaborate_recording_info.
+        $table = new xmldb_table('collaborate_recording_info');
+        $index = new xmldb_index('instanceid-recordingid-action', XMLDB_INDEX_NOTUNIQUE,
+                ['instanceid', 'recordingid', 'action']);
+
+        // Conditionally launch drop index instanceid-recordingid-action.
+        if ($dbman->index_exists($table, $index)) {
+            $dbman->drop_index($table, $index);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2016121306, 'collaborate');
     }
 
     return true;
