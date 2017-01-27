@@ -156,7 +156,6 @@ class mod_collaborate_mod_form extends moodleform_mod {
     /**
      * Determines if the given time zones are valid.
      *
-     * @param array $tzones
      * @return string $tzone
      *  @throws \Exception
      */
