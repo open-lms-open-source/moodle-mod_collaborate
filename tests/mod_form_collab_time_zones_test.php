@@ -24,9 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once ($CFG->dirroot.'/mod/collaborate/mod_form.php');
-
-
+require_once($CFG->dirroot.'/mod/collaborate/mod_form.php');
 
 class mod_form_collab_time_zones_testcase extends advanced_testcase {
 

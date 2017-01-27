@@ -157,24 +157,24 @@ class mod_collaborate_mod_form extends moodleform_mod {
      * Determines if the given time zones are valid.
      *
      * @return string $tzone
-     *  @throws \Exception
+     * @throws \Exception
      */
-     public static function get_validated_time_zone() {
-         global $USER;
-         $tzones = core_date::get_list_of_timezones();
-         if (isset($tzones[$USER->timezone])) {
+    public static function get_validated_time_zone() {
+        global $USER;
+        $tzones = core_date::get_list_of_timezones();
+        if (isset($tzones[$USER->timezone])) {
             $tzone = $tzones[$USER->timezone];
-         } else {
-             $defaulttz = core_date::get_server_timezone();
-             if (isset($tzones[$defaulttz])) {
+        } else {
+            $defaulttz = core_date::get_server_timezone();
+            if (isset($tzones[$defaulttz])) {
                  // Great, moodle has a textual representation of this timezone that we can use.
                  $tzone = $tzones[$defaulttz];
-             } else {
+            } else {
                  // We can't find this timezone in the list of moodle timezones, so let's just use it as is.
                  throw new moodle_exception('error:invalidservertimezone', 'collaborate');
-             }
-         }
-         return $tzone;
-     }
+            }
+        }
+        return $tzone;
+    }
 
 }
