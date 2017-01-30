@@ -73,6 +73,7 @@ $string['error:apifailure'] = 'An error occurred whilst talking to the collabora
 $string['error:failedtocreateurl'] = 'Failed to generate url for session';
 $string['error:failedtodeletesession'] = 'Failed to delete collaborate session';
 $string['error:invalidmoduleid'] = 'You must specify a valid course_module ID or an instance ID';
+$string['error: invalidservertimezone'] = 'Invalid time zone, please make sure the time zone is properly configured';
 $string['error:noconfiguration'] = 'Collaborate module is not configured - please contact an administrator';
 $string['error:serviceunreachable'] = 'WSDL unreachable';
 $string['error:unknownaction'] = 'Unknown action';
