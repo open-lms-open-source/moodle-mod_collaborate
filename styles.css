@@ -122,3 +122,7 @@ body:not(.theme-snap) .copyablelink.enabled button {
     -webkit-background-size: cover;
     background-size: cover;
 }
+
+.mod-collaborate-group-selector input[type="submit"] {
+    margin-top: 1em;
+}

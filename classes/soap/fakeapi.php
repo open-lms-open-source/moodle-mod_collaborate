@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * Fake api - for testing
  * @author    gthomas2
@@ -215,10 +215,10 @@ class fakeapi extends api {
      */
     protected function updateclass($objecta, $objectb) {
         if (!is_object($objecta)) {
-            throw new \coding_exception('$objecta must be an object');
+            throw new \coding_exception('$objecta must be an object', var_export($objecta, true));
         }
         if (!is_object($objectb)) {
-            throw new \coding_exception('$objectb must be an object');
+            throw new \coding_exception('$objectb must be an object', var_export($objectb, true));
         }
         $reflect = new \ReflectionClass($objecta);
         $aprops = $reflect->getProperties();

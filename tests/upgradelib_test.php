@@ -52,6 +52,11 @@ class  mod_collaborate_upgradelib_testcase extends advanced_testcase {
         return ($id);
     }
 
+    /**
+     * Note: This test is only going to be relevant for 2 versions (including this one) at the most.
+     * It should be removed at some point as it will provide no benefit once customers have upgraded.
+     * @throws coding_exception
+     */
     public function test_migrate_recording_info_instanceid_to_sessionlink() {
         global $DB;
 
@@ -70,9 +75,10 @@ class  mod_collaborate_upgradelib_testcase extends advanced_testcase {
             /** @var mod_collaborate_generator $collabgen */
             $collabgen = $generator->get_plugin_generator('mod_collaborate');
             $collabgen->create_instance((object)[
-                'id'        => $this->make_collaborate_id(),
-                'course'    => $course->id,
-                'sessionid' => $this->make_session_id()
+                'id'            => $this->make_collaborate_id(),
+                'course'        => $course->id,
+                'sessionid'     => $this->make_session_id(),
+                'legacytesting' => true // Create the record without session link table.
             ]);
         }
         $collabs = $DB->get_records('collaborate');

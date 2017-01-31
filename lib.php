@@ -32,11 +32,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\soap\api;
-use mod_collaborate\soap\generated\SetHtmlSession;
-use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\generated\SuccessResponse;
 use mod_collaborate\local;
+use mod_collaborate\sessionlink;
 use mod_collaborate\logging\constants;
 
 
@@ -83,25 +82,23 @@ function collaborate_supports($feature) {
  * @return int The id of the newly inserted collaborate record
  */
 function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
-    global $DB, $COURSE;
+    global $DB;
 
     $data = clone($collaborate);
     $data->timeend = local::timeend_from_duration($data->timestart, $data->duration);
-    if (PHPUNIT_TEST && isset($data->sessionid)) {
-        $sessionid = $data->sessionid;
-    } else {
-        $sessionid = local::api_create_session($data, $COURSE);
-    }
 
     $collaborate->timecreated = time();
     $collaborate->timestart = $data->timestart;
     $collaborate->timeend = $data->timeend;
-    $collaborate->sessionid = $sessionid;
     $collaborate->id = $DB->insert_record('collaborate', $collaborate);
 
-    collaborate_grade_item_update($collaborate);
+    // Note, this if statement should eventually be removed a few versions from now when the test
+    // "migrate_recording_info_instanceid_to_sessionlink" is removed.
+    if (empty($collaborate->legacytesting)) {
+        // Create session link records.
+        sessionlink::apply_session_links($collaborate);
 
-    local::update_calendar($collaborate);
+    }
 
     return $collaborate->id;
 }
@@ -118,49 +115,25 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
  * @return boolean Success/Fail
  */
 function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
-    global $DB, $COURSE;
+    $data = clone($collaborate);
+    $data->timeend = local::timeend_from_duration($data->timestart, $data->duration);
 
-    $htmlsession = local::el_update_html_session($collaborate, $collaborate->course);
-    $api = api::get_api();
-    if ($htmlsession instanceof SetHtmlSession) {
-        $collaborate->timeend = local::timeend_from_duration($collaborate->timestart, $collaborate->duration);
-        $collaborate->sessionid = local::api_create_session($collaborate, $COURSE);
-        $result = $api->SetHtmlSession($htmlsession);
-    } else if ($htmlsession instanceof UpdateHtmlSessionDetails) {
-        $result = $api->UpdateHtmlSession($htmlsession);
-    } else {
-        $msg = 'el_update_html_session returned an unexpected object. ';
-        $msg .= 'Should have been either mod_collaborate\\soap\\generated\\SetHtmlSession OR ';
-        $msg .= 'mod_collaborate\\soap\\generated\\UpdateHtmlSessionDetails. ';
-        $msg .= 'Returned: '.var_export($htmlsession, true);
-        throw new coding_exception($msg);
-    }
+    $collaborate->timecreated = time();
+    $collaborate->timestart = $data->timestart;
+    $collaborate->timeend = $data->timeend;
 
-    // Re-get html session from result. This means that we are guaranteeing our
-    // module data is exactly the same as what is on the collaborate end!
-    $htmlsessioncollection = $result->getHtmlSession();
-    $htmlsession = $htmlsessioncollection[0];
-
-    if (empty($collaborate->id)) {
+    if (!isset($collaborate->id) && isset($collaborate->instance)) {
         $collaborate->id = $collaborate->instance;
     }
 
-    $collaborate->timemodified = time();
-    $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
-    $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
-
-    if (empty($collaborate->guestaccessenabled)) {
-        // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
-        $collaborate->guestaccessenabled = 0;
+    // Note, this if statement should eventually be removed a few versions from now when the test
+    // "migrate_recording_info_instanceid_to_sessionlink" is removed.
+    if (empty($collaborate->legacytesting)) {
+        // Create session link records.
+        return sessionlink::apply_session_links($collaborate);
+    } else {
+        return true;
     }
-
-    $result = $DB->update_record('collaborate', $collaborate);
-
-    collaborate_grade_item_update($collaborate);
-
-    local::update_calendar($collaborate);
-
-    return $result;
 }
 
 /**
@@ -180,43 +153,17 @@ function collaborate_delete_instance($id) {
         return false;
     }
 
-    // API request deletion.
-    $api = api::get_api();
-    $api->set_silent(true);
-
-    $params = new RemoveHtmlSession($collaborate->sessionid);
-    try {
-        $result = $api->RemoveHtmlSession($params);
-    } catch (Exception $e) {
-        $result = false;
-    }
-    if ($result === null) {
-        // TODO: Warning - this is a bodge fix! - the wsdl2phpgenerator has set up this class so that it is expecting
-        // a Success Response object but we are actually getting back a RemoveSessionSuccessResponse element in the
-        // xml and as a result of that we end up with a 'null' object.
-        $xml = $api->__getLastResponse();
-        if (preg_match('/<success[^>]*>true<\/success>/', $xml)) {
-            // Manually create the response object!
-            $result = new SuccessResponse(true);
-        } else {
-            $result = false;
-        }
-    }
-
-    if (!$result || !$result->getSuccess()) {
-        $api->process_error(
-            'error:failedtodeletesession', constants::SEV_WARNING
-        );
-    }
+    // Request deletion of all linked sessions.
+    sessionlink::delete_sessions($id);
 
     // Delete main record.
-    $DB->delete_records('collaborate', array('id' => $collaborate->id));
+    $DB->delete_records('collaborate', array('id' => $id));
 
     // Delete the recording counts info.
-    $DB->delete_records('collaborate_recording_info', ['id' => $collaborate->id]);
+    $DB->delete_records('collaborate_recording_info', ['instanceid' => $id]);
 
     // Delete the cached recording counts.
-    cache::make('mod_collaborate', 'recordingcounts')->delete($collaborate->id);
+    cache::make('mod_collaborate', 'recordingcounts')->delete($id);
 
     collaborate_grade_item_delete($collaborate);
 

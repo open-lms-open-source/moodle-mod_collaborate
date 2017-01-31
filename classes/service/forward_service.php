@@ -31,6 +31,7 @@ use mod_collaborate\soap\generated\HtmlAttendee;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 use mod_collaborate\event;
 use mod_collaborate\logging;
+use mod_collaborate\sessionlink;
 use mod_collaborate\service\base_visit_service;
 
 require_once(__DIR__.'/../../lib.php');
@@ -75,6 +76,10 @@ class forward_service extends base_visit_service {
      * @throws \coding_exception
      */
     public function handle_forward() {
+        if (!confirm_sesskey()) {
+            throw new moodle_exception('confirmsesskeybad', 'error');
+        }
+
         // If a collaborate session hasn't been created yet and we can moderate or add, then create it now.
         $this->moderator_ensure_session();
 
@@ -98,12 +103,12 @@ class forward_service extends base_visit_service {
     }
 
     /**
-     * Update attendee.
+     * Update attendee for a specific session.
+     * @param int $sessionid
      *
      * @throws \coding_exception
      */
-    protected function api_update_attendee() {
-        $sessionid = $this->collaborate->sessionid;
+    protected function api_update_attendee($sessionid) {
         if (has_capability('mod/collaborate:moderate', $this->context)) {
             $role = 'moderator';
         } else if (has_capability('mod/collaborate:participate', $this->context)) {
@@ -142,13 +147,45 @@ class forward_service extends base_visit_service {
     protected function forward() {
         global $PAGE, $USER;
 
+        $context = \context_course::instance($this->course->id);
+        $aag = has_capability('moodle/site:accessallgroups', $context);
+        if ($aag) {
+            $groups = groups_get_all_groups($this->cm->get_course()->id);
+        } else {
+            $groups = groups_get_all_groups($this->cm->get_course()->id, $USER->id);
+        }
+
+        $groupid = optional_param('group', -1, PARAM_INT);
+        $group = false;
+        
+        $groupsession= $this->cm->groupmode > NOGROUPS && !($aag && $groupid === 0);
+
+        if ($groupsession) {
+            if (count($groups) === 1) {
+                $group = reset($groups);
+            } else if (count($groups) > 1) {
+                if (isset($groups[$groupid])) {
+                    $group = $groups[$groupid];
+                } else {
+                    throw new \coding_exception('Request for invalid group id', $groupid);
+                }
+            }
+        }
+
+        if ($group) {
+            $sessionlink = sessionlink::get_group_session_link($this->collaborate, $group->id);
+            $sessionid = $sessionlink->sessionid;
+        } else {
+            $sessionid = $this->collaborate->sessionid;
+        }
+
         $PAGE->set_url('/mod/collaborate/view.php', array(
             'id' => $this->cm->id,
             'action'    => 'view'
         ));
 
         $this->log_viewed_event();
-        $url = $this->api_update_attendee();
+        $url = $this->api_update_attendee($sessionid);
 
         if (empty($url)) {
             $this->api->process_error(

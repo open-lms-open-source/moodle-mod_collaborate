@@ -229,9 +229,28 @@ function xmldb_collaborate_upgrade($oldversion) {
             $dbman->drop_index($table, $index);
         }
 
+        // Note, we have to keep the existing fields 0
+        //so that the code in upgradelib.php can be unit tested.
+
         // Collaborate savepoint reached.
         upgrade_mod_savepoint(true, 2016121306, 'collaborate');
     }
+
+    if ($oldversion < 2016121307) {
+
+        // Define field deletionattempted to be added to collaborate_sessionlink.
+        $table = new xmldb_table('collaborate_sessionlink');
+        $field = new xmldb_field('deletionattempted', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'sessionid');
+
+        // Conditionally launch add field deletionattempted.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2016121307, 'collaborate');
+    }
+
 
     return true;
 }

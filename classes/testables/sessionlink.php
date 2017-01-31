@@ -15,19 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for Collaborate plugin.
- *
- * @package   mod_collaborate
- * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * Testable version of sessionlink class.
+ * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @copyright Copyright (c) 2017 Blackboard Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_collaborate\testables;
+
+use mod_collaborate\traits\testable_class;
+use mod_collaborate\sessionlink as basesessionlink;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2016121308;
-$plugin->release = '3.1.3';
-$plugin->requires = 2016052300;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+class sessionlink extends basesessionlink {
+    use testable_class;
+}

@@ -32,8 +32,10 @@ use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
 use mod_collaborate\soap\generated\HtmlAttendeeCollection;
 use mod_collaborate\soap\generated\HtmlAttendee;
+use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
+use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\api;
 use mod_collaborate\event\recording_deleted;
 
@@ -291,18 +293,52 @@ class local {
     }
 
     /**
-     * Create a session based on $data for specific $course
+     * Update the collaborate instance record with information in the soapresponse.
+     * @param \stdClass $collaborate
+     * @param \HtmlSession $htmlsession
+     * @return bool
+     */
+    public static function update_collaborate_instance_record($collaborate,  HtmlSession $htmlsession) {
+        global $DB;
+
+        $sessionid = $htmlsession->getSessionId();
+
+        // Update the main collaborate instance, this is not for a group.
+        $collaborate->sessionid = $sessionid;
+        $collaborate->timemodified = time();
+        $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
+        $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+        $collaborate->duration = $collaborate->timeend - $collaborate->timestart;
+
+        if (empty($collaborate->guestaccessenabled)) {
+            // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
+            $collaborate->guestaccessenabled = 0;
+        }
+
+        $result = $DB->update_record('collaborate', $collaborate);
+
+        if ($result) {
+            collaborate_grade_item_update($collaborate);
+            local::update_calendar($collaborate);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Create a session based on $collaborate data for specific $course
      *
-     * @param $data
-     * @param $course
+     * @param \stdClass $collaborate - collaborate instance data or record.
+     * @param \stdClass $course
+     * @param null|int $groupid
      * @return mixed
      * @throws \moodle_exception
      */
-    public static function api_create_session($data, $course) {
+    public static function api_create_session($collaborate, $course, $groupid = null) {
         $config = get_config('collaborate');
 
-        $data->timeend = self::timeend_from_duration($data->timestart, $data->duration);
-        $htmlsession = self::el_set_html_session($data, $course);
+        $collaborate->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
+        $htmlsession = self::el_set_html_session($collaborate, $course, $groupid);
         $api = api::get_api();
 
         $result = $api->SetHtmlSession($htmlsession);
@@ -322,7 +358,109 @@ class local {
         }
         $respobj = $respobjs[0];
         $sessionid = $respobj->getSessionId();
+
+        if ($groupid === null) {
+            // Update the main collaborate instance, this is not for a group.
+            self::update_collaborate_instance_record($collaborate, $respobj);
+        }
+
         return ($sessionid);
+    }
+
+    /**
+     * Update a session based on $collaborate data for specific $course
+     * @param \stdClass $collaborate
+     * @param \sdtClass $course
+     * @param \stdClass $sessionlink
+     * @return int
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     * @throws coding_exception
+     */
+    public static function api_update_session($collaborate, $course, $sessionlink) {
+        $config = get_config('collaborate');
+
+        $collaborate->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
+        $htmlsession = self::el_update_html_session($collaborate, $course, $sessionlink);
+
+        $api = api::get_api();
+        if ($htmlsession instanceof SetHtmlSession) {
+            $collaborate->sessionid = local::api_create_session($collaborate, $course);
+            return ($collaborate->sessionid);
+        } else if ($htmlsession instanceof UpdateHtmlSessionDetails) {
+            $result = $api->UpdateHtmlSession($htmlsession);
+        } else {
+            $msg = 'el_update_html_session returned an unexpected object. ';
+            $msg .= 'Should have been either mod_collaborate\\soap\\generated\\SetHtmlSession OR ';
+            $msg .= 'mod_collaborate\\soap\\generated\\UpdateHtmlSessionDetails. ';
+            $msg .= 'Returned: '.var_export($htmlsession, true);
+            throw new coding_exception($msg);
+        }
+
+        if (!$result) {
+            $msg = 'SetHtmlSession';
+            if (!empty($config->wsdebug)) {
+                $msg .= ' - returned: '.var_export($result, true);
+            }
+            $api->process_error('error:apicallfailed', logging\constants::SEV_CRITICAL, $msg);
+        }
+        $respobjs = $result->getHtmlSession();
+        if (!is_array($respobjs) || empty($respobjs)) {
+            $api->process_error(
+                'error:apicallfailed', logging\constants::SEV_CRITICAL,
+                'SetHtmlSession - failed on $result->getApolloSessionDto()'
+            );
+        }
+        $respobj = $respobjs[0];
+        $sessionid = $respobj->getSessionId();
+
+        if (empty($sessionlink->groupid)) {
+            // Update the main collaborate instance, this is not for a group.
+            self::update_collaborate_instance_record($collaborate, $respobj);
+        }
+
+        return ($sessionid);
+    }
+
+    /**
+     * Delete a collaborate session.
+     * @param int $sessionid
+     * @throws \moodle_exception
+     * @return bool - true on success, false on failure.
+     */
+    public static function api_delete_session($sessionid) {
+
+        // API request deletion.
+        $api = api::get_api();
+        $api->set_silent(true);
+
+        $params = new RemoveHtmlSession($sessionid);
+        try {
+            $result = $api->RemoveHtmlSession($params);
+        } catch (Exception $e) {
+            $result = false;
+        }
+        if ($result === null) {
+            // TODO: Warning - this is a bodge fix! - the wsdl2phpgenerator has set up this class so that it is expecting
+            // a Success Response object but we are actually getting back a RemoveSessionSuccessResponse element in the
+            // xml and as a result of that we end up with a 'null' object.
+            $xml = $api->__getLastResponse();
+            if (preg_match('/<success[^>]*>true<\/success>/', $xml)) {
+                // Manually create the response object!
+                $result = new SuccessResponse(true);
+            } else {
+                $result = false;
+            }
+        }
+
+        if (!$result || !$result->getSuccess()) {
+            $api->process_error(
+                'error:failedtodeletesession', constants::SEV_WARNING
+            );
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -395,13 +533,21 @@ class local {
     /**
      * Create appropriate session param element for new session or existing session.
      *
-     * @param $data
-     * @param $course
-     * @param null $sessionid
+     * @param \stdClass $data
+     * @param \stdClass $course
+     * @param null|int $sessionid
+     * @param null|int $groupid
      * @return SetHtmlSession|UpdateHtmlSessionDetails
      */
-    private static function el_html_session($data, $course, $sessionid = null) {
+    private static function el_html_session($data, $course, $sessionid = null, $groupid = null) {
         global $USER;
+
+        $sessionname = $data->name;
+        if ($groupid !== null) {
+            // Append sessionname with groupname.
+            $groupname = groups_get_group_name($groupid);
+            $sessionname .= ' ('.$groupname.')';
+        }
 
         // Main variables for session.
         list ($timestart, $timeend) = self::get_apitimes($data->timestart, $data->duration);
@@ -410,11 +556,11 @@ class local {
         // Setup appropriate session - set or update.
         if (empty($sessionid)) {
             // New session.
-            $htmlsession = new SetHtmlSession($data->name, $timestart, $timeend, $USER->id);
+            $htmlsession = new SetHtmlSession($sessionname, $timestart, $timeend, $USER->id);
         } else {
             // Update existing session.
             $htmlsession = new UpdateHtmlSessionDetails($sessionid);
-            $htmlsession->setName($data->name);
+            $htmlsession->setName($sessionname);
             $htmlsession->setStartTime($timestart);
             $htmlsession->setEndTime($timeend);
         }
@@ -442,8 +588,9 @@ class local {
 
         // Add attendees to html session.
         $attendees = new HtmlAttendeeCollection();
-        $moderators = self::moderator_enrolees($course);
-        $participants = self::participant_enrolees($course);
+        $participantgroupid = empty($groupid) ? 0 : $groupid;
+        $moderators = self::moderator_enrolees($course, $participantgroupid);
+        $participants = self::participant_enrolees($course, $participantgroupid);
         $attarr = [];
         foreach ($moderators as $moderatorid) {
             $attarr[] = new HtmlAttendee($moderatorid, 'moderator');
@@ -460,23 +607,25 @@ class local {
     /**
      * Build SetHtmlSession element
      *
-     * @param $data
-     * @param \stdClass|string $course
+     * @param \stdClass $data
+     * @param \stdClass $course
+     * @param null|int $groupid
      * @return soap\generated\SetHtmlSession
      */
-    public static function el_set_html_session($data, $course) {
-        return self::el_html_session($data, $course);
+    public static function el_set_html_session($data, $course, $groupid = null) {
+        return self::el_html_session($data, $course, null, $groupid);
     }
 
     /**
      * Build UpdateHtmlSession element
      *
      * @param $data
-     * @param \stdClass|string $course
+     * @param \stdClass $course
+     * @param \stdClass $sessionlink
      * @return soap\generated\SetHtmlSession
      */
-    public static function el_update_html_session($data, $course) {
-        return self::el_html_session($data, $course, $data->sessionid);
+    public static function el_update_html_session($data, $course, $sessionlink) {
+        return self::el_html_session($data, $course, $sessionlink->sessionid, $sessionlink->groupid);
     }
 
     /**
@@ -492,33 +641,33 @@ class local {
     /**
      * get recordings
      *
-     * @param int | object $collaborate
-     * @return soap\generated\HtmlSessionRecordingResponse[]
+     * @param \stdClass $collaborate
+     * @param \cm_info $cm
+     * @return soap\generated\HtmlSessionRecordingResponse[][]
      */
-    public static function get_recordings($collaborate) {
-        global $DB;
+    public static function get_recordings($collaborate, \cm_info $cm) {
 
-        if (!is_object($collaborate)) {
-            $collaborate = $DB->get_record('collaborate', array('id' => $collaborate));
-        }
+        $sessionlinks = sessionlink::my_active_links($collaborate, $cm);
 
-        if ($collaborate->sessionid === null) {
-            // Session has not been initialised - possibly a duplicated session.
-            return [];
-        }
+        $sessionrecordings = [];
 
-        $api = api::get_api();
-        $session = new HtmlSessionRecording();
-        $session->setSessionId($collaborate->sessionid);
-        $result = $api->ListHtmlSessionRecording($session);
-        if (!$result) {
-            return [];
+        foreach ($sessionlinks as $sessionlink) {
+            $api = api::get_api();
+            $session = new HtmlSessionRecording();
+            $session->setSessionId($sessionlink->sessionid);
+            $result = $api->ListHtmlSessionRecording($session);
+            $recordings = [];
+            if ($result) {
+                $respobjs = $result->getHtmlSessionRecordingResponse();
+                if (!is_array($respobjs) || empty($respobjs)) {
+                    $recordings = [];
+                } else {
+                    $recordings = $respobjs;
+                }
+            }
+            $sessionrecordings[$sessionlink->sessionid] = $recordings;
         }
-        $respobjs = $result->getHtmlSessionRecordingResponse();
-        if (!is_array($respobjs) || empty($respobjs)) {
-            return [];
-        }
-        return $respobjs;
+        return $sessionrecordings;
     }
 
     /**

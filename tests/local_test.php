@@ -23,8 +23,10 @@
 
 use mod_collaborate\testables\local;
 use mod_collaborate\soap\fakeapi;
+use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\recording_counter;
+use mod_collaborate\sessionlink;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -202,5 +204,61 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->setUser($student);
         $this->setExpectedException('required_capability_exception');
         local::delete_recording($rec->getRecordingId(), $rec->getDisplayName(), $cm);
+    }
+
+    public function test_update_collaborate_instance_record() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+
+        /** @var mod_collaborate_generator $generator */
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_collaborate');
+        $collaborate = $generator->create_instance(['course' => $course->id]);
+        $newstart = strtotime('+1 years');
+        $newduration = 6 * HOURSECS;
+        list($startTime, $endTime) = local::get_apitimes($newstart, $newduration);
+
+        $htmlsession = new HtmlSession(
+            $collaborate->sessionid, $collaborate->name, $collaborate->intro, $startTime, $endTime, 10, false, false, '', '',
+            false, false, false, false, false, [], 0, false
+        );
+
+        // Test that new times affect collaborate record.
+        $instanceok = local::update_collaborate_instance_record($collaborate,  $htmlsession);
+        $this->assertTrue($instanceok);
+
+        $modifiedcollab = $DB->get_record('collaborate', ['id' => $collaborate->id]);
+        $this->assertEquals($newstart, $modifiedcollab->timestart);
+        $this->assertEquals($newstart + $newduration, $modifiedcollab->timeend);
+        $this->assertEquals($newduration, $modifiedcollab->duration);
+    }
+
+    public function test_api_update_session() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+
+        /** @var mod_collaborate_generator $generator */
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_collaborate');
+        $collaborate = $generator->create_instance(['course' => $course->id]);
+        // Get main session link (groupid is null).
+        $sessionlink = sessionlink::get_group_session_link($collaborate, null);
+  
+        $newstart = strtotime('+1 years');
+        $newduration = 6 * HOURSECS;
+        $collaborate->timestart = $newstart;
+        $collaborate->timeend = $newstart + $newduration;
+        $collaborate->duration = $newduration;
+
+        local::api_update_session($collaborate, $course, $sessionlink);
+
+        $modifiedcollab = $DB->get_record('collaborate', ['id' => $collaborate->id]);
+        $this->assertEquals($newstart, $modifiedcollab->timestart);
+        $this->assertEquals($newstart + $newduration, $modifiedcollab->timeend);
+        $this->assertEquals($newduration, $modifiedcollab->duration);
     }
 }

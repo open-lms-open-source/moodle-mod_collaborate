@@ -73,8 +73,13 @@ trait testable_class {
     public function __call($name, $arguments) {
         $reflection = new \ReflectionObject($this);
         $parentreflection = $reflection->getParentClass();
-        $method = $parentreflection->getMethod($name);
-        $method->setAccessible(true);
+        if ($parentreflection) {
+            $method = $parentreflection->getMethod($name);
+            $method->setAccessible(true);
+        } else {
+            $method = $reflection->getMethod($name);
+            $method->setAccessible(true);;
+        }
         return $method->invokeArgs($this, $arguments);
     }
 

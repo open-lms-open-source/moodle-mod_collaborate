@@ -32,8 +32,10 @@ require_once($CFG->dirroot.'/calendar/lib.php');
 use mod_collaborate\renderables\view_action;
 use mod_collaborate\renderables\copyablelink;
 use mod_collaborate\renderables\recording_counts;
+use mod_collaborate\renderables\meetingstatus;
 use mod_collaborate\recording_counter;
 use mod_collaborate\local;
+use mod_collaborate\sessionlink;
 
 class mod_collaborate_renderer extends plugin_renderer_base {
 
@@ -63,51 +65,14 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         );
     }
 
-
     /**
-     * Display meeting status, times, join link, etc..
-     *
-     * @param $times
-     * @param $cm
-     * @param bool $canmoderate
-     * @param bool $canparticipate
-     * @return string
+     * Render meeting status.
+     * @param meetingstatus $meetingstatus
+     * @return bool|string
+     * @throws moodle_exception
      */
-    public function meeting_status($times,
-                                   $cm,
-                                   $canmoderate = false,
-                                   $canparticipate = false,
-                                   $unrestored = false,
-                                   $allowguestaccess = false) {
-        global $OUTPUT;
-
-        $o = '<div class = "path-mod-collaborate__meetingstatus">';
-        $o .= '<div class = "path-mod-collaborate__meetingstatus_times">'.$this->meeting_times($times).'</div>';
-
-        $boundarytime = local::boundary_time() * 60;
-
-        if (time() < $times->end) {
-            if (time() > ($times->start - $boundarytime)) {
-                if ($canparticipate && $unrestored) {
-                    $o .= $OUTPUT->notification(get_string('unrestored', 'collaborate'));
-                } else if ($canmoderate || $canparticipate) {
-                    $url = new moodle_url('view.php', ['action' => 'forward', 'id' => $cm->id]);
-                    $o .= html_writer::link($url, get_string('meetingtimejoin', 'mod_collaborate', $times), [
-                        'class' => 'btn btn-success',
-                        'target' => '_blank'
-                    ]);
-                } else if (!$allowguestaccess) {
-                    $o .= $OUTPUT->notification(get_string('noguestentry', 'collaborate'));
-                }
-            }
-            // Note: it is intentional that users don't see any message indicating that the meeting is scheduled to occur.
-            // This can already be inferred by the title and times.
-        } else {
-            $o .= '<p>'.get_string('meetingtimepast', 'mod_collaborate', $times).'</p>';
-        }
-
-        $o .= '</div>';
-        return $o;
+    public function render_meetingstatus(meetingstatus $meetingstatus) {
+        return $this->render_from_template('collaborate/meetingstatus', $meetingstatus->export_for_template($this));
     }
 
     /**
@@ -202,11 +167,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
-        $unrestored = $collaborate->sessionid == null && $canparticipate;
 
         $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
         $times = local::get_times($collaborate);
-        $o .= self::meeting_status($times, $cm, $canmoderate, $canparticipate, $unrestored);
+
+        $meetingstatus = new meetingstatus($times, $viewaction);
+        $o .= $this->render($meetingstatus);
 
         // Conditions to show the intro can change to look for own settings or whatever.
         if (!empty($collaborate->intro)) {
@@ -226,15 +192,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         // Recordings.
         if ($canparticipate) {
-            $recordings = local::get_recordings($collaborate);
-            if (!empty($recordings)) {
-                $recordingcounts = [];
-                if ($canmoderate) {
-                    $recordingcounthelper = new recording_counter($cm, $recordings);
-                    $recordingcounts = $recordingcounthelper->get_recording_counts();
-                }
-                $o .= '<hr />';
-                $o .= $this->render_recordings($recordings, $cm, $recordingcounts);
+            $sessionrecordings = local::get_recordings($collaborate, $cm);
+            if (!empty($sessionrecordings)) {
+                $o .= $this->render_recordings($sessionrecordings, $cm, $canmoderate);
             }
         }
 
@@ -244,60 +204,88 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     /**
      * Render recordings.
      *
-     * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[] $recordings
+     * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[][] $sessionrecordings
      * @param \cm_info $cm
-     * @param recording_counts[] $recordingcounts
+     * @param boolean $canmoderate
      * @return string
      */
-    public function render_recordings(array $recordings, $cm, $recordingcounts = []) {
-        if (empty($recordings)) {
+    public function render_recordings(array $sessionrecordings, $cm, $canmoderate) {
+        $allrecordings = [];
+        foreach ($sessionrecordings as $recordings) {
+            $allrecordings = array_merge($allrecordings, $recordings);
+        }
+        if (empty($allrecordings)) {
             return '';
         }
-
-        usort($recordings, function($a, $b) {
-            return ($a->getStartTs() > $b->getStartTs());
-        });
 
         $header = get_string('recordings', 'mod_collaborate');
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
         $viewstr = get_string('viewrec', 'collaborate');
 
-        foreach ($recordings as $recording) {
-            $recurl = $recording->getRecordingUrl();
+        $sessiontitles = sessionlink::get_titles_by_sessionids(array_keys($sessionrecordings));
 
-            $name = $recording->getDisplayName();
-            $recid = $recording->getRecordingId();
-            if (preg_match('/^recording_\d+$/', $name)) {
-                $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
+        $output .= '<hr />';
+        foreach ($sessionrecordings as $sessionid => $recordings) {
+
+            if (empty($recordings)) {
+                continue;
             }
-            $datetimestart = new \DateTime($recording->getStartTs());
-            $datetimestart = userdate($datetimestart->getTimestamp());
-            $duration = format_time(round($recording->getDurationMillis() / 1000));
 
-            $params = ['c' => $cm->instance, 't' => recording_counter::VIEW, 'rid' => $recid,
-                       'url' => urlencode($recurl), 'sesskey' => sesskey()];
-            $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+            usort($recordings, function($a, $b) {
+                return ($a->getStartTs() > $b->getStartTs());
+            });
 
-            $output .= '<li class="collab-recording-list-item">';
-            $output .= '<a alt="'.s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
+            $recordingcounts = [];
+            if ($canmoderate) {
+                $recordingcounthelper = new recording_counter($cm, $recordings);
+                $recordingcounts = $recordingcounthelper->get_recording_counts();
+            }
+
+            if (!isset($sessiontitles[$sessionid])) {
+                throw new coding_exception('Unable to get title for sessionid ' . $sessionid);
+            }
+
+            // Only segregate by titles if there are multiple sessions per this instance.
+            if (count($sessionrecordings) > 1) {
+                $output .= '<h4>' . $sessiontitles[$sessionid] . '</h4>';
+            }
+            foreach ($recordings as $recording) {
+                $recurl = $recording->getRecordingUrl();
+
+                $name = $recording->getDisplayName();
+                $recid = $recording->getRecordingId();
+                if (preg_match('/^recording_\d+$/', $name)) {
+                    $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
+                }
+                $datetimestart = new \DateTime($recording->getStartTs());
+                $datetimestart = userdate($datetimestart->getTimestamp());
+                $duration = format_time(round($recording->getDurationMillis() / 1000));
+
+                $params = ['c' => $cm->instance, 't' => recording_counter::VIEW, 'rid' => $recid,
+                    'url' => urlencode($recurl), 'sesskey' => sesskey()];
+                $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+
+                $output .= '<li class="collab-recording-list-item">';
+                $output .= '<a alt="' . s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
                     format_string($name) . '</a> ';
-            $output .= '['.$duration.']';
+                $output .= '[' . $duration . ']';
 
-            if (has_capability('mod/collaborate:deleterecordings', $cm->context)) {
-                $deleteparams = ['action' => 'delete', 'rname' => $name];
-                $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params + $deleteparams);
+                if (has_capability('mod/collaborate:deleterecordings', $cm->context)) {
+                    $deleteparams = ['action' => 'delete', 'rname' => $name];
+                    $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params + $deleteparams);
 
-                $deldesc = s(get_string('deleterecording', 'mod_collaborate', $name));
-                $output .= '<a aria-label="'.$deldesc.'" title="' . $deldesc .
-                    '" class="mod-collaborate-delete" href="' . $deleteurl . '" role="button"></a>';
+                    $deldesc = s(get_string('deleterecording', 'mod_collaborate', $name));
+                    $output .= '<a aria-label="' . $deldesc . '" title="' . $deldesc .
+                        '" class="mod-collaborate-delete" href="' . $deleteurl . '" role="button"></a>';
+                }
+
+                $output .= '<br>' . $datetimestart . '<br>';
+                if (!empty($recordingcounts[$recid])) {
+                    $output .= $this->render($recordingcounts[$recid]);
+                }
+                $output .= '</li>';
             }
-
-            $output .= '<br>' . $datetimestart .'<br>';
-            if (!empty($recordingcounts[$recid])) {
-                $output .= $this->render($recordingcounts[$recid]);
-            }
-            $output .= '</li>';
         }
         $output .= '</ul>';
         return $output;

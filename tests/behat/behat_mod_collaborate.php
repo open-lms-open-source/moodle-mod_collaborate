@@ -34,11 +34,38 @@ class behat_mod_collaborate extends behat_base {
      * Returns to Moodle tab after Joining collab session.
      * @Given /^I change to main window$/
      */
-
     public function i_change_to_main_window() {
         $session = $this->getSession();
         $mainwindow = $session->getWindowName();
         $session->switchToWindow($mainwindow);
+    }
+
+    /**
+     * Deletes a group by name
+     * @Given /^the group "([^"]*)" is deleted$/
+     * @param $groupname
+     */
+    public function delete_group_by_name($groupname) {
+        global $DB;
+        $group = $DB->get_record('groups', ['name' => $groupname]);
+        groups_delete_group($group);
+    }
+
+    /**
+     * @Given /^I check the "([^"]*)" meeting group radio button$/
+     * https://github.com/Behat/MinkExtension/issues/166
+     */
+    public function i_check_the_radio_button($labelText) {
+        $page = $this->getSession()->getPage();
+        $radioButton = $page->find('xpath', '//input[@data-group-name="'.$labelText.'"]');
+        if ($radioButton) {
+            $select = $radioButton->getAttribute('name');
+            $option = $radioButton->getAttribute('value');
+            $page->selectFieldOption($select, $option);
+            return;
+        }
+
+        throw new \Exception("Radio button with label {$labelText} not found");
     }
 
     /**

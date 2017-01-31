@@ -22,7 +22,9 @@
  */
 class collaborate_update_manager {
     /**
-     * Migrates instanceids to sessionlinkids
+     * Migrates instanceids to sessionlinkids.
+     * Note, we do not create the group sessions + links here as that could be too expensive time wise - we can do those
+     * on the fly instead.
      * @throws coding_exception
      */
     public function migrate_recording_info_instanceid_to_sessionlink() {

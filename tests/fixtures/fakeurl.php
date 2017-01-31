@@ -21,4 +21,27 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-die ('Howdy!'); // @codingStandardsIgnoreLine
+include_once(__DIR__.'/../../../../config.php');
+
+$sessionid = required_param('id', PARAM_INT);
+$userid = required_param('userid', PARAM_INT);
+global $DB, $PAGE, $OUTPUT;
+
+$sessionlink = $DB->get_record('collaborate_sessionlink', ['sessionid' => $sessionid]);
+
+$PAGE->set_url(new moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php', ['id' => 1, 'userid' => 802000]));
+$PAGE->set_context(context_system::instance());
+$PAGE->set_title('Fake join meeting endpoint');
+
+echo $OUTPUT->header();
+
+$OUTPUT->heading ('Fake join meeting endpoint');
+
+if (!empty($sessionlink->groupid)) {
+    $group = $DB->get_record('groups', ['id' => $sessionlink->groupid]);
+   echo ('<p>Joined a fake session for group "'.$group->name.'"</p>');
+} else {
+   echo ('<p>Joined a fake session for the collaborate instance</p>');
+}
+
+echo $OUTPUT->footer();
