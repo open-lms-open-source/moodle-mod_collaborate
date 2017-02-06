@@ -27,7 +27,7 @@ use mod_collaborate\testables\trait_exportable;
 
 class  mod_collaborate_trait_exportable_testcase extends advanced_testcase {
 
-    function test_array_keys_numeric() {
+    public function test_array_keys_numeric() {
         $object = new trait_exportable();
         $array = [
             200 => 'a',
@@ -48,7 +48,7 @@ class  mod_collaborate_trait_exportable_testcase extends advanced_testcase {
         $this->assertEquals($expected, $actual);
     }
 
-    function test_export_for_template() {
+    public function test_export_for_template() {
         global $PAGE;
         $object = new trait_exportable();
         $exported = $object->export_for_template($PAGE->get_renderer('core'));

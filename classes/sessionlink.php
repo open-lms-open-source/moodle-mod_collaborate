@@ -309,11 +309,10 @@ class sessionlink {
                   FROM {collaborate_sessionlink} sl
                   JOIN {collaborate} c
                     ON c.id = sl.collaborateid
-             LEFT JOIN {groups} g 
+             LEFT JOIN {groups} g
                     ON g.id = sl.groupid
-                WHERE sl.sessionid $insql
-        
-        ";
+                WHERE sl.sessionid $insql";
+
         $rs = $DB->get_records_sql($sql, $inparams);
         $titles = [];
         if (empty($rs)) {

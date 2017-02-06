@@ -218,10 +218,10 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $collaborate = $generator->create_instance(['course' => $course->id]);
         $newstart = strtotime('+1 years');
         $newduration = 6 * HOURSECS;
-        list($startTime, $endTime) = local::get_apitimes($newstart, $newduration);
+        list($starttime, $endtime) = local::get_apitimes($newstart, $newduration);
 
         $htmlsession = new HtmlSession(
-            $collaborate->sessionid, $collaborate->name, $collaborate->intro, $startTime, $endTime, 10, false, false, '', '',
+            $collaborate->sessionid, $collaborate->name, $collaborate->intro, $starttime, $endtime, 10, false, false, '', '',
             false, false, false, false, false, [], 0, false
         );
 
@@ -247,7 +247,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $collaborate = $generator->create_instance(['course' => $course->id]);
         // Get main session link (groupid is null).
         $sessionlink = sessionlink::get_group_session_link($collaborate, null);
-  
+
         $newstart = strtotime('+1 years');
         $newduration = 6 * HOURSECS;
         $collaborate->timestart = $newstart;

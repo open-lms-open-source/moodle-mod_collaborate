@@ -157,8 +157,8 @@ class forward_service extends base_visit_service {
 
         $groupid = optional_param('group', -1, PARAM_INT);
         $group = false;
-        
-        $groupsession= $this->cm->groupmode > NOGROUPS && !($aag && $groupid === 0);
+
+        $groupsession = $this->cm->groupmode > NOGROUPS && !($aag && $groupid === 0);
 
         if ($groupsession) {
             if (count($groups) === 1) {

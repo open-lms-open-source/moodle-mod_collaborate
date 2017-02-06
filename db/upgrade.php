@@ -31,7 +31,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-include_once('upgradelib.php');
+require_once('upgradelib.php');
 
 /**
  * Execute collaborate upgrade from the given old version
@@ -194,12 +194,16 @@ function xmldb_collaborate_upgrade($oldversion) {
         // Launch add key sessionlinkid.
         try {
             $dbman->add_key($table, $key);
+            unset($key);
         } catch (Exception $e) {
-            // Let's assume key already exists - /MDL-57761
+            // Let's assume key already exists - /MDL-57761.
+            unset($key);
         }
 
         // Add new composite key.
-        $index = new xmldb_index('sessionlinkid-recordingid-action', XMLDB_INDEX_NOTUNIQUE, array('sessionlinkid', 'recordingid', 'action'));
+        $index = new xmldb_index('sessionlinkid-recordingid-action', XMLDB_INDEX_NOTUNIQUE,
+                ['sessionlinkid', 'recordingid', 'action']
+        );
 
         // Conditionally launch add index sessionlinkid-recordingid-action.
         if (!$dbman->index_exists($table, $index)) {
@@ -230,7 +234,7 @@ function xmldb_collaborate_upgrade($oldversion) {
         }
 
         // Note, we have to keep the existing fields 0
-        //so that the code in upgradelib.php can be unit tested.
+        // so that the code in upgradelib.php can be unit tested.
 
         // Collaborate savepoint reached.
         upgrade_mod_savepoint(true, 2016121306, 'collaborate');
@@ -250,7 +254,6 @@ function xmldb_collaborate_upgrade($oldversion) {
         // Collaborate savepoint reached.
         upgrade_mod_savepoint(true, 2016121307, 'collaborate');
     }
-
 
     return true;
 }

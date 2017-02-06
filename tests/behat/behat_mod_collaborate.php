@@ -55,17 +55,17 @@ class behat_mod_collaborate extends behat_base {
      * @Given /^I check the "([^"]*)" meeting group radio button$/
      * https://github.com/Behat/MinkExtension/issues/166
      */
-    public function i_check_the_radio_button($labelText) {
+    public function i_check_the_radio_button($labeltext) {
         $page = $this->getSession()->getPage();
-        $radioButton = $page->find('xpath', '//input[@data-group-name="'.$labelText.'"]');
-        if ($radioButton) {
-            $select = $radioButton->getAttribute('name');
-            $option = $radioButton->getAttribute('value');
+        $radiobutton = $page->find('xpath', '//input[@data-group-name="'.$labeltext.'"]');
+        if ($radiobutton) {
+            $select = $radiobutton->getAttribute('name');
+            $option = $radiobutton->getAttribute('value');
             $page->selectFieldOption($select, $option);
             return;
         }
 
-        throw new \Exception("Radio button with label {$labelText} not found");
+        throw new \Exception("Radio button with label {$labeltext} not found");
     }
 
     /**

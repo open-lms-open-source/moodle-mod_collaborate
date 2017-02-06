@@ -319,7 +319,7 @@ class local {
 
         if ($result) {
             collaborate_grade_item_update($collaborate);
-            local::update_calendar($collaborate);
+            self::update_calendar($collaborate);
         }
 
         return $result;
@@ -385,7 +385,7 @@ class local {
 
         $api = api::get_api();
         if ($htmlsession instanceof SetHtmlSession) {
-            $collaborate->sessionid = local::api_create_session($collaborate, $course);
+            $collaborate->sessionid = self::api_create_session($collaborate, $course);
             return ($collaborate->sessionid);
         } else if ($htmlsession instanceof UpdateHtmlSessionDetails) {
             $result = $api->UpdateHtmlSession($htmlsession);

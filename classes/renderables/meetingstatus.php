@@ -82,7 +82,6 @@ class meetingstatus implements \renderable, \templatable{
                                 view_action $viewaction,
                                 $allowguestaccess = false) {
 
-
         global $PAGE, $USER;
 
         $collaborate = $viewaction->get_collaborate();

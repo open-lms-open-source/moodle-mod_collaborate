@@ -341,10 +341,9 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
         $collaborate = $modgen->create_instance($collabdata);
         list($course, $cm) = get_course_and_cm_from_instance($collaborate, 'collaborate');
 
-        // Enrol student to created course
+        // Enrol student to created course.
         $student = $this->getDataGenerator()->create_user();
         $gen->enrol_user($student->id, $course->id, 'student');
-
 
         $linkscreated = sessionlink::apply_session_links($collaborate);
         $this->assertTrue($linkscreated);

@@ -21,7 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-include_once(__DIR__.'/../../../../config.php');
+require_once(__DIR__.'/../../../../config.php');
+
+defined('MOODLE_INTERNAL') || die();
 
 $sessionid = required_param('id', PARAM_INT);
 $userid = required_param('userid', PARAM_INT);
@@ -39,9 +41,9 @@ $OUTPUT->heading ('Fake join meeting endpoint');
 
 if (!empty($sessionlink->groupid)) {
     $group = $DB->get_record('groups', ['id' => $sessionlink->groupid]);
-   echo ('<p>Joined a fake session for group "'.$group->name.'"</p>');
+    echo ('<p>Joined a fake session for group "'.$group->name.'"</p>');
 } else {
-   echo ('<p>Joined a fake session for the collaborate instance</p>');
+    echo ('<p>Joined a fake session for the collaborate instance</p>');
 }
 
 echo $OUTPUT->footer();
