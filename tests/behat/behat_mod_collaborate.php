@@ -27,6 +27,7 @@ require_once(__DIR__ . '/../../../../lib/behat/behat_base.php');
 
 use Behat\Gherkin\Node\TableNode as TableNode;
 use mod_collaborate\soap\fakeapi;
+use mod_collaborate\sessionlink;
 
 class behat_mod_collaborate extends behat_base {
 
@@ -69,15 +70,48 @@ class behat_mod_collaborate extends behat_base {
     }
 
     /**
+     * @param $headingtxt
+     * @Given /^recording heading "(?P<heading_string>(?:[^"]|\\")*)" should not exist$/
+     */
+    public function recording_heading_should_not_exist($headingtxt) {
+        $xpath = '//h4[contains(., "'.$headingtxt.'")]';
+        $this->execute('behat_general::wait_until_does_not_exists', [$xpath, 'xpath_element']);
+    }
+
+    /**
+     * @param int $nth
+     * @param string $titletxt
+     * @Given /^I edit the "(?P<nth_int>(?:[\d|rd|nd|th|st]|\\")*)" collaborate instance entitled "(?P<collaborate_string>(?:[^"]|\\")*)"$/
+     */
+    public function i_edit_the_nth_collaborate_entitled($nth, $titletxt) {
+        $nth = intval($nth);
+        $xpath = '(//span[contains(@class,"inplaceeditable")][contains(., "'.$titletxt.'")])['.$nth.']'.
+                '/parent::div/parent::div//span[contains(@class, "actions")]//a[contains(.,"Edit settings")]';
+        $this->execute('behat_general::i_click_on', [$xpath, 'xpath_element']);
+    }
+
+    /**
+     * Checks that a recording is under a specific heading.
+     *
+     * @param string $recordingtxt
+     * @param string $headingtxt
+     * @Given /^recording "(?P<recording_string>(?:[^"]|\\")*)" should exist under heading "(?P<heading_string>(?:[^"]|\\")*)"$/
+     */
+    public function recording_should_exist_under_heading($recordingtxt, $headingtxt) {
+        $xpath = '//h4[contains(., "'.$headingtxt.'")]/following-sibling::li[1]';
+        $this->execute('behat_general::assert_element_contains_text', [$recordingtxt, $xpath, 'xpath_element']);
+    }
+
+    /**
      * Creates fake recordings for testing purposes.
      * @param string $sessionname
      * @param TableNode $data
      * @Given /^the following fake recordings exist for session "(?P<element_string>(?:[^"]|\\")*)":$/
      */
-    public function the_following_fake_recordings_exist($sessionname, TableNode $data) {
+    public function the_following_fake_recordings_exist($instancename, TableNode $data) {
         global $DB;
-        $sessionrow = $DB->get_record('collaborate', ['name' => $sessionname]);
-        $sessionid = $sessionrow->sessionid;
+        $instancerow = $DB->get_record('collaborate', ['name' => $instancename]);
+        $coursesessionid = $instancerow->sessionid;
         $api = fakeapi::get_api();
         $table = $data->getHash();
         foreach ($table as $rkey => $row) {
@@ -100,7 +134,8 @@ class behat_mod_collaborate extends behat_base {
                 'id' => null,
                 'starttime' => $starttime,
                 'endtime' => $endtime,
-                'name' => null
+                'name' => null,
+                'group' => null
             ];
 
             $row = (object) array_replace($rowdefaults, $row);
@@ -108,6 +143,17 @@ class behat_mod_collaborate extends behat_base {
 
             if (empty($trimname)) {
                 $row->name = null;
+            }
+
+            if (!empty($row->group)) {
+                $groupid = groups_get_group_by_name($instancerow->course, $row->group);
+                if (empty($groupid)) {
+                    throw new coding_exception('Invalid group: '.$row->group);
+                }
+                $sessionlink = sessionlink::get_group_session_link($instancerow, $groupid);
+                $sessionid = $sessionlink->sessionid;
+            } else {
+                $sessionid = $coursesessionid;
             }
 
             $api->add_test_recording(

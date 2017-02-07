@@ -110,3 +110,52 @@ Feature: Separate sessions are created for the course and individual groups.
     And ".mod-collaborate-group-selector" "css_element" should not exist
     And I follow "Join session"
     And I should see "Joined a fake session for group \"Group 2\""
+
+  Scenario: Collaborate - duplicating an instance makes groups available post duplication.
+    Given I log in as "teacher1"
+    And I follow "Course 1"
+    And I turn editing mode on
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab |
+      | Group mode | Separate groups |
+    And I duplicate "Test collab" activity
+    And I edit the "2nd" collaborate instance entitled "Test collab"
+    And I set the following fields to these values:
+      | Session name | Test collab duplicated |
+    And I press "Save and return to course"
+    # Make sure duplicated collaborate works.
+    And I follow "Test collab duplicated"
+    And ".mod-collaborate-group-selector" "css_element" should exist
+    And I should see "No group" in the ".mod-collaborate-group-selector" "css_element"
+    And I should see "Group 1" in the ".mod-collaborate-group-selector" "css_element"
+    And I should see "Group 2" in the ".mod-collaborate-group-selector" "css_element"
+    And ".mod-collaborate-group-selector input[value=\"Join session\"]" "css_element" should exist
+    And I press "Join session"
+    And I should see "Joined a fake session for the collaborate instance"
+    And I log out
+    # Log in as student and make sure student doesn't see any group selectors if they are only in one group.
+    And I log in as "student1"
+    And I follow "Course 1"
+    And I follow "Test collab duplicated"
+    And ".mod-collaborate-group-selector" "css_element" should not exist
+    And I should see "Join session" in the "a.btn-success" "css_element"
+    And I follow "Join session"
+    And I should see "Joined a fake session for group \"Group 1\""
+    And I log out
+    # Log in as student and make sure student sees group selectors if they are in more than one group.
+    And I log in as "student2"
+    And I follow "Course 1"
+    And I follow "Test collab duplicated"
+    And ".mod-collaborate-group-selector" "css_element" should exist
+    And I should not see "No group" in the ".mod-collaborate-group-selector" "css_element"
+    And I should see "Group 1" in the ".mod-collaborate-group-selector" "css_element"
+    And I should see "Group 2" in the ".mod-collaborate-group-selector" "css_element"
+    And ".mod-collaborate-group-selector input[value=\"Join session\"]" "css_element" should exist
+    And I press "Join session"
+    And I should see "Joined a fake session for group \"Group 1\""
+    And I am on site homepage
+    And I follow "Course 1"
+    And I follow "Test collab duplicated"
+    And I check the "Group 2" meeting group radio button
+    When I press "Join session"
+    Then I should see "Joined a fake session for group \"Group 2\""
