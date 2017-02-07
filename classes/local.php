@@ -659,9 +659,7 @@ class local {
             $recordings = [];
             if ($result) {
                 $respobjs = $result->getHtmlSessionRecordingResponse();
-                if (!is_array($respobjs) || empty($respobjs)) {
-                    $recordings = [];
-                } else {
+                if (is_array($respobjs) && !empty($respobjs)) {
                     $recordings = $respobjs;
                 }
             }

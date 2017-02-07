@@ -60,7 +60,7 @@
         <INDEX NAME="sessionlinkid-recordingid-action" UNIQUE="false" FIELDS="sessionlinkid, recordingid, action" COMMENT="Index on the instance ID and recording ID and action"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="collaborate_sessionlink" COMMENT="Default comment for the table, please edit me">
+    <TABLE NAME="collaborate_sessionlink" COMMENT="Links sessions to groups and collaborate instances">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="collaborateid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>

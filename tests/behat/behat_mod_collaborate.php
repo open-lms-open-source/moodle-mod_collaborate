@@ -78,11 +78,13 @@ class behat_mod_collaborate extends behat_base {
         $this->execute('behat_general::wait_until_does_not_exists', [$xpath, 'xpath_element']);
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * @param int $nth
      * @param string $titletxt
      * @Given /^I edit the "(?P<nth_int>(?:[\d|rd|nd|th|st]|\\")*)" collaborate instance entitled "(?P<collaborate_string>(?:[^"]|\\")*)"$/
      */
+    // @codingStandardsIgnoreEnd
     public function i_edit_the_nth_collaborate_entitled($nth, $titletxt) {
         $nth = intval($nth);
         $xpath = '(//span[contains(@class,"inplaceeditable")][contains(., "'.$titletxt.'")])['.$nth.']'.
