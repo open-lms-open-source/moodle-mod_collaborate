@@ -42,6 +42,7 @@ class collaborate_update_manager {
         }
         $progress->start_progress('Migrating recording info to use session link table', count($rs));
         $p = 0;
+        $missinginstances = [];
         foreach ($rs as $row) {
             $p++;
             $progress->progress($p);
@@ -49,7 +50,18 @@ class collaborate_update_manager {
             if (empty($row->sessionlinkid)) {
                 // Migrate to session link.
                 if (!isset($instances[$row->instanceid])) {
-                    throw new coding_exception('Instance does not exist - '.$row->instanceid);
+                    // We can't use debugging or throw an error here.
+                    // This is happening because a collaborate instance that had recordings has been deleted.
+                    // Delete the recording view data for this missing instance.
+                    $DB->delete_records('collaborate_recording_info', ['id' => $row->id]);
+
+                    if (!in_array($row->instanceid, $missinginstances)) {
+                        // Only warn about instance missing once.
+                        mtrace('Instance does not exist - '.$row->instanceid);
+                        $missinginstances[] = $row->instanceid;
+                    }
+
+                    continue;
                 }
                 $instance = $instances[$row->instanceid];
                 $slrow = $DB->get_record('collaborate_sessionlink', ['sessionid' => $instance->sessionid]);
