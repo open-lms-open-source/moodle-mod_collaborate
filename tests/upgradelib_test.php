@@ -98,6 +98,7 @@ class  mod_collaborate_upgradelib_testcase extends advanced_testcase {
         $deletedcollab = reset($collabs);
         $DB->delete_records('collaborate', ['id' => $deletedcollab->id]);
         $collabs = $DB->get_records('collaborate');
+        $this->expectOutputRegex('/Instance does not exist - '.$deletedcollab->id.'/');
 
         // Run upgrade migration script.
         $upgradelib = new collaborate_update_manager();
