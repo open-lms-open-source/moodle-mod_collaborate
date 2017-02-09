@@ -36,6 +36,9 @@ use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
+use mod_collaborate\soap\generated\HtmlRoom;
+use mod_collaborate\soap\generated\HtmlAttendeeLog;
+use mod_collaborate\soap\generated\HtmlSessionAttendance;
 use mod_collaborate\soap\api;
 use mod_collaborate\event\recording_deleted;
 
@@ -636,6 +639,34 @@ class local {
     public static function via_ajax() {
         return !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+
+    /**
+     * get attendance
+     *
+     * @param int | object $collaborate
+     * @return soap\generated\HtmlRoomCollection[]
+     */
+
+    public static function get_attendance($collaborate) {
+        global $DB;
+
+        if (!is_object($collaborate)) {
+            $collaborate = $DB->get_record('collaborate', array('id' => $collaborate));
+        }
+
+        if ($collaborate->sessionid === null) {
+            // Session has not been initialised - possibly a duplicated session.
+            return [];
+        }
+
+        $api = api::get_api();
+        $startingtime = self::api_datetime($collaborate->timestart);
+        $collabsession = new HtmlSessionAttendance($collaborate->sessionid, $startingtime);
+        $result = $api->ListHtmlSessionAttendance($collabsession);
+        $rooms = $result->getHtmlRoom();
+
+        return $rooms;
     }
 
     /**

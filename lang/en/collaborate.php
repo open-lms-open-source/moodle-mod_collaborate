@@ -31,6 +31,10 @@ $string['apidiagnosticsavenotice'] = 'Note: You must submit this form before run
 // The apisettings language string matches the customer welcome email. Don't change unless the welcome email changes.
 $string['apisettings'] = 'Production Moodle Integration';
 $string['attendance'] = 'Attendance';
+$string['attendancestudents'] = 'Attendee';
+$string['attendancejoined'] = 'Joined Time';
+$string['attendanceleft'] = 'Abandoned';
+$string['attendancenet'] = 'Online Time';
 $string['boundaryminutes'] = 'Boundary Time';
 $string['chair'] = 'Chair';
 $string['cachedef_recordingcounts'] = 'Cache for Collaborate recording views and downloads';

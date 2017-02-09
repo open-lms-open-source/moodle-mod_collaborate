@@ -190,6 +190,16 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $o .= $this->render($clink);
         }
 
+        // Attendance.
+        if ($canmoderate) {
+            $roomsattendance = local::get_attendance($collaborate);
+            if (!empty($roomsattendance)) {
+                $attendance = $this->extract_attendance($roomsattendance);
+                $o .= '<hr />';
+                $o .= $this->render_attendance($attendance, $cm);
+            }
+        }
+
         // Recordings.
         if ($canparticipate) {
             $sessionrecordings = local::get_recordings($collaborate, $cm);
@@ -199,6 +209,90 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         }
 
         return $o;
+    }
+
+    /**
+     * Extract the data for attendance table.
+     *
+     * @param soap\generated\HtmlRoomCollection[]
+     * @return array $attendance Set of attendees for a Collab session
+     */
+    public function extract_attendance($rooms) {
+
+        $assistantinfo = new \stdClass();
+        $objctarray = array();
+
+        foreach ($rooms as $room) {
+            $roomattendees[] = $room->getHtmlAttendees();
+        }
+        foreach ($roomattendees as $roomattendee) {
+            $sessionattendees[] = $roomattendee->getHtmlAttendee();
+        }
+        foreach ($sessionattendees as $sessionattendee) {
+
+            foreach ($sessionattendee as $subattendee) {
+                $attendeename = $subattendee->getDisplayName();
+                $assistantinfo->name = $attendeename;
+                $attendeeid = $subattendee->getUserId();
+                $assistantinfo->id = $attendeeid;
+                $attendees = $subattendee->getHtmlAttendeeLogs();
+                $attendeelogs = $attendees[0]->getHtmlAttendeeLog();
+                foreach ($attendeelogs as $attendeelog) {
+                    $joinlog = $attendeelog->getJoined();
+                    $assistantinfo->joined = $joinlog->format('Y-m-d H:i');
+                    $leftlog = $attendeelog->getLeft();
+                    $assistantinfo->left = $leftlog->getTimestamp();
+                    $interval = $leftlog->diff($joinlog);
+                    $net = $interval->format('%h hours %i minutes %S seconds');
+                    $assistantinfo->net = $net;
+
+                }
+                $objctarray[] = $assistantinfo;
+                //print_object($objctarray);
+
+            }
+        }
+
+        return $objctarray;
+    }
+
+    /**
+     * Render attendance.
+     *
+     * @param array $attendance Set of attendees for a Collab session
+     * @param \cm_info $cm
+     * @return string
+     */
+    public function render_attendance(array $attendance, $cm) {
+        if (empty($attendance)) {
+            return '';
+        }
+
+        $header = get_string('attendance', 'mod_collaborate');
+        $output = "<h3>$header</h3>";
+        $output .= '<h4 class="collab-attendance-table">';
+
+        $table = new html_table();
+        $table->attributes['class'] = 'generaltable collaborate_attendance';
+
+        $heads[] = get_string('attendancestudents', 'mod_collaborate');
+        array_push($heads, get_string('attendancejoined', 'mod_collaborate'));
+        array_push($heads, get_string('attendanceleft', 'mod_collaborate'));
+        array_push($heads, get_string('attendancenet', 'mod_collaborate'));
+        $table->head = $heads;
+
+        foreach ($attendance as $attendee) {
+            $data = array();
+            array_push($data, $attendee->name);
+            array_push($data, $attendee->joined);
+            array_push($data, $attendee->left);
+            array_push($data, $attendee->net);
+            $table->data[]=$data;
+        }
+        $output .= html_writer::table($table);
+        $output .= '</h4>';
+        return $output;
+
     }
 
     /**
