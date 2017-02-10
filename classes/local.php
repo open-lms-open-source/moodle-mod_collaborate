@@ -651,8 +651,11 @@ class local {
 
         $sessionrecordings = [];
 
+        $api = api::get_api();
         foreach ($sessionlinks as $sessionlink) {
-            $api = api::get_api();
+            if (empty($sessionlink->sessionid)) {
+                continue;
+            }
             $session = new HtmlSessionRecording();
             $session->setSessionId($sessionlink->sessionid);
             $result = $api->ListHtmlSessionRecording($session);

@@ -29,6 +29,7 @@ Feature: Separate sessions are created for the course and individual groups.
       | teacher1 | Teacher   | 1        | teacher1@example.com |
       | student1 | Student   | 1        | student1@example.com |
       | student2 | Student   | 2        | student1@example.com |
+      | student3 | Student   | 3        | student1@example.com |
     And the following "courses" exist:
       | fullname | shortname | category |
       | Course 1 | C1        | 0        |
@@ -37,6 +38,7 @@ Feature: Separate sessions are created for the course and individual groups.
       | teacher1 | C1     | editingteacher |
       | student1 | C1     | student        |
       | student2 | C1     | student        |
+      | student3 | C1     | student        |
     And the following "groups" exist:
       | name    | course  | idnumber |
       | Group 1 | C1      | G1       |
@@ -87,8 +89,17 @@ Feature: Separate sessions are created for the course and individual groups.
     And I follow "Course 1"
     And I follow "Test collab"
     And I check the "Group 2" meeting group radio button
-    When I press "Join session"
-    Then I should see "Joined a fake session for group \"Group 2\""
+    And I press "Join session"
+    And I should see "Joined a fake session for group \"Group 2\""
+    And I log out
+    # Log in as student who isn't in any groups and make sure they join the main session.
+    And I log in as "student3"
+    And I follow "Course 1"
+    And I follow "Test collab"
+    And ".mod-collaborate-group-selector" "css_element" should not exist
+    And I should see "Join session" in the "a.btn-success" "css_element"
+    When I follow "Join session"
+    Then I should see "Joined a fake session for the collaborate instance"
 
   Scenario: Collaborate - deleting a group removes the group from the list of available groups when joining a session.
     Given I log in as "teacher1"
