@@ -91,7 +91,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $startmonth = userdate($times->start, '%m');
         $endmonth = userdate($times->end, '%m');
 
-        $openended = date('Y-m-d', $times->end) === '3000-01-01';
+        $openended = date('Y-m-d', $times->end) === date('Y-m-d', strtotime(local::TIMEDURATIONOFCOURSE));
 
         $startiscurrentyear = $startyear === userdate(time(), '%y');
         if ($startiscurrentyear && ($openended  || $startyear === $endyear)) {

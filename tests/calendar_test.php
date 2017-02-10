@@ -111,7 +111,7 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $this->assertEquals($duration, $calendarevent->timeduration);
 
         // Now lets change it to a duration of course setting.
-        $duration = 9999;
+        $duration = local::DURATIONOFCOURSE;
         $now = time() + 2000;
 
         $collabactivity->timestart = $now;
@@ -144,7 +144,7 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $this->resetAfterTest(true);
 
         $course2 = $this->getDataGenerator()->create_course();
-        $duration = 9999; // Numeric value for "Duration of course" set on the collab form.
+        $duration = local::DURATIONOFCOURSE; // Numeric value for "Duration of course" set on the collab form.
         $now = time();
 
         // Create another activity.
@@ -160,7 +160,7 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $finishingtime = local::timeend_from_duration($collabactivity->timestart, $duration);
         $collabactivity->timeend = $finishingtime;
         $this->assertNotEquals(($collabactivity->timestart + intval($duration)), $collabactivity->timeend);
-        $durationofcoursetimestamp = strtotime('3000-01-01 00:00');
+        $durationofcoursetimestamp = strtotime(local::TIMEDURATIONOFCOURSE);
         $this->assertEquals($durationofcoursetimestamp, $finishingtime);
         $collabactivity->id = 20;
 

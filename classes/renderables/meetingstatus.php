@@ -112,7 +112,9 @@ class meetingstatus implements \renderable, \templatable{
                             $this->groups = groups_get_all_groups($cm->get_course()->id);
                         } else {
                             $this->groups = groups_get_all_groups($cm->get_course()->id, $USER->id);
-                            reset($this->groups)->checked = "checked=\"checked\"";
+                            if (!empty($this->groups)) {
+                                reset($this->groups)->checked = "checked=\"checked\"";
+                            }
                         }
                     }
                     if (count($this->groups) > 1 || $this->aag) {

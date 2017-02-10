@@ -163,4 +163,28 @@ class behat_mod_collaborate extends behat_base {
             );
         }
     }
+
+    /**
+     * @Given /^I should see Collaborate time span of "(?P<duration_string>(?:[^"]|\\")*)"$/
+     * @param str $duration
+     */
+    public function i_see_timespan_of($duration) {
+        if ($duration === 'duration of course') {
+            $this->execute('behat_general::assert_element_contains_text', [
+                    '(Duration of course)',
+                    '.path-mod-collaborate__meetingstatus_times',
+                    'css_element'
+                ]
+            );
+            return;
+        }
+        $timeduration = strtotime($duration) - time();
+        $start = $this->find('xpath', '//time[@datetime][1]')->getAttribute('datetime');
+        $end = $this->find('xpath', '//time[@datetime][2]')->getAttribute('datetime');
+        $timestart = strtotime($start);
+        $timeend = strtotime($end);
+        if (($timeend - $timestart) !== $timeduration) {
+            throw new ExpectationException('A collaborate time duration of "' . $duration . '" was not present');
+        }
+    }
 }
