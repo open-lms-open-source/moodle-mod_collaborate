@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Behat feature for Collab group sessions.
+# Behat feature for Collab instances.
 #
 # @package    mod_collaborate
 # @author     Guy Thomas
@@ -21,7 +21,7 @@
 # @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 @mod @mod_collaborate
-Feature: Separate sessions are created for the course and individual groups.
+Feature: Collaborate instances can be created by teachers and joined by students.
 
   Background:
     Given the following "users" exist:
@@ -48,6 +48,34 @@ Feature: Separate sessions are created for the course and individual groups.
       | student1 | G1    |
       | student2 | G1    |
       | student2 | G2    |
+
+    @wip
+  Scenario: Collaborate instance can be created with various durations.
+    Given I log in as "teacher1"
+    And I follow "Course 1"
+    And I turn editing mode on
+    # Test 30 minutes duration
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab 30 mins |
+      | Duration     | 30 Minutes          |
+    And I follow "Test collab 30 mins"
+    And I should see Collaborate time span of "30 minutes"
+    # Test 1 hour duration
+    And I am on site homepage
+    And I follow "Course 1"
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab 1 hour |
+      | Duration     | 1 Hour             |
+    And I follow "Test collab 1 hour"
+    And I should see Collaborate time span of "1 hour"
+    # Test duration of course
+    And I am on site homepage
+    And I follow "Course 1"
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab duration course |
+      | Duration     | Duration of course          |
+    And I follow "Test collab duration course"
+    And I should see Collaborate time span of "duration of course"
 
   Scenario: Collaborate instance with group mode enabled shows appropriate options for joining session.
     Given I log in as "teacher1"

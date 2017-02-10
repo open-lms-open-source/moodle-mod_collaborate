@@ -92,12 +92,12 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addElement('static', 'sessionstarthelp', '', get_string('sessionstarthelp', 'mod_collaborate'));
 
         $options = [
-            (HOURSECS * 0.5)  => get_string('minutes', 'mod_collaborate', '30'),
-            HOURSECS          => get_string('hour', 'mod_collaborate'),
-            (HOURSECS * 1.5)  => get_string('hourminutes', 'mod_collaborate', (object) ['hours' => 1, 'minutes' => 30]),
-            (HOURSECS * 2)    => get_string('hours', 'mod_collaborate', 2),
-            (HOURSECS * 2.5)  => get_string('hoursminutes', 'mod_collaborate', (object) ['hours' => 2, 'minutes' => 30]),
-            9999              => get_string('openended', 'mod_collaborate')
+            (HOURSECS * 0.5)        => get_string('minutes', 'mod_collaborate', '30'),
+            HOURSECS                => get_string('hour', 'mod_collaborate'),
+            (HOURSECS * 1.5)        => get_string('hourminutes', 'mod_collaborate', (object) ['hours' => 1, 'minutes' => 30]),
+            (HOURSECS * 2)          => get_string('hours', 'mod_collaborate', 2),
+            (HOURSECS * 2.5)        => get_string('hoursminutes', 'mod_collaborate', (object) ['hours' => 2, 'minutes' => 30]),
+            local::DURATIONOFCOURSE => get_string('openended', 'mod_collaborate')
         ];
         $mform->addElement('select', 'duration', get_string('duration', 'mod_collaborate'), $options);
         $mform->setDefault('duration', HOURSECS);

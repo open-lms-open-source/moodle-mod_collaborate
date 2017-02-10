@@ -40,6 +40,11 @@ use mod_collaborate\soap\api;
 use mod_collaborate\event\recording_deleted;
 
 class local {
+
+    const DURATIONOFCOURSE = 9999;
+
+    const TIMEDURATIONOFCOURSE = '3000-01-01 00:00';
+
     /**
      * Get timeend from duration.
      *
@@ -48,10 +53,10 @@ class local {
      * @return int
      */
     public static function timeend_from_duration($timestart, $duration) {
-        if ($duration != 9999) {
+        if ($duration != self::DURATIONOFCOURSE) {
             $timeend = ($timestart + intval($duration));
         } else {
-            $timeend = strtotime('3000-01-01 00:00');
+            $timeend = strtotime(self::TIMEDURATIONOFCOURSE);
         }
         return $timeend;
     }
@@ -107,7 +112,7 @@ class local {
         if (!empty($event->timeend)) {
             // Ask if duration is set to "duration of course", then replace the
             // timeend (just in calendar) by the timestart creating a timeduration of 0.
-            $lastsdurationofcourse = strtotime('3000-01-01 00:00');
+            $lastsdurationofcourse = strtotime(self::TIMEDURATIONOFCOURSE);
             if ($event->timeend == $lastsdurationofcourse) {
                 $event->timeend = $event->timestart;
             }
@@ -307,7 +312,9 @@ class local {
         $collaborate->sessionid = $sessionid;
         $collaborate->timemodified = time();
         $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
-        $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+        if ($collaborate->timeend != strtotime(self::TIMEDURATIONOFCOURSE)) {
+            $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+        }
         $collaborate->duration = $collaborate->timeend - $collaborate->timestart;
 
         if (empty($collaborate->guestaccessenabled)) {
