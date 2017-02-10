@@ -43,7 +43,7 @@ Feature: Set one action as a completion condition for a Collab activity
     Given I log in as "teacher1"
     And I follow "Course 1"
     And I turn editing mode on
-    And I click on "Edit settings" "link" in the "Administration" "block"
+    And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
     And I press "Save and display"
@@ -60,7 +60,7 @@ Feature: Set one action as a completion condition for a Collab activity
     And I follow "Course 1"
     And I turn editing mode on
     And I follow "Test collaborate"
-    And I navigate to "Edit settings" node in "Collaborate administration"
+    And I navigate to "Edit settings" in current page administration
     Then I should see "Completion options locked"
 
   @javascript @_switch_window
@@ -68,7 +68,7 @@ Feature: Set one action as a completion condition for a Collab activity
     Given I log in as "teacher1"
     And I follow "Course 1"
     And I turn editing mode on
-    And I click on "Edit settings" "link" in the "Administration" "block"
+    And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
     And I press "Save and display"
@@ -77,10 +77,10 @@ Feature: Set one action as a completion condition for a Collab activity
       | completion   | 2 |
       | completionlaunch | 1 |
     And I follow "Test collaborate second"
-    And I navigate to "Edit settings" node in "Collaborate administration"
+    And I navigate to "Edit settings" in current page administration
     And I press "Save and display"
     And I follow "Test collaborate second"
-    And I navigate to "Edit settings" node in "Collaborate administration"
+    And I navigate to "Edit settings" in current page administration
     Then I should not see "Completion options locked"
     And I log out
     And I log in as "student1"
@@ -94,6 +94,6 @@ Feature: Set one action as a completion condition for a Collab activity
     And I follow "Course 1"
     And I turn editing mode on
     And I follow "Test collaborate second"
-    And I navigate to "Edit settings" node in "Collaborate administration"
+    And I navigate to "Edit settings" in current page administration
     And I expand all fieldsets
     Then I should see "Completion options locked"

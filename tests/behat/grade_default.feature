@@ -43,7 +43,7 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
     And I follow "Test collab"
-    And I navigate to "Edit settings" node in "Collaborate administration"
+    And I navigate to "Edit settings" in current page administration
     Then the field "grade[modgrade_type]" matches value "None"
 
   Scenario: Teacher can create a Collaborate instance that has grade type of Point
@@ -54,5 +54,5 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
       | Session name | Test collab |
       | grade[modgrade_type]   | Point       |
     And I follow "Test collab"
-    And I navigate to "Edit settings" node in "Collaborate administration"
+    And I navigate to "Edit settings" in current page administration
     Then the field "grade[modgrade_type]" matches value "Point"

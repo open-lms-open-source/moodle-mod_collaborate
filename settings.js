@@ -106,7 +106,7 @@ M.mod_collaborate.settings = {
             '#id_s_collaborate_password'
         ];
         for (var s in settingfields) {
-            $(settingfields[s]).keypress(function(e) {
+            $(settingfields[s]).keypress(function() {
                 M.mod_collaborate.settings.modified = true;
             });
         }
