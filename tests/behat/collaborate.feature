@@ -49,7 +49,6 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | student2 | G1    |
       | student2 | G2    |
 
-    @wip
   Scenario: Collaborate instance can be created with various durations.
     Given I log in as "teacher1"
     And I follow "Course 1"
@@ -61,7 +60,6 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I follow "Test collab 30 mins"
     And I should see Collaborate time span of "30 minutes"
     # Test 1 hour duration
-    And I am on site homepage
     And I follow "Course 1"
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 1 hour |
@@ -69,7 +67,6 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I follow "Test collab 1 hour"
     And I should see Collaborate time span of "1 hour"
     # Test duration of course
-    And I am on site homepage
     And I follow "Course 1"
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab duration course |
