@@ -240,7 +240,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 foreach ($attendeelogs as $key => $attendeelog) {
                     $joinlog = $attendeelog->getJoined();
                     $assistantinfo->joined = $joinlog->format('H:i');
-                    if ($key == 0){
+                    if ($key == 0) {
                         $leftlog = $attendeelog->getLeft();
                     }
                     $interval = $leftlog->diff($joinlog);
