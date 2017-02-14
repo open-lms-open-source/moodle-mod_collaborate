@@ -219,7 +219,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      */
     public function extract_attendance($rooms) {
 
-        $assistantinfo = new \stdClass();
         $objctarray = array();
 
         foreach ($rooms as $room) {
@@ -231,25 +230,24 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         foreach ($sessionattendees as $sessionattendee) {
 
             foreach ($sessionattendee as $subattendee) {
+                $assistantinfo = new \stdClass();
                 $attendeename = $subattendee->getDisplayName();
                 $assistantinfo->name = $attendeename;
                 $attendeeid = $subattendee->getUserId();
                 $assistantinfo->id = $attendeeid;
                 $attendees = $subattendee->getHtmlAttendeeLogs();
                 $attendeelogs = $attendees[0]->getHtmlAttendeeLog();
-                foreach ($attendeelogs as $attendeelog) {
+                foreach ($attendeelogs as $key => $attendeelog) {
                     $joinlog = $attendeelog->getJoined();
-                    $assistantinfo->joined = $joinlog->format('Y-m-d H:i');
-                    $leftlog = $attendeelog->getLeft();
-                    $assistantinfo->left = $leftlog->getTimestamp();
+                    $assistantinfo->joined = $joinlog->format('H:i');
+                    if ($key == 0){
+                        $leftlog = $attendeelog->getLeft();
+                    }
                     $interval = $leftlog->diff($joinlog);
                     $net = $interval->format('%h hours %i minutes %S seconds');
                     $assistantinfo->net = $net;
-
                 }
                 $objctarray[] = $assistantinfo;
-                //print_object($objctarray);
-
             }
         }
 
@@ -277,7 +275,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $heads[] = get_string('attendancestudents', 'mod_collaborate');
         array_push($heads, get_string('attendancejoined', 'mod_collaborate'));
-        array_push($heads, get_string('attendanceleft', 'mod_collaborate'));
         array_push($heads, get_string('attendancenet', 'mod_collaborate'));
         $table->head = $heads;
 
@@ -285,9 +282,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $data = array();
             array_push($data, $attendee->name);
             array_push($data, $attendee->joined);
-            array_push($data, $attendee->left);
             array_push($data, $attendee->net);
-            $table->data[]=$data;
+            $table->data[] = $data;
         }
         $output .= html_writer::table($table);
         $output .= '</h4>';
