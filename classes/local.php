@@ -698,13 +698,14 @@ class local {
                 foreach ($attendeelogs as $key => $attendeelog) {
                     $joinlog = $attendeelog->getJoined();
                     $assistantinfo->joined = $joinlog->format('H:i');
-                    if ($key == 0) {
-                        $leftlog = $attendeelog->getLeft();
+                    $leftlog = $attendeelog->getLeft();
+                    if ($key != 0) {
+                        $leftlog = $leftlog->sub($interval);
                     }
                     $interval = $leftlog->diff($joinlog);
-                    $net = $interval->format('%h hours %i minutes %S seconds');
-                    $assistantinfo->net = $net;
                 }
+                $net = $interval->format('%h hours %i minutes %S seconds');
+                $assistantinfo->net = $net;
                 $objctarray[] = $assistantinfo;
             }
         }
