@@ -642,7 +642,7 @@ class local {
     }
 
     /**
-     * get attendance
+     * Get attendance
      *
      * @param int | object $collaborate
      * @return soap\generated\HtmlRoomCollection[]
@@ -667,6 +667,48 @@ class local {
         $rooms = $result->getHtmlRoom();
 
         return $rooms;
+    }
+
+    /**
+     * Extract the data for attendance table.
+     *
+     * @param soap\generated\HtmlRoomCollection[]
+     * @return array $attendance Set of attendees for a Collab session
+     */
+    public static function extract_attendance($rooms) {
+
+        $objctarray = array();
+
+        foreach ($rooms as $room) {
+            $roomattendees[] = $room->getHtmlAttendees();
+        }
+        foreach ($roomattendees as $roomattendee) {
+            $sessionattendees[] = $roomattendee->getHtmlAttendee();
+        }
+        foreach ($sessionattendees as $sessionattendee) {
+
+            foreach ($sessionattendee as $subattendee) {
+                $assistantinfo = new \stdClass();
+                $attendeename = $subattendee->getDisplayName();
+                $assistantinfo->name = $attendeename;
+                $attendeeid = $subattendee->getUserId();
+                $assistantinfo->id = $attendeeid;
+                $attendees = $subattendee->getHtmlAttendeeLogs();
+                $attendeelogs = $attendees[0]->getHtmlAttendeeLog();
+                foreach ($attendeelogs as $key => $attendeelog) {
+                    $joinlog = $attendeelog->getJoined();
+                    $assistantinfo->joined = $joinlog->format('H:i');
+                    if ($key == 0) {
+                        $leftlog = $attendeelog->getLeft();
+                    }
+                    $interval = $leftlog->diff($joinlog);
+                    $net = $interval->format('%h hours %i minutes %S seconds');
+                    $assistantinfo->net = $net;
+                }
+                $objctarray[] = $assistantinfo;
+            }
+        }
+        return $objctarray;
     }
 
     /**
