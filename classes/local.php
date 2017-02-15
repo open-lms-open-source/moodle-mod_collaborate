@@ -314,8 +314,8 @@ class local {
         $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
         if ($collaborate->timeend != strtotime(self::TIMEDURATIONOFCOURSE)) {
             $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+            $collaborate->duration = $collaborate->timeend - $collaborate->timestart;
         }
-        $collaborate->duration = $collaborate->timeend - $collaborate->timestart;
 
         if (empty($collaborate->guestaccessenabled)) {
             // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
