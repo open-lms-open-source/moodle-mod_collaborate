@@ -24,6 +24,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\testables\sessionlink;
+use mod_collaborate\soap\fakeapi;
+use mod_collaborate\soap\generated\ListHtmlSession;
 
 class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
@@ -202,6 +204,55 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
         $this->assertNotEmpty($mainlink);
         $this->assertNotEmpty($group1link);
         $this->assertEmpty($group2link);
+    }
+
+    public function test_update_sessions_for_group() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $api = fakeapi::get_api();
+
+        $gen = $this->getDataGenerator();
+        $course = $gen->create_course();
+        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
+        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+
+        $modgen = $gen->get_plugin_generator('mod_collaborate');
+        $collabdata = (object) [
+            'course'    => $course->id,
+            'sessionid' => null,
+            'groupmode' => SEPARATEGROUPS
+        ];
+        $collaborate = $modgen->create_instance($collabdata);
+
+        $linkscreated = sessionlink::apply_session_links($collaborate);
+        $this->assertTrue($linkscreated);
+
+        // Assert existing session name for group2 as expected.
+        $expected = $collaborate->name.' ('.$group2->name.')';
+        $groupsesslink = sessionlink::get_group_session_link($collaborate, $group2->id);
+        $params = new ListHtmlSession();
+        $params->setSessionId($groupsesslink->sessionid);
+        $sessioncollection = $api->ListHtmlSession($params);
+        $session = $sessioncollection->getHtmlSession()[0];
+        $this->assertEquals($expected, $session->getName());
+
+        // Rename group2.
+        $group2modified = clone $group2;
+        $group2modified->name = 'group2 changed';
+        $DB->update_record('groups', $group2modified);
+        sessionlink::update_sessions_for_group($group2->id);
+        $groupsesslink = sessionlink::get_group_session_link($collaborate, $group2->id);
+
+        // Assert modified group2 name is carried over to session.
+        $expected = $collaborate->name.' ('.$group2modified->name.')';
+        $groupsesslink = sessionlink::get_group_session_link($collaborate, $group2->id);
+        $params = new ListHtmlSession();
+        $params->setSessionId($groupsesslink->sessionid);
+        $sessioncollection = $api->ListHtmlSession($params);
+        $session = $sessioncollection->getHtmlSession()[0];
+        $this->assertEquals($expected, $session->getName());
     }
 
     public function test_task_cleanup_failed_deletions() {

@@ -29,6 +29,7 @@ use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
 use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionCollection;
 use mod_collaborate\soap\generated\HtmlSessionRecordingResponse;
+use mod_collaborate\soap\generated\ListHtmlSession;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\generated\SetHtmlSession;
 use mod_collaborate\soap\generated\SuccessResponse;
@@ -235,6 +236,18 @@ class fakeapi extends api {
                 }
             }
         }
+    }
+
+    /**
+     * @param ListHtmlSession $parameters
+     *
+     * @return HtmlSessionCollection
+     */
+    public function ListHtmlSession(ListHtmlSession $parameters) {
+        $session = $this->getobject('HtmlSession', $parameters->getSessionId());
+        $collection = new HtmlSessionCollection();
+        $collection->setHtmlSession([$session]);
+        return $collection;
     }
 
     /**

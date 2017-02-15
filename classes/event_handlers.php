@@ -23,6 +23,7 @@
 
 namespace mod_collaborate;
 use core\event\group_deleted;
+use core\event\group_updated;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -34,5 +35,13 @@ class event_handlers {
     public static function group_deleted(group_deleted $event) {
         $groupid = $event->objectid;
         sessionlink::delete_sessions_for_group($groupid);
+    }
+
+    /**
+     * @param group_updated $event
+     */
+    public static function group_updated(group_updated $event) {
+        $groupid = $event->objectid;
+        sessionlink::update_sessions_for_group($groupid);
     }
 }
