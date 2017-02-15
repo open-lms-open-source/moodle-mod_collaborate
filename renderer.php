@@ -225,7 +225,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $header = get_string('attendance', 'mod_collaborate');
         $output = "<h3>$header</h3>";
-        $output .= '<h4 class="collab-attendance-table">';
+        $output .= '<div class="collab-attendance-table">';
 
         $table = new html_table();
         $table->attributes['class'] = 'generaltable collaborate_attendance';
@@ -243,7 +243,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $table->data[] = $data;
         }
         $output .= html_writer::table($table);
-        $output .= '</h4>';
+        $output .= '</div>';
         return $output;
 
     }
