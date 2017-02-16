@@ -23,8 +23,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $observers = array(
-    array (
+    [
         'eventname' => '\core\event\group_deleted',
-        'callback'  => '\mod_collaborate\event_handlers::group_deleted',
-    )
+        'callback'  => '\mod_collaborate\event_handlers::group_deleted'
+    ],
+    [
+        'eventname' => '\core\event\group_updated',
+        'callback'  => '\mod_collaborate\event_handlers::group_updated'
+    ]
 );

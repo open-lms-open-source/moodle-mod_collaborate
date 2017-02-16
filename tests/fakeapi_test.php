@@ -28,6 +28,8 @@ global $CFG, $DB;
 
 use mod_collaborate\soap\fakeapi;
 use mod_collaborate\soap\generated\SetHtmlSession;
+use mod_collaborate\soap\generated\ListHtmlSession;
+use mod_collaborate\soap\generated\HtmlSessionCollection;
 use mod_collaborate\soap\generated\HtmlAttendee;
 use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
@@ -71,6 +73,25 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $this->assert_dates_equal($timeend, $newhtmlsession->getEndTime());
         $setuserid = $newhtmlsession->getHtmlAttendees()[0]->getUserId();
         $this->assertEquals($userid, $setuserid);
+    }
+
+    public function test_listhtmlsession() {
+        $this->resetAfterTest();
+        $api = fakeapi::get_api();
+
+        list ($timestart, $timeend) = local::get_apitimes(time(), 30);
+        $userid = 100;
+        $htmlattendee = new HtmlAttendee($userid, 'Presenter');
+        $htmlsession = new SetHtmlSession('Test Session', $timestart, $timeend, $userid);
+        $htmlsession->setHtmlAttendees([$htmlattendee]);
+        $htmlsessioncollection = $api->SetHtmlSession($htmlsession);
+        $newhtmlsession = $htmlsessioncollection->getHtmlSession()[0];
+
+        $params = new ListHtmlSession();
+        $params->setSessionId($newhtmlsession->getSessionId());
+        $sessioncollection = $api->ListHtmlSession($params);
+        $session = $sessioncollection->getHtmlSession()[0];
+        $this->assertEquals('Test Session', $session->getName());
     }
 
     public function test_updatehtmlsession() {

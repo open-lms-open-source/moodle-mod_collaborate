@@ -244,6 +244,25 @@ class sessionlink {
     }
 
     /**
+     * Update all sessions associated with a specific groupid.
+     * @param int $groupid
+     */
+    public static function update_sessions_for_group($groupid) {
+        global $DB;
+
+        $collaborate = null;
+
+        $sessionlinks = $DB->get_records('collaborate_sessionlink', ['groupid' => $groupid]);
+        foreach ($sessionlinks as $sessionlink) {
+            if (empty($collaborate) || $collaborate->id != $sessionlink->collaborateid) {
+                $collaborate = $DB->get_record('collaborate', ['id' => $sessionlink->collaborateid]);
+                $course = $DB->get_record('course', ['id' => $collaborate->course]);
+            }
+            self::ensure_session_link($collaborate, $sessionlink, $course);
+        }
+    }
+
+    /**
      * Return active session links available to current user.
      * @param \stdClass $collaborate
      * @param \cm_info $cm
