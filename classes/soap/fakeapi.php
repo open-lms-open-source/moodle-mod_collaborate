@@ -243,7 +243,6 @@ class fakeapi extends api {
     }
 
     public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters) {
-        global $CFG;
         $rooms = array();
         $ret = new HtmlRoomCollection($rooms);
         return $ret;
