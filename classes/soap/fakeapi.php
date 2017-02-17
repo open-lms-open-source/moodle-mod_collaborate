@@ -42,6 +42,11 @@ use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
+use mod_collaborate\soap\generated\HtmlSessionAttendance;
+use mod_collaborate\soap\generated\HtmlRoomCollection;
+use mod_collaborate\soap\generated\HtmlRoom;
+use mod_collaborate\soap\generated\HtmlAttendeeCollection;
+use mod_collaborate\soap\generated\HtmlAttendee;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -236,6 +241,12 @@ class fakeapi extends api {
                 }
             }
         }
+    }
+
+    public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters) {
+        $rooms = array();
+        $ret = new HtmlRoomCollection($rooms);
+        return $ret;
     }
 
     /**
