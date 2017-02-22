@@ -81,6 +81,7 @@ Feature: Set one action as a completion condition for a Collab activity
     And I press "Save and display"
     And I follow "Test collaborate second"
     And I navigate to "Edit settings" in current page administration
+    And I expand all fieldsets
     Then I should not see "Completion options locked"
     And I log out
     And I log in as "student1"
@@ -92,8 +93,9 @@ Feature: Set one action as a completion condition for a Collab activity
     And I log out
     And I log in as "teacher1"
     And I follow "Course 1"
-    And I turn editing mode on
     And I follow "Test collaborate second"
+    # This pause is a workaround till MDL-58053 is fixed.
+    And I wait "3" seconds
     And I navigate to "Edit settings" in current page administration
     And I expand all fieldsets
     Then I should see "Completion options locked"

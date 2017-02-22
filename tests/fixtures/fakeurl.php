@@ -34,6 +34,7 @@ $sessionlink = $DB->get_record('collaborate_sessionlink', ['sessionid' => $sessi
 $PAGE->set_url(new moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php', ['id' => 1, 'userid' => 802000]));
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title('Fake join meeting endpoint');
+$PAGE->set_pagelayout('incourse');
 
 echo $OUTPUT->header();
 

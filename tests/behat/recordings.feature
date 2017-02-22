@@ -49,7 +49,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
       | 1  |Recording1  | +1 hours  | +2 hours |
       | 2  |Recording2  | +3 hours  | +4 hours |
     And I follow "Test collab"
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And I should see "Recording1" in the ".collab-recording-list" "css_element"
     And I should see "Recording2" in the ".collab-recording-list" "css_element"
     And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element"
@@ -63,7 +63,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log in as "student1"
     And I follow "Course 1"
     And I follow "Test collab"
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And I should see "Recording1" in the ".collab-recording-list" "css_element"
     And I should see "Recording2" in the ".collab-recording-list" "css_element"
     And ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element" should not exist
@@ -77,7 +77,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I should see "Are you sure you want to delete the recording entitled \"Recording1\"?"
     And I press "Continue"
     And I should see "The recording entitled \"Recording1\" has been deleted."
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And I should not see "Recording1" in the ".collab-recording-list" "css_element"
     And I should see "Recording2" in the ".collab-recording-list" "css_element"
     # Test deleting final recording.
@@ -86,7 +86,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     When I press "Continue"
     Then I should see "The recording entitled \"Recording2\" has been deleted."
     # The recordings header should be gone.
-    And "h3" "css_element" should not exist
+    And "#page h3" "css_element" should not exist
     # There should be no recordings listed at all.
     And ".collab-recording-list" "css_element" should not exist
 
@@ -112,7 +112,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
       | 3  |Recording for group 2 | +4 hours  | +5 hours | Group 2 |
     And I follow "Test collab"
     # Teacher can see all recordings partitioned by a recording heading of instance or group name.
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And recording "Recording1" should exist under heading "Test collab"
     And recording "Recording for group 1" should exist under heading "Group Group 1"
     And recording "Recording for group 2" should exist under heading "Group Group 2"
@@ -120,7 +120,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     # Student in 1 group sees recording list without recording heading.
     And I log in as "student1"
     And I follow "Test collab"
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And recording heading "Test collab" should not exist
     And recording heading "Group Group 1" should not exist
     And recording heading "Group Group 2" should not exist
@@ -129,7 +129,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     # Student in 2 groups sees recording list with recording heading.
     And I log in as "student2"
     And I follow "Test collab"
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And recording heading "Test collab" should not exist
     And recording "Recording for group 1" should exist under heading "Group Group 1"
     And recording "Recording for group 2" should exist under heading "Group Group 2"
@@ -160,7 +160,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I should see "Are you sure you want to delete the recording entitled \"Recording1\"?"
     And I press "Continue"
     And I should see "The recording entitled \"Recording1\" has been deleted."
-    And I should see "Recordings" in the "h3" "css_element"
+    And I should see "Recordings" in the "#page h3" "css_element"
     And recording heading "Test collab" should not exist
     And I should not see "Recording1" in the ".collab-recording-list" "css_element"
     And recording "Recording for group 1" should exist under heading "Group Group 1"
@@ -176,6 +176,6 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     When I press "Continue"
     Then I should see "The recording entitled \"Recording for group 2\" has been deleted."
     # The recordings header should be gone.
-    And "h3" "css_element" should not exist
+    And "#page h3" "css_element" should not exist
     # There should be no recordings listed at all.
     And ".collab-recording-list" "css_element" should not exist
