@@ -194,8 +194,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         if ($canmoderate) {
             $roomsattendance = local::get_attendance($collaborate);
             if (!empty($roomsattendance)) {
-                $attendance = local::extract_attendance($roomsattendance);
-                $o .= '<hr />';
+                $attendance = local::extract_attendance($roomsattendance, $collaborate);
                 $o .= $this->render_attendance($attendance, $cm);
             }
         }
@@ -226,6 +225,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $header = get_string('attendance', 'mod_collaborate');
         $output = "<h3>$header</h3>";
         $output .= '<div class="collab-attendance-table">';
+        $output .= '<hr />';
 
         $table = new html_table();
         $table->attributes['class'] = 'generaltable collaborate_attendance';
