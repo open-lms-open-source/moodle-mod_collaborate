@@ -706,9 +706,8 @@ class local {
 
                 foreach ($attendeelogs as $key => $attendeelog) {
                     $joinlog = $attendeelog->getJoined();
-                    $tz = \core_date::get_server_timezone_object();
-                    $joinlog->setTimezone($tz);
-                    $assistantinfo->joined = $joinlog->format('Y-m-d H:i');
+                    $jointimestamp = $joinlog->getTimestamp();
+                    $assistantinfo->joined = userdate($jointimestamp, get_string('strftimedatetime', 'langconfig'));
                     $leftlog = $attendeelog->getLeft();
                     $lefttimestamp = $leftlog->getTimestamp();
 
