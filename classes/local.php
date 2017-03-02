@@ -680,10 +680,9 @@ class local {
      * Extract the data for attendance table.
      *
      * @param soap\generated\HtmlRoomCollection[]
-     * @param int | object $collaborate
      * @return array $attendance Set of attendees for a Collab session
      */
-    public static function extract_attendance($rooms, $collaborate) {
+    public static function extract_attendance($rooms) {
 
         $objctarray = array();
 
@@ -711,9 +710,6 @@ class local {
                     $leftlog = $attendeelog->getLeft();
                     $lefttimestamp = $leftlog->getTimestamp();
 
-                    if ($lefttimestamp > $collaborate->timeend) {
-                        $leftlog->setTimestamp($collaborate->timeend);
-                    }
                     if ($key != 0) {
                         $leftlog = $leftlog->sub($interval);
                     }
