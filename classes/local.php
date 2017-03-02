@@ -719,8 +719,10 @@ class local {
                     }
                     $interval = $leftlog->diff($joinlog);
                 }
-                $net = $interval->format('%h hour(s) %i minute(s) %S second(s)');
-                $assistantinfo->net = $net;
+                $reference = new \DateTimeImmutable;
+                $endvalue = $reference->add($interval);
+                $diffvalue = $endvalue->getTimestamp() - $reference->getTimestamp();
+                $assistantinfo->net = format_time($diffvalue);
                 $objctarray[] = $assistantinfo;
             }
         }
