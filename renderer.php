@@ -194,7 +194,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         if ($canmoderate) {
             $roomsattendance = local::get_attendance($collaborate);
             if (!empty($roomsattendance)) {
-                $attendance = local::extract_attendance($roomsattendance, $collaborate);
+                $attendance = local::extract_attendance($roomsattendance);
                 $o .= $this->render_attendance($attendance, $cm);
             }
         }
