@@ -272,8 +272,8 @@ class fakeapi extends api {
      * @param int $sessionid
      * @param string $role
      * @param null|int $id
-     * @param \DateTime $joined
-     * @param \DateTime $left
+     * @param null|\DateTime $joined
+     * @param null|\DateTime $left
      * @param null|string $username
      */
     public function add_test_attendee($sessionid, $role, $id = null, $joined = null, $left = null, $username = null) {
