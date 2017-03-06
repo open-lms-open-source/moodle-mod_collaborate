@@ -47,6 +47,8 @@ use mod_collaborate\soap\generated\HtmlRoomCollection;
 use mod_collaborate\soap\generated\HtmlRoom;
 use mod_collaborate\soap\generated\HtmlAttendeeCollection;
 use mod_collaborate\soap\generated\HtmlAttendee;
+use mod_collaborate\soap\generated\HtmlAttendeeLog;
+use mod_collaborate\soap\generated\HtmlAttendeeLogCollection;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -243,10 +245,57 @@ class fakeapi extends api {
         }
     }
 
+    /**
+     * @param HtmlSessionAttendance $parameters
+     *
+     * @return HtmlRoomCollection
+     */
     public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters) {
-        $rooms = array();
-        $ret = new HtmlRoomCollection($rooms);
+        $attendees = $this->getobject('parent_HtmlAttendee', $parameters->getSessionId());
+        if (empty($attendees)) {
+            $attendees = [];
+        }
+
+        $roomarray = array();
+        $ret = new HtmlRoomCollection($roomarray);
+        $sessionname = "Session for testing ". $parameters->getSessionId();
+        $opened = $parameters->getStartTime();
+        $closed = $opened->add(new \DateInterval('PT1800S'));
+        $attendeescollected = new HtmlAttendeeCollection();
+        $attendeescollected->setHtmlAttendee($attendees);
+        $room = new HtmlRoom($sessionname, $opened, $closed, $attendeescollected);
+        $ret->setHtmlRoom([$room]);
         return $ret;
+    }
+
+    /**
+     * @param int $sessionid
+     * @param string $role
+     * @param null|int $id
+     * @param \DateTime $joined
+     * @param \DateTime $left
+     * @param null|string $username
+     */
+    public function add_test_attendee($sessionid, $role, $id = null, $joined = null, $left = null, $username = null) {
+        if (!$id) {
+            $id = $this->fakeid('HtmlAttendee');
+        }
+        if ($joined === null) {
+            $joined = new \DateTime('+' . $id . ' minutes');
+        }
+        if ($left === null) {
+            $dtime = $joined;
+            $left = $dtime->add(new \DateInterval('PT900S'));
+        }
+        $logcollected = new HtmlAttendeeLogCollection();
+        $userlog = new HtmlAttendeeLog($joined, $left);
+        $logcollected->setHtmlAttendeeLog([$userlog]);
+        $object = new htmlAttendee($id, $role);
+        $object->setHtmlAttendeeLogs([$logcollected]);
+        $object->setDisplayName($username);
+
+        $this->setobject($object, $id, $sessionid);
+        return $object;
     }
 
     /**
