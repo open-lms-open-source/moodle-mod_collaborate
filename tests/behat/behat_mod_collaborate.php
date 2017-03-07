@@ -187,4 +187,54 @@ class behat_mod_collaborate extends behat_base {
             throw new ExpectationException('A collaborate time duration of "' . $duration . '" was not present');
         }
     }
+
+    /**
+     * Creates fake attendees for testing purposes.
+     * @param string $instancename name of collab session
+     * @param TableNode $data
+     * @Given /^the following fake attendees exist for session "(?P<element_string>(?:[^"]|\\")*)":$/
+     */
+    public function the_following_fake_attendees_exist($instancename, TableNode $data) {
+        global $DB;
+        $instancerow = $DB->get_record('collaborate', ['name' => $instancename]);
+        $coursesessionid = $instancerow->sessionid;
+        $api = fakeapi::get_api();
+        $table = $data->getHash();
+        foreach ($table as $row) {
+
+            if (isset($row['joined'])) {
+                $dti = new \DateTime($row['joined']);
+            } else {
+                $dti = new \DateTime('+1 minutes');
+            }
+            $joined = $dti;
+
+            if (isset($row['left'])) {
+                $dti = new \DateTime($row['left']);
+            } else {
+                $dti = new \DateTime('+25 minutes');
+            }
+            $left = $dti;
+
+            $rownewvalues = [
+                'joined' => $joined,
+                'left' => $left
+            ];
+
+            $row = (object) array_replace($row, $rownewvalues);
+            $trimname = trim($row->username);
+            $trimrole = trim($row->role);
+
+            if (empty($trimname)) {
+                $row->username = null;
+            }
+            if (empty($trimrole)) {
+                $row->role = 'participant';
+            }
+
+            $api->add_test_attendee(
+                $coursesessionid, $row->role, $row->id, $row->joined, $row->left, $row->username
+            );
+        }
+    }
 }
