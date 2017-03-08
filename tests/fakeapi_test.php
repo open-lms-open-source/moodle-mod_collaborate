@@ -41,6 +41,7 @@ use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\local;
+use mod_collaborate\logging\constants;
 
 class mod_collaborate_fakeapi_testcase extends advanced_testcase {
 
@@ -245,5 +246,35 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $recordings = $result->getHtmlSessionRecordingResponse();
         $this->assertCount(1, $recordings);
         $this->assertEquals($rec2->getRecordingId(), $recordings[0]->getRecordingId());
+    }
+
+    public function test_logging() {
+        global $DB;
+        $this->resetAfterTest();
+
+        set_config('logrange', constants::RANGE_MEDIUM, 'collaborate');
+
+        // Need to reset the api to build a new logger.
+        $api = fakeapi::get_api(true);
+        $api->set_silent(true);
+
+        // Make sure there are no logs.
+        $this->assertEquals(0, $DB->count_records('collaborate_log'));
+
+        // Make an error to log that won't record.
+        $api->process_error('error:serviceunreachable', constants::SEV_INFO);
+        $this->assertEquals(0, $DB->count_records('collaborate_log'));
+
+        // Make an error to actually log.
+        $api->process_error('error:serviceunreachable', constants::SEV_ERROR);
+
+        // Make sure there is 1 entry.
+        $logs = $DB->get_records('collaborate_log');
+        $this->assertCount(1, $logs);
+
+        // Check the log.
+        $log = array_pop($logs);
+        $this->assertEquals(get_string('error:serviceunreachable', 'mod_collaborate'), $log->message);
+        $this->assertEquals(\Psr\Log\LogLevel::ERROR, $log->level);
     }
 }

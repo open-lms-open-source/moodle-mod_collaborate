@@ -18,8 +18,7 @@ namespace mod_collaborate\logging;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/../../vendor/psr/log/Psr/Log/LoggerInterface.php');
-require_once(__DIR__ . '/../../vendor/psr/log/Psr/Log/LogLevel.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
