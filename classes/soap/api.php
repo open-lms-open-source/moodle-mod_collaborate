@@ -222,6 +222,14 @@ class api extends generated\SASDefaultAdapter {
 
         // Developer orinetated error message.
         $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
+        if (!empty($errorarr)) {
+            if (!empty($debuginfo)) {
+                $debuginfo .= "\n\n" .
+                    var_export($errorarr, true);
+            } else {
+                $debuginfo = var_export($errorarr, true);
+            }
+        }
         throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
     }
 
