@@ -22,7 +22,7 @@ use mod_collaborate\logging\loggerdb;
 use mod_collaborate\logging\constants;
 use mod_collaborate\local;
 
-require_once($CFG->dirroot.'/mod/collaborate/vendor/psr/log/Psr/Log/LoggerAwareTrait.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use Psr\Log\LoggerAwareTrait;
 use mod_collaborate\soap\fakeapi;
