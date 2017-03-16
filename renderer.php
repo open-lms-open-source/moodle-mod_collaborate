@@ -190,15 +190,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $o .= $this->render($clink);
         }
 
-        // Attendance.
-        if ($canmoderate) {
-            $roomsattendance = local::get_attendance($collaborate);
-            if (!empty($roomsattendance)) {
-                $attendance = local::extract_attendance($roomsattendance);
-                $o .= $this->render_attendance($attendance, $cm);
-            }
-        }
-
         // Recordings.
         if ($canparticipate) {
             $sessionrecordings = local::get_recordings($collaborate, $cm);
@@ -208,44 +199,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         }
 
         return $o;
-    }
-
-    /**
-     * Render attendance.
-     *
-     * @param array $attendance Set of attendees for a Collab session
-     * @param \cm_info $cm
-     * @return string
-     */
-    public function render_attendance(array $attendance, $cm) {
-        if (empty($attendance)) {
-            return '';
-        }
-
-        $header = get_string('attendance', 'mod_collaborate');
-        $output = "<h3>$header</h3>";
-        $output .= '<div class="collab-attendance-table">';
-        $output .= '<hr />';
-
-        $table = new html_table();
-        $table->attributes['class'] = 'generaltable collaborate_attendance';
-
-        $heads[] = get_string('attendancestudents', 'mod_collaborate');
-        array_push($heads, get_string('attendancejoined', 'mod_collaborate'));
-        array_push($heads, get_string('attendancenet', 'mod_collaborate'));
-        $table->head = $heads;
-
-        foreach ($attendance as $attendee) {
-            $data = array();
-            array_push($data, $attendee->name);
-            array_push($data, $attendee->joined);
-            array_push($data, $attendee->net);
-            $table->data[] = $data;
-        }
-        $output .= html_writer::table($table);
-        $output .= '</div>';
-        return $output;
-
     }
 
     /**
