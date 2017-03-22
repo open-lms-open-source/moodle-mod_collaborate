@@ -564,6 +564,7 @@ class local {
         if (empty($sessionid)) {
             // New session.
             $htmlsession = new SetHtmlSession($sessionname, $timestart, $timeend, $USER->id);
+            $data->guesturl = '';
         } else {
             // Update existing session.
             $htmlsession = new UpdateHtmlSessionDetails($sessionid);
