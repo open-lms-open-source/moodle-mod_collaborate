@@ -82,6 +82,6 @@ class mod_collaborate_generator_testcase extends advanced_testcase {
         // Test non-empty guest URL.
         $url = new moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
         $collab = $generator->create_instance(['course' => $course->id, 'guesturl' => $url->out()]);
-        $this->assertEquals($url->out(), $collab->guesturl);
+        $this->assertEquals('', $collab->guesturl);
     }
 }
