@@ -23,6 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
+use mod_collaborate\local;
 
 /**
  * Collab generator tests.
@@ -79,9 +80,13 @@ class mod_collaborate_generator_testcase extends advanced_testcase {
         $collab = $generator->create_instance(['course' => $course->id, 'guestrole' => 'pa']);
         $this->assertEquals('pa', $collab->guestrole);
 
-        // Test non-empty guest URL.
+        // Test valid guest URL.
         $url = new moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
-        $collab = $generator->create_instance(['course' => $course->id, 'guesturl' => $url->out()]);
-        $this->assertEquals($url->out(), $collab->guesturl);
+        $collab = $generator->create_instance(['course' => $course->id, 'guestaccessenabled' => 1, 'guestrole' => 'pa',
+            'guesturl' => $url->out()]);
+        $this->assertEquals('', $collab->guesturl);
+        $guesturl = local::guest_url($collab);
+        $collab->guesturl = $guesturl;
+        $this->assertContains($url->out(), $collab->guesturl);
     }
 }
