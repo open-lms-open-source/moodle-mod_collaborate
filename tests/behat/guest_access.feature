@@ -57,3 +57,14 @@ Feature: Guest access can be provided for a Collaborate session
     And I follow "Test collab"
     And I navigate to "Edit settings" in current page administration
     Then the field "Collaborate guest role" matches value "Participant"
+
+  Scenario: Guest can not access to a Collaborate instance and an error message should be displayed
+    Given I log in as "teacher1"
+      And I follow "Course 1"
+      And I turn editing mode on
+      And I add a "Collaborate" to section "1" and I fill the form with:
+         | Session name | Test collab 3      |
+         | Duration     | Duration of course |
+      And I follow "Test collab 3"
+     Then I navigate to "Guest" node in "Switch role to..."
+      And I should see "Sorry, guests are not allowed to take part in discussions"
