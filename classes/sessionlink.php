@@ -272,21 +272,15 @@ class sessionlink {
         global $DB;
         global $USER;
         $aag = has_capability('moodle/site:accessallgroups', $cm->context);
-        $gpnullsql = '';
+        $gpnullsql = 'groupid IS null';
         $gpparams = [];
         if ($aag) {
             $groups = groups_get_all_groups($cm->get_course()->id, 0, 0, 'g.id');
             $gpparams = array_keys($groups);
-            $gpnullsql = 'groupid IS null';
         } else {
             $groups = groups_get_all_groups($cm->get_course()->id, $USER->id, 0, 'g.id');
             if (!empty($groups)) {
                 $gpparams = array_keys($groups);
-                // Users in groups should be able to watch recordings when group is not specified in a session.
-                $gpnullsql = 'groupid IS null';
-            } else {
-                // Pull back the main instance session as this user is not in any groups.
-                $gpnullsql = 'groupid IS null';
             }
         }
 

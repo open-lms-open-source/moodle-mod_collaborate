@@ -412,16 +412,16 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
         // Add student to group1 and assert only get link for group1.
         $gen->create_group_member(['userid' => $student->id, 'groupid' => $group1->id]);
         $links = sessionlink::my_active_links($collaborate, $cm);
-        $this->assertCount(1, $links);
-        $this->assertFalse($this->links_contain_group($links, null));
+        $this->assertCount(2, $links);
+        $this->assertTrue($this->links_contain_group($links, null));
         $this->assertTrue($this->links_contain_group($links, $group1->id));
         $this->assertFalse($this->links_contain_group($links, $group2->id));
 
         // Add student to group2 and assert get links for group1 and group2.
         $gen->create_group_member(['userid' => $student->id, 'groupid' => $group2->id]);
         $links = sessionlink::my_active_links($collaborate, $cm);
-        $this->assertCount(2, $links);
-        $this->assertFalse($this->links_contain_group($links, null));
+        $this->assertCount(3, $links);
+        $this->assertTrue($this->links_contain_group($links, null));
         $this->assertTrue($this->links_contain_group($links, $group1->id));
         $this->assertTrue($this->links_contain_group($links, $group2->id));
 
@@ -437,8 +437,8 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
         $links = sessionlink::my_active_links($collaborate, $cm);
         // Assert 1 Link for group 2 and group1 deleted.
-        $this->assertCount(1, $links);
-        $this->assertFalse($this->links_contain_group($links, null));
+        $this->assertCount(2, $links);
+        $this->assertTrue($this->links_contain_group($links, null));
         $this->assertFalse($this->links_contain_group($links, $group1->id));
         $this->assertTrue($this->links_contain_group($links, $group2->id));
     }

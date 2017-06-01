@@ -121,8 +121,8 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log in as "student1"
     And I follow "Test collab"
     And I should see "Recordings" in the "#page h3" "css_element"
-    And recording heading "Test collab" should not exist
-    And recording heading "Group Group 1" should not exist
+    And recording "Recording1" should exist under heading "Test collab"
+    And recording "Recording for group 1" should exist under heading "Group Group 1"
     And recording heading "Group Group 2" should not exist
     And I should see "Recording for group 1" in the ".collab-recording-list" "css_element"
     And I log out
@@ -130,7 +130,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log in as "student2"
     And I follow "Test collab"
     And I should see "Recordings" in the "#page h3" "css_element"
-    And recording heading "Test collab" should not exist
+    And recording "Recording1" should exist under heading "Test collab"
     And recording "Recording for group 1" should exist under heading "Group Group 1"
     And recording "Recording for group 2" should exist under heading "Group Group 2"
     And I log out
