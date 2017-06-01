@@ -282,6 +282,8 @@ class sessionlink {
             $groups = groups_get_all_groups($cm->get_course()->id, $USER->id, 0, 'g.id');
             if (!empty($groups)) {
                 $gpparams = array_keys($groups);
+                // Users in groups should be able to watch recordings when group is not specified in a session.
+                $gpnullsql = 'groupid IS null';
             } else {
                 // Pull back the main instance session as this user is not in any groups.
                 $gpnullsql = 'groupid IS null';
