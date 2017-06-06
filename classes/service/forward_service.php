@@ -77,7 +77,7 @@ class forward_service extends base_visit_service {
      */
     public function handle_forward() {
         if (!confirm_sesskey()) {
-            throw new moodle_exception('confirmsesskeybad', 'error');
+            throw new \moodle_exception('confirmsesskeybad', 'error');
         }
 
         // If a collaborate session hasn't been created yet and we can moderate or add, then create it now.
