@@ -60,7 +60,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     # Test student cannot delete recordings.
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And I should see "Recordings" in the "#page h3" "css_element"
     And I should see "Recording1" in the ".collab-recording-list" "css_element"
@@ -69,7 +69,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log out
     # Log back in as teacher and test delete recording options visible.
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     # Test delete recording.
     And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element"
@@ -145,13 +145,13 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     # Test student cannot delete recordings.
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And ".mod-collaborate-delete[title='Delete recording entitled \"Recording for group 1\"']" "css_element" should not exist
     And I log out
     # Log back in as teacher and test delete recording options visible.
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     # Test delete recording.
     And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element"

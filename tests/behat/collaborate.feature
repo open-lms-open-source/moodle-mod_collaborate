@@ -59,14 +59,14 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I follow "Test collab 30 mins"
     And I should see Collaborate time span of "30 minutes"
     # Test 1 hour duration
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 1 hour |
       | Duration     | 1 Hour             |
     And I follow "Test collab 1 hour"
     And I should see Collaborate time span of "1 hour"
     # Test duration of course
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab duration course |
       | Duration     | Duration of course          |
@@ -90,7 +90,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I log out
     # Log in as student and make sure student doesn't see any group selectors if they are only in one group.
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And ".mod-collaborate-group-selector" "css_element" should not exist
     And I should see "Join session" in the "a.btn-success" "css_element"
@@ -99,7 +99,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I log out
     # Log in as student and make sure student sees group selectors if they are in more than one group.
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And ".mod-collaborate-group-selector" "css_element" should exist
     And I should not see "No group" in the ".mod-collaborate-group-selector" "css_element"
@@ -109,7 +109,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I press "Join session"
     And I should see "Joined a fake session for group \"Group 1\""
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And I check the "Group 2" meeting group radio button
     And I press "Join session"
@@ -117,7 +117,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I log out
     # Log in as student who isn't in any groups and make sure they join the main session.
     And I log in as "student3"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And ".mod-collaborate-group-selector" "css_element" should not exist
     And I should see "Join session" in the "a.btn-success" "css_element"
@@ -132,7 +132,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | Group mode | Separate groups |
     And I log out
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And ".mod-collaborate-group-selector" "css_element" should exist
     And I should see "Group 1" in the ".mod-collaborate-group-selector" "css_element"
@@ -167,7 +167,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I log out
     # Log in as student and make sure student doesn't see any group selectors if they are only in one group.
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab duplicated"
     And ".mod-collaborate-group-selector" "css_element" should not exist
     And I should see "Join session" in the "a.btn-success" "css_element"
@@ -176,7 +176,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I log out
     # Log in as student and make sure student sees group selectors if they are in more than one group.
     And I log in as "student2"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab duplicated"
     And ".mod-collaborate-group-selector" "css_element" should exist
     And I should not see "No group" in the ".mod-collaborate-group-selector" "css_element"
@@ -186,7 +186,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I press "Join session"
     And I should see "Joined a fake session for group \"Group 1\""
     And I am on site homepage
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab duplicated"
     And I check the "Group 2" meeting group radio button
     When I press "Join session"

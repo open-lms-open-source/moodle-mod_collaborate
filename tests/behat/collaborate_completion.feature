@@ -52,7 +52,7 @@ Feature: Set one action as a completion condition for a Collab activity
       | completionview | 1 |
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collaborate"
     And I log out
     And I log in as "teacher1"
@@ -82,14 +82,14 @@ Feature: Set one action as a completion condition for a Collab activity
     Then I should not see "Completion options locked"
     And I log out
     And I log in as "student1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collaborate second"
     And I click on "Join session" "link"
     And I wait to be redirected
     And I change to main window
     And I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
+    And I am on "Course 1" course homepage
     And I follow "Test collaborate second"
     # This pause is a workaround till MDL-58053 is fixed.
     And I wait "3" seconds
