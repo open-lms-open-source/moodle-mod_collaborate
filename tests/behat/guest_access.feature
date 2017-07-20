@@ -19,8 +19,7 @@ Feature: Guest access can be provided for a Collaborate session
 
   Scenario: Teacher can enable and disable guest access for a Collaborate instance
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
       | Allow Collaborate guest access | 1 |
@@ -37,8 +36,7 @@ Feature: Guest access can be provided for a Collaborate session
 
   Scenario: Teacher can create Collaborate instance with Collaborate guest role default of "Presenter"
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 2 |
       | Allow Collaborate guest access | 1 |
@@ -48,8 +46,7 @@ Feature: Guest access can be provided for a Collaborate session
 
   Scenario: Teacher select Collaborate guest role for a Collaborate instance
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 2 |
       | Allow Collaborate guest access | 1 |
@@ -60,8 +57,7 @@ Feature: Guest access can be provided for a Collaborate session
 
   Scenario: Guest can not access to a Collaborate instance and an error message should be displayed
     Given I log in as "teacher1"
-      And I follow "Course 1"
-      And I turn editing mode on
+      And I am on "Course 1" course homepage with editing mode on
       And I add a "Collaborate" to section "1" and I fill the form with:
         | Session name | Test collab 3      |
         | Duration     | Duration of course |

@@ -41,8 +41,7 @@ Feature: Set one action as a completion condition for a Collab activity
 
   Scenario: Automatic view completion
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
@@ -57,8 +56,7 @@ Feature: Set one action as a completion condition for a Collab activity
     And I follow "Test collaborate"
     And I log out
     And I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collaborate"
     And I navigate to "Edit settings" in current page administration
     Then I should see "Completion options locked"
@@ -66,8 +64,7 @@ Feature: Set one action as a completion condition for a Collab activity
   @javascript @_switch_window
   Scenario: Edit settings on Collab are not completing activities automatically
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I navigate to "Edit settings" in current page administration
     And I set the following fields to these values:
       | Enable completion tracking | Yes |

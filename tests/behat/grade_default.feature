@@ -38,8 +38,7 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
 
   Scenario: Teacher can create a Collaborate instance that has grade type default to None
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
     And I follow "Test collab"
@@ -48,8 +47,7 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
 
   Scenario: Teacher can create a Collaborate instance that has grade type of Point
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
       | grade[modgrade_type]   | Point       |

@@ -51,8 +51,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate instance can be created with various durations.
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     # Test 30 minutes duration
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab 30 mins |
@@ -76,8 +75,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate instance with group mode enabled shows appropriate options for joining session.
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
       | Group mode | Separate groups |
@@ -128,8 +126,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate - deleting a group removes the group from the list of available groups when joining a session.
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
       | Group mode | Separate groups |
@@ -149,8 +146,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate - duplicating an instance makes groups available post duplication.
     Given I log in as "teacher1"
-    And I follow "Course 1"
-    And I turn editing mode on
+    And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
       | Group mode | Separate groups |
