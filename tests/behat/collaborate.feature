@@ -108,7 +108,6 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And ".mod-collaborate-group-selector input[value=\"Join session\"]" "css_element" should exist
     And I press "Join session"
     And I should see "Joined a fake session for group \"Group 1\""
-    And I am on site homepage
     And I am on "Course 1" course homepage
     And I follow "Test collab"
     And I check the "Group 2" meeting group radio button
@@ -185,7 +184,6 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And ".mod-collaborate-group-selector input[value=\"Join session\"]" "css_element" should exist
     And I press "Join session"
     And I should see "Joined a fake session for group \"Group 1\""
-    And I am on site homepage
     And I am on "Course 1" course homepage
     And I follow "Test collab duplicated"
     And I check the "Group 2" meeting group radio button
