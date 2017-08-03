@@ -366,7 +366,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         if ($detail) {
             $modname = $modnames[$activity->type];
             $o .= '<div class="title">';
-            $o .= '<img src="' . $OUTPUT->pix_url('icon', 'collaborate') . '" '.
+            $o .= '<img src="' . $OUTPUT->image_url('icon', 'collaborate') . '" '.
                 'class="icon" alt="' . $modname . '">';
             $o .= '<a href="' . $CFG->wwwroot . '/mod/collaborate/view.php?id=' . $activity->cmid . '">';
             $o .= $activity->name;
