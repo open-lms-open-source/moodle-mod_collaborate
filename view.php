@@ -27,7 +27,7 @@
 
 use mod_collaborate\controller\view_controller;
 
-require_once(__DIR__.'/../../config.php');
+require_once(__DIR__.'/../../config.php'); // @codingStandardsIgnoreLine Ignore require login check, handled elsewhere.
 require_once(__DIR__.'/lib.php');
 
 $action = optional_param('action', 'view', PARAM_ALPHA);

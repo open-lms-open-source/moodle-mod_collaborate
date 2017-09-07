@@ -36,7 +36,7 @@ if ((!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
 }
 // @codingStandardsIgnoreEnd
 
-require_once(__DIR__.'/../../config.php');
+require_once(__DIR__.'/../../config.php'); // @codingStandardsIgnoreLine Ignore require login check, handled elsewhere.
 require_once(__DIR__.'/lib.php');
 
 global $PAGE;

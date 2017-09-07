@@ -21,9 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__.'/../../../../config.php');
+require_once(__DIR__.'/../../../../config.php'); // @codingStandardsIgnoreLine Ignore require login check.
 
-defined('MOODLE_INTERNAL') || die();
+defined('BEHAT_SITE_RUNNING') || die();
 
 $sessionid = required_param('id', PARAM_INT);
 $userid = required_param('userid', PARAM_INT);

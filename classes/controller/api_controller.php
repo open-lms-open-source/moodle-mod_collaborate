@@ -59,7 +59,8 @@ class api_controller extends controller_abstract {
      * @param string $action
      */
     public function require_capability() {
-
+        require_login();
+        require_capability('moodle/site:config', \context_system::instance());
     }
 
     /**
