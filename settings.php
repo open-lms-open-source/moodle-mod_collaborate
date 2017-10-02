@@ -24,9 +24,14 @@
 defined('MOODLE_INTERNAL') || die;
 
 use mod_collaborate\logging\constants;
-use mod_collaborate\trimmed_configtext;
+use mod_collaborate\settings\setting_trimmed_configtext;
+use mod_collaborate\settings\setting_statictext;
 
 if ($ADMIN->fulltree) {
+
+    // We have to require these classes even though they are autoloadable or we will get errors on upgrade.
+    require_once(__DIR__.'/classes/settings/setting_statictext.php');
+    require_once(__DIR__.'/classes/settings/setting_trimmed_configtext.php');
 
     if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
         $PAGE->requires->jquery();
@@ -53,18 +58,26 @@ if ($ADMIN->fulltree) {
     $setting = new \admin_setting_heading($name, get_string('apisettings', 'mod_collaborate'), '');
     $settings->add($setting);
 
+    $name = 'collaborate/opensoapapisettings';
+    $setting = new setting_statictext($name, '<fieldset class="soapapisettings" disabled="true">');
+    $settings->add($setting);
+
+    $name = 'collaborate/soapapisettings';
+    $setting = new setting_statictext($name, '<h4>'.get_string('soapapisettings', 'mod_collaborate').'</h4>');;
+    $settings->add($setting);
+
     $name = 'collaborate/server';
     $title = new \lang_string('configserver', 'collaborate');
     $description = new \lang_string('configserverdesc', 'collaborate');
     $default = '';
-    $setting = new trimmed_configtext($name, $title, $description, $default);
+    $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/username';
     $title = new \lang_string('configusername', 'collaborate');
     $description = '';
     $default = '';
-    $setting = new trimmed_configtext($name, $title, $description, $default);
+    $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/password';
@@ -72,6 +85,49 @@ if ($ADMIN->fulltree) {
     $description = '';
     $default = '';
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
+    $settings->add($setting);
+
+    $name = 'collaborate/closesoapapisettings';
+    $setting = new setting_statictext($name, '</fieldset>');
+    $settings->add($setting);
+
+    $name = 'collaborate/openrestapisettings';
+    $setting = new setting_statictext($name, '<fieldset class="restapisettings">');
+    $settings->add($setting);
+
+    $name = 'collaborate/restapisettings';
+    $setting = new setting_statictext($name, '<h4>'.get_string('restapisettings', 'mod_collaborate').'</h4>');
+    $settings->add($setting);
+
+    $name = 'collaborate/restserver';
+    $title = new \lang_string('configrestserver', 'collaborate');
+    $description = new \lang_string('configrestserverdesc', 'collaborate');
+    $default = '';
+    $setting = new setting_trimmed_configtext($name, $title, $description, $default);
+    $settings->add($setting);
+
+    $name = 'collaborate/restkey';
+    $title = new \lang_string('configrestkey', 'collaborate');
+    $description = '';
+    $default = '';
+    $setting = new setting_trimmed_configtext($name, $title, $description, $default);
+    $settings->add($setting);
+
+    $name = 'collaborate/configrestsecret';
+    $title = new \lang_string('configrestsecret', 'collaborate');
+    $description = '';
+    $default = '';
+    $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
+    $settings->add($setting);
+
+    $name = 'collaborate/restmigration';
+    $migratebutton = '<button class="btn btn-primary" disabled="true">'.
+            get_string('configrestmigrate', 'mod_collaborate').'</button>';
+    $setting = new setting_statictext($name, $migratebutton);
+    $settings->add($setting);
+
+    $name = 'collaborate/closerestapisettings';
+    $setting = new setting_statictext($name, '</fieldset>');
     $settings->add($setting);
 
     // Add debugging settings.

@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace mod_collaborate;
+namespace mod_collaborate\settings;
 
 defined('MOODLE_INTERNAL') || die();
 
-class trimmed_configtext extends \admin_setting_configtext {
+class setting_trimmed_configtext extends \admin_setting_configtext {
     /**
      * Config text constructor
      *

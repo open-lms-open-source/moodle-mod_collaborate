@@ -23,6 +23,12 @@ M.mod_collaborate.settings = {
         if (checkapistr !== '') {
             M.mod_collaborate.settings.testApi();
         }
+        // For IE / Edge, disable fieldset fields.
+        if (/Edge\/\d./i.test(navigator.userAgent)
+            || /MSIE/i.test(navigator.userAgent)
+            || /Trident/i.test(navigator.userAgent)){
+            $('fieldset[disabled="true"] input').attr('disabled', 'true');
+        }
         M.mod_collaborate.settings.initialised = true;
     },
 

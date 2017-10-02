@@ -50,9 +50,14 @@ $string['configlogging'] = 'Logging';
 $string['configloggingdesc'] = 'Logging levels - determines how much data is logged for debugging purposes. Note: This is different to moodle event based logs which are not designed for logging errors, soap calls, etc..';
 // The configpassword language string matches the customer welcome email. Don't change unless the welcome email changes.
 $string['configpassword'] = 'Password';
+$string['configrestkey'] = 'Key';
+$string['configrestmigrate'] = 'Migrate to REST API';
+$string['configrestsecret'] = 'Secret';
+$string['configrestserver'] = 'REST server URL';
+$string['configrestserverdesc'] = 'The REST server your Collaborate sessions are created on.';
 // The configserver language string matches the customer welcome email. Don't change unless the welcome email changes.
 $string['configserver'] = 'URL';
-$string['configserverdesc'] = 'The server your Collaborate sessions are created on.';
+$string['configserverdesc'] = 'The (old) SOAP server your Collaborate sessions are created on.';
 // The configusername language string matches the customer welcome email. Don't change unless the welcome email changes.
 $string['configusername'] = 'Username';
 $string['configwsdebug'] = 'Web Services Debugging';
@@ -115,9 +120,11 @@ $string['recording'] = 'Recording {$a}';
 $string['recordingcounts'] = '{$a->views} view(s)';
 $string['recordingdeleted'] = 'The recording entitled "{$a}" has been deleted.';
 $string['recordings'] = 'Recordings';
+$string['restapisettings'] = 'REST API settings';
 $string['sessiongroup'] = 'Group {$a}';
 $string['sessionstart'] = 'Start';
 $string['sessionstarthelp'] = 'Participants can join the session 15 minutes before it starts';
+$string['soapapisettings'] = 'SOAP (old) API settings';
 $string['starts'] = 'Starts - {$a}';
 $string['testapi'] = 'Test connection';
 $string['timezone'] = 'Timezone: {$a}';
