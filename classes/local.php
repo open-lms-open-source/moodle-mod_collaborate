@@ -36,7 +36,6 @@ use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\api as soapapi;
 use mod_collaborate\rest\api as restapi;
-use mod_collaborate\logging\constants as loggingconstants;
 use mod_collaborate\testable_api;
 use mod_collaborate\event\recording_deleted;
 use stdClass;
@@ -213,6 +212,22 @@ class local {
     }
 
     /**
+     * Select the api className based on configuration / testing status.
+     * @param stdClass|null $config
+     * @return string
+     */
+    protected static function select_api(stdClass $config = null) {
+        if (self::duringtesting()) {
+            return 'mod_collaborate\testable_api';
+        } else if (restapi::configured($config)) {
+            return 'mod_collaborate\rest\api';
+        } else if (soapapi::configured($config)) {
+            return 'mod_collaborate\soap\api';
+        }
+        return '';
+    }
+
+    /**
      * Return 'sessionid' or 'sessionuid' depending on contents of a record (collaborate or collaborate_session_link).
      * @param $record
      */
@@ -222,22 +237,6 @@ class local {
 
     public static function get_sessionid_or_sessionuid($record) {
         return self::select_sessionid_or_sessionuid($record);
-    }
-
-    /**
-     * Select the api className based on configuration / testing status.
-     * @param stdClass|null $config
-     * @return string
-     */
-    public static function select_api(stdClass $config = null) {
-        if (self::duringtesting()) {
-            return 'mod_collaborate\testable_api';
-        } else if (restapi::configured($config)) {
-            return 'mod_collaborate\rest\api';
-        } else if (soapapi::configured($config)) {
-            return 'mod_collaborate\soap\api';
-        }
-        return '';
     }
 
     /**
@@ -347,47 +346,6 @@ class local {
         $timestart = $api->api_datetime($starttime);
         $timeend = $api->api_datetime($endtime);
         return [$timestart, $timeend];
-    }
-
-    /**
-     * Delete a collaborate session.
-     * @param int $sessionid
-     * @throws \moodle_exception
-     * @return bool - true on success, false on failure.
-     */
-    public static function api_delete_session($sessionid) {
-
-        // API request deletion.
-        $api = soapapi::get_api();
-        $api->set_silent(true);
-
-        $params = new RemoveHtmlSession($sessionid);
-        try {
-            $result = $api->RemoveHtmlSession($params);
-        } catch (Exception $e) {
-            $result = false;
-        }
-        if ($result === null) {
-            // TODO: Warning - this is a bodge fix! - the wsdl2phpgenerator has set up this class so that it is expecting
-            // a Success Response object but we are actually getting back a RemoveSessionSuccessResponse element in the
-            // xml and as a result of that we end up with a 'null' object.
-            $xml = $api->__getLastResponse();
-            if (preg_match('/<success[^>]*>true<\/success>/', $xml)) {
-                // Manually create the response object!
-                $result = new SuccessResponse(true);
-            } else {
-                $result = false;
-            }
-        }
-
-        if (!$result || !$result->getSuccess()) {
-            $api->process_error(
-                'error:failedtodeletesession', constants::SEV_WARNING
-            );
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**

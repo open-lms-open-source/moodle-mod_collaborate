@@ -504,7 +504,6 @@ class api {
             // Just create one.
             $reqopts = new requestoptions(json_encode($enrollobj), ['sessionId' => $sessionid]);
             $enrollmentresponse = $this->rest_call(self::POST, '/sessions/{sessionId}/enrollments', $reqopts);
-            var_dump($enrollmentresponse);
             if (empty($enrollmentresponse->userId)) {
                 throw new \coding_exception('Failed to create enrollment for userid '.$userid.
                         ' and sessionid '.$sessionid);
