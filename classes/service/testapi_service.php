@@ -64,11 +64,13 @@ class testapi_service {
      * @param \mod_collaborate_renderer $renderer
      */
     public function __construct(\mod_collaborate_renderer $renderer,
-                                $server = false, $username = false, $password = false) {
+                                $server = false, $username = false, $password = false, $key = false, $secret = false) {
         $this->renderer = $renderer;
         $this->server = $server;
         $this->username  = $username;
         $this->password  = $password;
+        $this->key = $key;
+        $this->secret = $secret;
     }
 
     /**
@@ -78,15 +80,23 @@ class testapi_service {
      * @return bool
      */
     protected function api_verified() {
-        $apidetscomplete = $this->server !== false && $this->username !== false && $this->password !== false;
+        $soapdetscomplete = $this->server !== false && $this->username !== false && $this->password !== false;
+        $restdetscomplete = $this->server !== false && $this->key !== false && $this->secret !== false;
         $config = false;
-        if ($apidetscomplete) {
+        if ($soapdetscomplete) {
             $config = (object) [
                 'server'   => $this->server,
                 'username' => $this->username,
                 'password' => $this->password
             ];
+        } else if ($restdetscomplete) {
+            $config = (object) [
+                'restserver'   => $this->server,
+                'restkey' => $this->key,
+                'restsecret' => $this->secret
+            ];
         }
+
         return local::api_verified(true, $config);
     }
 

@@ -26,14 +26,19 @@ class ComplexType extends Type
      *
      * @var ComplexType
      */
-    private $baseType;
+    protected $baseType;
 
     /**
      * The members in the type
      *
      * @var Variable[]
      */
-    private $members;
+    protected $members;
+
+    /**
+     * @var
+     */
+    protected $abstract;
 
     /**
      * Construct the object
@@ -46,6 +51,7 @@ class ComplexType extends Type
         parent::__construct($config, $name, null);
         $this->members = array();
         $this->baseType = null;
+        $this->abstract = false;
     }
 
     /**
@@ -59,10 +65,15 @@ class ComplexType extends Type
             throw new Exception("The class has already been generated");
         }
 
-        $class = new PhpClass(
+        $classBaseType = $this->getBaseTypeClass();
+
+        $this->class = new PhpClass(
             $this->phpIdentifier,
             false,
-            $this->baseType !== null ? $this->baseType->getPhpIdentifier() : ''
+            $classBaseType,
+            null,
+            false,
+            $this->abstract
         );
 
         $constructorComment = new PhpDocComment();
@@ -94,16 +105,14 @@ class ComplexType extends Type
             $comment = new PhpDocComment();
             $comment->setVar(PhpDocElementFactory::getVar($type, $name, ''));
             $var = new PhpVariable('protected', $name, 'null', $comment);
-            $class->addVariable($var);
+            $this->class->addVariable($var);
 
             if (!$member->getNullable()) {
                 if ($type == '\DateTime') {
                     if ($this->config->get('constructorParamsDefaultToNull')) {
-                        // GT Mod - removed DateTime::ATOM date (not compatible with apollo) with Y-m-d\TH:i:s .
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\'Y-m-d\TH:i:s\Z\') : null;' . PHP_EOL;
+                        $constructorSource .= '  $this->' . $name . ' = $' . $name . ' ? $' . $name . '->format(\DateTime::ATOM) : null;' . PHP_EOL;
                     } else {
-                        // GT Mod - removed DateTime::ATOM date (not compatible with apollo) with Y-m-d\TH:i:s .
-                        $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\'Y-m-d\TH:i:s\Z\');' . PHP_EOL;
+                        $constructorSource .= '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
                     }
                 } else {
                     $constructorSource .= '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
@@ -114,7 +123,6 @@ class ComplexType extends Type
 
             $getterComment = new PhpDocComment();
             $getterComment->setReturn(PhpDocElementFactory::getReturn($type, ''));
-            $getterCode = '';
             if ($type == '\DateTime') {
                 $getterCode = '  if ($this->' . $name . ' == null) {' . PHP_EOL
                     . '    return null;' . PHP_EOL
@@ -134,15 +142,34 @@ class ComplexType extends Type
             $setterComment = new PhpDocComment();
             $setterComment->addParam(PhpDocElementFactory::getParam($type, $name, ''));
             $setterComment->setReturn(PhpDocElementFactory::getReturn($this->phpNamespacedIdentifier, ''));
-            $setterCode = '';
             if ($type == '\DateTime') {
-                // GT Mod - removed DateTime::ATOM date (not compatible with apollo) with Y-m-d\TH:i:sZ .
-                $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\'Y-m-d\TH:i:s\Z\');' . PHP_EOL;
+                if ($member->getNullable()) {
+                    $setterCode = '  if ($' . $name . ' == null) {' . PHP_EOL
+                        . '   $this->' . $name . ' = null;' . PHP_EOL
+                        . '  } else {' . PHP_EOL
+                        . '    $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL
+                        . '  }' . PHP_EOL;
+                } else {
+                    $setterCode = '  $this->' . $name . ' = $' . $name . '->format(\DateTime::ATOM);' . PHP_EOL;
+                }
             } else {
                 $setterCode = '  $this->' . $name . ' = $' . $name . ';' . PHP_EOL;
             }
             $setterCode .= '  return $this;' . PHP_EOL;
-            $setter = new PhpFunction('public', 'set' . ucfirst($name), $this->buildParametersString(array($name => $typeHint)), $setterCode, $setterComment);
+            $setter = new PhpFunction(
+                'public',
+                'set' . ucfirst($name),
+                $this->buildParametersString(
+                    array($name => $typeHint),
+                    true,
+                    // If the type of a member is nullable we should allow passing null to the setter. If the type
+                    // of the member is a class and not a primitive this is only possible if setter parameter has
+                    // a default null value. We can detect whether the type is a class by checking the type hint.
+                    $member->getNullable() && !empty($typeHint)
+                ),
+                $setterCode,
+                $setterComment
+            );
             $accessors[] = $setter;
         }
 
@@ -157,13 +184,31 @@ class ComplexType extends Type
             $constructorSource,
             $constructorComment
         );
-        $class->addFunction($constructor);
+        $this->class->addFunction($constructor);
 
         foreach ($accessors as $accessor) {
-            $class->addFunction($accessor);
+            $this->class->addFunction($accessor);
+        }
+    }
+
+    /**
+     * Determine parent class
+     *
+     * @return string|null
+     *   Returns a string containing the PHP identifier for the parent class
+     *   or null if there is no applicable parent class.
+     */
+    public function getBaseTypeClass()
+    {
+        // If we have a base type which is different than the current class then extend that.
+        // It is actually possible to have different classes with the same name as PHP SoapClient has a poor
+        // understanding of namespaces. Two types with the same name but in different namespaces will have the same
+        // identifier.
+        if ($this->baseType !== null && $this->baseType !== $this) {
+            return $this->baseType->getPhpIdentifier();
         }
 
-        $this->class = $class;
+        return null;
     }
 
     /**
@@ -185,6 +230,22 @@ class ComplexType extends Type
     public function setBaseType(ComplexType $type)
     {
         $this->baseType = $type;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAbstract()
+    {
+        return $this->abstract;
+    }
+
+    /**
+     * @param bool $abstract
+     */
+    public function setAbstract($abstract)
+    {
+        $this->abstract = $abstract;
     }
 
     /**
@@ -243,10 +304,16 @@ class ComplexType extends Type
      */
     protected function getBaseTypeMembers(ComplexType $type)
     {
-        $members = array();
-        if (!empty($type->baseType)) {
-            $members = array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());
+        if (empty($type->baseType)) {
+            return array();
         }
-        return $members;
+
+        // Only get members from the base type if it differs from the current class. It is possible that they will be
+        // the same due to poor handling of namespaces in PHP SoapClients.
+        if ($type === $type->baseType) {
+            return array();
+        }
+
+        return array_merge($this->getBaseTypeMembers($type->baseType), $type->baseType->getMembers());
     }
 }

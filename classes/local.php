@@ -36,8 +36,11 @@ use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
-use mod_collaborate\soap\api;
+use mod_collaborate\soap\api as soapapi;
+use mod_collaborate\rest\api as restapi;
+use mod_collaborate\testable_api;
 use mod_collaborate\event\recording_deleted;
+use stdClass;
 
 class local {
 
@@ -184,30 +187,51 @@ class local {
     }
 
     /**
-     * Is this module configured?
+     * Is the API configured.
+     * @param stdClass|null $config
      * @return bool
      */
-    public static function configured() {
-        $config = get_config('collaborate');
-
-        if (!empty ($config)
-            && !empty($config->server)
-            && !empty($config->username)
-            && !empty($config->password)
-        ) {
-            return true;
-        }
-
-        return false;
+    public static function configured(stdClass $config = null) {
+        return restapi::configured($config) || soapapi::configured($config);
     }
 
     /**
-     * Make sure module is configured or throw error.
-     * @throws \moodle_exception
+     * Require the API to be configured.
+     * @param stdClass|null $config
      */
-    public static function require_configured() {
-        if (!static::configured() && !self::duringtesting()) {
-            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
+    public static function require_configured(stdClass $config = null) {
+        $api = self::select_api($config);
+        $api::require_configured();
+    }
+
+    /**
+     * Select the api className based on configuration / testing status.
+     * @param stdClass|null $config
+     * @return string
+     */
+    protected static function select_api(stdClass $config = null) {
+        if (self::duringtesting()) {
+            return 'mod_collaborate\testable_api';
+        } else if (restapi::configured($config)) {
+            return 'mod_collaborate\rest\api';
+        } else if (soapapi::configured($config)) {
+            return 'mod_collaborate\soap\api';
+        }
+        return '';
+    }
+
+    /**
+     * Get the appropriate API.
+     * @param bool $reset
+     * @param stdClass|null $config
+     * @return restapi|soapapi
+     */
+    public static function get_api($reset = false, stdClass $config = null) {
+        if (restapi::configured($config)) {
+            return restapi::instance($reset, $config);
+        } else {
+            $config = get_config('collaborate');
+            return soapapi::get_api($reset, [], null, $config);
         }
     }
 
@@ -220,32 +244,33 @@ class local {
      */
     public static function api_verified($silent = false, $config = false) {
         static $apiverified = null;
+
         // Only do this once! settings.php was calling this 3 times, hence the static to stop this!
         if ($apiverified !== null) {
             return $apiverified;
         }
 
-        $config = $config ? $config : get_config('collaborate');
+        if (self::configured($config)) {
+            $api = self::get_api(true, $config);
 
-        if (static::configured()) {
-            $param = new ServerConfiguration();
-            try {
-                $api = api::get_api(true, [], null, $config);
-            } catch (\Exception $e) {
-                $api = false;
-            }
-            if ($api && $api->is_usable()) {
-                // If silent, will stop error output for now.
-                $api->set_silent($silent);
-                try {
-                    $result = @$api->GetServerConfiguration($param);
-                } catch (\Exception $e) {
+            if ($api instanceof soapapi) {
+                if ($api && $api->is_usable()) {
+                    // If silent, will stop error output for now.
+                    $api->set_silent($silent);
+                    try {
+                        $param = new ServerConfiguration();
+                        $result = @$api->GetServerConfiguration($param);
+                    } catch (\Exception $e) {
+                        $result = false;
+                    }
+                    // Renable error output.
+                    $api->set_silent(false);
+                } else {
                     $result = false;
                 }
-                // Renable error output.
-                $api->set_silent(false);
             } else {
-                $result = false;
+                // This is enough for checking the REST server's readiness.
+                return $api && $api->is_usable();
             }
         } else {
             $result = false;
@@ -299,7 +324,7 @@ class local {
 
     /**
      * Update the collaborate instance record with information in the soapresponse.
-     * @param \stdClass $collaborate
+     * @param stdClass $collaborate
      * @param \HtmlSession $htmlsession
      * @return bool
      */
@@ -335,8 +360,8 @@ class local {
     /**
      * Create a session based on $collaborate data for specific $course
      *
-     * @param \stdClass $collaborate - collaborate instance data or record.
-     * @param \stdClass $course
+     * @param stdClass $collaborate - collaborate instance data or record.
+     * @param stdClass $course
      * @param null|int $groupid
      * @return mixed
      * @throws \moodle_exception
@@ -346,7 +371,7 @@ class local {
 
         $collaborate->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
         $htmlsession = self::el_set_html_session($collaborate, $course, $groupid);
-        $api = api::get_api();
+        $api = soapapi::get_api();
 
         $result = $api->SetHtmlSession($htmlsession);
         if (!$result) {
@@ -376,9 +401,9 @@ class local {
 
     /**
      * Update a session based on $collaborate data for specific $course
-     * @param \stdClass $collaborate
+     * @param stdClass $collaborate
      * @param \sdtClass $course
-     * @param \stdClass $sessionlink
+     * @param stdClass $sessionlink
      * @return int
      * @throws \dml_exception
      * @throws \moodle_exception
@@ -390,7 +415,7 @@ class local {
         $collaborate->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
         $htmlsession = self::el_update_html_session($collaborate, $course, $sessionlink);
 
-        $api = api::get_api();
+        $api = soapapi::get_api();
         if ($htmlsession instanceof SetHtmlSession) {
             $collaborate->sessionid = self::api_create_session($collaborate, $course);
             return ($collaborate->sessionid);
@@ -438,7 +463,7 @@ class local {
     public static function api_delete_session($sessionid) {
 
         // API request deletion.
-        $api = api::get_api();
+        $api = soapapi::get_api();
         $api->set_silent(true);
 
         $params = new RemoveHtmlSession($sessionid);
@@ -473,7 +498,7 @@ class local {
     /**
      * Get enrolee ids for course.
      *
-     * @param \stdClass|string $course
+     * @param stdClass|string $course
      * @param string $withcapability
      * @param string $withoutcapability
      * @param int $groupid
@@ -516,7 +541,7 @@ class local {
     /**
      * Get chair enrolees for course.
      *
-     * @param \stdClass|string $course
+     * @param stdClass|string $course
      * @param int $groupid
      * @return array
      */
@@ -528,7 +553,7 @@ class local {
     /**
      * Get non-chair enrolees for course.
      *
-     * @param \stdClass|string $course
+     * @param stdClass|string $course
      * @param int $groupid
      * @return array
      */
@@ -540,8 +565,8 @@ class local {
     /**
      * Create appropriate session param element for new session or existing session.
      *
-     * @param \stdClass $data
-     * @param \stdClass $course
+     * @param stdClass $data
+     * @param stdClass $course
      * @param null|int $sessionid
      * @param null|int $groupid
      * @return SetHtmlSession|UpdateHtmlSessionDetails
@@ -615,8 +640,8 @@ class local {
     /**
      * Build SetHtmlSession element
      *
-     * @param \stdClass $data
-     * @param \stdClass $course
+     * @param stdClass $data
+     * @param stdClass $course
      * @param null|int $groupid
      * @return soap\generated\SetHtmlSession
      */
@@ -628,8 +653,8 @@ class local {
      * Build UpdateHtmlSession element
      *
      * @param $data
-     * @param \stdClass $course
-     * @param \stdClass $sessionlink
+     * @param stdClass $course
+     * @param stdClass $sessionlink
      * @return soap\generated\SetHtmlSession
      */
     public static function el_update_html_session($data, $course, $sessionlink) {
@@ -649,7 +674,7 @@ class local {
     /**
      * get recordings
      *
-     * @param \stdClass $collaborate
+     * @param stdClass $collaborate
      * @param \cm_info $cm
      * @return soap\generated\HtmlSessionRecordingResponse[][]
      */
@@ -659,7 +684,7 @@ class local {
 
         $sessionrecordings = [];
 
-        $api = api::get_api();
+        $api = soapapi::get_api();
         foreach ($sessionlinks as $sessionlink) {
             if (empty($sessionlink->sessionid)) {
                 continue;
@@ -691,7 +716,7 @@ class local {
 
         require_capability('mod/collaborate:deleterecordings', $cm->context);
 
-        $api = api::get_api();
+        $api = soapapi::get_api();
 
         $delrec = new RemoveHtmlSessionRecording($recordingid);
         // Note, this is returning 'null' at the moment, so no way to return success boolean.
@@ -726,7 +751,7 @@ class local {
      * @param stdClass $collaborate - collaborate record.
      * @param bool $forcesoap - force a soap call.
      */
-    public static function guest_url(\stdClass $collaborate, $forcesoap = false) {
+    public static function guest_url(stdClass $collaborate, $forcesoap = false) {
         global $DB;
 
         if (empty($collaborate->guestaccessenabled)) {
@@ -738,7 +763,7 @@ class local {
         }
 
         // Get guest url.
-        $api = api::get_api();
+        $api = soapapi::get_api();
         $param = new BuildHtmlSessionUrl($collaborate->sessionid);
         $sessionurl = $api->BuildHtmlSessionUrl($param);
         $url = $sessionurl->getUrl();

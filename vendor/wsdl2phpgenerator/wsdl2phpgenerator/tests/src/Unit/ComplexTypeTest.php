@@ -170,6 +170,52 @@ class ComplexTypeTest extends CodeGenerationTestCase
     }
 
     /**
+     * Test classes that extend themselves.
+     */
+    public function testExtendingOwnClass()
+    {
+        // It is actually possible to have a type which extends itself. This is caused by the poor understanding of PHP
+        // namespaces. Two types with the same name but in different namespaces will have the same identifier.
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+        ));
+
+        $type = new ComplexType($config, 'ExtendOwn');
+        $type->setBaseType($type);
+
+        $this->generateClass($type);
+
+        $object = new \ExtendOwn();
+        $class = new \ReflectionClass($object);
+        $this->assertEmpty($class->getParentClass());
+    }
+
+    /**
+     * Test setters for nullable typed members.
+     */
+    public function testNullableTypedMembers()
+    {
+        $config = new Config(array(
+            'inputFile' => null,
+            'outputDir' => null,
+        ));
+
+        $type = new ComplexType($config, 'NullableDateTime');
+        // Add a member which has a type (datetime) and is nullable.
+        $type->addMember('datetime', 'aDateTime', true);
+
+        $this->generateClass($type);
+
+        $object = new \NullableDateTime();
+        // If the member is nullable then we should also be able to pass null to the setter without causing an error.
+        $object->setADateTime(null);
+        // Obviously the returned member value should be null as well.
+        $this->assertNull($object->getADateTime());
+    }
+
+
+    /**
      * Sets object property value using reflection.
      *
      * @param mixed $object The object to set the value on.

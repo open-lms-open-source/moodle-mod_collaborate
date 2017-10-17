@@ -50,8 +50,8 @@ class loggerdb extends loggerbase {
             $data .= "\n".str_repeat('-', 80);
         }
 
-        return $DB->insert_record('collaborate_log',
-            (object) ['time' => time(), 'level' => $level, 'message' => $message, 'data' => $data]
-        );
+        $record = (object) ['time' => time(), 'level' => $level, 'message' => $message, 'data' => $data];
+
+        return $DB->insert_record('collaborate_log', $record);
     }
 }

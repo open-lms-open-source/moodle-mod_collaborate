@@ -25,7 +25,9 @@ use mod_collaborate\local;
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use Psr\Log\LoggerAwareTrait;
-use mod_collaborate\soap\fakeapi;
+use mod_collaborate\soap\fakeapi,
+    mod_collaborate\traits\api as apitrait;
+use stdClass;
 
 /**
  * The collab api.
@@ -36,11 +38,7 @@ use mod_collaborate\soap\fakeapi;
  */
 class api extends generated\SASDefaultAdapter {
     use LoggerAwareTrait;
-
-    /**
-     * @var bool
-     */
-    protected $usable = true;
+    use apitrait;
 
     /**
      * If true, do not output any error messages.
@@ -53,16 +51,15 @@ class api extends generated\SASDefaultAdapter {
      *
      * @param array $options
      * @param string $wsdl - just here to match base class.
-     * @param bool $config - custom config passed in on construct.
+     * @param stdClass $config - custom config passed in on construct.
      */
-    public function __construct(array $options = array(), $wsdl = null, $config = false) {
+    public function __construct(array $options = array(), $wsdl = null, stdClass $config = null) {
 
-        $logger = new loggerdb();
-        $this->setLogger($logger);
+        $this->setup($config);
 
-        $config = $config ?: get_config('collaborate');
+        $config = $this->config;
 
-        local::require_configured();
+        self::require_configured();
 
         // Set wsdl to local version.
         $wsdl = __DIR__ . '/../../wsdl.xml';
@@ -88,9 +85,23 @@ class api extends generated\SASDefaultAdapter {
         }
         try {
             parent::__construct($options, $wsdl);
+            $this->usable = true;
         } catch (\Exception $e) {
             $this->usable = false;
         }
+    }
+
+    /**
+     * Is SOAP API configured?
+     * @param stdClass | bool $config
+     * @return bool
+     */
+    public static function configured(stdClass $config = null) {
+        if (!$config) {
+            $config = get_config('collaborate');
+        }
+        return !empty($config) && !empty($config->server) && !empty($config->username) &&
+            !empty($config->password);
     }
 
     /**
@@ -107,10 +118,10 @@ class api extends generated\SASDefaultAdapter {
      * @param bool $reset
      * @param array $options
      * @param string $wsdl
-     * @param bool|stdClass $config
+     * @param stdClass $config
      * @return api
      */
-    public static function get_api($reset = false, $options = [], $wsdl = null, $config = false) {
+    public static function get_api($reset = false, $options = [], $wsdl = null, stdClass $config = null) {
         static $api;
         if ($api && !$reset) {
             return $api;
@@ -132,9 +143,6 @@ class api extends generated\SASDefaultAdapter {
         $this->usable = $usable;
     }
 
-    /**
-     * Is the api usable?
-     */
     public function is_usable() {
         return $this->usable;
     }
@@ -297,7 +305,7 @@ class api extends generated\SASDefaultAdapter {
             }
         }
 
-        $config = get_config('collaborate');
+        $config = $this->config;
 
         $headerbody = array('Name' => $config->username,
         'Password' => $config->password);

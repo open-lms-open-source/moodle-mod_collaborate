@@ -261,4 +261,24 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertEquals($newstart + $newduration, $modifiedcollab->timeend);
         $this->assertEquals($newduration, $modifiedcollab->duration);
     }
+
+    public function test_configured() {
+        $config = (object) [];
+        $this->assertFalse(local::configured($config));
+        $config->server = 'http://someserver';
+        $config->username = 'myuser';
+        $config->password = 'mypassword';
+        $this->assertTrue(local::configured($config));
+        $config = (object) [];
+        $config->restserver = 'http://somerestserver';
+        $config->restkey = 'somerestkey';
+        $config->restsecret = 'somerestsecret';
+        $this->assertTrue(local::configured($config));
+    }
+
+    public function test_select_api() {
+        $expected = 'mod_collaborate\testable_api';
+        $api = phpunit_util::call_internal_method(null, 'select_api', [null], 'mod_collaborate\local');
+        $this->assertEquals($expected, $api);
+    }
 }

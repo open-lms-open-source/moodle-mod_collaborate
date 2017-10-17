@@ -103,6 +103,8 @@ class Generator implements GeneratorInterface
 
         $this->wsdl = new WsdlDocument($this->config, $wsdl);
 
+        $this->types = array();
+
         $this->loadTypes();
         $this->loadService();
     }
@@ -119,6 +121,7 @@ class Generator implements GeneratorInterface
 
         foreach ($this->wsdl->getOperations() as $function) {
             $this->log('Loading function ' . $function->getName());
+
             $this->service->addOperation(new Operation($function->getName(), $function->getParams(), $function->getDocumentation(), $function->getReturns()));
         }
 
@@ -138,8 +141,15 @@ class Generator implements GeneratorInterface
             $type = null;
 
             if ($typeNode->isComplex()) {
-                $type = new ComplexType($this->config, $typeNode->getName());
+                if ($typeNode->isArray()) {
+                    $type = new ArrayType($this->config, $typeNode->getName());
+                } else {
+                    $type = new ComplexType($this->config, $typeNode->getName());
+                }
+
                 $this->log('Loading type ' . $type->getPhpIdentifier());
+
+                $type->setAbstract($typeNode->isAbstract());
 
                 foreach ($typeNode->getParts() as $name => $typeName) {
                     // There are 2 ways a wsdl can indicate that a field accepts the null value -

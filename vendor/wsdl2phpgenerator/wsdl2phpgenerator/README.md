@@ -9,7 +9,7 @@ Simple WSDL to PHP classes converter. Takes a WSDL file and outputs class files 
 
 Uses the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
-NOTE: This library has been modified by gthomas@moodlerooms to meet the specific requirements of the collaborate module.
+> **Announcement**: We are looking to add one or two co-maintainers with commit access to help bring this project forward, review pull requests and respond to issues. If you have contributed to this project or are otherwise actively involved in open source and have a GitHub profile for review, ping [@kasperg](https://github.com/kasperg) to express your interest.
 
 ## New major version: 3.0
 
@@ -20,9 +20,8 @@ This introduces changes to both configuration and generated code. The changes ma
 2.x users are encourage to read [a walkthrough of what is new in 3.0](docs/whats-new-in-3.0.md).
 
 ## Contributors
-Originally developed by [@walle](https://github.com/walle) and includes bug fixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/),
-[@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/),
-[@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@xstefanox](https://github.com/xstefanox/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/), [@sheeep](https://github.com/sheeep/), [@colinodell](https://github.com/colinodell/), [@red-led](https://github.com/red-led/), [@ivol84](https://github.com/ivol84/), [@wasinger](https://github.com/wasinger/) and [@kasperg](https://github.com/kasperg/).
+Originally developed by [@walle](https://github.com/walle) and includes bug fixes and improvements from [@vakopian](https://github.com/vakopian), [@statikbe](https://github.com/statikbe/), [@ecolinet](https://github.com/ecolinet), [@nuth](https://github.com/nuth/), [@chriskl](https://github.com/chriskl/), [@RSully](https://github.com/RSully/), [@jrbasso](https://github.com/jrbasso/), [@dypa](https://github.com/dypa/), [@Lafriks](https://github.com/Lafriks/), [@SamMousa](https://github.com/SamMousa/), [@xstefanox](https://github.com/xstefanox/), [@garex](https://github.com/garex/), [@honzap](https://github.com/honzap/), [@jk](https://github.com/jk/), [@sheeep](https://github.com/sheeep/), [@colinodell](https://github.com/colinodell/), [@red-led](https://github.com/red-led/), [@ivol84](https://github.com/ivol84/), [@wasinger](https://github.com/wasinger/), [@devlead](https://github.com/devlead/), [@NoUseFreak](https://github.com/nousefreak/), [@HighOnMikey](https://github.com/highonmikey/), [@theHarvester](https://github.com/theHarvester), [@fduch](https://github.com/fduch), [@methodin](https://github.com/methodin), [@nkm](https://github.com/nkm/), [@jongotlin](https://github.com/jongotlin/), [@yethee](https://github.com/yethee/), [@rindeal](https://github.com/rindeal/)
+and [@kasperg](https://github.com/kasperg/).
 
 Pull requests are very welcome. Please read [our guidelines for contributing](https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/master/CONTRIBUTING.md).
 
@@ -109,8 +108,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'http://wsf.cdyne.com/WeatherWS/Weather.asmx?wsdl',
-        'outputDir' => '/tmp/weather'
-        'namespaceName' => 'CDyne\Weather',
+        'outputDir' => '/tmp/weather',
+        'namespaceName' => 'CDyne\Weather'
     ))
 );
 ```
@@ -130,8 +129,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
-        'outputDir' => '/tmp/amazon'
-        'classNames' => 'AmazonEC2, CopyImageType',
+        'outputDir' => '/tmp/amazon',
+        'classNames' => 'AmazonEC2, CopyImageType'
     ))
 );
 ```
@@ -148,8 +147,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://s3.amazonaws.com/ec2-downloads/2013-10-01.ec2.wsdl',
-        'outputDir' => '/tmp/amazon'
-        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances',
+        'outputDir' => '/tmp/amazon',
+        'operationNames' => 'ReplaceRouteTableAssociation, RequestSpotInstances'
     ))
 );
 ```
@@ -181,8 +180,8 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'https://ads.google.com/apis/ads/publisher/v201306/ActivityService?wsdl',
-        'outputDir' => '/tmp/amazon'
-        'proxy' => 'tcp://user:secret@192.168.0.1:8080',
+        'outputDir' => '/tmp/amazon',
+        'proxy' => 'tcp://user:secret@192.168.0.1:8080'
     ))
 );
 ```
@@ -198,7 +197,7 @@ Examples of third party SOAP client implementations which can be used:
 * [soap-plus](https://github.com/dcarbone/soap-plus)
 * [SoapClientEx](https://gist.github.com/RobThree/4117914)
 
-Note that is is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.
+Note that it is the responsibility of the surrounding code to ensure that the base class is available during code generation and when calling web services.
 
 ##### Example usage
 
@@ -209,7 +208,7 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output'
+        'outputDir' => '/tmp/output',
         'soapClientClass' => '\BeSimple\SoapClient\SoapClient'
     ))
 );
@@ -232,14 +231,14 @@ $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
     new \Wsdl2PhpGenerator\Config(array(
         'inputFile' => 'input.wsdl',
-        'outputDir' => '/tmp/output'
+        'outputDir' => '/tmp/output',
         'soapClientOptions' => array(
         	'authentication' => SOAP_AUTHENTICATION_BASIC,
         	'login' => 'username',
-        	'password' => 'secret'
-        	'connection_timeout' => 60,
+        	'password' => 'secret',
+        	'connection_timeout' => 60
     ))
-);
+));
 ````
 
 ## Versioning

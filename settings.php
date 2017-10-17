@@ -34,18 +34,7 @@ if ($ADMIN->fulltree) {
     require_once(__DIR__.'/classes/settings/setting_trimmed_configtext.php');
 
     if ($PAGE->pagetype === 'admin-setting-modsettingcollaborate') {
-        $PAGE->requires->jquery();
-        $module = array(
-            'name' => 'mod_collaborate',
-            'fullpath' => '/mod/collaborate/settings.js',
-            'strings' => [
-                ['connectionfailed', 'mod_collaborate'],
-                ['connectionverified', 'mod_collaborate'],
-                ['verifyingapi', 'mod_collaborate'],
-                ['connectionstatusunknown', 'mod_collaborate']
-            ]
-        );
-        $PAGE->requires->js_init_call('M.mod_collaborate.settings.init', [$PAGE->context->id], true, $module);
+        $PAGE->requires->js_call_amd('mod_collaborate/settings', 'init', [$PAGE->context->id]);
 
         $renderer = $PAGE->get_renderer('mod_collaborate');
         $apitest = $renderer->api_diagnostics();
@@ -113,7 +102,7 @@ if ($ADMIN->fulltree) {
     $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
-    $name = 'collaborate/configrestsecret';
+    $name = 'collaborate/restsecret';
     $title = new \lang_string('configrestsecret', 'collaborate');
     $description = '';
     $default = '';

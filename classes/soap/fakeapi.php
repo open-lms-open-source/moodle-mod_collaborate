@@ -42,6 +42,7 @@ use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
+use stdClass;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -53,9 +54,9 @@ class fakeapi extends api {
      *
      * @param array $options
      * @param string $wsdl - just here to match base class.
-     * @param bool $config - custom config passed in on construct.
+     * @param stdClass $config - custom config passed in on construct.
      */
-    public function __construct(array $options = array(), $wsdl = null, $config = false) {
+    public function __construct(array $options = array(), $wsdl = null, stdClass $config = null) {
 
         $logger = new loggerdb();
         $this->setLogger($logger);
@@ -94,10 +95,10 @@ class fakeapi extends api {
      * @param bool $reset
      * @param array $options
      * @param string $wsdl
-     * @param bool|\stdClass $config
+     * @param stdClass $config
      * @return fakeapi
      */
-    public static function get_api($reset = false, $options = [], $wsdl = null, $config = false) {
+    public static function get_api($reset = false, $options = [], $wsdl = null, stdClass $config = null) {
         return parent::get_api($reset, $options, $wsdl, $config);
     }
 
@@ -183,7 +184,7 @@ class fakeapi extends api {
      * Set / update an object in config.
      * Only used for testing.
      *
-     * @param \stdClass $object
+     * @param mixed $object
      * @param int $id
      * @param int|null $parentid
      */

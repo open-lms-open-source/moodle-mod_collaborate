@@ -64,43 +64,7 @@ class PhpFile
      */
     public function getSource()
     {
-        $ret = '<?php' . PHP_EOL;
-
-        // GT Mod - add comments to top of each file.
-        // TODO, this needs to be a feature request for wsdl2phpgenerator - i.e. allow comments to be specified in cfg.
-
-        if (count($this->classes) == 1) {
-            $classcomment = 'SOAP API / element: '.reset($this->classes)->getIdentifier();
-        } else {
-            $classcomment = 'SOAP API / element.';
-        }
-        $year  = date('Y');
-
-        $ret .= <<<EOF
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * $classcomment
- *
- * @package   mod_collaborate
- * @copyright Copyright (c) $year Moodlerooms Inc. (http://www.moodlerooms.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-EOF;
-        $ret .= PHP_EOL;
+        $ret = '<?php' . PHP_EOL . PHP_EOL;
 
         if (count($this->namespaces) > 0) {
             $ret .= 'namespace ' . $this->namespaces[0] . ';' . PHP_EOL . PHP_EOL;

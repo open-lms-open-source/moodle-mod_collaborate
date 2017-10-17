@@ -22,6 +22,10 @@
     margin-left: 1em;
 }
 
+#page-admin-setting-modsettingcollaborate fieldset.soapapisettings {
+    display:none;
+}
+
 #page-admin-setting-modsettingcollaborate .api-connection-status {
     margin-top:1em;
 }

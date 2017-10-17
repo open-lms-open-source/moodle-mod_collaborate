@@ -49,8 +49,10 @@ class api_controller extends controller_abstract {
         $server = optional_param('server', false, PARAM_URL);
         $username  = optional_param('username', false, PARAM_ALPHANUMEXT);
         $password  = optional_param('password', false, PARAM_RAW);
+        $key = optional_param('restkey', false, PARAM_RAW);
+        $secret = optional_param('restsecret', false, PARAM_RAW);
 
-        $this->testapiservice = new testapi_service($renderer, $server, $username, $password);
+        $this->testapiservice = new testapi_service($renderer, $server, $username, $password, $key, $secret);
     }
 
     /**

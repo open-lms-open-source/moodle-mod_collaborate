@@ -50,16 +50,6 @@ class TypeNode extends XmlNode
     }
 
     /**
-     * Returns whether the type is an array.
-     *
-     * @return bool If the type is an array.
-     */
-    public function isArray()
-    {
-        return substr($this->name, -2, 2) == '[]' || substr($this->name, 0, 7) == 'ArrayOf';
-    }
-
-    /**
      * Returns whether a sub element of the type may be undefined for the type.
      *
      * @param string $name The name of the sub element.
@@ -83,7 +73,10 @@ class TypeNode extends XmlNode
     public function isElementArray($name)
     {
         foreach ($this->element->getElementsByTagName('element') as $element) {
-            if ($element->getAttribute('name') == $name && $element->getAttribute('maxOccurs') == 'unbounded') {
+            if ($element->getAttribute('name') == $name &&
+                  ($element->getAttribute('maxOccurs') == 'unbounded'
+                    || $element->getAttribute('maxOccurs') >= 2)
+              ) {
                 return true;
             }
         }
@@ -103,15 +96,7 @@ class TypeNode extends XmlNode
                 if ($minOccurs === '') {
                     return null;
                 }
-                // GT Mod: If the attribute is a string, we still need to return an integer if possible.
-                if (is_string($minOccurs)) {
-                    if (is_numeric($minOccurs)) {
-                        return intval($minOccurs);
-                    } else {
-                        return null; // Bad value in minOccurs.
-                    }
-                }
-                return $minOccurs;
+                return (int) $minOccurs;
             }
         }
         return null;
@@ -233,8 +218,36 @@ class TypeNode extends XmlNode
     {
         // If array is defied as inherited from array type it has restricton to array elements type, but still is complexType
         return
-            $this->restriction == 'struct' ||
-            $this->element->localName == 'complexType';
+          $this->restriction == 'struct' ||
+          $this->element->localName == 'complexType';
+    }
+
+    /**
+     * Returns whether the type is an array.
+     *
+     * @return bool If the type is an array.
+     */
+    public function isArray()
+    {
+        $parts = $this->getParts();
+
+        // Array types are complex types with one element, their names begins with 'ArrayOf'.
+        // So if not - that's not array. Only field must be array also.
+        return $this->isComplex()
+            && count($parts) == 1
+            && (substr($this->name, 0, 7) == 'ArrayOf')
+            && substr(reset($parts), -2, 2) == '[]';
+    }
+
+    /**
+     * Returns whether the type is abstract.
+     *
+     * @return bool Whether the type is abstract.
+     */
+    public function isAbstract()
+    {
+        return $this->element->hasAttribute('abstract')
+            && $this->element->getAttribute('abstract') == 'true';
     }
 
     /**

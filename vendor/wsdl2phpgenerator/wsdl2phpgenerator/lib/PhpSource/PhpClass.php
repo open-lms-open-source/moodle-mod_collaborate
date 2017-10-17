@@ -45,7 +45,14 @@ class PhpClass extends PhpElement
 
     /**
      *
-     * @var const
+     * @var string[]
+     * @access private
+     */
+    private $implements;
+
+    /**
+     *
+     * @var string
      * @access private
      */
     private $default;
@@ -58,14 +65,14 @@ class PhpClass extends PhpElement
 
     /**
      *
-     * @var array Array of PhpVariable objects
+     * @var PhpVariable[]
      * @access private
      */
     private $variables;
 
     /**
      *
-     * @var array Array of PhpFunction objects
+     * @var PhpFunction[]
      * @access private
      */
     private $functions;
@@ -79,13 +86,21 @@ class PhpClass extends PhpElement
 
     /**
      *
+     * @var bool If the class is abstract.
+     * @access private
+     */
+    private $abstract;
+
+    /**
+     *
      * @param string $identifier
      * @param bool $classExists
      * @param string $extends A string of the class that this class extends
      * @param PhpDocComment $comment
      * @param bool $final
+     * @param bool $abstract
      */
-    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false)
+    public function __construct($identifier, $classExists = false, $extends = '', PhpDocComment $comment = null, $final = false, $abstract = false)
     {
         $this->dependencies = array();
         $this->classExists = $classExists;
@@ -98,6 +113,7 @@ class PhpClass extends PhpElement
         $this->variables = array();
         $this->functions = array();
         $this->indentionStr = '    '; // Use 4 spaces as indention, as requested by PSR-2
+        $this->abstract = $abstract;
     }
 
     /**
@@ -127,10 +143,18 @@ class PhpClass extends PhpElement
             $ret .= 'final ';
         }
 
+        if ($this->abstract) {
+            $ret .= 'abstract ';
+        }
+
         $ret .= 'class ' . $this->identifier;
 
         if (strlen($this->extends) > 0) {
             $ret .= ' extends ' . $this->extends;
+        }
+
+        if (count($this->implements) > 0) {
+            $ret .= ' implements ' . implode(', ', $this->implements);
         }
 
         $ret .= PHP_EOL . '{' . PHP_EOL;
@@ -180,6 +204,15 @@ class PhpClass extends PhpElement
         if (in_array($filename, $this->dependencies) == false) {
             $this->dependencies[] = $filename;
         }
+    }
+
+    /**
+     * @param string|\string[] $classes  $filename
+     */
+    public function addImplementation($classes)
+    {
+        $classes = (array)$classes;
+        $this->implements = array_merge((array)$this->implements, $classes);
     }
 
     /**
