@@ -36,6 +36,7 @@ use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\api as soapapi;
 use mod_collaborate\rest\api as restapi;
+use mod_collaborate\logging\constants as loggingconstants;
 use mod_collaborate\testable_api;
 use mod_collaborate\event\recording_deleted;
 use stdClass;
@@ -212,22 +213,6 @@ class local {
     }
 
     /**
-     * Select the api className based on configuration / testing status.
-     * @param stdClass|null $config
-     * @return string
-     */
-    protected static function select_api(stdClass $config = null) {
-        if (self::duringtesting()) {
-            return 'mod_collaborate\testable_api';
-        } else if (restapi::configured($config)) {
-            return 'mod_collaborate\rest\api';
-        } else if (soapapi::configured($config)) {
-            return 'mod_collaborate\soap\api';
-        }
-        return '';
-    }
-
-    /**
      * Return 'sessionid' or 'sessionuid' depending on contents of a record (collaborate or collaborate_session_link).
      * @param $record
      */
@@ -237,6 +222,22 @@ class local {
 
     public static function get_sessionid_or_sessionuid($record) {
         return self::select_sessionid_or_sessionuid($record);
+    }
+
+    /**
+     * Select the api className based on configuration / testing status.
+     * @param stdClass|null $config
+     * @return string
+     */
+    public static function select_api(stdClass $config = null) {
+        if (self::duringtesting()) {
+            return 'mod_collaborate\testable_api';
+        } else if (restapi::configured($config)) {
+            return 'mod_collaborate\rest\api';
+        } else if (soapapi::configured($config)) {
+            return 'mod_collaborate\soap\api';
+        }
+        return '';
     }
 
     /**
