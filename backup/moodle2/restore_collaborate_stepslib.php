@@ -56,7 +56,9 @@ class restore_collaborate_activity_structure_step extends restore_activity_struc
         global $DB;
 
         $data = (object)$data;
-        unset($data->sessionid); // We need to create a new session.
+        // We need to create a new session.
+        unset($data->sessionid);
+        unset($data->sessionuid);
 
         $data->course = $this->get_courseid();
 

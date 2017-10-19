@@ -26,6 +26,8 @@ namespace mod_collaborate\service;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_collaborate\local;
+
 require_once(__DIR__.'/../../lib.php');
 
 /**
@@ -86,7 +88,14 @@ abstract class base_visit_service {
      * @throws \coding_exception
      */
     protected function moderator_ensure_session() {
-        if ($this->collaborate->sessionid === null) {
+
+        if ($this->collaborate->sessionid === null && $this->collaborate->sessionuid === null) {
+            $sessionidkey = local::api_is_legacy() ? 'sessionid' : 'sessionuid';
+        } else {
+            return;
+        }
+
+        if ($this->collaborate->$sessionidkey === null) {
             $canmoderate = has_capability('mod/collaborate:moderate', $this->context);
             $canadd = has_capability('mod/collaborate:addinstance', $this->context);
             $capscreate = ($canmoderate || $canadd);

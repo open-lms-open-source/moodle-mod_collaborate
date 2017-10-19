@@ -14,49 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_collaborate\iface;
+
+defined('MOODLE_INTERNAL') || die();
+
+use stdClass;
+
 /**
- * Request options.
+ * API attendee interface.
  * @author    Guy Thomas <gthomas@moodlerooms.com>
  * @copyright Copyright (c) 2017 Blackboard Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_collaborate\rest;
-
-defined('MOODLE_INTERNAL') || die();
-
-class requestoptions {
+interface api_attendee {
 
     /**
-     * @var string
+     * Update attendee for a specific session.
+     * @param string $sessionuid
+     * @param string $userid
+     * @param string $avatarurl
+     * @param string $displayname
+     * @param string $role
+     *
+     * @throws \coding_exception
+     *
+     * @return $string url
      */
-    public $bodyjson;
-
-    /**
-     * @var array
-     */
-    public $queryparams;
-
-    /**
-     * @var array
-     */
-    public $postfields;
-
-    /**
-     * @var array
-     */
-    public $pathparams;
-
-    /**
-     * requestoptions constructor.
-     * @param string $bodyjson
-     * @param array $queryparams
-     * @param array $postfields
-     */
-    public function __construct($bodyjson = '', array $pathparams = [], array $queryparams = [], array $postfields = []) {
-        $this->bodyjson = $bodyjson;
-        $this->pathparams = $pathparams;
-        $this->queryparams = $queryparams;
-        $this->postfields = $postfields;
-    }
+    public function update_attendee($sessionuid, $userid, $avatarurl, $displayname, $role);
 }

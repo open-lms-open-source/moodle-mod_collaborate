@@ -70,7 +70,7 @@ class fakeapi extends api {
      *
      * @return bool
      */
-    protected function quick_test_service($serviceuri) {
+    protected function test_service_reachable($serviceuri) {
         return true;
     }
 

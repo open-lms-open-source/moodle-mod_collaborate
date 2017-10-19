@@ -18,16 +18,24 @@ namespace mod_collaborate\soap;
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\logging\loggerdb;
-use mod_collaborate\logging\constants;
-use mod_collaborate\local;
-
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
-use Psr\Log\LoggerAwareTrait;
-use mod_collaborate\soap\fakeapi,
-    mod_collaborate\traits\api as apitrait;
-use stdClass;
+use mod_collaborate\iface\api_attendee;
+use Psr\Log\LoggerAwareTrait,
+    mod_collaborate\logging\loggerdb,
+    mod_collaborate\logging\constants,
+    mod_collaborate\local,
+    mod_collaborate\soap\fakeapi,
+    mod_collaborate\soap\generated\HtmlSession,
+    mod_collaborate\soap\generated\SetHtmlSession,
+    mod_collaborate\soap\generated\HtmlAttendee,
+    mod_collaborate\soap\generated\HtmlAttendeeCollection,
+    mod_collaborate\soap\generated\UpdateHtmlSessionAttendee,
+    mod_collaborate\soap\generated\UpdateHtmlSessionDetails,
+    mod_collaborate\traits\api as apitrait,
+    mod_collaborate\iface\api_session,
+    mod_collaborate\logging\constants as loggingconstants,
+    stdClass;
 
 /**
  * The collab api.
@@ -36,7 +44,7 @@ use stdClass;
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class api extends generated\SASDefaultAdapter {
+class api extends generated\SASDefaultAdapter implements api_session, api_attendee {
     use LoggerAwareTrait;
     use apitrait;
 
@@ -78,7 +86,7 @@ class api extends generated\SASDefaultAdapter {
             $options['trace'] = 1;
         }
 
-        $serviceok = $this->quick_test_service($options['location']);
+        $serviceok = $this->test_service_reachable($options['location']);
         if (!$serviceok) {
             $this->usable = false;
             return;
@@ -153,7 +161,7 @@ class api extends generated\SASDefaultAdapter {
      * @param $serviceuri
      * @return bool
      */
-    protected function quick_test_service($serviceuri) {
+    protected function test_service_reachable($serviceuri) {
         $ch = curl_init();
         $this->logger->info('Testing service availability: '.$serviceuri);
         curl_setopt($ch, CURLOPT_URL, $serviceuri);
@@ -174,71 +182,6 @@ class api extends generated\SASDefaultAdapter {
             $this->logger->info('Service accessible');
             return true;
         }
-    }
-
-    /**
-     * Log error and display an error if appropriate.
-     *
-     * @param $errorkey
-     * @param $errorlevel
-     * @param string $debuginfo
-     * @param array $errorarr
-     * @throws \coding_exception
-     * @throws \moodle_exception
-     */
-    public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
-        global $COURSE;
-
-        $errorstring = get_string($errorkey, 'mod_collaborate');
-
-        if (!empty($debuginfo)) {
-            // Add debuginfo to start of error array (for logging).
-            $debuginfarr = ['debug_info' => $debuginfo];
-            $errorarr = array_merge($debuginfarr, $errorarr);
-        }
-
-        switch ($errorlevel) {
-            case constants::SEV_EMERGENCY :
-                $this->logger->emergency($errorstring, $errorarr);
-                break;
-            case constants::SEV_ALERT :
-                $this->logger->alert($errorstring, $errorarr);
-                break;
-            case constants::SEV_CRITICAL :
-                $this->logger->critical($errorstring, $errorarr);
-                break;
-            case constants::SEV_ERROR :
-                $this->logger->error($errorstring, $errorarr);
-                break;
-            case constants::SEV_WARNING :
-                $this->logger->warning($errorstring, $errorarr);
-                break;
-            case constants::SEV_NOTICE :
-                $this->logger->notice($errorstring, $errorarr);
-                break;
-            case constants::SEV_INFO :
-                $this->logger->info($errorstring, $errorarr);
-                break;
-            case constants::SEV_DEBUG :
-                $this->logger->info($errorstring, $errorarr);
-                break;
-        }
-
-        if ($this->silent) {
-            return;
-        }
-
-        // Developer orinetated error message.
-        $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
-        if (!empty($errorarr)) {
-            if (!empty($debuginfo)) {
-                $debuginfo .= "\n\n" .
-                    var_export($errorarr, true);
-            } else {
-                $debuginfo = var_export($errorarr, true);
-            }
-        }
-        throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
     }
 
     /**
@@ -346,4 +289,257 @@ class api extends generated\SASDefaultAdapter {
 
         return ($result);
     }
+
+
+    /**
+     * Create appropriate session param element for new session or existing session.
+     *
+     * @param stdClass $data
+     * @param stdClass $course
+     * @param null|int $sessionid
+     * @param null|int $groupid
+     * @return SetHtmlSession|UpdateHtmlSessionDetails
+     */
+    private function el_html_session($data, $course, $sessionid = null, $groupid = null) {
+        global $USER;
+
+        $sessionname = $data->name;
+        if ($groupid !== null) {
+            // Append sessionname with groupname.
+            $groupname = groups_get_group_name($groupid);
+            $sessionname .= ' ('.$groupname.')';
+        }
+
+        // Main variables for session.
+        list ($timestart, $timeend) = local::get_apitimes($data->timestart, $data->duration);
+        $description = isset($data->introeditor['text']) ? $data->introeditor['text'] : $data->intro;
+
+        // Setup appropriate session - set or update.
+        if (empty($sessionid)) {
+            // New session.
+            $htmlsession = new SetHtmlSession($sessionname, $timestart, $timeend, $USER->id);
+            $data->guesturl = '';
+        } else {
+            // Update existing session.
+            $htmlsession = new UpdateHtmlSessionDetails($sessionid);
+            $htmlsession->setName($sessionname);
+            $htmlsession->setStartTime($timestart);
+            $htmlsession->setEndTime($timeend);
+        }
+        $htmlsession->setDescription(strip_tags($description));
+        $htmlsession->setBoundaryTime(local::boundary_time());
+        $htmlsession->setMustBeSupervised(true);
+        $allowguests = !empty($data->guestaccessenabled) && $data->guestaccessenabled == 1;
+        $htmlsession->setAllowGuest($allowguests);
+        if ($allowguests) {
+            switch ($data->guestrole) {
+                case 'pa' :
+                    $guestrole = 'Participant';
+                    break;
+                case 'pr' :
+                    $guestrole = 'Presenter';
+                    break;
+                case 'mo' :
+                    $guestrole = 'Moderator';
+                    break;
+                default :
+                    $guestrole = 'Participant';
+            }
+            $htmlsession->setGuestRole($guestrole);
+        }
+
+        // Add attendees to html session.
+        $attendees = new HtmlAttendeeCollection();
+        $participantgroupid = empty($groupid) ? 0 : $groupid;
+        $moderators = local::moderator_enrolees($course, $participantgroupid);
+        $participants = local::participant_enrolees($course, $participantgroupid);
+        $attarr = [];
+        foreach ($moderators as $moderatorid) {
+            $attarr[] = new HtmlAttendee($moderatorid, 'moderator');
+        }
+        foreach ($participants as $participantid) {
+            $attarr[] = new HtmlAttendee($participantid, 'participant');
+        }
+        $attendees->setHtmlAttendee($attarr);
+        $htmlsession->setHtmlAttendees([$attendees]);
+
+        return $htmlsession;
+    }
+
+    /**
+     * Build SetHtmlSession element
+     *
+     * @param stdClass $data
+     * @param stdClass $course
+     * @param null|int $groupid
+     * @return SetHtmlSession
+     */
+    public function el_set_html_session($data, $course, $groupid = null) {
+        return $this->el_html_session($data, $course, null, $groupid);
+    }
+
+    /**
+     * Build UpdateHtmlSession element
+     *
+     * @param $data
+     * @param stdClass $course
+     * @param stdClass $sessionlink
+     * @return SetHtmlSession
+     */
+    public function el_update_html_session($data, $course, $sessionlink) {
+        return $this->el_html_session($data, $course, $sessionlink->sessionid, $sessionlink->groupid);
+    }
+
+    public function create_session($collaborate, $course, $groupid = null) {
+        $config = get_config('collaborate');
+
+        $collaborate->timeend = local::timeend_from_duration($collaborate->timestart, $collaborate->duration);
+        $htmlsession = $this->el_set_html_session($collaborate, $course, $groupid);
+
+        $result = $this->SetHtmlSession($htmlsession);
+        if (!$result) {
+            $msg = 'SetHtmlSession';
+            if (!empty($config->wsdebug)) {
+                $msg .= ' - returned: '.var_export($result, true);
+            }
+            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, $msg);
+        }
+        $respobjs = $result->getHtmlSession();
+        if (!is_array($respobjs) || empty($respobjs)) {
+            $this->process_error(
+                'error:apicallfailed', loggingconstants::SEV_CRITICAL,
+                'SetHtmlSession - failed on $result->getApolloSessionDto()'
+            );
+        }
+        $respobj = $respobjs[0];
+        $sessionid = $respobj->getSessionId();
+
+        if ($groupid === null) {
+            // Update the main collaborate instance, this is not for a group.
+            $this->update_collaborate_instance_record($collaborate, $respobj);
+        }
+
+        return ($sessionid);
+    }
+
+    public function update_collaborate_instance_record(stdClass $collaborate, $htmlsession) {
+        global $DB;
+
+        $sessionid = $htmlsession->getSessionId();
+
+        // Update the main collaborate instance, this is not for a group.
+        $collaborate->sessionid = $sessionid;
+        $collaborate->timemodified = time();
+        $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
+        if ($collaborate->timeend != strtotime(local::TIMEDURATIONOFCOURSE)) {
+            $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
+            $collaborate->duration = $collaborate->timeend - $collaborate->timestart;
+        }
+
+        if (empty($collaborate->guestaccessenabled)) {
+            // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
+            $collaborate->guestaccessenabled = 0;
+        }
+
+        $result = $DB->update_record('collaborate', $collaborate);
+
+        if ($result) {
+            collaborate_grade_item_update($collaborate);
+            local::update_calendar($collaborate);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Update a session based on $collaborate data for specific $course
+     * @param stdClass $collaborate
+     * @param stdClass $course
+     * @param stdClass $sessionlink
+     * @return int
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     * @throws coding_exception
+     */
+    public function update_session($collaborate, $course, $sessionlink) {
+        $config = get_config('collaborate');
+
+        $collaborate->timeend = local::timeend_from_duration($collaborate->timestart, $collaborate->duration);
+        $htmlsession = $this->el_update_html_session($collaborate, $course, $sessionlink);
+
+        if ($htmlsession instanceof SetHtmlSession) {
+            $collaborate->sessionid = $this->create_session($collaborate, $course);
+            return ($collaborate->sessionid);
+        } else if ($htmlsession instanceof UpdateHtmlSessionDetails) {
+            $result = $this->UpdateHtmlSession($htmlsession);
+        } else {
+            $msg = 'el_update_html_session returned an unexpected object. ';
+            $msg .= 'Should have been either mod_collaborate\\soap\\generated\\SetHtmlSession OR ';
+            $msg .= 'mod_collaborate\\soap\\generated\\UpdateHtmlSessionDetails. ';
+            $msg .= 'Returned: '.var_export($htmlsession, true);
+            throw new coding_exception($msg);
+        }
+
+        if (!$result) {
+            $msg = 'SetHtmlSession';
+            if (!empty($config->wsdebug)) {
+                $msg .= ' - returned: '.var_export($result, true);
+            }
+            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, $msg);
+        }
+        $respobjs = $result->getHtmlSession();
+        if (!is_array($respobjs) || empty($respobjs)) {
+            $this->process_error(
+                'error:apicallfailed', loggingconstants::SEV_CRITICAL,
+                'SetHtmlSession - failed on $result->getApolloSessionDto()'
+            );
+        }
+        $respobj = $respobjs[0];
+        $sessionid = $respobj->getSessionId();
+
+        if (empty($sessionlink->groupid)) {
+            // Update the main collaborate instance, this is not for a group.
+            $this->update_collaborate_instance_record($collaborate, $respobj);
+        }
+
+        return ($sessionid);
+    }
+
+    public function update_attendee($sessionid, $userid, $avatarurl, $displayname, $role) {
+
+        $attendee = new HtmlAttendee($userid, $role);
+        $attendee->setDisplayName($displayname, 0, 80);
+        $attendee->setAvatarUrl(new \SoapVar('<ns1:avatarUrl><![CDATA['.$avatarurl.']]></ns1:avatarUrl>', XSD_ANYXML));
+
+        $satts = new UpdateHtmlSessionAttendee($sessionid, $attendee);
+        $satts->setLocale(current_language());
+
+        $result = $this->UpdateHtmlSessionAttendee($satts);
+
+        if (!$result || !method_exists($result, 'getUrl')) {
+            return false;
+        }
+        $url = $result->getUrl();
+        return ($url);
+    }
+
+    /**
+     * Return a date suitable for the API.
+     *
+     * NOTE: date('c', $data->timestart) doesn't work with the API as it treates any time date with a + symbol in it as
+     * invalid. Therefore, this function expects the date passed in to already be a UTC date WITHOUT an offset.
+     * @param int $uts unix time stamp
+     * @param boolean $converttoutc - adjust server time to be a UTC time.
+     *
+     * @return DateTime
+     */
+    public function api_datetime($uts, $converttoutc = false) {
+        if ($converttoutc) {
+            $uts = local::servertime_to_utc($uts);
+        }
+        $dt = new \DateTime(date('Y-m-d H:i:s', $uts), new \DateTimeZone('UTC'));
+        $dt->format('Y-m-d\TH:i:s\Z');
+        return $dt;
+    }
+
 }

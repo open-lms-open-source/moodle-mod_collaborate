@@ -27,17 +27,16 @@ namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
-use mod_collaborate\soap\generated\SetHtmlSession;
 use mod_collaborate\soap\generated\ServerConfiguration;
 use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
 use mod_collaborate\soap\generated\HtmlAttendeeCollection;
 use mod_collaborate\soap\generated\HtmlAttendee;
-use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\api as soapapi;
 use mod_collaborate\rest\api as restapi;
+use mod_collaborate\logging\constants as loggingconstants;
 use mod_collaborate\testable_api;
 use mod_collaborate\event\recording_deleted;
 use stdClass;
@@ -62,6 +61,15 @@ class local {
             $timeend = strtotime(self::TIMEDURATIONOFCOURSE);
         }
         return $timeend;
+    }
+
+    /**
+     * Is timeend classed as open ended.
+     * @param $timeend
+     * @return bool
+     */
+    public static function timeend_open_ended($timeend) {
+        return ($timeend >= (strtotime(self::TIMEDURATIONOFCOURSE) - WEEKSECS));
     }
 
     /**
@@ -205,11 +213,23 @@ class local {
     }
 
     /**
+     * Return 'sessionid' or 'sessionuid' depending on contents of a record (collaborate or collaborate_session_link).
+     * @param $record
+     */
+    public static function select_sessionid_or_sessionuid($record) {
+        return !empty($record->sessionuid) ? 'sessionuid' : 'sessionid';
+    }
+
+    public static function get_sessionid_or_sessionuid($record) {
+        return self::select_sessionid_or_sessionuid($record);
+    }
+
+    /**
      * Select the api className based on configuration / testing status.
      * @param stdClass|null $config
      * @return string
      */
-    protected static function select_api(stdClass $config = null) {
+    public static function select_api(stdClass $config = null) {
         if (self::duringtesting()) {
             return 'mod_collaborate\testable_api';
         } else if (restapi::configured($config)) {
@@ -221,12 +241,33 @@ class local {
     }
 
     /**
+     * Return true if api is legacy soap.
+     * @return boolean
+     */
+    public static function api_is_legacy() {
+        return stripos(self::select_api(), 'soap');
+    }
+
+    /**
      * Get the appropriate API.
      * @param bool $reset
      * @param stdClass|null $config
+     * @param string $forceapi - if specified, the specific api will be recovered.
      * @return restapi|soapapi
      */
-    public static function get_api($reset = false, stdClass $config = null) {
+    public static function get_api($reset = false, stdClass $config = null, $forceapi = '') {
+        if (!empty($forceapi)) {
+            if ($forceapi === 'rest') {
+                return restapi::instance($reset, $config);
+            } else if ($forceapi === 'soap') {
+                $config = get_config('collaborate');
+                return soapapi::get_api($reset, [], null, $config);
+            } else if ($forceapi === 'testable') {
+                return testable_api::instance($reset, $config);
+            }
+        }
+        // This should use self::select_api once testable_api is implemented fully and all unit tests migrated to not
+        // use soap/fakeapi.
         if (restapi::configured($config)) {
             return restapi::instance($reset, $config);
         } else {
@@ -302,156 +343,10 @@ class local {
         // So we are converting starttime to a UTC date by subtracting the server time zone offset.
         $starttime = self::servertime_to_utc($starttime);
         $endtime = self::timeend_from_duration($starttime, $duration);
-        $timestart = self::api_datetime($starttime);
-        $timeend = self::api_datetime($endtime);
+        $api = self::get_api();
+        $timestart = $api->api_datetime($starttime);
+        $timeend = $api->api_datetime($endtime);
         return [$timestart, $timeend];
-    }
-
-    /**
-     * Take a utctime (adjusted by server timezone offset) and return a date suitable for the API.
-     *
-     * NOTE: date('c', $data->timestart) doesn't work with the API as it treates any time date with a + symbol in it as
-     * invalid. Therefore, this function expects the date passed in to already be a UTC date WITHOUT an offset.
-     * @param $utctime
-     *
-     * @return string
-     */
-    public static function api_datetime($utctime) {
-        $dt = new \DateTime(date('Y-m-d H:i:s', $utctime), new \DateTimeZone('UTC'));
-        $dt->format('Y-m-d\TH:i:s\Z');
-        return $dt;
-    }
-
-    /**
-     * Update the collaborate instance record with information in the soapresponse.
-     * @param stdClass $collaborate
-     * @param \HtmlSession $htmlsession
-     * @return bool
-     */
-    public static function update_collaborate_instance_record($collaborate,  HtmlSession $htmlsession) {
-        global $DB;
-
-        $sessionid = $htmlsession->getSessionId();
-
-        // Update the main collaborate instance, this is not for a group.
-        $collaborate->sessionid = $sessionid;
-        $collaborate->timemodified = time();
-        $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
-        if ($collaborate->timeend != strtotime(self::TIMEDURATIONOFCOURSE)) {
-            $collaborate->timeend = $htmlsession->getEndTime()->getTimestamp();
-            $collaborate->duration = $collaborate->timeend - $collaborate->timestart;
-        }
-
-        if (empty($collaborate->guestaccessenabled)) {
-            // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
-            $collaborate->guestaccessenabled = 0;
-        }
-
-        $result = $DB->update_record('collaborate', $collaborate);
-
-        if ($result) {
-            collaborate_grade_item_update($collaborate);
-            self::update_calendar($collaborate);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Create a session based on $collaborate data for specific $course
-     *
-     * @param stdClass $collaborate - collaborate instance data or record.
-     * @param stdClass $course
-     * @param null|int $groupid
-     * @return mixed
-     * @throws \moodle_exception
-     */
-    public static function api_create_session($collaborate, $course, $groupid = null) {
-        $config = get_config('collaborate');
-
-        $collaborate->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
-        $htmlsession = self::el_set_html_session($collaborate, $course, $groupid);
-        $api = soapapi::get_api();
-
-        $result = $api->SetHtmlSession($htmlsession);
-        if (!$result) {
-            $msg = 'SetHtmlSession';
-            if (!empty($config->wsdebug)) {
-                $msg .= ' - returned: '.var_export($result, true);
-            }
-            $api->process_error('error:apicallfailed', logging\constants::SEV_CRITICAL, $msg);
-        }
-        $respobjs = $result->getHtmlSession();
-        if (!is_array($respobjs) || empty($respobjs)) {
-            $api->process_error(
-                'error:apicallfailed', logging\constants::SEV_CRITICAL,
-                'SetHtmlSession - failed on $result->getApolloSessionDto()'
-            );
-        }
-        $respobj = $respobjs[0];
-        $sessionid = $respobj->getSessionId();
-
-        if ($groupid === null) {
-            // Update the main collaborate instance, this is not for a group.
-            self::update_collaborate_instance_record($collaborate, $respobj);
-        }
-
-        return ($sessionid);
-    }
-
-    /**
-     * Update a session based on $collaborate data for specific $course
-     * @param stdClass $collaborate
-     * @param \sdtClass $course
-     * @param stdClass $sessionlink
-     * @return int
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     * @throws coding_exception
-     */
-    public static function api_update_session($collaborate, $course, $sessionlink) {
-        $config = get_config('collaborate');
-
-        $collaborate->timeend = self::timeend_from_duration($collaborate->timestart, $collaborate->duration);
-        $htmlsession = self::el_update_html_session($collaborate, $course, $sessionlink);
-
-        $api = soapapi::get_api();
-        if ($htmlsession instanceof SetHtmlSession) {
-            $collaborate->sessionid = self::api_create_session($collaborate, $course);
-            return ($collaborate->sessionid);
-        } else if ($htmlsession instanceof UpdateHtmlSessionDetails) {
-            $result = $api->UpdateHtmlSession($htmlsession);
-        } else {
-            $msg = 'el_update_html_session returned an unexpected object. ';
-            $msg .= 'Should have been either mod_collaborate\\soap\\generated\\SetHtmlSession OR ';
-            $msg .= 'mod_collaborate\\soap\\generated\\UpdateHtmlSessionDetails. ';
-            $msg .= 'Returned: '.var_export($htmlsession, true);
-            throw new coding_exception($msg);
-        }
-
-        if (!$result) {
-            $msg = 'SetHtmlSession';
-            if (!empty($config->wsdebug)) {
-                $msg .= ' - returned: '.var_export($result, true);
-            }
-            $api->process_error('error:apicallfailed', logging\constants::SEV_CRITICAL, $msg);
-        }
-        $respobjs = $result->getHtmlSession();
-        if (!is_array($respobjs) || empty($respobjs)) {
-            $api->process_error(
-                'error:apicallfailed', logging\constants::SEV_CRITICAL,
-                'SetHtmlSession - failed on $result->getApolloSessionDto()'
-            );
-        }
-        $respobj = $respobjs[0];
-        $sessionid = $respobj->getSessionId();
-
-        if (empty($sessionlink->groupid)) {
-            // Update the main collaborate instance, this is not for a group.
-            self::update_collaborate_instance_record($collaborate, $respobj);
-        }
-
-        return ($sessionid);
     }
 
     /**
@@ -560,105 +455,6 @@ class local {
     public static function participant_enrolees($course, $groupid = 0) {
         global $USER;
         return self::enrolees_array($course, '', 'moodle/grade:viewall', $groupid, false, $USER->id);
-    }
-
-    /**
-     * Create appropriate session param element for new session or existing session.
-     *
-     * @param stdClass $data
-     * @param stdClass $course
-     * @param null|int $sessionid
-     * @param null|int $groupid
-     * @return SetHtmlSession|UpdateHtmlSessionDetails
-     */
-    private static function el_html_session($data, $course, $sessionid = null, $groupid = null) {
-        global $USER;
-
-        $sessionname = $data->name;
-        if ($groupid !== null) {
-            // Append sessionname with groupname.
-            $groupname = groups_get_group_name($groupid);
-            $sessionname .= ' ('.$groupname.')';
-        }
-
-        // Main variables for session.
-        list ($timestart, $timeend) = self::get_apitimes($data->timestart, $data->duration);
-        $description = isset($data->introeditor['text']) ? $data->introeditor['text'] : $data->intro;
-
-        // Setup appropriate session - set or update.
-        if (empty($sessionid)) {
-            // New session.
-            $htmlsession = new SetHtmlSession($sessionname, $timestart, $timeend, $USER->id);
-            $data->guesturl = '';
-        } else {
-            // Update existing session.
-            $htmlsession = new UpdateHtmlSessionDetails($sessionid);
-            $htmlsession->setName($sessionname);
-            $htmlsession->setStartTime($timestart);
-            $htmlsession->setEndTime($timeend);
-        }
-        $htmlsession->setDescription(strip_tags($description));
-        $htmlsession->setBoundaryTime(self::boundary_time());
-        $htmlsession->setMustBeSupervised(true);
-        $allowguests = !empty($data->guestaccessenabled) && $data->guestaccessenabled == 1;
-        $htmlsession->setAllowGuest($allowguests);
-        if ($allowguests) {
-            switch ($data->guestrole) {
-                case 'pa' :
-                    $guestrole = 'Participant';
-                    break;
-                case 'pr' :
-                    $guestrole = 'Presenter';
-                    break;
-                case 'mo' :
-                    $guestrole = 'Moderator';
-                    break;
-                default :
-                    $guestrole = 'Participant';
-            }
-            $htmlsession->setGuestRole($guestrole);
-        }
-
-        // Add attendees to html session.
-        $attendees = new HtmlAttendeeCollection();
-        $participantgroupid = empty($groupid) ? 0 : $groupid;
-        $moderators = self::moderator_enrolees($course, $participantgroupid);
-        $participants = self::participant_enrolees($course, $participantgroupid);
-        $attarr = [];
-        foreach ($moderators as $moderatorid) {
-            $attarr[] = new HtmlAttendee($moderatorid, 'moderator');
-        }
-        foreach ($participants as $participantid) {
-            $attarr[] = new HtmlAttendee($participantid, 'participant');
-        }
-        $attendees->setHtmlAttendee($attarr);
-        $htmlsession->setHtmlAttendees([$attendees]);
-
-        return $htmlsession;
-    }
-
-    /**
-     * Build SetHtmlSession element
-     *
-     * @param stdClass $data
-     * @param stdClass $course
-     * @param null|int $groupid
-     * @return soap\generated\SetHtmlSession
-     */
-    public static function el_set_html_session($data, $course, $groupid = null) {
-        return self::el_html_session($data, $course, null, $groupid);
-    }
-
-    /**
-     * Build UpdateHtmlSession element
-     *
-     * @param $data
-     * @param stdClass $course
-     * @param stdClass $sessionlink
-     * @return soap\generated\SetHtmlSession
-     */
-    public static function el_update_html_session($data, $course, $sessionlink) {
-        return self::el_html_session($data, $course, $sessionlink->sessionid, $sessionlink->groupid);
     }
 
     /**

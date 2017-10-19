@@ -26,6 +26,7 @@ namespace mod_collaborate\service;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_collaborate\local;
 use mod_collaborate\soap\api;
 use mod_collaborate\soap\generated\HtmlAttendee;
 use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
@@ -95,7 +96,7 @@ class forward_service extends base_visit_service {
         $event = event\session_launched::create(array(
             'objectid' => $this->cm->instance,
             'context' => $this->context,
-            'other' => ['session' => $this->collaborate->sessionid],
+            'other' => ['session' => local::get_sessionid_or_sessionuid($this->collaborate->sessionid)],
         ));
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot($this->cm->modname, $this->collaborate);
@@ -105,10 +106,11 @@ class forward_service extends base_visit_service {
     /**
      * Update attendee for a specific session.
      * @param int $sessionid
+     * @param bool $forcelegacyapi
      *
      * @throws \coding_exception
      */
-    protected function api_update_attendee($sessionid) {
+    protected function api_update_attendee($sessionid, $forcelegacyapi = false) {
         if (has_capability('mod/collaborate:moderate', $this->context)) {
             $role = 'moderator';
         } else if (has_capability('mod/collaborate:participate', $this->context)) {
@@ -117,25 +119,24 @@ class forward_service extends base_visit_service {
             return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
         }
 
-        $attendee = new HtmlAttendee($this->user->id, $role);
-        $attendee->setDisplayName(\core_text::substr(fullname($this->user), 0, 80));
         $avatar = new \user_picture($this->user);
+        $displayname = \core_text::substr(fullname($this->user), 0, 80);
+
         // Note, we get the avatar url for the site instance and don't use the $PAGE object so that this function is
         // unit testable.
         $page = new \moodle_page();
         $page->set_context(\context_system::instance());
-        $avatarurl = $avatar->get_url($page);
-        $attendee->setAvatarUrl(new \SoapVar('<ns1:avatarUrl><![CDATA['.$avatarurl.']]></ns1:avatarUrl>', XSD_ANYXML));
+        $avatarurl = strval($avatar->get_url($page));
 
-        $satts = new UpdateHtmlSessionAttendee($sessionid, $attendee);
-        $satts->setLocale(current_language());
-        $result = $this->api->UpdateHtmlSessionAttendee($satts);
-
-        if (!$result || !method_exists($result, 'getUrl')) {
-            return false;
+        if ($forcelegacyapi) {
+            // Even if we have the rest API enabled, if there are unmigrated SOAP sessions then we will need to use
+            // the legacy SOAP API. Note - this code will go away post migration (once all sites migrated).
+            $api = local::get_api(false, null, 'soap');
+        } else {
+            $api = local::get_api();
         }
-        $url = $result->getUrl();
-        return ($url);
+
+        return $api->update_attendee($sessionid, $this->user->id, $avatarurl, $displayname, $role);
     }
 
     /**
@@ -174,9 +175,11 @@ class forward_service extends base_visit_service {
 
         if ($group) {
             $sessionlink = sessionlink::get_group_session_link($this->collaborate, $group->id);
-            $sessionid = $sessionlink->sessionid;
+            $sessionidkey = local::select_sessionid_or_sessionuid($sessionlink);
+            $sessionid = $sessionlink->$sessionidkey;
         } else {
-            $sessionid = $this->collaborate->sessionid;
+            $sessionidkey = local::select_sessionid_or_sessionuid($this->collaborate);
+            $sessionid = $this->collaborate->$sessionidkey;
         }
 
         $PAGE->set_url('/mod/collaborate/view.php', array(
@@ -185,7 +188,8 @@ class forward_service extends base_visit_service {
         ));
 
         $this->log_viewed_event();
-        $url = $this->api_update_attendee($sessionid);
+        $forcelegacyapi = $sessionidkey === 'sessionid';
+        $url = $this->api_update_attendee($sessionid, $forcelegacyapi);
 
         if (empty($url)) {
             $this->api->process_error(

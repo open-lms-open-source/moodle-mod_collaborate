@@ -41,11 +41,36 @@ class testable_api {
         $this->setLogger($logger);
     }
 
+
+    /**
+     * Get API singleton instance.
+     * @param bool $reset
+     * @param bool $config
+     * @return api
+     */
+    public static function instance($reset = false, $config = false) {
+        static $instance;
+        if ($reset) {
+            $instance = null;
+        }
+        if (empty($instance)) {
+            if (!$config) {
+                $config = get_config('collaborate');
+            }
+            $instance = new testable_api($config);
+        }
+        return $instance;
+    }
+
     public function is_usable() {
         return true;
     }
 
     public static function configured() {
+        return true;
+    }
+
+    protected function test_service_reachable($serviceuri) {
         return true;
     }
 }

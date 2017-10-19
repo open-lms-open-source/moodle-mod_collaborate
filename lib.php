@@ -92,13 +92,8 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
     $collaborate->timeend = $data->timeend;
     $collaborate->id = $DB->insert_record('collaborate', $collaborate);
 
-    // Note, this if statement should eventually be removed a few versions from now when the test
-    // "migrate_recording_info_instanceid_to_sessionlink" is removed.
-    if (empty($collaborate->legacytesting)) {
-        // Create session link records.
-        sessionlink::apply_session_links($collaborate);
-
-    }
+    // Create session link records.
+    sessionlink::apply_session_links($collaborate);
 
     return $collaborate->id;
 }

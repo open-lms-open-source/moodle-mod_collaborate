@@ -255,5 +255,66 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2016121307, 'collaborate');
     }
 
+    if ($oldversion < 2017101800) {
+
+        // Modifications to collaborate table.
+        $table = new xmldb_table('collaborate');
+
+        $key = new xmldb_key('sessionid', XMLDB_KEY_FOREIGN_UNIQUE, array('sessionid'), 'collaborate', array('sessionid'));
+        // Launch drop key sessionid.
+        $dbman->drop_key($table, $key);
+
+        // Changing nullability of field sessionid on table collaborate to null.
+        $field = new xmldb_field('sessionid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'introformat');
+
+        // Launch change of nullability for field sessionid.
+        $dbman->change_field_notnull($table, $field);
+
+        $field = new xmldb_field('sessionuid', XMLDB_TYPE_CHAR, '32', null, null, null, null, 'sessionid');
+        // Conditionally launch add field sessionuid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define key sessionuid (unique) to be added to collaborate.
+        $key = new xmldb_key('sessionuid', XMLDB_KEY_UNIQUE, array('sessionuid'));
+
+        // Launch add key sessionuid.
+        $dbman->add_key($table, $key);
+
+        // Session link modifications.
+        $table = new xmldb_table('collaborate_sessionlink');
+
+        $field = new xmldb_field('sessionuid', XMLDB_TYPE_CHAR, '32', null, null, null, null, 'sessionid');
+
+        // Conditionally launch add field sessionuid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $key = new xmldb_key('sessionid', XMLDB_KEY_FOREIGN, array('sessionid'), 'collaborate', array('sessionid'));
+        // Launch drop key sessionid.
+        $dbman->drop_key($table, $key);
+
+        // Changing nullability of field sessionid on table collaborate to null.
+        $field = new xmldb_field('sessionid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'groupid');
+
+        // Launch change of nullability for field sessionid.
+        $dbman->change_field_notnull($table, $field);
+
+        $key = new xmldb_key('sessionid', XMLDB_KEY_FOREIGN_UNIQUE, array('sessionid'), 'collaborate', array('sessionid'));
+        // Launch add key sessionid.
+        $dbman->add_key($table, $key);
+
+        // Define key sessionuid (foreign-unique) to be added to collaborate_sessionlink.
+        $key = new xmldb_key('sessionuid', XMLDB_KEY_FOREIGN_UNIQUE, array('sessionuid'), 'collaborate', array('sessionuid'));
+        // Launch add key sessionuid.
+        $dbman->add_key($table, $key);
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2017101800, 'collaborate');
+
+    }
+
     return true;
 }

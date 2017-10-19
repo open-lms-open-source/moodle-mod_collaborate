@@ -226,7 +226,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         );
 
         // Test that new times affect collaborate record.
-        $instanceok = local::update_collaborate_instance_record($collaborate,  $htmlsession);
+        $instanceok = local::get_api()->update_collaborate_instance_record($collaborate,  $htmlsession);
         $this->assertTrue($instanceok);
 
         $modifiedcollab = $DB->get_record('collaborate', ['id' => $collaborate->id]);
@@ -254,7 +254,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $collaborate->timeend = $newstart + $newduration;
         $collaborate->duration = $newduration;
 
-        local::api_update_session($collaborate, $course, $sessionlink);
+        local::get_api()->update_session($collaborate, $course, $sessionlink);
 
         $modifiedcollab = $DB->get_record('collaborate', ['id' => $collaborate->id]);
         $this->assertEquals($newstart, $modifiedcollab->timestart);
@@ -280,5 +280,14 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $expected = 'mod_collaborate\testable_api';
         $api = phpunit_util::call_internal_method(null, 'select_api', [null], 'mod_collaborate\local');
         $this->assertEquals($expected, $api);
+    }
+
+    public function test_get_api() {
+        $soap = local::get_api(false, null, 'soap');
+        $this->assertTrue($soap instanceof fakeapi);
+        $rest = local::get_api(false, null, 'rest');
+        $this->assertTrue($rest instanceof mod_collaborate\rest\api);
+        $testable = local::get_api(false, null, 'testable');
+        $this->assertTrue($testable instanceof mod_collaborate\testable_api);
     }
 }

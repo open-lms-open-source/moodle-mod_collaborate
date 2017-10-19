@@ -88,7 +88,7 @@ class meetingstatus implements \renderable, \templatable{
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
-        $unrestored = $collaborate->sessionid == null && $canparticipate;
+        $unrestored = $collaborate->sessionid === null && $collaborate->sessionuid === null && $canparticipate;
 
         /** @var mod_collaborate_renderer $output */
         $output = $PAGE->get_renderer('mod_collaborate');
@@ -102,7 +102,10 @@ class meetingstatus implements \renderable, \templatable{
 
         if (time() < $times->end) {
             if (time() > ($times->start - $boundarytime)) {
-                if ($canparticipate && $unrestored) {
+
+                $showunrestored = !$canmoderate && $canparticipate && $unrestored;
+
+                if ($showunrestored) {
                     $this->statusunrestored = (object) ['message' => get_string('unrestored', 'collaborate')];
                 } else if ($canmoderate || $canparticipate) {
                     $this->statusjoinmeeting = true;

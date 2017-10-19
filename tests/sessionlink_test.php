@@ -31,13 +31,16 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
     public function test_ensure_session_link() {
 
+        global $DB;
+
         $this->resetAfterTest();
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
         $modgen = $gen->get_plugin_generator('mod_collaborate');
-        $collaborate = $modgen->create_instance((object) ['course' => $course->id, 'sessionid' => null]);
-        $sessionlink = (object) ['collaborateid' => $collaborate->id, 'sessionid' => null];
+
+        $collaborate = $modgen->create_instance((object) ['course' => $course->id]);
+        $sessionlink = (object) ['collaborateid' => $collaborate->id, 'sessionid' => $collaborate->sessionid];
 
         $sessionlinkrow = sessionlink::ensure_session_link($collaborate, $sessionlink, $course);
         $this->assertEquals($sessionlink->collaborateid, $sessionlinkrow->collaborateid);
@@ -88,7 +91,6 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
             'course'    => $course->id,
-            'sessionid' => null,
             'groupmode' => SEPARATEGROUPS
         ];
         $collaborate = $modgen->create_instance($collabdata);
