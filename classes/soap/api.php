@@ -567,5 +567,4 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             return true;
         }
     }
-
 }

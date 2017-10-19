@@ -96,7 +96,7 @@ class forward_service extends base_visit_service {
         $event = event\session_launched::create(array(
             'objectid' => $this->cm->instance,
             'context' => $this->context,
-            'other' => ['session' => local::get_sessionid_or_sessionuid($this->collaborate)],
+            'other' => ['session' => local::get_sessionid_or_sessionuid($this->collaborate)]
         ));
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot($this->cm->modname, $this->collaborate);
