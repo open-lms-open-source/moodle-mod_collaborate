@@ -26,20 +26,15 @@ namespace mod_collaborate;
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\soap\generated\BuildHtmlSessionUrl;
-use mod_collaborate\soap\generated\ServerConfiguration;
-use mod_collaborate\soap\generated\UpdateHtmlSessionDetails;
-use mod_collaborate\soap\generated\HtmlAttendeeCollection;
-use mod_collaborate\soap\generated\HtmlAttendee;
-use mod_collaborate\soap\generated\HtmlSessionRecording;
-use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
-use mod_collaborate\soap\generated\RemoveHtmlSession;
-use mod_collaborate\soap\api as soapapi;
-use mod_collaborate\rest\api as restapi;
-use mod_collaborate\logging\constants as loggingconstants;
-use mod_collaborate\testable_api;
-use mod_collaborate\event\recording_deleted;
-use stdClass;
+use mod_collaborate\soap\generated\BuildHtmlSessionUrl,
+    mod_collaborate\soap\generated\ServerConfiguration,
+    mod_collaborate\soap\generated\HtmlSessionRecording,
+    mod_collaborate\soap\generated\RemoveHtmlSessionRecording,
+    mod_collaborate\soap\api as soapapi,
+    mod_collaborate\rest\api as restapi,
+    mod_collaborate\testable_api,
+    mod_collaborate\event\recording_deleted,
+    stdClass;
 
 class local {
 
@@ -220,8 +215,14 @@ class local {
         return !empty($record->sessionuid) ? 'sessionuid' : 'sessionid';
     }
 
+    /**
+     * Return 'sessionid' or 'sessionuid' from record.
+     * @param $record
+     * @return string
+     */
     public static function get_sessionid_or_sessionuid($record) {
-        return self::select_sessionid_or_sessionuid($record);
+        $field = self::select_sessionid_or_sessionuid($record);
+        return $record->$field;
     }
 
     /**

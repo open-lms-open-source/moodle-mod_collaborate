@@ -51,7 +51,7 @@ interface api_session {
 
     /**
      * Update a session based on $collaborate data for specific $course
-     * @param stdClass $collaborate
+     * @param stdClass $collaborate - collaborate instance data or record.
      * @param stdClass $course
      * @param stdClass $sessionlink
      * @return int
@@ -60,4 +60,11 @@ interface api_session {
      * @throws coding_exception
      */
     public function update_session($collaborate, $course, $sessionlink);
+
+    /**
+     * Delete a specific session.
+     * @param string $sessionid
+     * @return mixed
+     */
+    public function delete_session($sessionid);
 }

@@ -28,17 +28,14 @@ defined ('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use Horde\Socket\Client\Exception;
-use mod_collaborate\rest\jwthelper,
-    mod_collaborate\rest\requestoptions,
-    mod_collaborate\local,
+use mod_collaborate\local,
+    mod_collaborate\logging\constants as loggingconstants,
     mod_collaborate\traits\api as apitrait,
-    Psr\Log\LoggerAwareTrait,
     stdClass;
 
 class api {
 
-    use LoggerAwareTrait,
-        apitrait;
+    use apitrait;
 
     /**
      * @var stdClass {expires_in, access_token}
@@ -124,7 +121,14 @@ class api {
         $reqopts = new requestoptions('', [], $data);
 
         try {
-            $this->accesstoken = $this->rest_call(self::POST, 'token', $reqopts);
+            $validationerr = new http_validation_code_error('error:restapifailedtocreateaccesstoken',
+                loggingconstants::SEV_CRITICAL);
+            $validation = new http_code_validation([200], [
+                '400' => $validationerr,
+                '401' => $validationerr,
+            ]);
+            $response = $this->rest_call(self::POST, 'token', $reqopts, $validation);
+            $this->accesstoken = $response->object;
             if (!empty($this->accesstoken->access_token)) {
                 $this->accesstokenexpires = time() + $this->accesstoken->expires_in;
                 $this->usable = true;
@@ -188,9 +192,15 @@ class api {
      * @param string $verb
      * @param string $resourcepath
      * @param requestoptions $requestoptions
-     * @return mixed
+     * @param http_code_validation | null $validation
+     * @return response
      */
-    public function rest_call($verb, $resourcepath, requestoptions $requestoptions) {
+    public function rest_call($verb, $resourcepath, requestoptions $requestoptions,
+                              http_code_validation $validation = null) {
+
+        if (empty($validation)) {
+            $validation = new http_code_validation();
+        }
         if ($resourcepath != 'token') {
             if (!$this->is_usable()) {
                 if (!self::configured()) {
@@ -255,7 +265,9 @@ class api {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $this->logger->info('response', ['httpcode' => $httpcode]);
         $this->logger->info('response', ['jsonstr' => $jsonstr]);
-        return (object) json_decode($jsonstr);
+        $response = new response($jsonstr, $httpcode);
+        $validation->validate_response($response);
+        return $response;
     }
 
     /**
@@ -343,10 +355,13 @@ class api {
 
         $session = $this->make_session_request_object($collaborate, $groupid);
 
-        $respobj = $this->rest_call(self::POST, 'sessions', new requestoptions(json_encode($session)));
+        $response = $this->rest_call(self::POST, 'sessions', new requestoptions(json_encode($session)));
+        $respobj = $response->object;
+
         if (!isset($respobj->id)) {
-            throw new \coding_exception('Failed to create REST session with JSON '.json_encode($session).
-                'response = '.var_export($respobj, true));
+            $msg = 'Failed to create REST session';
+            $errorarr = ['request_json' => json_encode($session), 'response' => var_export($respobj, true)];
+            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, null, $msg, $errorarr);
         }
         $sessionuid = $respobj->id;
 
@@ -398,11 +413,11 @@ class api {
 
         $sessionuid = $collaborate->sessionuid;
         $session = $this->make_session_request_object($collaborate, $sessionlink->groupid);
-        $respobj = $this->rest_call(self::PUT, 'sessions', new requestoptions(json_encode($session), [$sessionuid]));
+        $response = $this->rest_call(self::PUT, 'sessions', new requestoptions(json_encode($session), [$sessionuid]));
 
         if (empty($sessionlink->groupid)) {
             // Update the main collaborate instance, this is not for a group.
-            $this->update_collaborate_instance_record($collaborate, $respobj);
+            $this->update_collaborate_instance_record($collaborate, $response->object);
         }
 
         return ($sessionuid);
@@ -431,17 +446,19 @@ class api {
     /**
      * Get Collaborate user by moodle userid. Intentionally private scope.
      * @param int $userid - Moodle userid
-     * @return mixed
+     * @return stdClass|bool
      */
     private function get_user($userid) {
         $reqopts = new requestoptions('', [], ['extId' => $userid]);
-        $resp = $this->rest_call(self::GET, '/users', $reqopts);
-        if (empty($resp->results)) {
+        $validation = new http_code_validation([200, 404]);
+        $response = $this->rest_call(self::GET, '/users', $reqopts, $validation);
+        if (empty($response->object->results)) {
             return false;
-        } else if (count($resp->results) > 1) {
-            throw new coding_exception('Multiple users in Collaborate with extId '.$userid);
+        } else if (count($response->object->results) > 1) {
+            $this->process_error('error:restapiduplicateusers',
+                loggingconstants::SEV_CRITICAL, $userid);
         }
-        return reset($resp->results);
+        return reset($response->object->results);
     }
 
     /**
@@ -476,7 +493,8 @@ class api {
             "modified" => $this->api_datetime(time())
         ];
         $reqops = new requestoptions(json_encode($update), ['userId' => $collaborateuserid]);
-        return $this->rest_call(self::PUT, '/users/{userId}', $reqops);
+        $response = $this->rest_call(self::PUT, '/users/{userId}', $reqops);
+        return $response->object;
     }
 
     public function update_attendee($sessionid, $userid, $avatarurl, $displayname, $role) {
@@ -485,12 +503,15 @@ class api {
         $collabuserid = $user->id;
 
         $reqoptions = new requestoptions('', ['sessionId' => $sessionid], ['userId' => $collabuserid]);
-        $enrollment = $this->rest_call(self::GET, '/sessions/{sessionId}/enrollments', $reqoptions);
+        $validation = new http_code_validation([200, 404]);
+        $response = $this->rest_call(self::GET, '/sessions/{sessionId}/enrollments', $reqoptions, $validation);
+        $enrollment = $response->object;
         if (!isset($enrollment->results)) {
             $enrollment = false;
         } else {
             if (count($enrollment->results) > 1) {
-                throw new \coding_exception('Multiple enrollments found for sessionId '.$sessionid.' and userId '.$collabuserid);
+                $this->process_error('error:restapimultpleenrollments',
+                    loggingconstants::SEV_CRITICAL, (object) ['sessionid' => $sessionid, 'userid' => $collabuserid]);
             }
             $enrollment = reset($enrollment->results);
         }
@@ -504,15 +525,37 @@ class api {
             // Just create one.
             $reqopts = new requestoptions(json_encode($enrollobj), ['sessionId' => $sessionid]);
             $enrollmentresponse = $this->rest_call(self::POST, '/sessions/{sessionId}/enrollments', $reqopts);
-            if (empty($enrollmentresponse->userId)) {
-                throw new \coding_exception('Failed to create enrollment for userid '.$userid.
-                        ' and sessionid '.$sessionid);
+            if (empty($enrollmentresponse->object->userId)) {
+                $this->process_error('error:restapifailedtoenroll',
+                    loggingconstants::SEV_CRITICAL, (object) ['sessionid' => $sessionid, 'userid' => $collabuserid]);
             }
-            return $enrollmentresponse->permanentUrl;
+            return $enrollmentresponse->object->permanentUrl;
         }
         $reqopts = new requestoptions(json_encode($enrollobj),
                 ['sessionId' => $sessionid, 'enrollmentId' => $enrollment->id]);
         $enrollmentresponse = $this->rest_call(self::PUT, '/sessions/{sessionId}/enrollments/{enrollmentId}', $reqopts);
-        return $enrollmentresponse->permanentUrl;
+        return $enrollmentresponse->object->permanentUrl;
+    }
+
+    /**
+     * Delete a session by id.
+     * @param string $sessionid
+     * @return bool
+     */
+    public function delete_session($sessionid) {
+
+        // API request deletion.
+        $this->set_silent(true);
+
+        $reqopts = new requestoptions(null, ['sessionId' => $sessionid]);
+
+        // Deletion validation is taken care of by default check for 200 http code status.
+        try {
+            $this->rest_call(self::DELETE, '/sessions/{sessionId}', $reqopts);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }

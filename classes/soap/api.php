@@ -20,10 +20,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
-use mod_collaborate\iface\api_attendee;
-use Psr\Log\LoggerAwareTrait,
-    mod_collaborate\logging\loggerdb,
-    mod_collaborate\logging\constants,
+use mod_collaborate\logging\constants,
     mod_collaborate\local,
     mod_collaborate\soap\fakeapi,
     mod_collaborate\soap\generated\HtmlSession,
@@ -32,8 +29,13 @@ use Psr\Log\LoggerAwareTrait,
     mod_collaborate\soap\generated\HtmlAttendeeCollection,
     mod_collaborate\soap\generated\UpdateHtmlSessionAttendee,
     mod_collaborate\soap\generated\UpdateHtmlSessionDetails,
+    mod_collaborate\soap\generated\HtmlSessionRecording,
+    mod_collaborate\soap\generated\RemoveHtmlSessionRecording,
+    mod_collaborate\soap\generated\RemoveHtmlSession,
+    mod_collaborate\soap\generated\SuccessResponse,
     mod_collaborate\traits\api as apitrait,
     mod_collaborate\iface\api_session,
+    mod_collaborate\iface\api_attendee,
     mod_collaborate\logging\constants as loggingconstants,
     stdClass;
 
@@ -45,7 +47,7 @@ use Psr\Log\LoggerAwareTrait,
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class api extends generated\SASDefaultAdapter implements api_session, api_attendee {
-    use LoggerAwareTrait;
+
     use apitrait;
 
     /**
@@ -110,15 +112,6 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         }
         return !empty($config) && !empty($config->server) && !empty($config->username) &&
             !empty($config->password);
-    }
-
-    /**
-     * Set silent - i.e. no errors output to page.
-     *
-     * @param bool $silent
-     */
-    public function set_silent($silent = true) {
-        $this->silent = $silent;
     }
 
     /**
@@ -269,7 +262,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
                 'response' => $lastresp
             ];
 
-            $this->process_error('error:apifailure', constants::SEV_CRITICAL, $soapfault, $debuginfo);
+            $this->process_error('error:apifailure', constants::SEV_CRITICAL, null, $soapfault, $debuginfo);
 
             if ($this->silent) {
                 return false;
@@ -289,7 +282,6 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
 
         return ($result);
     }
-
 
     /**
      * Create appropriate session param element for new session or existing session.
@@ -402,7 +394,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             if (!empty($config->wsdebug)) {
                 $msg .= ' - returned: '.var_export($result, true);
             }
-            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, $msg);
+            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, null, $msg);
         }
         $respobjs = $result->getHtmlSession();
         if (!is_array($respobjs) || empty($respobjs)) {
@@ -485,12 +477,12 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             if (!empty($config->wsdebug)) {
                 $msg .= ' - returned: '.var_export($result, true);
             }
-            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, $msg);
+            $this->process_error('error:apicallfailed', loggingconstants::SEV_CRITICAL, null, $msg);
         }
         $respobjs = $result->getHtmlSession();
         if (!is_array($respobjs) || empty($respobjs)) {
             $this->process_error(
-                'error:apicallfailed', loggingconstants::SEV_CRITICAL,
+                'error:apicallfailed', loggingconstants::SEV_CRITICAL, null,
                 'SetHtmlSession - failed on $result->getApolloSessionDto()'
             );
         }
@@ -540,6 +532,40 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         $dt = new \DateTime(date('Y-m-d H:i:s', $uts), new \DateTimeZone('UTC'));
         $dt->format('Y-m-d\TH:i:s\Z');
         return $dt;
+    }
+
+    public function delete_session($sessionid) {
+
+        // API request deletion.
+        $this->set_silent(true);
+
+        $params = new RemoveHtmlSession($sessionid);
+        try {
+            $result = $this->RemoveHtmlSession($params);
+        } catch (Exception $e) {
+            $result = false;
+        }
+        if ($result === null) {
+            // TODO: Warning - this is a bodge fix! - the wsdl2phpgenerator has set up this class so that it is expecting
+            // a Success Response object but we are actually getting back a RemoveSessionSuccessResponse element in the
+            // xml and as a result of that we end up with a 'null' object.
+            $xml = $this->__getLastResponse();
+            if (preg_match('/<success[^>]*>true<\/success>/', $xml)) {
+                // Manually create the response object!
+                $result = new SuccessResponse(true);
+            } else {
+                $result = false;
+            }
+        }
+
+        if (!$result || !$result->getSuccess()) {
+            $this->process_error(
+                'error:failedtodeletesession', constants::SEV_WARNING
+            );
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

@@ -33,8 +33,7 @@ use mod_collaborate\logging\loggerdb,
 
 class testable_api {
 
-    use LoggerAwareTrait,
-        apitrait;
+    use apitrait;
 
     public function __construct() {
         $logger = new loggerdb();

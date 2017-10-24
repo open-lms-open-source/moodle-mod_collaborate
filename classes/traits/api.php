@@ -26,11 +26,11 @@ namespace mod_collaborate\traits;
 defined('MOODLE_INTERNAL') || die();
 
 use stdClass,
-    mod_collaborate\local,
-    mod_collaborate\logging\constants,
-    mod_collaborate\logging\loggerdb;
+    mod_collaborate\local;
 
 trait api {
+
+    use loggable;
 
     /**
      * @var strdClass
@@ -72,73 +72,7 @@ trait api {
             $config = get_config('collaborate');
         }
         $this->config = $config;
-        $logger = new loggerdb();
-        $this->setLogger($logger);
-    }
-
-    /**
-     * Log error and display an error if appropriate.
-     *
-     * @param string $errorkey
-     * @param string $errorlevel
-     * @param string $debuginfo
-     * @param array $errorarr
-     * @throws \coding_exception
-     * @throws \moodle_exception
-     */
-    public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
-        global $COURSE;
-
-        $errorstring = get_string($errorkey, 'mod_collaborate');
-
-        if (!empty($debuginfo)) {
-            // Add debuginfo to start of error array (for logging).
-            $debuginfarr = ['debug_info' => $debuginfo];
-            $errorarr = array_merge($debuginfarr, $errorarr);
-        }
-
-        switch ($errorlevel) {
-            case constants::SEV_EMERGENCY :
-                $this->logger->emergency($errorstring, $errorarr);
-                break;
-            case constants::SEV_ALERT :
-                $this->logger->alert($errorstring, $errorarr);
-                break;
-            case constants::SEV_CRITICAL :
-                $this->logger->critical($errorstring, $errorarr);
-                break;
-            case constants::SEV_ERROR :
-                $this->logger->error($errorstring, $errorarr);
-                break;
-            case constants::SEV_WARNING :
-                $this->logger->warning($errorstring, $errorarr);
-                break;
-            case constants::SEV_NOTICE :
-                $this->logger->notice($errorstring, $errorarr);
-                break;
-            case constants::SEV_INFO :
-                $this->logger->info($errorstring, $errorarr);
-                break;
-            case constants::SEV_DEBUG :
-                $this->logger->info($errorstring, $errorarr);
-                break;
-        }
-
-        if ($this->silent) {
-            return;
-        }
-
-        // Developer orinetated error message.
-        $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
-        if (!empty($errorarr)) {
-            if (!empty($debuginfo)) {
-                $debuginfo .= "\n\n" .
-                    var_export($errorarr, true);
-            } else {
-                $debuginfo = var_export($errorarr, true);
-            }
-        }
-        throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
+        $this->setup_logger();
     }
 
     /**
@@ -166,4 +100,13 @@ trait api {
      * @return bool
      */
     abstract protected function test_service_reachable($serviceuri);
+
+    /**
+     * Set silent - i.e. no errors output to page.
+     *
+     * @param bool $silent
+     */
+    public function set_silent($silent = true) {
+        $this->silent = $silent;
+    }
 }

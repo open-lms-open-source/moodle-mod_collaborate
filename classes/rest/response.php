@@ -15,19 +15,42 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for Collaborate plugin.
- *
- * @package   mod_collaborate
- * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * REST response class
+ * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @copyright Copyright (c) 2017 Blackboard Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_collaborate\rest;
+
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2017101804;
-$plugin->release = '3.3.1';
-$plugin->requires = 2017051500;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+class response {
+    /**
+     * @var string
+     */
+    public $jsonstr = '';
+
+    /**
+     * @var null | stdClass
+     */
+    public $object = null;
+
+    /**
+     * @var int
+     */
+    public $httpcode;
+
+    /**
+     * response constructor.
+     * @param string $jsonstr
+     * @param int $httpcode
+     */
+    public function __construct($jsonstr, $httpcode) {
+        $this->jsonstr = $jsonstr;
+        if (!empty($jsonstr)) {
+            $this->object = (object) json_decode($jsonstr);
+        }
+        $this->httpcode = $httpcode;
+    }
+}

@@ -253,11 +253,16 @@ class sessionlink {
         $delsuccesses = [];
         $delfails = [];
         foreach ($sessionlinks as $link) {
-            $delok = local::api_delete_session($link->sessionid);
-            if ($delok) {
-                $delsuccesses[] = $link->sessionid;
+            $sessionid = local::get_sessionid_or_sessionuid($link);
+            if (local::select_sessionid_or_sessionuid($link) === 'sessionid') {
+                $delok = local::get_api(false, null, 'soap')->delete_session($sessionid);
             } else {
-                $delfails[] = $link->sessionid;
+                $delok = local::get_api()->delete_session($sessionid);
+            }
+            if ($delok) {
+                $delsuccesses[] = $sessionid;
+            } else {
+                $delfails[] = $sessionid;
             }
         }
 
