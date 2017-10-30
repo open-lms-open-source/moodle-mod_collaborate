@@ -33,6 +33,7 @@ use mod_collaborate\logging\constants,
     mod_collaborate\soap\generated\RemoveHtmlSessionRecording,
     mod_collaborate\soap\generated\RemoveHtmlSession,
     mod_collaborate\soap\generated\SuccessResponse,
+    mod_collaborate\soap\generated\BuildHtmlSessionUrl,
     mod_collaborate\traits\api as apitrait,
     mod_collaborate\iface\api_session,
     mod_collaborate\iface\api_attendee,
@@ -566,5 +567,11 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         } else {
             return true;
         }
+    }
+
+    public function guest_url($sessionid) {
+        $param = new BuildHtmlSessionUrl($sessionid);
+        $sessionurl = $this->BuildHtmlSessionUrl($param);
+        return $sessionurl->getUrl();
     }
 }

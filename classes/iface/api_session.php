@@ -67,4 +67,11 @@ interface api_session {
      * @return mixed
      */
     public function delete_session($sessionid);
+
+    /**
+     * Get a guest url for a specific session.
+     * @param $sessionid
+     * @return mixed
+     */
+    public function guest_url($sessionid);
 }

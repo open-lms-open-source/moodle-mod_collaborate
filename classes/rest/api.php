@@ -537,11 +537,6 @@ class api {
         return $enrollmentresponse->object->permanentUrl;
     }
 
-    /**
-     * Delete a session by id.
-     * @param string $sessionid
-     * @return bool
-     */
     public function delete_session($sessionid) {
 
         // API request deletion.
@@ -557,5 +552,17 @@ class api {
         }
 
         return true;
+    }
+
+    public function guest_url($sessionid) {
+        $reqopts = new requestoptions(null, ['sessionId' => $sessionid]);
+        $response = $this->rest_call(self::GET, '/sessions/{sessionId}', $reqopts);
+
+        if (!isset($response->object->guestUrl)) {
+            $this->process_error('error:restapisessionguesturlmissing',
+                loggingconstants::SEV_CRITICAL, (object) ['sessionid' => $sessionid]);
+        }
+
+        return $response->object->guestUrl;
     }
 }

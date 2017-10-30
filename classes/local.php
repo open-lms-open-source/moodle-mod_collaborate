@@ -26,8 +26,7 @@ namespace mod_collaborate;
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\soap\generated\BuildHtmlSessionUrl,
-    mod_collaborate\soap\generated\ServerConfiguration,
+use mod_collaborate\soap\generated\ServerConfiguration,
     mod_collaborate\soap\generated\HtmlSessionRecording,
     mod_collaborate\soap\generated\RemoveHtmlSessionRecording,
     mod_collaborate\soap\api as soapapi,
@@ -519,10 +518,13 @@ class local {
         }
 
         // Get guest url.
-        $api = soapapi::get_api();
-        $param = new BuildHtmlSessionUrl($collaborate->sessionid);
-        $sessionurl = $api->BuildHtmlSessionUrl($param);
-        $url = $sessionurl->getUrl();
+        $sessionfield = self::select_sessionid_or_sessionuid($collaborate);
+        if ($sessionfield === 'sessionid') {
+            $api = self::get_api(false, null, 'soap');
+        } else {
+            $api = self::get_api();
+        }
+        $url = $api->guest_url(self::get_sessionid_or_sessionuid($collaborate));
 
         // Update collaborate record with guest url.
         $record = (object) [
