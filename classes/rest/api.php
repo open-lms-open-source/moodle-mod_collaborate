@@ -31,6 +31,10 @@ use Horde\Socket\Client\Exception;
 use mod_collaborate\local,
     mod_collaborate\logging\constants as loggingconstants,
     mod_collaborate\traits\api as apitrait,
+    mod_collaborate\sessionlink,
+    mod_collaborate\renderables\recording,
+    mod_collaborate\recording_counter,
+    cm_info,
     stdClass;
 
 class api {
@@ -110,6 +114,21 @@ class api {
         return $url;
     }
 
+    /**
+     * Get access token.
+     * @return mixed
+     */
+    public function get_accesstoken() {
+        if ($this->accesstokenexpires < time()) {
+            // Token has expired, get a new one!
+            $this->set_accesstoken();
+        }
+        return $this->accesstoken->access_token;
+    }
+
+    /**
+     * Set access token.
+     */
     private function set_accesstoken() {
         $data = [
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -348,10 +367,13 @@ class api {
         return $session;
     }
 
-    public function create_session(stdClass $collaborate, $course, $groupid = null) {
+    public function create_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null) {
 
         // Note - Collaborate REST API does not allow for bulk enrollments on creation / update so we do not bother
         // doing it here (users get enrolled on the fly when they click "join").
+        $groupid = $sessionlink->groupid;
+
+        local::prepare_sessionids_for_query($collaborate);
 
         $session = $this->make_session_request_object($collaborate, $groupid);
 
@@ -379,6 +401,7 @@ class api {
         $sessionid = $respobj->id;
 
         // Update the main collaborate instance, this is not for a group.
+        $collaborate->sessionid = null;
         $collaborate->sessionuid = $sessionid;
         $collaborate->timemodified = time();
         $collaborate->timestart = strtotime($respobj->startTime);
@@ -402,7 +425,7 @@ class api {
         return $result;
     }
 
-    public function update_session($collaborate, $course, $sessionlink) {
+    public function update_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null) {
 
         // Note - Collaborate REST API does not allow for bulk enrollments on creation / update so we do not bother
         // doing it here (users get enrolled on the fly when they click "join").
@@ -411,7 +434,12 @@ class api {
             throw new \coding_exception('Collaborate row must have a sessionuid property for an update to be possible');
         }
 
-        $sessionuid = $collaborate->sessionuid;
+        if (empty($collaborate->sessionid)) {
+            // We need to make sure that the old sessionid is null if it's passed via the form and it is 0.
+            $collaborate->sessionid = null;
+        }
+
+        $sessionuid = $sessionlink->sessionuid;
         $session = $this->make_session_request_object($collaborate, $sessionlink->groupid);
         $response = $this->rest_call(self::PUT, 'sessions', new requestoptions(json_encode($session), [$sessionuid]));
 
@@ -564,5 +592,105 @@ class api {
         }
 
         return $response->object->guestUrl;
+    }
+
+    /**
+     * Get specific recording url by recid
+     * @param string $recid
+     * @param string $disposition launch | download
+     * @return mixed
+     */
+    public function get_recording_url($recid, $disposition = 'launch') {
+        $reqopts = new requestoptions('', ['recordingId' => $recid], ['validHours' => 1, 'disposition' => $disposition]);
+        $response = $this->rest_call(self::GET, 'recordings/{recordingId}/url', $reqopts);
+
+        return $response->object->url;
+    }
+
+    public function get_recordings(stdClass $collaborate, cm_info $cm, $canmoderate = false) {
+        $sessionlinks = sessionlink::my_active_links($collaborate, $cm);
+
+        $sessionrecordings = [];
+
+        foreach ($sessionlinks as $sessionlink) {
+            if (empty($sessionlink->sessionuid)) {
+                continue;
+            }
+
+            $validation = new http_code_validation([200, 404]);
+            $result = $this->rest_call(self::GET, 'recordings',
+                new requestoptions('', [], ['sessionId' => $sessionlink->sessionuid]), $validation
+            );
+
+            $recordings = [];
+            if (!empty($result->object->results)) {
+                $recordings = $result->object->results;
+            }
+            $sessionrecordings[$sessionlink->sessionuid] = $recordings;
+        }
+
+        $modelsbysessionuid = [];
+
+        foreach ($sessionrecordings as $sessionuid => $recordings) {
+
+            if (empty($recordings)) {
+                continue;
+            }
+
+            usort($recordings, function($a, $b) {
+                return ($a->created > $b->created);
+            });
+
+            $recordingcounts = [];
+            if ($canmoderate) {
+                $recordingcounthelper = new recording_counter($cm, $recordings);
+                $recordingcounts = $recordingcounthelper->get_recording_counts();
+            }
+
+            // Only segregate by titles if there are multiple sessions per this instance.
+            foreach ($recordings as $recording) {
+
+                $name = $recording->name;
+                $recid = $recording->id;
+                if (preg_match('/^recording_\d+$/', $name)) {
+                    $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
+                }
+                $datetimestart = new \DateTime($recording->created);
+                $datetimestart = $datetimestart->getTimestamp();
+                $duration = round($recording->duration / 1000);
+                $datetimeend = $datetimestart + $duration;
+
+                $viewurl = 'rest_launch';
+                $downloadurl = null;
+                if ($recording->canDownload) {
+                    $downloadurl = 'rest_download';
+                }
+
+                $model = new recording();
+                $model->id = $recid;
+                $model->starttime = $datetimestart;
+                $model->endtime = $datetimeend;
+                $model->duration = $duration;
+                $model->name = $name;
+                $model->viewurl = $viewurl;
+                $model->downloadurl = $downloadurl;
+
+                if (!empty($recordingcounts[$recid])) {
+                    $model->count = $recordingcounts[$recid];
+                }
+
+                if (!isset($modelsbysessionuid[$sessionuid])) {
+                    $modelsbysessionuid[$sessionuid] = [];
+                }
+                $modelsbysessionuid[$sessionuid][] = $model;
+            }
+        }
+        return $modelsbysessionuid;
+    }
+
+    public function delete_recording($recordingid) {
+        $this->rest_call(self::DELETE, 'recordings/{recordingId}',
+            new requestoptions('', ['recordingId' => $recordingid])
+        );
     }
 }

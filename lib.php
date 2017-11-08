@@ -84,6 +84,8 @@ function collaborate_supports($feature) {
 function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
     global $DB;
 
+    local::prepare_sessionids_for_query($collaborate);
+
     $data = clone($collaborate);
     $data->timeend = local::timeend_from_duration($data->timestart, $data->duration);
 
@@ -116,6 +118,8 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     $collaborate->timecreated = time();
     $collaborate->timestart = $data->timestart;
     $collaborate->timeend = $data->timeend;
+
+    local::prepare_sessionids_for_query($collaborate);
 
     if (!isset($collaborate->id) && isset($collaborate->instance)) {
         $collaborate->id = $collaborate->instance;

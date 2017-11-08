@@ -30,7 +30,9 @@ require_once(__DIR__.'/lib.php');
 $action = optional_param('action', 'view', PARAM_ALPHAEXT);
 
 $vc = new recordings_controller($action);
-if ($action === 'view') {
+if ($action === 'download') {
+    $vc->download_action();
+} else if ($action === 'view') {
     $vc->view_action();
 } else if ($action === 'delete') {
     $vc->delete_action();

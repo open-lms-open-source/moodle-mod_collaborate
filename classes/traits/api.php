@@ -26,7 +26,8 @@ namespace mod_collaborate\traits;
 defined('MOODLE_INTERNAL') || die();
 
 use stdClass,
-    mod_collaborate\local;
+    mod_collaborate\local,
+    mod_collaborate\logging\constants;
 
 trait api {
 

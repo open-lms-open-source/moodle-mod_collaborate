@@ -28,8 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\local;
 use mod_collaborate\soap\api;
-use mod_collaborate\soap\generated\HtmlAttendee;
-use mod_collaborate\soap\generated\UpdateHtmlSessionAttendee;
 use mod_collaborate\event;
 use mod_collaborate\logging;
 use mod_collaborate\sessionlink;
@@ -69,7 +67,11 @@ class forward_service extends base_visit_service {
 
         parent::__construct($collaborate, $cm, $user);
 
-        $this->api = api::get_api();
+        if (!empty($collaborate->sessionid) && empty($collaborate->sessionuid)) {
+            $this->api = local::get_api(false, null, 'soap');
+        } else {
+            $this->api = local::get_api();
+        }
     }
 
     /**

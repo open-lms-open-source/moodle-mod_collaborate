@@ -22,6 +22,7 @@
  */
 namespace mod_collaborate\controller;
 
+use mod_collaborate\event\recording_downloaded;
 use mod_collaborate\event\recording_viewed;
 use mod_collaborate\recording_counter;
 use mod_collaborate\local;
@@ -89,16 +90,25 @@ class recordings_controller extends controller_abstract {
     }
 
     /**
-     * View collaborate instance.
-     *
-     * @return void
+     * View or download a recording based on params.
+     * @param bool $view
+     * @throws \coding_exception
      */
-    public function view_action() {
+    private function view_or_download($view = true) {
         global $DB;
 
+        if ($view) {
+            $actioncheck = 'view';
+            $disposition = 'launch';
+        } else {
+            $actioncheck = 'download';
+            $disposition = 'download';
+        }
+
         $urlencoded = required_param('url', PARAM_TEXT);
-        $action = required_param('t', PARAM_INT);
-        $recordingid = required_param('rid', PARAM_INT);
+        $action = required_param('action', PARAM_ALPHA);
+        $recordingid = required_param('rid', PARAM_ALPHANUMEXT);
+        $sessionlinkid = required_param('sessionlinkid', PARAM_INT);
         $context = \context_module::instance($this->cm->id);
 
         $url = urldecode($urlencoded);
@@ -112,14 +122,26 @@ class recordings_controller extends controller_abstract {
         ];
 
         // Create the appropriate event based on view or recording.
-        if ($action == recording_counter::VIEW) {
-            $event = recording_viewed::create($data);
+        if ($action === $actioncheck) {
+            if ($actioncheck === recording_counter::VIEW) {
+                $event = recording_viewed::create($data);
+            } else {
+                $event = recording_downloaded::create($data);
+            }
         } else {
-            throw new \coding_exception('Only view is allowed for type');
+            throw new \coding_exception('Only action of type ' . $actioncheck . ' is allowed for type, action of type ' .
+                $action . ' provided');
         }
 
         // Insert a record to the collab recording info table.
-        $record = ['instanceid' => $this->collaborate->id, 'recordingid' => $recordingid, 'action' => $action];
+        if ($action === 'view') {
+            $actionint = recording_counter::VIEW;
+        } else {
+            $actionint = recording_counter::DOWNLOAD;
+        }
+
+        $record = ['instanceid' => $this->collaborate->id, 'sessionlinkid' => $sessionlinkid,
+                'recordingid' => $recordingid, 'action' => $actionint];
         $DB->insert_record('collaborate_recording_info', (object) $record);
 
         // Trigger the event.
@@ -128,7 +150,31 @@ class recordings_controller extends controller_abstract {
         // Delete the cached recording counts.
         \cache::make('mod_collaborate', 'recordingcounts')->delete($this->collaborate->id);
 
-        redirect($url);
+        if (!empty($this->collaborate->sessionuid)) {
+            $api = local::get_api();
+            $url = $api->get_recording_url($recordingid, $disposition);
+            redirect($url);
+        } else {
+            redirect($url);
+        }
+    }
+
+    /**
+     * View collaborate recording.
+     *
+     * @return void
+     */
+    public function view_action() {
+        $this->view_or_download();
+    }
+
+    /**
+     * Download collaborate recording.
+     *
+     * @return void
+     */
+    public function download_action() {
+        $this->view_or_download(false);
     }
 
     /**
@@ -137,7 +183,7 @@ class recordings_controller extends controller_abstract {
     public function delete_action() {
         global $PAGE, $OUTPUT;
 
-        $recordingid = required_param('rid', PARAM_INT);
+        $recordingid = required_param('rid', PARAM_ALPHANUMEXT);
         $recordingname = required_param('rname', PARAM_TEXT);
 
         // Set up the page header.
@@ -167,9 +213,9 @@ class recordings_controller extends controller_abstract {
      * Delete confirmation action.
      */
     public function delete_confirmation_action() {
-        global $PAGE, $OUTPUT;
+        global $PAGE;
 
-        $recordingid = required_param('rid', PARAM_INT);
+        $recordingid = required_param('rid', PARAM_ALPHANUMEXT);
         $recordingname = required_param('rname', PARAM_TEXT);
 
         // Set up the page header.

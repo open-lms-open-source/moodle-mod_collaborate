@@ -316,5 +316,26 @@ function xmldb_collaborate_upgrade($oldversion) {
 
     }
 
+    if ($oldversion < 2017111000) {
+
+        // Drop index so we can change field type for recordingid.
+        $table = new xmldb_table('collaborate_recording_info');
+        $idx = new xmldb_index('sessionlinkid-recordingid-action', XMLDB_INDEX_NOTUNIQUE,
+            ['sessionlinkid', 'recordingid', 'action'], 'collaborate');
+        // Launch drop key sessionid.
+        $dbman->drop_index($table, $idx);
+
+        // Changing type of field recordingid on table collaborate_recording_info to char.
+        $field = new xmldb_field('recordingid', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null, 'sessionlinkid');
+        // Launch change of type for field recordingid.
+        $dbman->change_field_type($table, $field);
+
+        // Re-add index.
+        $dbman->add_index($table, $idx);
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2017111000, 'collaborate');
+    }
+
     return true;
 }

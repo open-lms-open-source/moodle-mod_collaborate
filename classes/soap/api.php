@@ -37,7 +37,12 @@ use mod_collaborate\logging\constants,
     mod_collaborate\traits\api as apitrait,
     mod_collaborate\iface\api_session,
     mod_collaborate\iface\api_attendee,
+    mod_collaborate\iface\api_recordings,
     mod_collaborate\logging\constants as loggingconstants,
+    mod_collaborate\renderables\recording,
+    mod_collaborate\recording_counter,
+    mod_collaborate\sessionlink,
+    cm_info,
     stdClass;
 
 /**
@@ -47,7 +52,7 @@ use mod_collaborate\logging\constants,
  * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class api extends generated\SASDefaultAdapter implements api_session, api_attendee {
+class api extends generated\SASDefaultAdapter implements api_session, api_attendee, api_recordings {
 
     use apitrait;
 
@@ -304,7 +309,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         }
 
         // Main variables for session.
-        list ($timestart, $timeend) = local::get_apitimes($data->timestart, $data->duration);
+        list ($timestart, $timeend) = local::get_apitimes($data->timestart, $data->duration, 'soap');
         $description = isset($data->introeditor['text']) ? $data->introeditor['text'] : $data->intro;
 
         // Setup appropriate session - set or update.
@@ -383,7 +388,9 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         return $this->el_html_session($data, $course, $sessionlink->sessionid, $sessionlink->groupid);
     }
 
-    public function create_session($collaborate, $course, $groupid = null) {
+    public function create_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null) {
+        $groupid = $sessionlink->groupid;
+
         $config = get_config('collaborate');
 
         $collaborate->timeend = local::timeend_from_duration($collaborate->timestart, $collaborate->duration);
@@ -421,6 +428,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         $sessionid = $htmlsession->getSessionId();
 
         // Update the main collaborate instance, this is not for a group.
+        local::prepare_sessionids_for_query($collaborate);
         $collaborate->sessionid = $sessionid;
         $collaborate->timemodified = time();
         $collaborate->timestart = $htmlsession->getStartTime()->getTimestamp();
@@ -444,24 +452,14 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         return $result;
     }
 
-    /**
-     * Update a session based on $collaborate data for specific $course
-     * @param stdClass $collaborate
-     * @param stdClass $course
-     * @param stdClass $sessionlink
-     * @return int
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     * @throws coding_exception
-     */
-    public function update_session($collaborate, $course, $sessionlink) {
+    public function update_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null) {
         $config = get_config('collaborate');
 
         $collaborate->timeend = local::timeend_from_duration($collaborate->timestart, $collaborate->duration);
         $htmlsession = $this->el_update_html_session($collaborate, $course, $sessionlink);
 
         if ($htmlsession instanceof SetHtmlSession) {
-            $collaborate->sessionid = $this->create_session($collaborate, $course);
+            $collaborate->sessionid = $this->create_session($collaborate, $sessionlink, $course);
             return ($collaborate->sessionid);
         } else if ($htmlsession instanceof UpdateHtmlSessionDetails) {
             $result = $this->UpdateHtmlSession($htmlsession);
@@ -573,5 +571,93 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         $param = new BuildHtmlSessionUrl($sessionid);
         $sessionurl = $this->BuildHtmlSessionUrl($param);
         return $sessionurl->getUrl();
+    }
+
+    public function get_recordings(stdClass $collaborate, cm_info $cm, $canmoderate = false) {
+        $sessionlinks = sessionlink::my_active_links($collaborate, $cm);
+
+        $sessionrecordings = [];
+
+        foreach ($sessionlinks as $sessionlink) {
+            if (empty($sessionlink->sessionid)) {
+                continue;
+            }
+            $session = new HtmlSessionRecording();
+            $session->setSessionId($sessionlink->sessionid);
+            $result = $this->ListHtmlSessionRecording($session);
+            $recordings = [];
+            if ($result) {
+                $respobjs = $result->getHtmlSessionRecordingResponse();
+                if (is_array($respobjs) && !empty($respobjs)) {
+                    $recordings = $respobjs;
+                }
+            }
+            $sessionrecordings[$sessionlink->sessionid] = $recordings;
+        }
+
+        $modelsbysessionid = [];
+
+        foreach ($sessionrecordings as $sessionid => $recordings) {
+
+            if (empty($recordings)) {
+                continue;
+            }
+
+            usort($recordings, function($a, $b) {
+                return ($a->getStartTs() > $b->getStartTs());
+            });
+
+            // Only segregate by titles if there are multiple sessions per this instance.
+            foreach ($recordings as $recording) {
+                $recurl = $recording->getRecordingUrl();
+
+                $name = $recording->getDisplayName();
+                if (preg_match('/^recording_\d+$/', $name)) {
+                    $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
+                }
+                $datetimestart = new \DateTime($recording->getStartTs());
+                $datetimestart = $datetimestart->getTimestamp();
+                $datetimeend = new \DateTime($recording->getEndTs());
+                $datetimeend = $datetimeend->getTimestamp();
+                $duration = round($recording->getDurationMillis() / 1000);
+
+                $model = new recording();
+                $model->id = $recording->getRecordingId();
+                $model->starttime = $datetimestart;
+                $model->endtime = $datetimeend;
+                $model->duration =$duration;
+                $model->name = $name;
+                $model->viewurl = ($recurl);
+
+                if (!isset($modelsbysessionid[$sessionid])) {
+                    $modelsbysessionid[$sessionid] = [];
+                }
+                $modelsbysessionid[$sessionid][] = $model;
+            }
+        }
+
+
+        foreach ($modelsbysessionid as $sessionid => $models) {
+
+            $recordingcounts = [];
+
+            if ($canmoderate) {
+                $recordingcounthelper = new recording_counter($cm, $models);
+                $recordingcounts = $recordingcounthelper->get_recording_counts();
+            }
+            foreach ($models as $model) {
+                if (!empty($recordingcounts[$model->id])) {
+                    $model->count = $recordingcounts[$model->id];
+                }
+            }
+        }
+
+        return $modelsbysessionid;
+    }
+
+    public function delete_recording($recordingid) {
+        $delrec = new RemoveHtmlSessionRecording($recordingid);
+        // Note, this is returning 'null' at the moment, so no way to return success boolean.
+        $this->RemoveHtmlSessionRecording($delrec);
     }
 }

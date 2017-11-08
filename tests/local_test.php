@@ -27,6 +27,7 @@ use mod_collaborate\soap\generated\HtmlSession;
 use mod_collaborate\soap\generated\HtmlSessionRecording;
 use mod_collaborate\recording_counter;
 use mod_collaborate\sessionlink;
+use mod_collaborate\event\recording_viewed;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -131,8 +132,8 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         // Assert 2 recordings.
         $recording = new HtmlSessionRecording();
         $recording->setSessionId($sessionid);
-        $result = $api->ListHtmlSessionRecording($recording);
-        $recordings = $result->getHtmlSessionRecordingResponse();
+        $result = $api->get_recordings($collab, $cm, true);
+        $recordings = $result[$sessionid];
         $this->assertCount(2, $recordings);
 
         // Insert a record to the collab recording info table.
@@ -141,6 +142,9 @@ class mod_collaborate_local_testcase extends advanced_testcase {
             'recordingid' => $rec1->getRecordingId(),
             'action'      => mod_collaborate\recording_counter::VIEW
         ];
+        // Delete the cached recording counts.
+        \cache::make('mod_collaborate', 'recordingcounts')->delete($collab->id);
+
         $DB->insert_record('collaborate_recording_info', (object) $record);
         $recordinghelper = new recording_counter($cm, $recordings, null, null);
         $counts = $recordinghelper->get_recording_counts();
@@ -156,8 +160,8 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         local::delete_recording($rec1->getRecordingId(), $rec1->getDisplayName(), $cm);
 
         // Assert 1 recording.
-        $result = $api->ListHtmlSessionRecording($recording);
-        $recordings = $result->getHtmlSessionRecordingResponse();
+        $result = $api->get_recordings($collab, $cm, true);
+        $recordings = $result[$sessionid];
         $this->assertCount(1, $recordings);
 
         // Assert recording_deleted event triggered.
@@ -254,7 +258,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $collaborate->timeend = $newstart + $newduration;
         $collaborate->duration = $newduration;
 
-        local::get_api()->update_session($collaborate, $course, $sessionlink);
+        local::get_api()->update_session($collaborate, $sessionlink, $course);
 
         $modifiedcollab = $DB->get_record('collaborate', ['id' => $collaborate->id]);
         $this->assertEquals($newstart, $modifiedcollab->timestart);
@@ -289,5 +293,27 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertTrue($rest instanceof mod_collaborate\rest\api);
         $testable = local::get_api(false, null, 'testable');
         $this->assertTrue($testable instanceof mod_collaborate\testable_api);
+    }
+
+    public function test_legacy_record() {
+        $legacy = (object) ['sessionid' => 1];
+        $this->assertTrue(local::legacy_record($legacy));
+        $notlegacy = (object) ['sessionuid' => 'abcd'];
+        $this->assertFalse(local::legacy_record($notlegacy));
+    }
+
+    public function test_prepare_sessionids_for_query() {
+        $record = (object) ['sessionid' => 1234, 'sessionuid' => 'ABCD'];
+        $expected = clone $record;
+        local::prepare_sessionids_for_query($record);
+        $this->assertEquals($expected, $record);
+        $record = (object) ['sessionid' => 1234, 'sessionuid' => ''];
+        local::prepare_sessionids_for_query($record);
+        $this->assertEquals(null, $record->sessionuid);
+        $this->assertEquals(1234, $record->sessionid);
+        $record = (object) ['sessionid' => 0, 'sessionuid' => 'ABCD'];
+        local::prepare_sessionids_for_query($record);
+        $this->assertEquals('ABCD', $record->sessionuid);
+        $this->assertEquals(null, $record->sessionid);
     }
 }

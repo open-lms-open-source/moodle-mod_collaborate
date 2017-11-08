@@ -31,8 +31,9 @@ require_once($CFG->dirroot.'/calendar/lib.php');
 
 use mod_collaborate\renderables\view_action;
 use mod_collaborate\renderables\copyablelink;
-use mod_collaborate\renderables\recording_counts;
 use mod_collaborate\renderables\meetingstatus;
+use mod_collaborate\renderables\recording;
+use mod_collaborate\renderables\recording_counts;
 use mod_collaborate\recording_counter;
 use mod_collaborate\local;
 use mod_collaborate\sessionlink;
@@ -181,6 +182,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 format_module_intro('collaborate', $collaborate, $cm->id),
                 'generalbox mod_introbox', 'collaborateintro'
             );
+            $o .= '<hr />';
         }
 
         // Guest url.
@@ -192,9 +194,14 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         // Recordings.
         if ($canparticipate) {
-            $sessionrecordings = local::get_recordings($collaborate, $cm);
+            if (empty($collaborate->sessionuid) && !empty($collaborate->sessionid)) {
+                $api = local::get_api(false, null, 'soap');
+            } else {
+                $api = local::get_api();
+            }
+            $sessionrecordings = $api->get_recordings($collaborate, $cm, $canmoderate);
             if (!empty($sessionrecordings)) {
-                $o .= $this->render_recordings($sessionrecordings, $cm, $canmoderate);
+                $o .= $this->render_recordings($collaborate, $sessionrecordings, $cm, $canmoderate);
             }
         }
 
@@ -204,12 +211,13 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     /**
      * Render recordings.
      *
-     * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[][] $sessionrecordings
+     * @param stdClass $collaborate
+     * @param recording[][] $sessionrecordings
      * @param \cm_info $cm
      * @param boolean $canmoderate
      * @return string
      */
-    public function render_recordings(array $sessionrecordings, $cm, $canmoderate) {
+    public function render_recordings(stdClass $collaborate, array $sessionrecordings, $cm, $canmoderate) {
         $allrecordings = [];
         foreach ($sessionrecordings as $recordings) {
             $allrecordings = array_merge($allrecordings, $recordings);
@@ -222,48 +230,52 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $output = "<h3>$header</h3>";
         $output .= '<ul class="collab-recording-list">';
         $viewstr = get_string('viewrec', 'collaborate');
+        $downloadstr = get_string('downloadrec', 'collaborate');
 
-        $sessiontitles = sessionlink::get_titles_by_sessionids(array_keys($sessionrecordings));
+        $sessionfield = local::select_sessionid_or_sessionuid($collaborate);
+        $mainsessionid = $collaborate->$sessionfield;
+        $sessiontitles = sessionlink::get_titles_by_sessionids(array_keys($sessionrecordings), $mainsessionid, $sessionfield);
 
         $output .= '<hr />';
-        foreach ($sessionrecordings as $sessionid => $recordings) {
 
-            if (empty($recordings)) {
+        foreach ($sessiontitles as $sessionid => $sessiontitle) {
+            if ($sessionfield === 'sessionid') {
+                // Remove prefix char (we needed it to sort the titles but we don't now!).
+                $sessionid = str_replace('_', '', $sessionid);
+            }
+            if (empty($sessionrecordings[$sessionid])) {
                 continue;
             }
 
-            usort($recordings, function($a, $b) {
-                return ($a->getStartTs() > $b->getStartTs());
-            });
+            $recordings = $sessionrecordings[$sessionid];
 
-            $recordingcounts = [];
-            if ($canmoderate) {
-                $recordingcounthelper = new recording_counter($cm, $recordings);
-                $recordingcounts = $recordingcounthelper->get_recording_counts();
+            if ($sessionfield === 'sessionid') {
+                $sessionlinkrow = sessionlink::get_session_link_row_by_sessionid($sessionid);
+            } else {
+                $sessionlinkrow = sessionlink::get_session_link_row_by_sessionuid($sessionid);
             }
 
-            if (!isset($sessiontitles[$sessionid])) {
-                throw new coding_exception('Unable to get title for sessionid ' . $sessionid);
+            if (!$sessionlinkrow) {
+                throw new coding_exception('Unable to get session link row for sessionid '.$sessionid);
             }
 
             // Only segregate by titles if there are multiple sessions per this instance.
-            if (count($sessionrecordings) > 1) {
-                $output .= '<h4>' . $sessiontitles[$sessionid] . '</h4>';
-            }
-            foreach ($recordings as $recording) {
-                $recurl = $recording->getRecordingUrl();
+            $output .= '<h4>' . $sessiontitle . '</h4>';
 
-                $name = $recording->getDisplayName();
-                $recid = $recording->getRecordingId();
+            foreach ($recordings as $recording) {
+
+                $name = $recording->name;
                 if (preg_match('/^recording_\d+$/', $name)) {
                     $name = str_replace('recording_', '', get_string('recording', 'collaborate', $name));
                 }
-                $datetimestart = new \DateTime($recording->getStartTs());
-                $datetimestart = userdate($datetimestart->getTimestamp());
-                $duration = format_time(round($recording->getDurationMillis() / 1000));
+                $datetimestart = userdate($recording->starttime);
+                $duration = format_time($recording->duration);
 
-                $params = ['c' => $cm->instance, 't' => recording_counter::VIEW, 'rid' => $recid,
-                    'url' => urlencode($recurl), 'sesskey' => sesskey()];
+                $params = ['c' => $cm->instance, 'action' => 'view', 'rid' => $recording->id,
+                    'url' => urlencode($recording->viewurl), 'sesskey' => sesskey(),
+                    'sessionlinkid' => $sessionlinkrow->id
+                ];
+
                 $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
 
                 $output .= '<li class="collab-recording-list-item">';
@@ -271,9 +283,22 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                     format_string($name) . '</a> ';
                 $output .= '[' . $duration . ']';
 
+                if (!empty($recording->downloadurl)) {
+                    $params = ['c' => $cm->instance, 'action' => 'download', 'rid' => $recording->id,
+                        'url' => urlencode($recording->downloadurl), 'sesskey' => sesskey(),
+                        'sessionlinkid' => $sessionlinkrow->id
+                    ];
+                    $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+                    $output .= '<a aria-label="' . s($downloadstr) . '" title="'.s($downloadstr).'"'.
+                        '" class="mod-collaborate-download" href="' . $dlurl . '" target="_blank" role="button"></a>';
+                }
+
                 if (has_capability('mod/collaborate:deleterecordings', $cm->context)) {
-                    $deleteparams = ['action' => 'delete', 'rname' => $name];
-                    $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params + $deleteparams);
+                    $params = ['c' => $cm->instance, 'action' => 'view', 'rid' => $recording->id,
+                        'url' => urlencode($recording->viewurl), 'sesskey' => sesskey(),
+                        'sessionlinkid' => $sessionlinkrow->id, 'action' => 'delete', 'rname' => $name
+                    ];
+                    $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params);
 
                     $deldesc = s(get_string('deleterecording', 'mod_collaborate', $name));
                     $output .= '<a aria-label="' . $deldesc . '" title="' . $deldesc .
@@ -281,8 +306,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 }
 
                 $output .= '<br>' . $datetimestart . '<br>';
-                if (!empty($recordingcounts[$recid])) {
-                    $output .= $this->render($recordingcounts[$recid]);
+                if (!empty($recording->count) && $canmoderate) {
+                    $output .= $this->render($recording->count);
                 }
                 $output .= '</li>';
             }
@@ -414,6 +439,11 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return string
      */
     public function render_recording_counts(recording_counts $counts) {
-        return get_string('recordingcounts', 'mod_collaborate', $counts);
+        if (isset($counts->downloads)) {
+            return get_string('recordingcountsincdownloads', 'mod_collaborate', $counts);
+        } else {
+            return get_string('recordingcounts', 'mod_collaborate', $counts);
+        }
+
     }
 }

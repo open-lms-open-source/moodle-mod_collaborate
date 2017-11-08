@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/collaborate/db" VERSION="20171018" COMMENT="XMLDB file for Moodle mod/collaborate"
+<XMLDB PATH="mod/collaborate/db" VERSION="20171106" COMMENT="XMLDB file for Moodle mod/collaborate"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -51,7 +51,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the Collaborate instance"/>
         <FIELD NAME="sessionlinkid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="ID of the Collaborate instance"/>
-        <FIELD NAME="recordingid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the recording provided by the Collaborate API"/>
+        <FIELD NAME="recordingid" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the recording provided by the Collaborate API"/>
         <FIELD NAME="action" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false" COMMENT="View or download"/>
       </FIELDS>
       <KEYS>

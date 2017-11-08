@@ -14,20 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Version information for Collaborate plugin.
- *
- * @package   mod_collaborate
- * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_collaborate\iface;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2017111000;
-$plugin->release = '3.3.1';
-$plugin->requires = 2017051500;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+use stdClass,
+    cm_info;
+
+/**
+ * API Recordings interface.
+ * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @copyright Copyright (c) 2017 Blackboard Inc.
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+interface api_recordings {
+    /**
+     * @param stdClass $collaborate
+     * @param cm_info $cm
+     * @param bool $canmoderate
+     * @return mixed
+     */
+    public function get_recordings(stdClass $collaborate, cm_info $cm, $canmoderate = false);
+
+    /**
+     * @param string $recordingid
+     * @return mixed
+     */
+    public function delete_recording($recordingid);
+}

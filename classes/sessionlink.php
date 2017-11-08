@@ -22,9 +22,10 @@
  */
 namespace mod_collaborate;
 
-use mod_collaborate\local;
-
 defined('MOODLE_INTERNAL') || die();
+
+use mod_collaborate\local,
+    stdClass;
 
 class sessionlink {
 
@@ -36,38 +37,43 @@ class sessionlink {
      * @return mixed
      * @throws \coding_exception
      */
-    private static function ensure_session_link_soap($collaborate, $sessionlink, $course) {
+    private static function ensure_session_link_soap(stdClass $collaborate, stdClass $sessionlink, stdClass $course) {
         global $DB;
 
-        $existinglink = false;
-
         $sessionlink->deletionattempted = 0;
+
+        local::prepare_sessionids_for_query($sessionlink);
+        if (empty($sessionlink->sessionid)) {
+            unset($sessionlink->sessionid);
+        }
 
         if (!isset($sessionlink->collaborateid)) {
             throw new \coding_exception('The collaborateid must be set for a sessionlink', var_export($sessionlink, true));
         }
         if (!isset($sessionlink->groupid)) {
             $sessionlink->groupid = null;
-        } else {
-            $existinglink = $DB->get_record('collaborate_sessionlink', (array) $sessionlink);
-            if ($existinglink) {
-                $sessionlink->sessionid = $existinglink->sessionid;
-            }
         }
+
+        $existinglink = $DB->get_record('collaborate_sessionlink', (array) $sessionlink);
+        if ($existinglink) {
+            $sessionlink->sessionid = $existinglink->sessionid;
+        }
+
         if (empty($sessionlink->sessionid)) {
             // Create a session.
             if (PHPUNIT_TEST && isset($collaborate->sessionid) && empty($sessionlink->groupid)) {
                 $sessionlink->sessionid = $collaborate->sessionid;
             } else {
-                $sessionlink->sessionid = local::get_api()->create_session($collaborate, $course, $sessionlink->groupid);
+                $api = local::get_api(false, null, 'soap');
+                $sessionlink->sessionid = $api->create_session($collaborate, $sessionlink, $course);
             }
         } else {
             // Update session.
-            local::get_api()->update_session($collaborate, $course, $sessionlink);
+            local::get_api(false, null, 'soap')->update_session($collaborate, $sessionlink, $course);
         }
 
         if (!$existinglink) {
-            $existinglink = $DB->get_record('collaborate_sessionlink', (array)$sessionlink);
+            $existinglink = $DB->get_record('collaborate_sessionlink', (array) $sessionlink);
         }
 
         if (!$existinglink) {
@@ -78,6 +84,49 @@ class sessionlink {
         }
         if (!$existinglink) {
             $existinglink = $DB->get_record('collaborate_sessionlink', (array) $sessionlink);
+        }
+
+        return $existinglink;
+    }
+
+    /**
+     * @param int $sessionid
+     * @return mixed
+     */
+    public static function get_session_link_row_by_sessionid($sessionid) {
+        global $DB;
+
+        return $DB->get_record('collaborate_sessionlink', ['sessionid' => $sessionid]);
+    }
+
+    /**
+     * @param str $sessionuid
+     * @return mixed
+     */
+    public static function get_session_link_row_by_sessionuid($sessionuid) {
+        global $DB;
+
+        return $DB->get_record('collaborate_sessionlink', ['sessionuid' => $sessionuid]);
+    }
+
+    /**
+     * @param stdClass $collaborate collaborate record
+     * @param stdClass $sessionlink session link fields and values
+     * @return mixed
+     */
+    public static function get_session_link_row($collaborate, $sessionlink) {
+        global $DB;
+        if (empty($sessionlink->groupid)) {
+            $sessionlink->groupid = null;
+            $existinglink = $DB->get_record('collaborate_sessionlink', [
+                'collaborateid' => $collaborate->id,
+                'groupid' => null
+            ]);
+        } else {
+            $existinglink = $DB->get_record('collaborate_sessionlink', [
+                'collaborateid' => $collaborate->id,
+                'groupid' => $sessionlink->groupid
+            ]);
         }
         return $existinglink;
     }
@@ -94,39 +143,43 @@ class sessionlink {
         global $DB;
 
         // Note - local::duringtesting() will be removed once the new testable_api class is completed.
-        if (local::api_is_legacy() || local::duringtesting()) {
+        $legacyid = !empty($collaborate->sessionid) && empty($collaborate->sessionuid);
+        if (local::api_is_legacy() || local::duringtesting() || $legacyid) {
             return self::ensure_session_link_soap($collaborate, $sessionlink, $course);
         }
 
-        $existinglink = false;
+        local::prepare_sessionids_for_query($sessionlink);
+        // Not a legacy session link, so remove sessionid property.
+        unset($sessionlink->sessionid);
+        // If we have a null sessionuid then we need to remove it so we can search by collaborateid / groupid instead.
+        if (empty($sessionlink->sessionuid)) {
+            unset($sessionlink->sessionuid);
+        }
 
         $sessionlink->deletionattempted = 0;
 
         if (!isset($sessionlink->collaborateid)) {
             throw new \coding_exception('The collaborateid must be set for a sessionlink', var_export($sessionlink, true));
         }
-        if (!isset($sessionlink->groupid)) {
-            $sessionlink->groupid = null;
-        } else {
-            $existinglink = $DB->get_record('collaborate_sessionlink', (array) $sessionlink);
-            if ($existinglink) {
-                $sessionlink->sessionuid = $existinglink->sessionuid;
-            }
+
+        $existinglink = self::get_session_link_row($collaborate, $sessionlink);
+        if ($existinglink) {
+            $sessionlink->sessionuid = $existinglink->sessionuid;
         }
+
         if (empty($sessionlink->sessionuid)) {
             // Create a session.
             if (PHPUNIT_TEST && isset($collaborate->sessionuid) && empty($sessionlink->groupid)) {
                 $sessionlink->sessionuid = $collaborate->sessionuid;
             } else {
-                $sessionlink->sessionuid = local::get_api()->create_session($collaborate, $course, $sessionlink->groupid);
+                $sessionlink->sessionuid = local::get_api()->create_session($collaborate, $sessionlink, $course);
             }
         } else {
             // Update session.
-            local::get_api()->update_session($collaborate, $course, $sessionlink);
+            local::get_api()->update_session($collaborate, $sessionlink, $course);
         }
 
         if (!$existinglink) {
-            $links = $DB->get_records('collaborate_sessionlink');
             $existinglink = $DB->get_record('collaborate_sessionlink', (array)$sessionlink);
         }
 
@@ -139,6 +192,7 @@ class sessionlink {
         if (!$existinglink) {
             $existinglink = $DB->get_record('collaborate_sessionlink', (array) $sessionlink);
         }
+
         return $existinglink;
     }
 
@@ -166,14 +220,17 @@ class sessionlink {
     public static function apply_session_links_soap($collaborate, $groupmode, $groupingid, $course) {
 
         // Ensure session exists for collaborate instance (not group mode).
-        if (!isset($collaborate->sessionid)) {
-            $collaborate->sessionid = null;
-        }
+        local::prepare_sessionids_for_query($collaborate);
         $sessionlink = (object) [
             'collaborateid' => $collaborate->id,
-            'sessionid' => $collaborate->sessionid,
             'groupid' => null
         ];
+        if (!empty($collaborate->sessionid)) {
+            $sessionlink->sessionid = $collaborate->sessionid;
+        }
+        if (!empty($collaborate->sessionuid)) {
+            $sessionlink->sessionuid = $collaborate->sessionuid;
+        }
         self::ensure_session_link($collaborate, $sessionlink, $course);
         if ($groupmode > NOGROUPS) {
             // Ensure sessions exist for groups.
@@ -205,14 +262,13 @@ class sessionlink {
             $groupmode = $cm->groupmode;
         }
 
+        $legacyid = !empty($collaborate->sessionid) && empty($collaborate->sessionuid);
         // Note - local::duringtesting() will be removed once the new testable_api class is completed.
-        if (local::api_is_legacy() || local::duringtesting()) {
+        if (local::api_is_legacy() || local::duringtesting() || $legacyid) {
             return self::apply_session_links_soap($collaborate, $groupmode, $groupingid, $course);
         } else {
             // Ensure session exists for collaborate instance (not group mode).
-            if (!isset($collaborate->sessionuid)) {
-                $collaborate->sessionuid = null;
-            }
+            local::prepare_sessionids_for_query($collaborate);
             $sessionlink = (object) [
                 'collaborateid' => $collaborate->id,
                 'sessionuid' => $collaborate->sessionuid,
@@ -254,11 +310,8 @@ class sessionlink {
         $delfails = [];
         foreach ($sessionlinks as $link) {
             $sessionid = local::get_sessionid_or_sessionuid($link);
-            if (local::select_sessionid_or_sessionuid($link) === 'sessionid') {
-                $delok = local::get_api(false, null, 'soap')->delete_session($sessionid);
-            } else {
-                $delok = local::get_api()->delete_session($sessionid);
-            }
+            $api = local::select_api_by_sessionidfield($link);
+            $delok = $api->delete_session($sessionid);
             if ($delok) {
                 $delsuccesses[] = $sessionid;
             } else {
@@ -408,20 +461,22 @@ class sessionlink {
     /**
      * Get titles of sessions by ids.
      * @param array $sessionids
+     * @param string $mainsessionid
+     * @param string $field
      * @return array
      */
-    public static function get_titles_by_sessionids(array $sessionids) {
+    public static function get_titles_by_sessionids(array $sessionids, $mainsessionid, $field = 'sessionid') {
         global $DB;
 
         list($insql, $inparams) = $DB->get_in_or_equal($sessionids);
 
-        $sql = "SELECT sl.sessionid, c.name, g.name AS groupname
+        $sql = "SELECT sl.$field, c.name, g.name AS groupname
                   FROM {collaborate_sessionlink} sl
                   JOIN {collaborate} c
                     ON c.id = sl.collaborateid
              LEFT JOIN {groups} g
                     ON g.id = sl.groupid
-                WHERE sl.sessionid $insql";
+                WHERE sl.$field $insql";
 
         $rs = $DB->get_records_sql($sql, $inparams);
         $titles = [];
@@ -433,8 +488,36 @@ class sessionlink {
             if (!empty($row->groupname)) {
                 $title = get_string('sessiongroup', 'collaborate', $row->groupname);
             }
-            $titles[$row->sessionid] = $title;
+            $titles[$row->$field] = $title;
         }
+
+        // Sort session titles with main session's title at the top and others underneath in alphabetical order.
+        if ($field === 'sessionid') {
+            // As we are going to perform sorting on this array and we want to preserve the keys, we have to convert
+            // the keys to strings by prefixing with a non numeric char.
+            $sksessiontitles = [];
+            foreach ($titles as $key => $val) {
+                $sksessiontitles['_' . $key] = $val;
+            }
+            $titles = $sksessiontitles;
+            unset($sksessiontitles);
+        }
+
+        if ($field === 'sessionid') {
+            $mainsessionid = '_'.$mainsessionid;
+        }
+
+        if (isset($titles[$mainsessionid])) {
+            $maintitle = $titles[$mainsessionid];
+
+            // Put the main collaborate session at the top of the list and order the rest of the list.
+            unset($titles[$mainsessionid]);
+            asort($titles);
+            $titles = array_merge([$mainsessionid => $maintitle], $titles);
+        } else {
+            asort($titles);
+        }
+
         return $titles;
     }
 

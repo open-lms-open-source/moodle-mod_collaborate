@@ -33,12 +33,12 @@ interface api_session {
      * Create a session based on $collaborate data for specific $course
      *
      * @param stdClass $collaborate - collaborate instance data or record.
-     * @param stdClass $course
-     * @param null|int $groupid
+     * @param stdClass $sessionlink
+     * @param stdClass|null $course
      * @return string sessionid
      * @throws \moodle_exception
      */
-    public function create_session($collaborate, $course, $groupid = null);
+    public function create_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null);
 
     /**
      * Updates the collaborate instance record's time and end dates with those returned in the API call response
@@ -52,14 +52,14 @@ interface api_session {
     /**
      * Update a session based on $collaborate data for specific $course
      * @param stdClass $collaborate - collaborate instance data or record.
-     * @param stdClass $course
      * @param stdClass $sessionlink
+     * @param stdClass|null $course
      * @return int
      * @throws \dml_exception
      * @throws \moodle_exception
      * @throws coding_exception
      */
-    public function update_session($collaborate, $course, $sessionlink);
+    public function update_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null);
 
     /**
      * Delete a specific session.

@@ -27,11 +27,8 @@ namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\soap\generated\ServerConfiguration,
-    mod_collaborate\soap\generated\HtmlSessionRecording,
-    mod_collaborate\soap\generated\RemoveHtmlSessionRecording,
     mod_collaborate\soap\api as soapapi,
     mod_collaborate\rest\api as restapi,
-    mod_collaborate\testable_api,
     mod_collaborate\event\recording_deleted,
     stdClass;
 
@@ -208,10 +205,33 @@ class local {
 
     /**
      * Return 'sessionid' or 'sessionuid' depending on contents of a record (collaborate or collaborate_session_link).
-     * @param $record
+     * @param stdClass $record collaborate record
      */
-    public static function select_sessionid_or_sessionuid($record) {
+    public static function select_sessionid_or_sessionuid(stdClass $record) {
         return !empty($record->sessionuid) ? 'sessionuid' : 'sessionid';
+    }
+
+    /**
+     * Return true if record is purely legacy - no sessionuid but has sessionid.
+     * @param stdClass $record
+     * @return bool
+     */
+    public static function legacy_record(stdClass $record) {
+        return !empty($record->sessionid) && empty($record->sessionuid);
+    }
+
+    /**
+     * Select api by examining available sessionid fields in $record.
+     * @param stdClass $record // Collaborate record from _collaborate or _collaborate_sessionlink
+     * @return restapi|soapapi
+     */
+    public static function select_api_by_sessionidfield(stdClass $record) {
+        if (self::select_sessionid_or_sessionuid($record) === 'sessionid') {
+            // Collaborate record is legacy.
+            return self::get_api(false, null, 'soap');
+        } else {
+            return self::get_api();
+        }
     }
 
     /**
@@ -336,14 +356,14 @@ class local {
      * @param $duration
      * @return array
      */
-    public static function get_apitimes($starttime, $duration) {
+    public static function get_apitimes($starttime, $duration, $forceapi = null) {
         // Note it would be great if we could use date('c', $data->timestart) which would include the server timezone
         // offset in the date - e.g. 2015-04-02T17:00:00+01:00.
         // However, the apollo api does not accept 2015-04-02T17:00:00+01:00
         // So we are converting starttime to a UTC date by subtracting the server time zone offset.
         $starttime = self::servertime_to_utc($starttime);
         $endtime = self::timeend_from_duration($starttime, $duration);
-        $api = self::get_api();
+        $api = self::get_api(false, null, $forceapi);
         $timestart = $api->api_datetime($starttime);
         $timeend = $api->api_datetime($endtime);
         return [$timestart, $timeend];
@@ -427,39 +447,6 @@ class local {
     }
 
     /**
-     * get recordings
-     *
-     * @param stdClass $collaborate
-     * @param \cm_info $cm
-     * @return soap\generated\HtmlSessionRecordingResponse[][]
-     */
-    public static function get_recordings($collaborate, \cm_info $cm) {
-
-        $sessionlinks = sessionlink::my_active_links($collaborate, $cm);
-
-        $sessionrecordings = [];
-
-        $api = soapapi::get_api();
-        foreach ($sessionlinks as $sessionlink) {
-            if (empty($sessionlink->sessionid)) {
-                continue;
-            }
-            $session = new HtmlSessionRecording();
-            $session->setSessionId($sessionlink->sessionid);
-            $result = $api->ListHtmlSessionRecording($session);
-            $recordings = [];
-            if ($result) {
-                $respobjs = $result->getHtmlSessionRecordingResponse();
-                if (is_array($respobjs) && !empty($respobjs)) {
-                    $recordings = $respobjs;
-                }
-            }
-            $sessionrecordings[$sessionlink->sessionid] = $recordings;
-        }
-        return $sessionrecordings;
-    }
-
-    /**
      * Delete recording
      *
      * @param int $recordingid
@@ -471,11 +458,10 @@ class local {
 
         require_capability('mod/collaborate:deleterecordings', $cm->context);
 
-        $api = soapapi::get_api();
+        $collaborate = $DB->get_record('collaborate', ['id' => $cm->instance]);
+        $api = self::select_api_by_sessionidfield($collaborate);
 
-        $delrec = new RemoveHtmlSessionRecording($recordingid);
-        // Note, this is returning 'null' at the moment, so no way to return success boolean.
-        $api->RemoveHtmlSessionRecording($delrec);
+        $api->delete_recording($recordingid);
 
         // Recording deleted, log this event!
         $data = [
@@ -518,12 +504,7 @@ class local {
         }
 
         // Get guest url.
-        $sessionfield = self::select_sessionid_or_sessionuid($collaborate);
-        if ($sessionfield === 'sessionid') {
-            $api = self::get_api(false, null, 'soap');
-        } else {
-            $api = self::get_api();
-        }
+        $api = self::select_api_by_sessionidfield($collaborate);
         $url = $api->guest_url(self::get_sessionid_or_sessionuid($collaborate));
 
         // Update collaborate record with guest url.
@@ -545,6 +526,19 @@ class local {
         $runningphpunittest = defined('PHPUNIT_TEST') && PHPUNIT_TEST;
         $runningbehattest = defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING;
         return ($runningphpunittest || $runningbehattest);
+    }
+
+    /**
+     * Prepare session ids for insert - makes sure they are null if empty.
+     * @param stdClass $record
+     */
+    public static function prepare_sessionids_for_query(stdClass $record) {
+        if (isset($record->sessionid) && empty($record->sessionid)) {
+            $record->sessionid = null; // Prevent integer 0 being saved to DB.
+        }
+        if (isset($record->sessionuid) && empty($record->sessionuid)) {
+            $record->sessionuid = null; // Prevent empty string being saved to DB.
+        }
     }
 
 }

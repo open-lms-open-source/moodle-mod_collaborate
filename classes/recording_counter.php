@@ -24,9 +24,10 @@
  */
 namespace mod_collaborate;
 
-use mod_collaborate\renderables\recording_counts;
-
 defined('MOODLE_INTERNAL') || die();
+
+use mod_collaborate\renderables\recording_counts,
+    mod_collaborate\renderables\recording;
 
 /**
  * Recording count helper class.
@@ -43,12 +44,27 @@ class recording_counter {
     const VIEW = 1;
 
     /**
+     * @const int
+     */
+    const DOWNLOAD = 2;
+
+    /**
+     * @const int
+     */
+    const DELETE = 3;
+
+    /**
+     * @const int
+     */
+    const DELETE_CONFIRM = 4;
+
+    /**
      * @var \cm_info
      */
     private $cm;
 
     /**
-     * @var \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[]
+     * @var recording[]
      */
     private $recordings = [];
 
@@ -60,7 +76,7 @@ class recording_counter {
     /**
      * recording_counter constructor.
      * @param \cm_info $cm
-     * @param \mod_collaborate\soap\generated\HtmlSessionRecordingResponse[] $recordings
+     * @param recording[] $recordings
      * @param \moodle_database|null $db
      * @param \cache|null $cache
      * @throws \coding_exception
@@ -108,7 +124,7 @@ class recording_counter {
 
         // Initialize a model for each recording.
         foreach ($this->recordings as $recording) {
-            $recordingid = $recording->getRecordingId();
+            $recordingid = $recording->id;
             $recordingcounts[$recordingid] = new recording_counts($recordingid);
         }
 
@@ -134,6 +150,8 @@ EOL;
             }
             if ($event->action == self::VIEW) {
                 $recordingcounts[$recordingid]->views = $event->numactions;
+            } else if ($event->action == self::DOWNLOAD) {
+                $recordingcounts[$recordingid]->downloads = $event->numactions;
             }
         }
 

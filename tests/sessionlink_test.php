@@ -457,7 +457,8 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
+            'name' => 'Z Collaborate test' // Z is for checking ordering.
         ];
         $collaborate = $modgen->create_instance($collabdata);
         list($course, $cm) = get_course_and_cm_from_instance($collaborate, 'collaborate');
@@ -474,12 +475,46 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
             $sessionids[] = $link->sessionid;
         }
 
-        $sessiontitles = sessionlink::get_titles_by_sessionids($sessionids);
+        $sessiontitles = sessionlink::get_titles_by_sessionids($sessionids, $collaborate->sessionid);
         $group1link = sessionlink::get_group_session_link($collaborate, $group1->id);
         $group2link = sessionlink::get_group_session_link($collaborate, $group2->id);
-        $this->assertEquals('Collaborate 1', $sessiontitles[$collaborate->sessionid]);
-        $this->assertEquals('Group group1', $sessiontitles[$group1link->sessionid]);
-        $this->assertEquals('Group group2', $sessiontitles[$group2link->sessionid]);
+        // Test that main session title is always at the top:.
+        $this->assertEquals('Z Collaborate test', reset($sessiontitles));
+        $this->assertEquals('Z Collaborate test', $sessiontitles['_'.$collaborate->sessionid]);
+        $this->assertEquals('Group group1', $sessiontitles['_'.$group1link->sessionid]);
+        $this->assertEquals('Group group2', $sessiontitles['_'.$group2link->sessionid]);
+    }
+
+    /**
+     * @param bool $sessionid
+     */
+    private function assert_session_link_row_by_sessionid_or_sessionuid($sessionid = true) {
+        global $DB;
+
+        $this->resetAfterTest(true);
+
+        $object = (object) [
+            'collaborateid' => 1,
+            'sessionid' => 1234,
+            'sessionuid' => 'ABCD'
+        ];
+        $DB->insert_record('collaborate_sessionlink', $object);
+        if ($sessionid) {
+            $row = sessionlink::get_session_link_row_by_sessionuid('ABCD');
+        } else {
+            $row = sessionlink::get_session_link_row_by_sessionid(1234);
+        }
+        foreach ((array) $object as $key => $val) {
+            $this->assertEquals($val, $row->$key);
+        }
+    }
+
+    public function test_get_session_link_row_by_sessionid() {
+        $this->assert_session_link_row_by_sessionid_or_sessionuid(true);
+    }
+
+    public function test_get_session_link_row_by_sessionuid() {
+        $this->assert_session_link_row_by_sessionid_or_sessionuid(false);
     }
 }
 

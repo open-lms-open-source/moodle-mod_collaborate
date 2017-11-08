@@ -2,6 +2,10 @@
     margin: 1em 0;
 }
 
+.path-mod-collaborate__meetingstatus{
+    margin-bottom: 1em;
+}
+
 .path-mod-collaborate .activity-title {
     background-image: url([[pix:mod_collaborate|icon]]);
     background-size: 1em 1em;
@@ -17,6 +21,11 @@
 .path-mod-collaborate .collab-recording-list {
     list-style: none;
 }
+
+.path-mod-collaborate .collab-recording-list h4 {
+    margin-top:1em;
+}
+
 .path-mod-collaborate .collab-recording-list-item span {
     font-size: smaller;
     margin-left: 1em;
@@ -117,14 +126,21 @@ body:not(.theme-snap) .copyablelink.enabled button {
     padding: 1em;
 }
 
-.mod-collaborate-delete {
+.mod-collaborate-delete, .mod-collaborate-download{
     display: inline-block;
     width: 0.75em;
     height: 0.75em;
     margin: 0 0.5em;
-    background-image: url([[pix:core|t/delete]]);
     -webkit-background-size: cover;
     background-size: cover;
+}
+
+.mod-collaborate-delete {
+    background-image: url([[pix:core|t/delete]]);
+}
+
+.mod-collaborate-download {
+    background-image: url([[pix:core|t/download]]);
 }
 
 .mod-collaborate-group-selector input[type="submit"] {

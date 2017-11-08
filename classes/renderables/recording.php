@@ -15,19 +15,60 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for Collaborate plugin.
- *
- * @package   mod_collaborate
- * @copyright Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * Recording renderable.
+ * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @copyright Copyright (c) 2017 Blackboard Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_collaborate\renderables;
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_collaborate';
-$plugin->version = 2017111000;
-$plugin->release = '3.3.1';
-$plugin->requires = 2017051500;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->cron = 0;
-$plugin->dependencies = array();
+class recording implements \renderable {
+
+    /**
+     * @var string
+     */
+    public $id;
+
+    /**
+     * @var string
+     */
+    public $name;
+
+    /**
+     * @var int
+     */
+    public $starttime;
+
+    /**
+     * @var int
+     */
+    public $endtime;
+
+    /**
+     * @var int
+     */
+    public $duration;
+
+    /**
+     * @var int
+     */
+    public $count;
+
+    /**
+     * @var string
+     */
+    public $sessionid;
+
+    /**
+     * @var string
+     */
+    public $viewurl;
+
+    /**
+     * @var string
+     */
+    public $downloadurl;
+
+}

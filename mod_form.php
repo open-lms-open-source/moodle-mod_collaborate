@@ -53,6 +53,8 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         $mform->addElement('hidden', 'sessionid');
         $mform->setType('sessionid', PARAM_INT);
+        $mform->addElement('hidden', 'sessionuid');
+        $mform->setType('sessionuid', PARAM_ALPHANUMEXT);
 
         // Adding the "general" fieldset, where all the common settings are showed.
         $mform->addElement('header', 'general', get_string('general', 'form'));
