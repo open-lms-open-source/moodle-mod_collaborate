@@ -104,4 +104,18 @@ class session_launched extends base {
             throw new \coding_exception('The \'session\' value must be set in other.');
         }
     }
+
+    /**
+     * @return bool
+     */
+    public static function get_other_mapping() {
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public static function get_objectid_mapping() {
+        return ['db' => 'collaborate', 'restore' => 'collaborate'];
+    }
 }
