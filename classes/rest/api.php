@@ -59,8 +59,10 @@ class api {
 
     private function __construct(stdClass $config) {
         $this->setup($config);
-        self::require_configured();
-        $this->set_accesstoken();
+        if (!(defined('PHPUNIT_TEST') && PHPUNIT_TEST)) {
+            self::require_configured();
+            $this->set_accesstoken();
+        }
     }
 
     /**
