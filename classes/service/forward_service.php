@@ -67,11 +67,7 @@ class forward_service extends base_visit_service {
 
         parent::__construct($collaborate, $cm, $user);
 
-        if (!empty($collaborate->sessionid) && empty($collaborate->sessionuid)) {
-            $this->api = local::get_api(false, null, 'soap');
-        } else {
-            $this->api = local::get_api();
-        }
+        $this->api = local::select_api_by_sessionidfield($collaborate);
     }
 
     /**

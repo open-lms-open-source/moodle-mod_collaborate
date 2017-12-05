@@ -230,7 +230,7 @@ class local {
             // Collaborate record is legacy.
             return self::get_api(false, null, 'soap');
         } else {
-            return self::get_api();
+            return self::get_api(false, null, 'rest');
         }
     }
 

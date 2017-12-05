@@ -59,9 +59,8 @@ class api {
 
     private function __construct(stdClass $config) {
         $this->setup($config);
-        if (self::configured($config)) {
-            $this->set_accesstoken();
-        }
+        self::require_configured();
+        $this->set_accesstoken();
     }
 
     /**

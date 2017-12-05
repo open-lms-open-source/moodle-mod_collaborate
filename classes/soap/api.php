@@ -261,14 +261,14 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             $soapfault = "SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})";
 
             list ($lreqheaders, $lastreq, $lrespheaders, $lastresp) = $this->get_soap_req_resp();
-            $debuginfo = [
+            $errorarr = [
                 'request_headers' => $lreqheaders,
                 'request' => $lastreq,
                 'response_headers' => $lrespheaders,
                 'response' => $lastresp
             ];
 
-            $this->process_error('error:apifailure', constants::SEV_CRITICAL, null, $soapfault, $debuginfo);
+            $this->process_error('error:apifailure', constants::SEV_CRITICAL, $soapfault, $errorarr);
 
             if ($this->silent) {
                 return false;
