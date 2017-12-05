@@ -243,6 +243,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 // Remove prefix char (we needed it to sort the titles but we don't now!).
                 $sessionid = str_replace('_', '', $sessionid);
             }
+
             if (empty($sessionrecordings[$sessionid])) {
                 continue;
             }
@@ -439,7 +440,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return string
      */
     public function render_recording_counts(recording_counts $counts) {
-        if (isset($counts->downloads)) {
+        if (isset($counts->downloads) && $counts->candownload) {
             return get_string('recordingcountsincdownloads', 'mod_collaborate', $counts);
         } else {
             return get_string('recordingcounts', 'mod_collaborate', $counts);

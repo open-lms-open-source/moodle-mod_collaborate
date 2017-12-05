@@ -64,6 +64,11 @@ class recording_counter {
     private $cm;
 
     /**
+     * @var stdClass
+     */
+    private $instance;
+
+    /**
      * @var recording[]
      */
     private $recordings = [];
@@ -86,6 +91,7 @@ class recording_counter {
 
         $this->cm = $cm;
         $this->recordings = $recordings;
+        $this->instance = $DB->get_record('collaborate', ['id' => $cm->instance]);
 
         if (is_null($db)) {
             $db = $DB;
@@ -122,10 +128,12 @@ class recording_counter {
     protected function query_counts() {
         $recordingcounts = [];
 
+        $candownload = !empty($this->instance->sessionuid);
+
         // Initialize a model for each recording.
         foreach ($this->recordings as $recording) {
             $recordingid = $recording->id;
-            $recordingcounts[$recordingid] = new recording_counts($recordingid);
+            $recordingcounts[$recordingid] = new recording_counts($recordingid, $candownload);
         }
 
         $params = [
@@ -146,7 +154,7 @@ EOL;
 
         foreach ($rs as $recordingid => $event) {
             if (empty($recordingcounts[$recordingid])) {
-                $recordingcounts[$recordingid] = new recording_counts($recordingid);
+                $recordingcounts[$recordingid] = new recording_counts($recordingid, $candownload);
             }
             if ($event->action == self::VIEW) {
                 $recordingcounts[$recordingid]->views = $event->numactions;

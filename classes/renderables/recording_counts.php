@@ -50,10 +50,17 @@ class recording_counts implements \renderable {
     public $downloads = 0;
 
     /**
+     * @var bool
+     */
+    public $candownload = false;
+
+    /**
      * recording_counts constructor.
      * @param int $recordingid
+     * @param bool $candownload
      */
-    public function __construct($recordingid) {
+    public function __construct($recordingid, $candownload = false) {
+        $this->candownload = $candownload;
         $this->recordingid = $recordingid;
     }
 }

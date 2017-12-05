@@ -597,6 +597,8 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
 
         $modelsbysessionid = [];
 
+        $allrecordingmodels = [];
+
         foreach ($sessionrecordings as $sessionid => $recordings) {
 
             if (empty($recordings)) {
@@ -609,6 +611,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
 
             // Only segregate by titles if there are multiple sessions per this instance.
             foreach ($recordings as $recording) {
+
                 $recurl = $recording->getRecordingUrl();
 
                 $name = $recording->getDisplayName();
@@ -629,6 +632,8 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
                 $model->name = $name;
                 $model->viewurl = ($recurl);
 
+                $allrecordingmodels[$model->id] = $model;
+
                 if (!isset($modelsbysessionid[$sessionid])) {
                     $modelsbysessionid[$sessionid] = [];
                 }
@@ -636,15 +641,14 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             }
         }
 
+        $recordingcounts = [];
+
+        if ($canmoderate) {
+            $recordingcounthelper = new recording_counter($cm, $allrecordingmodels);
+            $recordingcounts = $recordingcounthelper->get_recording_counts();
+        }
 
         foreach ($modelsbysessionid as $sessionid => $models) {
-
-            $recordingcounts = [];
-
-            if ($canmoderate) {
-                $recordingcounthelper = new recording_counter($cm, $models);
-                $recordingcounts = $recordingcounthelper->get_recording_counts();
-            }
             foreach ($models as $model) {
                 if (!empty($recordingcounts[$model->id])) {
                     $model->count = $recordingcounts[$model->id];

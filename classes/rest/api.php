@@ -630,6 +630,8 @@ class api {
 
         $modelsbysessionuid = [];
 
+        $allrecordingmodels = [];
+
         foreach ($sessionrecordings as $sessionuid => $recordings) {
 
             if (empty($recordings)) {
@@ -639,12 +641,6 @@ class api {
             usort($recordings, function($a, $b) {
                 return ($a->created > $b->created);
             });
-
-            $recordingcounts = [];
-            if ($canmoderate) {
-                $recordingcounthelper = new recording_counter($cm, $recordings);
-                $recordingcounts = $recordingcounthelper->get_recording_counts();
-            }
 
             // Only segregate by titles if there are multiple sessions per this instance.
             foreach ($recordings as $recording) {
@@ -674,9 +670,7 @@ class api {
                 $model->viewurl = $viewurl;
                 $model->downloadurl = $downloadurl;
 
-                if (!empty($recordingcounts[$recid])) {
-                    $model->count = $recordingcounts[$recid];
-                }
+                $allrecordingmodels[$recid] = $model;
 
                 if (!isset($modelsbysessionuid[$sessionuid])) {
                     $modelsbysessionuid[$sessionuid] = [];
@@ -684,6 +678,21 @@ class api {
                 $modelsbysessionuid[$sessionuid][] = $model;
             }
         }
+
+        $recordingcounts = [];
+        if ($canmoderate) {
+            $recordingcounthelper = new recording_counter($cm, $allrecordingmodels);
+            $recordingcounts = $recordingcounthelper->get_recording_counts();
+        }
+
+        foreach ($modelsbysessionuid as $sessionuid => $models) {
+            foreach ($models as $model) {
+                if (!empty($recordingcounts[$model->id])) {
+                    $model->count = $recordingcounts[$model->id];
+                }
+            }
+        }
+
         return $modelsbysessionuid;
     }
 
