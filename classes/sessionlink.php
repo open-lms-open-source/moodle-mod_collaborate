@@ -261,6 +261,10 @@ class sessionlink {
             $groupingid = $cm->groupingid;
             $groupmode = $cm->groupmode;
         }
+        if ($course->groupmodeforce) {
+            $groupmode = $course->groupmode;
+            $collaborate->groupmode = $groupmode;
+        }
 
         $legacyid = !empty($collaborate->sessionid) && empty($collaborate->sessionuid);
         // Note - local::duringtesting() will be removed once the new testable_api class is completed.

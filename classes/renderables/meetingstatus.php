@@ -82,7 +82,7 @@ class meetingstatus implements \renderable, \templatable{
                                 view_action $viewaction,
                                 $allowguestaccess = false) {
 
-        global $PAGE, $USER;
+        global $PAGE, $USER, $COURSE;
 
         $collaborate = $viewaction->get_collaborate();
         $cm = $viewaction->get_cm();
@@ -109,7 +109,8 @@ class meetingstatus implements \renderable, \templatable{
                     $this->statusunrestored = (object) ['message' => get_string('unrestored', 'collaborate')];
                 } else if ($canmoderate || $canparticipate) {
                     $this->statusjoinmeeting = true;
-                    if ($cm->groupmode > NOGROUPS) {
+                    $forcedgrps = $COURSE->groupmodeforce && $COURSE->groupmode;
+                    if ($cm->groupmode > NOGROUPS || $forcedgrps) {
                         $this->aag = has_capability('moodle/site:accessallgroups', $cm->context);
                         if ($this->aag) {
                             $this->groups = groups_get_all_groups($cm->get_course()->id);
