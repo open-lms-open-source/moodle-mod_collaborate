@@ -117,7 +117,7 @@ body:not(.theme-snap) .copyablelink.enabled button {
     left: calc(50% - .5em);
     filter: brightness(100);
     -webkit-filter: brightness(100);
-    background: url(/theme/image.php/clean/core/1460987426/e/copy) no-repeat center center;
+    background: url([[pix:core|t/copy]]) no-repeat center center;
     background-size: 100%;
 }
 
