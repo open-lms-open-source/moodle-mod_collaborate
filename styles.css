@@ -91,6 +91,7 @@
     border: 0;
     margin: 0 0 2px 0;
     cursor: copy;
+    background: #7700C2;
 }
 
 .path-mod-collaborate .copyablelink div {
@@ -102,10 +103,6 @@
 .path-mod-collaborate .copyablelink.enabled label,
 .path-mod-collaborate .copyablelink.copied div {
     display: block;
-}
-
-body:not(.theme-snap) .copyablelink.enabled button {
-    background: #7700C2;
 }
 
 .path-mod-collaborate .copyablelink.enabled button span.copyicon {
