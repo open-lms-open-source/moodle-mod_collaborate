@@ -92,6 +92,16 @@
     margin: 0 0 2px 0;
     cursor: copy;
     background: #7700C2;
+    vertical-align: middle;
+}
+
+/**
+* Align copy button for Collaborate guest link on IE 11.
+*/
+@media all and (-ms-high-contrast:none) {
+    .path-mod-collaborate .copyablelink.enabled button {
+        bottom: 0.2em;
+    }
 }
 
 .path-mod-collaborate .copyablelink div {
