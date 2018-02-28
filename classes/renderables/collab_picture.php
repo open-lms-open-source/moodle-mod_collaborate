@@ -12,13 +12,13 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * View services
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2018 Moodlerooms Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -53,7 +53,8 @@ class collab_picture implements \renderable {
      * @var int Size in pixels. Special values are (true/1 = 100px) and
      * (false/0 = 35px)
      * for backward compatibility.
-     * This was modified so the user picture in Collaborate have an adequate size, since Collaborate avatar container only have 200px width.
+     * This was modified so the user picture in Collaborate have an adequate size,
+     * since Collaborate avatar container only have 200px width.
      */
     public $size = 200;
 
@@ -80,19 +81,20 @@ class collab_picture implements \renderable {
             throw new coding_exception('User id is required when printing user avatar image.');
         }
 
-        // only touch the DB if we are missing data and complain loudly...
+        // Only touch the DB if we are missing data and complain loudly...
         $needrec = false;
         foreach (self::$fields as $field) {
             if (!array_key_exists($field, $user)) {
                 $needrec = true;
-                debugging('Missing '.$field.' property in $user object, this is a performance problem that needs to be fixed by a developer. '
+                debugging('Missing '.$field.' property in $user object, '
+                    .'this is a performance problem that needs to be fixed by a developer. '
                     .'Please use collab_picture::fields() to get the full list of required fields.', DEBUG_DEVELOPER);
                 break;
             }
         }
 
         if ($needrec) {
-            $this->user = $DB->get_record('user', array('id'=>$user->id), self::fields(), MUST_EXIST);
+            $this->user = $DB->get_record('user', array('id' => $user->id), self::fields(), MUST_EXIST);
         } else {
             $this->user = clone($user);
         }
@@ -134,7 +136,7 @@ class collab_picture implements \renderable {
             $size = (int)$this->size;
         }
 
-        $defaulturl = $renderer->image_url('u/'.$filename); // default image
+        $defaulturl = $renderer->image_url('u/'.$filename); // Default image.
 
         if ((!empty($CFG->forcelogin) and !isloggedin()) ||
             (!empty($CFG->forceloginforprofileimage) && (!isloggedin() || isguestuser()))) {
@@ -173,21 +175,21 @@ class collab_picture implements \renderable {
                 $path .= $page->theme->name.'/';
             }
             // Set the image URL to the URL for the uploaded file and return.
-            $url = \moodle_url::make_pluginfile_url($contextid, 'user', 'icon', NULL, $path, $filename);
+            $url = \moodle_url::make_pluginfile_url($contextid, 'user', 'icon', null, $path, $filename);
             $url->param('rev', $this->user->picture);
             return $url;
         }
 
         if ($this->user->picture == 0 and !empty($CFG->enablegravatar)) {
-            // Normalise the size variable to acceptable bounds
+            // Normalise the size variable to acceptable bounds.
             if ($size < 1 || $size > 512) {
                 $size = 35;
             }
-            // Hash the users email address
+            // Hash the users email address.
             $md5 = md5(strtolower(trim($this->user->email)));
             // Build a gravatar URL with what we know.
 
-            // Find the best default image URL we can (MDL-35669)
+            // Find the best default image URL we can (MDL-35669).
             if (empty($CFG->gravatardefaulturl)) {
                 $absoluteimagepath = $page->theme->resolve_image_location('u/'.$filename, 'core');
                 if (strpos($absoluteimagepath, $CFG->dirroot) === 0) {

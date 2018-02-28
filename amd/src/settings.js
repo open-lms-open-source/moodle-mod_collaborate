@@ -41,7 +41,7 @@ define(['jquery', 'core/str'], function($, str) {
             var checkFieldsComplete = function(flds) {
                 for (var f in flds) {
                     var fld = flds[f];
-                    var val = '' + $('#id_s_collaborate_'+fld).val().trim();
+                    var val = '' + $('#id_s_collaborate_' + fld).val().trim();
                     if (val === '') {
                         return false;
                     }
@@ -158,7 +158,6 @@ define(['jquery', 'core/str'], function($, str) {
                 });
             };
 
-
             str.get_strings([
                 {key: 'connectionfailed', component: 'mod_collaborate'},
                 {key: 'connectionverified', component: 'mod_collaborate'},
@@ -195,8 +194,6 @@ define(['jquery', 'core/str'], function($, str) {
                 initialised = true;
             });
 
-
         }
     };
 });
-
