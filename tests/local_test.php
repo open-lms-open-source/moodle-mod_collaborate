@@ -206,7 +206,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
 
         // Assert delete recording fails with capability failure.
         $this->setUser($student);
-        $this->setExpectedException('required_capability_exception');
+        $this->expectException('required_capability_exception');
         local::delete_recording($rec->getRecordingId(), $rec->getDisplayName(), $cm);
     }
 
