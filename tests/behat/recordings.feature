@@ -117,6 +117,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log out
     # Student in 1 group sees recording list without recording heading.
     And I log in as "student1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And I should see "Recordings" in the "#page h3" "css_element"
     And recording "Recording1" should exist under heading "Test collab"
@@ -126,6 +127,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log out
     # Student in 2 groups sees recording list with recording heading.
     And I log in as "student2"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And I should see "Recordings" in the "#page h3" "css_element"
     And recording "Recording1" should exist under heading "Test collab"
@@ -134,6 +136,7 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
     And I log out
     # Test deleting recordings.
     And I log in as "teacher1"
+    And I am on "Course 1" course homepage
     And I follow "Test collab"
     And I click on ".mod-collaborate-delete[title='Delete recording entitled \"Recording1\"']" "css_element"
     And I should see "Are you sure you want to delete the recording entitled \"Recording1\"?"
