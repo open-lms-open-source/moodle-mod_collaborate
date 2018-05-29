@@ -20,7 +20,11 @@
  * @package    mod_collab
  */
 
+namespace mod_collaborate\privacy;
+
 use \core_privacy\local\metadata\collection;
+use \core_privacy\local\request\approved_contextlist;
+use \core_privacy\local\request\contextlist;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -29,7 +33,8 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider {
 
     use \core_privacy\local\legacy_polyfill;
 
@@ -49,4 +54,18 @@ class provider implements \core_privacy\local\metadata\provider {
 
         return $collection;
     }
+
+    public static function _get_contexts_for_userid($userid) {
+        return new contextlist();
+    }
+
+    public static function _export_user_data(approved_contextlist $contextlist) {
+    }
+
+    public static function _delete_data_for_all_users_in_context(\context $context) {
+    }
+
+    public static function _delete_data_for_user(approved_contextlist $contextlist) {
+    }
+
 }
