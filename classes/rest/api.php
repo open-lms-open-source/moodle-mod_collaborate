@@ -218,6 +218,8 @@ class api {
     public function rest_call($verb, $resourcepath, requestoptions $requestoptions,
                               http_code_validation $validation = null) {
 
+        global $CFG;
+
         if (empty($validation)) {
             $validation = new http_code_validation();
         }
@@ -248,6 +250,14 @@ class api {
                 throw new \moodle_exception('error:restapifailedtocreateaccesstoken', 'collaborate');
             }
             $headers[] = 'Authorization: Bearer '.$this->accesstoken->access_token;
+        }
+        $curloutput = null;
+        if ($CFG->debugdeveloper) {
+            $curloutput = fopen('php://temp', 'w+');
+            if (is_resource($curloutput)) {
+                curl_setopt($ch, CURLOPT_VERBOSE, true);
+                curl_setopt($ch, CURLOPT_STDERR, $curloutput);
+            }
         }
         $query = empty($requestoptions->queryparams) ? '' : '?' . http_build_query($requestoptions->queryparams, '', '&');
         $url = $this->api_url($this->process_resource_path($resourcepath, $requestoptions->pathparams) . $query);
@@ -285,6 +295,16 @@ class api {
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $this->logger->info('response', ['httpcode' => $httpcode]);
         $this->logger->info('response', ['jsonstr' => $jsonstr]);
+
+        if ($CFG->debugdeveloper && is_resource($curloutput)) {
+            rewind($curloutput);
+            $output = stream_get_contents($curloutput);
+            if ($output !== false) {
+                $this->logger->info('debug request and response', [$output]);
+            }
+            fclose($curloutput);
+        }
+
         $response = new response($jsonstr, $httpcode);
         $validation->validate_response($response);
         return $response;
