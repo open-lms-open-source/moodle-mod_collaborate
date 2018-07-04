@@ -280,8 +280,9 @@ class api {
         }
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        if (!empty($requestoptions->postfields)) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $requestoptions->postfields);
+        if ($verb == 'POST') {
+            $postdata = !empty($requestoptions->postfields) ? $requestoptions->postfields : '';
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
         }
         if (!empty($requestoptions->bodyjson)) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $requestoptions->bodyjson);
