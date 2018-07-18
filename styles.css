@@ -128,9 +128,8 @@
     background-size: 100%;
 }
 
-.path-mod-collaborate .copyablelink.enabled {
-    background-color: #eee;
-    padding: 1em;
+.path-mod-collaborate .tab-pane ul {
+    text-align: left;
 }
 
 .mod-collaborate-delete, .mod-collaborate-download{
@@ -152,4 +151,31 @@
 
 .mod-collaborate-group-selector input[type="submit"] {
     margin-top: 1em;
+}
+
+.path-mod-collaborate .groupcard {
+    margin: 0.5em 3% 0.5em 0;
+    border-radius: 0.3em;
+    box-shadow: 0 1px 2px 0 #eceeef;
+    position: relative;
+    overflow: hidden;
+    background-position: center top;
+    background-size: cover;
+    text-align: center;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    background-color: #eee;
+}
+
+@media (min-width: 768px){
+    .path-mod-collaborate .groupcard {
+        width: 30%;
+        float: left;
+        height:124px;
+    }
+}
+
+.path-mod-collaborate .container {
+    margin-bottom: 2em;
 }

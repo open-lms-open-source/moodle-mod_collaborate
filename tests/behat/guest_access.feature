@@ -24,7 +24,8 @@ Feature: Guest access can be provided for a Collaborate session
       | Session name | Test collab |
       | Allow Collaborate guest access | 1 |
     And I follow "Test collab"
-    Then I should see "Collaborate guest link"
+    And I follow "Guest links"
+    Then I should see "Main session"
     And "#guestlink" "css_element" should exist
     And I click on "Copy link" "button"
     Then I should see "Link copied to clipboard."

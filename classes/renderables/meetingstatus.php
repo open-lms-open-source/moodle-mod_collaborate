@@ -73,6 +73,11 @@ class meetingstatus implements \renderable, \templatable{
     public $aag = false;
 
     /**
+     * @var bool show navigation tabs for groups guest links
+     */
+    public $usetabs = false;
+
+    /**
      * @var \stdClass[]
      */
     public $groups;
@@ -80,10 +85,12 @@ class meetingstatus implements \renderable, \templatable{
 
     public function __construct($times,
                                 view_action $viewaction,
-                                $allowguestaccess = false) {
+                                $allowguestaccess = false,
+                                $usetabs) {
 
         global $PAGE, $USER, $COURSE;
 
+        $this->usetabs = $usetabs;
         $collaborate = $viewaction->get_collaborate();
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();

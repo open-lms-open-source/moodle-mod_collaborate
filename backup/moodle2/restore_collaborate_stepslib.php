@@ -59,7 +59,8 @@ class restore_collaborate_activity_structure_step extends restore_activity_struc
         // We need to create a new session.
         unset($data->sessionid);
         unset($data->sessionuid);
-
+        // Force guest link creation.
+        unset($data->guesturl);
         $data->course = $this->get_courseid();
 
         if (empty($data->timecreated)) {

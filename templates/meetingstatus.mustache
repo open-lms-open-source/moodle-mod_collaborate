@@ -20,50 +20,62 @@
   @author Guy Thomas
   @package mod_collaborate
 }}
-<div class = "path-mod-collaborate__meetingstatus">
-    <div class = "path-mod-collaborate__meetingstatus_times">{{{meetingtimes}}}</div>
 
-    {{#statusunrestored}}
-        {{> core/notification_info}}
-    {{/statusunrestored}}
+{{#usetabs}}
+<ul class="nav nav-tabs" role="tablist">
+    <li id="maintab" class="nav-item">
+        <a class="nav-link active" href="#maininfo" data-toggle="tab"
+           role="tab"> {{# str }} session, mod_collaborate {{/ str}} </a> </li>
+    <li id="guesttab" class="nav-item">
+        <a class="nav-link" href="#guestlinks" data-toggle="tab"
+           role="tab"> {{# str }} guestlinks, mod_collaborate {{/ str}} </a> </li>
+</ul>
+{{/usetabs}}
 
-    {{#statuswarnnoguest}}
-        {{> core/notification_warning}}
-    {{/statuswarnnoguest}}
+<div class="tab-pane active" id="maininfo" role="tabpanel">
+    <div class = "path-mod-collaborate__meetingstatus">
+        <div class = "path-mod-collaborate__meetingstatus_times">{{{meetingtimes}}}</div>
 
-    {{#statusmeetingtimepassed}}
-        <p>{{message}}</p>
-    {{/statusmeetingtimepassed}}
+        {{#statusunrestored}}
+            {{> core/notification_info}}
+        {{/statusunrestored}}
 
-    {{#statusjoinmeeting}}
-        {{^statuslistgroups}}
-            <a href="{{{fwdurl}}}" class="btn btn-success" target="_blank">
-                {{# str }} meetingtimejoin, mod_collaborate {{/ str }}
-            </a>
-        {{/statuslistgroups}}
-        {{#statuslistgroups}}
-           <form target="_blank" class="mod-collaborate-group-selector" action="{{{fwdurl}}}" method="post">
-           {{#aag}}
-               {{! People with access to all groups can choose to enter the session for the module instance
-                   instead of a group. }}
-                <div>
-                    <input type="radio" name="group" value="0" checked="checked">
-                        <label>{{# str }} nogroup, enrol {{/ str }}</label>
-                    </input>
-                </div>
-           {{/aag}}
-           {{#groups}}
-               <div>
-                   <input type="radio" name="group" data-group-name="{{name}}" value="{{id}}" {{{checked}}}>
-                    <label>{{name}}</label>
-                   </input>
-               </div>
-           {{/groups}}
-               <div>
-                   <input type="submit" value="{{# str }} meetingtimejoin, mod_collaborate {{/ str }}" />
-               </div>
-           </form>
-        {{/statuslistgroups}}
+        {{#statuswarnnoguest}}
+            {{> core/notification_warning}}
+        {{/statuswarnnoguest}}
 
-    {{/statusjoinmeeting}}
+        {{#statusmeetingtimepassed}}
+            <p>{{message}}</p>
+        {{/statusmeetingtimepassed}}
+
+        {{#statusjoinmeeting}}
+            {{^statuslistgroups}}
+                <a href="{{{fwdurl}}}" class="btn btn-success" target="_blank">
+                    {{# str }} meetingtimejoin, mod_collaborate {{/ str }}
+                </a>
+            {{/statuslistgroups}}
+            {{#statuslistgroups}}
+                <form target="_blank" class="mod-collaborate-group-selector" action="{{{fwdurl}}}" method="post">
+                    <select name="group" class="custom-select">
+                        {{#aag}}
+                        {{! People with access to all groups can choose to enter the session for the module instance
+                            instead of a group. }}
+                            <option type="radio" name="group" value="0">
+                                {{# str }} nogroup, enrol {{/ str }}
+                            </option>
+                        {{/aag}}
+                        {{#groups}}
+                            <option name="group" data-group-name="{{name}}" value="{{id}}">
+                                {{name}}
+                            </option>
+                        {{/groups}}
+                    </select>
+                    <div>
+                        <input class="btn btn-success" type="submit" value="{{# str }} meetingtimejoin, mod_collaborate {{/ str }}" />
+                    </div>
+                </form>
+            {{/statuslistgroups}}
+
+        {{/statusjoinmeeting}}
+    </div>
 </div>

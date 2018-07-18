@@ -26,9 +26,21 @@ namespace mod_collaborate\renderables;
 defined('MOODLE_INTERNAL') || die();
 
 class copyablelink implements \renderable{
-    public function __construct($label, $id, $url) {
-        $this->label = $label;
-        $this->id = $id;
-        $this->url = $url;
+
+    public function __construct($label, $id, $groups) {
+        $nogrouplabel = get_string('nogroup', 'mod_collaborate');
+        $grouplabel = get_string('group', 'mod_collaborate');
+        foreach ($groups as $key => $group) {
+            $link = new \stdClass();
+            $link->label = $nogrouplabel;
+            $link->id = $id;
+            if ($key != 'main') {
+                $link->label = $grouplabel . $group->name;
+                $link->id = $id . '_' .$group->id;
+            }
+            $link->url = $group->guesturl;
+            $this->links[] = $link;
+        }
+
     }
 }

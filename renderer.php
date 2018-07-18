@@ -168,11 +168,16 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
-
         $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
-        $times = local::get_times($collaborate);
 
-        $meetingstatus = new meetingstatus($times, $viewaction);
+        // Guest url.
+        $guesturls = $viewaction->get_guest_urls();
+        $usetabs = $guesturls and $canmoderate;
+
+        $times = local::get_times($collaborate);
+        $o .= '<div class="container">
+                <div class="tab-content">';
+        $meetingstatus = new meetingstatus($times, $viewaction, false, $usetabs);
         $o .= $this->render($meetingstatus);
 
         // Conditions to show the intro can change to look for own settings or whatever.
@@ -185,12 +190,11 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $o .= '<hr />';
         }
 
-        // Guest url.
-        $guesturl = $viewaction->get_guest_url();
-        if ($guesturl) {
-            $clink = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturl);
-            $o .= $this->render($clink);
+        if ($guesturls) {
+            $clinks = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturls);
+            $o .= $this->render($clinks);
         }
+        $o .= '</div></div><div class="collab_recordings container">';
 
         // Recordings.
         if ($canparticipate) {
@@ -204,7 +208,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 $o .= $this->render_recordings($collaborate, $sessionrecordings, $cm, $canmoderate);
             }
         }
-
+        $o .= '</div>';
         return $o;
     }
 

@@ -14,12 +14,19 @@
   You should have received a copy of the GNU General Public License
   along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-
-<form class="copyablelink">
-    <label for="{{id}}">{{label}}</label>
-    <input id="{{id}}" value="{{{url}}}" readonly />
-    <button title="{{# str }} copylink, mod_collaborate {{/ str }}"><span class="copyicon"></span></button>
-    <div tabindex="-1">
-        {{# str }} copiedlink, mod_collaborate {{/ str }}
-    </div>
-</form>
+<div class="tab-pane card-deck text-center" id="guestlinks" role="tabpanel">
+    <ul>
+        {{#links}}
+            <li class="groupcard">
+                <form class="copyablelink">
+                    <label for="{{id}}">{{label}}</label>
+                    <input id="{{id}}" value="{{{url}}}" readonly />
+                    <button title="{{# str }} copylink, mod_collaborate {{/ str }}"><span class="copyicon"></span></button>
+                    <div tabindex="-1">
+                        {{# str }} copiedlink, mod_collaborate {{/ str }}
+                    </div>
+                </form>
+            </li>
+        {{/links}}
+    </ul>
+</div>

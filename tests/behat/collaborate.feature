@@ -110,7 +110,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see "Joined a fake session for group \"Group 1\""
     And I am on "Course 1" course homepage
     And I follow "Test collab"
-    And I check the "Group 2" meeting group radio button
+    And I set the field "group" to "Group 2"
     And I press "Join session"
     And I should see "Joined a fake session for group \"Group 2\""
     And I log out
@@ -186,6 +186,27 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see "Joined a fake session for group \"Group 1\""
     And I am on "Course 1" course homepage
     And I follow "Test collab duplicated"
-    And I check the "Group 2" meeting group radio button
+    And I set the field "group" to "Group 2"
     When I press "Join session"
     Then I should see "Joined a fake session for group \"Group 2\""
+
+  Scenario: Collaborate instance with group mode enabled and guest access should display nav tabs for teachers.
+    Given I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab |
+      | Group mode | Separate groups |
+      | Allow Collaborate guest access | 1 |
+    And I follow "Test collab"
+    And "#maintab" "css_element" should exist
+    And "#guesttab" "css_element" should exist
+    And I follow "Guest links"
+    And I should see "No group"
+    And I should see "Group 1"
+    And I should see "Group 2"
+    And I log out
+    And I log in as "student1"
+    And I am on "Course 1" course homepage
+    And I follow "Test collab"
+    And "#maintab" "css_element" should not exist
+    And "#guesttab" "css_element" should not exist

@@ -110,16 +110,16 @@ class view_action implements \renderable{
     }
 
     /**
-     * Get guest url if appropriate.
+     * Get guest urls if appropriate.
      * Return empty string if it should not be viewed.
      *
-     * @return string $url
+     * @return array
      */
-    public function get_guest_url() {
+    public function get_guest_urls() {
         $canview = $this->canadd || $this->canmoderate;
         $guestaccessallowed = !empty($this->collaborate->guestaccessenabled);
-        if ($canview && $guestaccessallowed && !empty($this->collaborate->guesturl)) {
-            return $this->collaborate->guesturl;
+        if ($canview && $guestaccessallowed && !empty($this->collaborate->guesturls)) {
+            return $this->collaborate->guesturls;
         } else {
             return '';
         }

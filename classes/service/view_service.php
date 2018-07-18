@@ -30,6 +30,7 @@ use mod_collaborate\event\course_module_viewed;
 use mod_collaborate\service\base_visit_service;
 use mod_collaborate\soap\api;
 use mod_collaborate\local;
+use mod_collaborate\sessionlink;
 
 require_once(__DIR__.'/../../lib.php');
 
@@ -100,8 +101,33 @@ class view_service extends base_visit_service {
      * Apply guest url to collaborate property.
      */
     protected function apply_guest_url() {
+        global $USER;
+
         $url = local::guest_url($this->collaborate);
-        $this->collaborate->guesturl = $url;
+
+        $main = new \stdClass();
+        $main->guesturl = $url;
+        $this->collaborate->guesturls['main'] = $main;
+
+        $context = \context_course::instance($this->course->id);
+        $aag = has_capability('moodle/site:accessallgroups', $context);
+        if ($aag) {
+            $groups = groups_get_all_groups($this->cm->get_course()->id);
+        } else {
+            $groups = groups_get_all_groups($this->cm->get_course()->id, $USER->id);
+        }
+
+        foreach ($groups as $group) {
+            $sessionlink = sessionlink::get_group_session_link($this->collaborate, $group->id);
+            $sessionidkey = local::select_sessionid_or_sessionuid($sessionlink);
+            $sessionid = $sessionlink->$sessionidkey;
+            $collabtmp = $this->collaborate;
+            $collabtmp->guesturl = null;
+            $collabtmp->$sessionidkey = $sessionid;
+            $group->guesturl = local::guest_url($collabtmp);
+            $this->collaborate->guesturls[$group->id] = $group;
+        }
+
     }
 
 }
