@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG, $DB;
 
 use mod_collaborate\local;
-require_once(__DIR__.'/../../../local/mr/bootstrap.php');
 require_once($CFG->dirroot.'/calendar/lib.php');
 
 class mod_collaborate_calendar_testcase extends advanced_testcase {
