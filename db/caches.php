@@ -19,7 +19,7 @@
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee
- * @copyright  Copyright (c) 2016 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.moodlerooms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();

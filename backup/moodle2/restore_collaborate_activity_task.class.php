@@ -18,7 +18,7 @@
  * Provides the restore activity task class
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,7 +32,7 @@ require_once($CFG->dirroot . '/mod/collaborate/backup/moodle2/restore_collaborat
  * Provides all the settings and steps to perform complete restore of the activity.
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Moodlerooms Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.moodlerooms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_collaborate_activity_task extends restore_activity_task {
