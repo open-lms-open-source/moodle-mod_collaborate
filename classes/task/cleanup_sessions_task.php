@@ -16,7 +16,7 @@
 
 /**
  * Task for deleting sessions that were previously attempted to be deleted via the API but failed.
- * @author    Guy Thomas <gthomas@moodlerooms.com>
+ * @author    Guy Thomas <osdev@blackboard.com>
  * @copyright Copyright (c) 2017 Blackboard Inc.
  * @package   mod_collaborate
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

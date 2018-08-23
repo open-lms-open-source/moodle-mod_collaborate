@@ -19,7 +19,7 @@
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.moodlerooms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_collaborate;
@@ -33,7 +33,7 @@ use mod_collaborate\renderables\recording_counts,
  * Recording count helper class.
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.moodlerooms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class recording_counter {

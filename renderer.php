@@ -21,7 +21,7 @@
  * visit: http://docs.moodle.org/en/Development:lib/formslib.php
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboardopenlms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
