@@ -54,7 +54,7 @@ class recording_deleted extends base {
     }
 
     public function get_url() {
-        $delurl = new moodle_url('/mod/collaborate/recordings.php', array(
+        $delurl = new \moodle_url('/mod/collaborate/recordings.php', array(
             'c' => $this->contextinstanceid,
             'action' => 'delete_confirmation',
             'rid' => $this->other['recordingid'],
