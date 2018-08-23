@@ -18,7 +18,7 @@
  * Defines backup_collaborate_activity_task class
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboardopenlms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/mod/collaborate/backup/moodle2/backup_collaborate
  * Provides the steps to perform one complete backup of the collaborate instance
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.moodlerooms.com)
+ * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboardopenlms.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_collaborate_activity_task extends backup_activity_task {
