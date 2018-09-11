@@ -18,7 +18,7 @@
  * The mod_collaborate session launched event.
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2015 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,7 +39,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @package    mod_collaborate
  * @since      Moodle 2.8
- * @copyright  Copyright (c) 2015 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class session_launched extends base {

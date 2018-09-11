@@ -19,7 +19,7 @@
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_collaborate\renderables;
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * Simple recording count renderable model.
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class recording_counts implements \renderable {

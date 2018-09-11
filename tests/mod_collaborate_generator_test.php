@@ -19,7 +19,7 @@
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -29,7 +29,7 @@ use mod_collaborate\local;
  * Collab generator tests.
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_collaborate_generator_testcase extends advanced_testcase {

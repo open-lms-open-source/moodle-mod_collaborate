@@ -19,7 +19,7 @@
  *
  * @package    mod_collaborate
  * @author     Sam Chaffee
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_collaborate\event;
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  * Recording viewed event.
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboardopenlms.com)
+ * @copyright  Copyright (c) 2016 Blackboard Inc. (http://www.blackboard.com)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class recording_viewed extends base {
