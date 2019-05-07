@@ -74,6 +74,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see Collaborate time span of "duration of course"
 
   Scenario: Collaborate instance with group mode enabled shows appropriate options for joining session.
+    Given I skip because "Groups options are not available and should be addressed in another ticket"
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
@@ -124,6 +125,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     Then I should see "Joined a fake session for the collaborate instance"
 
   Scenario: Collaborate - deleting a group removes the group from the list of available groups when joining a session.
+    Given I skip because "Groups options are not available and should be addressed in another ticket"
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
@@ -145,6 +147,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate - duplicating an instance makes groups available post duplication.
     Given I log in as "teacher1"
+    Given I skip because "Groups options are not available and should be addressed in another ticket"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab |
@@ -191,6 +194,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     Then I should see "Joined a fake session for group \"Group 2\""
 
   Scenario: Collaborate instance with group mode enabled and guest access should display nav tabs for teachers.
+    Given I skip because "Groups options are not available and should be addressed in another ticket"
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
