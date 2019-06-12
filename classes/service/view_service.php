@@ -116,16 +116,19 @@ class view_service extends base_visit_service {
                 $groups = groups_get_all_groups($this->cm->get_course()->id, $USER->id);
             }
 
-            foreach ($groups as $group) {
-                $sessionlink = sessionlink::get_group_session_link($this->collaborate, $group->id);
-                $sessionidkey = local::select_sessionid_or_sessionuid($sessionlink);
-                $sessionid = $sessionlink->$sessionidkey;
-                $collabtmp = $this->collaborate;
-                $collabtmp->guesturl = null;
-                $collabtmp->$sessionidkey = $sessionid;
-                $api = local::select_api_by_sessionidfield($collabtmp);
-                $group->guesturl = $api->guest_url(local::get_sessionid_or_sessionuid($collabtmp));
-                $this->collaborate->guesturls[$group->id] = $group;
+            $collabcminfo = $this->cm->get_course_module_record();
+            if ($collabcminfo->groupmode > NOGROUPS) {
+                foreach ($groups as $group) {
+                    $sessionlink = sessionlink::get_group_session_link($this->collaborate, $group->id);
+                    $sessionidkey = local::select_sessionid_or_sessionuid($sessionlink);
+                    $sessionid = $sessionlink->$sessionidkey;
+                    $collabtmp = $this->collaborate;
+                    $collabtmp->guesturl = null;
+                    $collabtmp->$sessionidkey = $sessionid;
+                    $api = local::select_api_by_sessionidfield($collabtmp);
+                    $group->guesturl = $api->guest_url(local::get_sessionid_or_sessionuid($collabtmp));
+                    $this->collaborate->guesturls[$group->id] = $group;
+                }
             }
         }
     }

@@ -9,6 +9,7 @@ Feature: Guest access can be provided for a Collaborate session
       | username | firstname | lastname | email |
       | teacher1 | Teacher | 1 | teacher1@example.com |
       | student1 | Student | 1 | student1@example.com |
+      | student2 | Student | 2 | student2@example.com |
     And the following "courses" exist:
       | fullname | shortname | category |
       | Course 1 | C1 | 0 |
@@ -16,6 +17,7 @@ Feature: Guest access can be provided for a Collaborate session
       | user | course | role |
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student        |
+      | student2 | C1 | student        |
 
   Scenario: Teacher can enable and disable guest access for a Collaborate instance
     Given I log in as "teacher1"
@@ -55,6 +57,37 @@ Feature: Guest access can be provided for a Collaborate session
     And I follow "Test collab"
     And I navigate to "Edit settings" in current page administration
     Then the field "Collaborate guest role" matches value "Participant"
+
+  Scenario: Groups guest access are created depending on the group mode
+    And the following "groups" exist:
+      | name    | course  | idnumber |
+      | Group 1 | C1      | G1       |
+      | Group 2 | C1      | G2       |
+    And the following "group members" exist:
+      | user     | group |
+      | student1 | G1    |
+      | student2 | G2    |
+    Given I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name                   | Test collab     |
+      | Allow Collaborate guest access | 1               |
+      | Group mode                     | Separate groups |
+    And I follow "Test collab"
+    And I follow "Guest links"
+    Then I should see "Main session"
+    Then I should see "Group 1"
+    Then I should see "Group 2"
+    And I follow "Course 1"
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name                   | Testing collab  |
+      | Allow Collaborate guest access | 1               |
+      | Group mode                     | No groups       |
+    And I follow "Testing collab"
+    And I follow "Guest links"
+    Then I should see "Main session"
+    Then I should not see "Group 1"
+    Then I should not see "Group 2"
 
   Scenario: Guest can not access to a Collaborate instance and an error message should be displayed
     Given I log in as "teacher1"
