@@ -23,9 +23,9 @@
 namespace mod_collaborate\privacy;
 
 use \core_privacy\local\metadata\collection;
-use \core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
-use \core_privacy\local\request\contextlist;
+use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 
 defined('MOODLE_INTERNAL') || die();
@@ -39,15 +39,13 @@ class provider implements \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider,
     \core_privacy\local\request\core_userlist_provider {
 
-    use \core_privacy\local\legacy_polyfill;
-
     /**
      * Returns meta data about this system.
      *
      * @param   collection     $collection The initialised collection to add items to.
      * @return  collection     A listing of user data stored through this system.
      */
-    public static function _get_metadata(collection $collection) {
+    public static function get_metadata(collection $collection) : collection {
         $collection->add_external_location_link('collaborate', [
             'userid' => 'privacy:metadata:collaborate:userid',
             'avatarurl' => 'privacy:metadata:collaborate:avatarurl',
@@ -58,17 +56,17 @@ class provider implements \core_privacy\local\metadata\provider,
         return $collection;
     }
 
-    public static function _get_contexts_for_userid($userid) {
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         return new contextlist();
     }
 
-    public static function _export_user_data(approved_contextlist $contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist) {
     }
 
-    public static function _delete_data_for_all_users_in_context(\context $context) {
+    public static function delete_data_for_all_users_in_context(\context $context) {
     }
 
-    public static function _delete_data_for_user(approved_contextlist $contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
     }
 
     public static function get_users_in_context(userlist $userlist) {
