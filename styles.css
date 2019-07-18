@@ -130,6 +130,7 @@
 
 .path-mod-collaborate .tab-pane ul {
     text-align: left;
+    overflow: auto;
 }
 
 .mod-collaborate-delete, .mod-collaborate-download{
@@ -172,7 +173,7 @@
     .path-mod-collaborate .groupcard {
         width: 30%;
         float: left;
-        height:124px;
+        height:100px;
     }
 }
 
