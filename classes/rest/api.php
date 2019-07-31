@@ -368,7 +368,7 @@ class api {
             "canShareVideo" => true, // Hard coded.
             "raiseHandOnEnter" => false, // Hard coded.
             "boundaryTime" => local::boundary_time(),
-            "showProfile" => true, // Hard coded.
+            "showProfile" => false, // Hard coded.
             "canShareAudio" => true, // Hard coded.
             "startTime" => $timestart,
             "modified" => $now
