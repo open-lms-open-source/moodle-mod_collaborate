@@ -58,6 +58,11 @@ class http_code_validation {
      */
     public function validate_response(response $response) {
         if (!in_array($response->httpcode, $this->expectedcodes)) {
+
+            if ($response->httpcode == '400' || $response->httpcode == '401') {
+                set_config('preventtask', time(), 'collaborate');
+            }
+
             if (!empty($this->errorsbycode[strval($response->httpcode)])) {
                 $valerr = $this->errorsbycode[$response->httpcode];
                 $this->process_error($valerr->errorcode, $valerr->severity,

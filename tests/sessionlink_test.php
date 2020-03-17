@@ -262,6 +262,8 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
         $this->resetAfterTest();
 
+        set_config('preventtask', time(), 'collaborate');
+
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
         $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
@@ -286,7 +288,13 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
         sessionlink::task_cleanup_failed_deletions();
         $links = $DB->get_records('collaborate_sessionlink');
-        $this->assertEmpty($links);
+        $this->assertNotEmpty($links); // Task must not have run.
+
+        $januaryof2019 = 1546347600;
+        set_config('preventtask', $januaryof2019, 'collaborate');
+        sessionlink::task_cleanup_failed_deletions();
+        $links = $DB->get_records('collaborate_sessionlink');
+        $this->assertEmpty($links); // Task must have run and the table must be empty.
     }
 
     /**

@@ -356,6 +356,14 @@ class sessionlink {
     public static function task_cleanup_failed_deletions() {
         global $DB;
 
+        $taskprevention = get_config('collaborate', 'preventtask');
+        if (!empty($taskprevention)) {
+            $lastattempt = time() - $taskprevention;
+            if ($lastattempt < DAYSECS) {
+                return;
+            }
+        }
+
         $sessionlinks = $DB->get_records_select('collaborate_sessionlink', 'deletionattempted > 0');
         $delok = self::attempt_delete_sessions($sessionlinks);
         if ($delok) {
