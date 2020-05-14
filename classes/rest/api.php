@@ -349,6 +349,11 @@ class api {
             }
         }
 
+        $cansharevideo = isset($collaborate->cansharevideo) && boolval($collaborate->cansharevideo) ? 1 : 0;
+        $canpostmessages = isset($collaborate->canpostmessages) && boolval($collaborate->canpostmessages) ? 1 : 0;
+        $canannotatewhiteboard = isset($collaborate->canannotatewhiteboard) && boolval($collaborate->canannotatewhiteboard) ? 1 : 0;
+        $canshareaudio = isset($collaborate->canshareaudio) && boolval($collaborate->canshareaudio) ? 1 : 0;
+        $candownloadrecordings = isset($collaborate->candownloadrecordings) && boolval($collaborate->candownloadrecordings) ? 1 : 0;
         $now = time();
 
         $session = (object) [
@@ -360,16 +365,16 @@ class api {
             "description" => strip_tags($description),
             "name" => $sessionname,
             "occurrenceType" => "S", // Hard coded.
-            "canPostMessage" => true, // Hard coded.
+            "canPostMessage" => $canpostmessages,
             "participantCanUseTools" => true, // Hard coded.
             "courseRoomEnabled" => true, // Hard coded.
-            "canAnnotateWhiteboard" => true, // Hard coded.
-            "canDownloadRecording" => true, // Hard coded.
-            "canShareVideo" => true, // Hard coded.
+            "canAnnotateWhiteboard" => $canannotatewhiteboard,
+            "canDownloadRecording" => $candownloadrecordings,
+            "canShareVideo" => $cansharevideo,
             "raiseHandOnEnter" => false, // Hard coded.
             "boundaryTime" => local::boundary_time(),
             "showProfile" => false, // Hard coded.
-            "canShareAudio" => true, // Hard coded.
+            "canShareAudio" => $canshareaudio,
             "startTime" => $timestart,
             "modified" => $now
         ];

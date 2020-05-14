@@ -120,6 +120,16 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     $collaborate->timecreated = time();
     $collaborate->timestart = $data->timestart;
     $collaborate->timeend = $data->timeend;
+    $cansharevideo = isset($collaborate->cansharevideo) && boolval($collaborate->cansharevideo);
+    $collaborate->cansharevideo = $cansharevideo ?: 0;
+    $canpostmessages = isset($collaborate->canpostmessages) && boolval($collaborate->canpostmessages);
+    $collaborate->canpostmessages = $canpostmessages ?: 0;
+    $canannotatewhiteboard = isset($collaborate->canannotatewhiteboard) && boolval($collaborate->canannotatewhiteboard);
+    $collaborate->canannotatewhiteboard = $canannotatewhiteboard ?: 0;
+    $canshareaudio = isset($collaborate->canshareaudio) && boolval($collaborate->canshareaudio);
+    $collaborate->canshareaudio = $canshareaudio ?: 0;
+    $candownloadrecordings = isset($collaborate->candownloadrecordings) && boolval($collaborate->candownloadrecordings);
+    $collaborate->candownloadrecordings = $candownloadrecordings ?: 0;
 
     local::prepare_sessionids_for_query($collaborate);
 

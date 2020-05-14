@@ -118,6 +118,24 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->setDefault('guestrole', 'pr');
         $mform->disabledIf('guestrole', 'guestaccessenabled');
 
+        // Instructor Settings.
+        $mform->addElement('header', 'instructorsettings', get_string('instructorsettings',  'mod_collaborate'));
+        $mform->addElement('static', 'instructorsettingshelp', '', get_string('instructorsettingshelp', 'mod_collaborate'));
+        $mform->addElement('checkbox', 'canpostmessages',
+            get_string('canpostmessages', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('canpostmessages', 1);
+        $mform->addElement('checkbox', 'canannotatewhiteboard',
+            get_string('canannotatewhiteboard', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('canannotatewhiteboard', 0);
+        $mform->addElement('checkbox', 'cansharevideo',
+            get_string('cansharevideo', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('cansharevideo', 0);
+        $mform->addElement('checkbox', 'canshareaudio',
+            get_string('canshareaudio', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('canshareaudio', 0);
+        $mform->addElement('checkbox', 'candownloadrecordings',
+            get_string('candownloadrecordings', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('candownloadrecordings', 1);
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
         /** @var MoodleQuickForm_modgrade $modgrade */

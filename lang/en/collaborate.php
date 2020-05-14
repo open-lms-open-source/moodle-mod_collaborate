@@ -151,3 +151,12 @@ $string['privacy:metadata:collaborate:userid'] = 'The userid is sent from Moodle
 $string['privacy:metadata:collaborate:fullname'] = 'Your full name is sent to the remote system to allow a better user experience.';
 $string['privacy:metadata:collaborate:avatarurl'] = 'Your profile picture is sent the Collaborate service.';
 $string['privacy:metadata:collaborate:role'] = 'Your role within the Collaborate session.';
+
+// Instructor settings.
+$string['instructorsettings'] = 'Instructor Settings';
+$string['instructorsettingshelp'] = 'Allow participants to:';
+$string['cansharevideo'] = 'Share video feed';
+$string['canpostmessages'] = 'Post messages';
+$string['canannotatewhiteboard'] = 'Annotate on the whiteboard';
+$string['canshareaudio'] = 'Share audio feed';
+$string['candownloadrecordings'] = 'Download recordings';

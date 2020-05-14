@@ -1,0 +1,14 @@
+/*
+* Collaborate styles for Snap theme.
+*/
+
+/*
+* Collaborate instructor settings.
+*/
+#page-mod-collaborate-mod .snap-form-advanced #id_instructorsettings .checkbox {
+    padding-left: 1rem;
+}
+#page-mod-collaborate-mod .snap-form-advanced #id_instructorsettings [type='checkbox'] {
+    position: relative;
+    bottom: 0.15rem;
+}
