@@ -101,4 +101,15 @@ $capabilities = array(
             'student' => CAP_ALLOW
         )
     ),
+
+    'mod/collaborate:downloadrecordings' => array(
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+    ),
 );

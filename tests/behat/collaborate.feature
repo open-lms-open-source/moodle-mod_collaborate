@@ -215,8 +215,15 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And "#maintab" "css_element" should not exist
     And "#guesttab" "css_element" should not exist
 
-  Scenario: Collaborate instance can be created with instructor settings.
-    Given I log in as "teacher1"
+  Scenario: Collaborate instance can be created with default instructor settings and edit the settings.
+    Given the following config values are set as admin:
+      | instructorsettingstoggle | 1 | collaborate |
+      | canpostmessages          | 0 | collaborate |
+      | canannotatewhiteboard    | 0 | collaborate |
+      | cansharevideo            | 0 | collaborate |
+      | canshareaudio            | 0 | collaborate |
+      | candownloadrecordings    | 0 | collaborate |
+    And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab Instructor settings |
@@ -230,24 +237,25 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see "Share audio feed"
     And I should see "Download recordings"
     Then the following fields match these values:
-      | Post messages              | 1 |
+      | Post messages              | 0 |
       | Annotate on the whiteboard | 0 |
       | Share video feed           | 0 |
       | Share audio feed           | 0 |
-      | Download recordings        | 1 |
+      | Download recordings        | 0 |
     And I set the following fields to these values:
-      | Post messages              | 0 |
+      | Post messages              | 1 |
       | Annotate on the whiteboard | 1 |
       | Share video feed           | 1 |
       | Share audio feed           | 1 |
-      | Download recordings        | 0 |
+      | Download recordings        | 1 |
+    And I should see "Post messages"
     And I click on "Save and display" "button"
     And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
     And I click on "Edit settings" "link"
     Then the following fields match these values:
-      | Post messages              | 0 |
+      | Post messages              | 1 |
       | Annotate on the whiteboard | 1 |
       | Share video feed           | 1 |
       | Share audio feed           | 1 |
-      | Download recordings        | 0 |
+      | Download recordings        | 1 |
 

@@ -145,4 +145,61 @@ if ($ADMIN->fulltree) {
     ];
     $setting = new \admin_setting_configselect($name, $title, $description, 0, $options);
     $settings->add($setting);
+
+    // Add Instructor settings.
+
+    $checked = 1;
+    $unchecked = 0;
+
+    $name = 'collaborate/instructorsettings';
+    $information = new lang_string('instructorsettings:toggledesc', 'collaborate');
+    $setting = new \admin_setting_heading($name, get_string('instructorsettings', 'mod_collaborate'), $information);
+    $settings->add($setting);
+
+    $name = 'collaborate/instructorsettingstoggle';
+    $title = new lang_string('instructorsettings:toggle', 'collaborate');
+    $default = $checked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
+
+    $name = 'collaborate/defaultsettings';
+    $heading = new lang_string('instructorsettings:defaultsettings', 'mod_collaborate');
+    $information = new lang_string('instructorsettings:defaultsettingsdesc', 'collaborate');
+    $setting = new \admin_setting_heading($name, $heading, $information);
+    $settings->add($setting);
+
+    $name = 'collaborate/canpostmessages';
+    $title = new lang_string('canpostmessages', 'collaborate');
+    $description = new lang_string('canpostmessages', 'collaborate');
+    $default = $checked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
+
+    $name = 'collaborate/candownloadrecordings';
+    $title = new lang_string('candownloadrecordings', 'collaborate');
+    $description = new lang_string('candownloadrecordings', 'collaborate');
+    $default = $checked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
+
+    $name = 'collaborate/canannotatewhiteboard';
+    $title = new lang_string('canannotatewhiteboard', 'collaborate');
+    $description = new lang_string('canannotatewhiteboard', 'collaborate');
+    $default = $unchecked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
+
+    $name = 'collaborate/cansharevideo';
+    $title = new lang_string('cansharevideo', 'collaborate');
+    $description = new lang_string('cansharevideo', 'collaborate');
+    $default = $unchecked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
+
+    $name = 'collaborate/canshareaudio';
+    $title = new lang_string('canshareaudio', 'collaborate');
+    $description = new lang_string('canshareaudio', 'collaborate');
+    $default = $unchecked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
 }

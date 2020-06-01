@@ -337,33 +337,47 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2017111000, 'collaborate');
     }
 
-    if ($oldversion < 2018080801) {
+    if ($oldversion < 2018080802) {
 
-        // Define field completionlaunch to be added to collaborate.
         $table = new xmldb_table('collaborate');
-        $field = new xmldb_field('cansharevideo', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $field = new xmldb_field('cansharevideo', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+        } else {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+            $dbman->change_field_default($table, $field);
         }
         $field = new xmldb_field('canpostmessages', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+        } else {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+            $dbman->change_field_default($table, $field);
         }
-        $field = new xmldb_field('canannotatewhiteboard', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $field = new xmldb_field('canannotatewhiteboard', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+        } else {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+            $dbman->change_field_default($table, $field);
         }
-        $field = new xmldb_field('canshareaudio', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $field = new xmldb_field('canshareaudio', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+        } else {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+            $dbman->change_field_default($table, $field);
         }
         $field = new xmldb_field('candownloadrecordings', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+        } else {
+            $field->set_attributes(XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+            $dbman->change_field_default($table, $field);
         }
 
         // Collaborate savepoint reached.
-        upgrade_mod_savepoint(true, 2018080801, 'collaborate');
+        upgrade_mod_savepoint(true, 2018080802, 'collaborate');
     }
 
     return true;

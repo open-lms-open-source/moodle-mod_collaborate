@@ -120,22 +120,39 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Instructor Settings.
         $mform->addElement('header', 'instructorsettings', get_string('instructorsettings',  'mod_collaborate'));
-        $mform->addElement('static', 'instructorsettingshelp', '', get_string('instructorsettingshelp', 'mod_collaborate'));
-        $mform->addElement('checkbox', 'canpostmessages',
+
+        $instructortoggle = get_config('collaborate', 'instructorsettingstoggle');
+        $mform->addElement('hidden', 'instructorsettingstoggle', $instructortoggle);
+        $mform->setType('instructorsettingstoggle', PARAM_INT);
+
+        $mform->addElement('static', 'instructorsettings:allow', '', get_string('instructorsettings:allow', 'mod_collaborate'));
+        $mform->addHelpButton('instructorsettings:allow', 'instructorsettings:allow', 'mod_collaborate');
+
+        $mform->addElement('advcheckbox', 'canpostmessages',
             get_string('canpostmessages', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
-        $mform->setDefault('canpostmessages', 1);
-        $mform->addElement('checkbox', 'canannotatewhiteboard',
+        $mform->setDefault('canpostmessages', get_config('collaborate', 'canpostmessages'));
+        $mform->disabledIf('canpostmessages', 'instructorsettingstoggle', 0);
+
+        $mform->addElement('advcheckbox', 'canannotatewhiteboard',
             get_string('canannotatewhiteboard', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
-        $mform->setDefault('canannotatewhiteboard', 0);
-        $mform->addElement('checkbox', 'cansharevideo',
+        $mform->setDefault('canannotatewhiteboard', get_config('collaborate', 'canannotatewhiteboard'));
+        $mform->disabledIf('canannotatewhiteboard', 'instructorsettingstoggle', 0);
+
+        $mform->addElement('advcheckbox', 'cansharevideo',
             get_string('cansharevideo', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
-        $mform->setDefault('cansharevideo', 0);
-        $mform->addElement('checkbox', 'canshareaudio',
+        $mform->setDefault('cansharevideo', get_config('collaborate', 'cansharevideo'));
+        $mform->disabledIf('cansharevideo', 'instructorsettingstoggle', 0);
+
+        $mform->addElement('advcheckbox', 'canshareaudio',
             get_string('canshareaudio', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
-        $mform->setDefault('canshareaudio', 0);
-        $mform->addElement('checkbox', 'candownloadrecordings',
+        $mform->setDefault('canshareaudio', get_config('collaborate', 'canshareaudio'));
+        $mform->disabledIf('canshareaudio', 'instructorsettingstoggle', 0);
+
+        $mform->addElement('advcheckbox', 'candownloadrecordings',
             get_string('candownloadrecordings', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
-        $mform->setDefault('candownloadrecordings', 1);
+        $mform->setDefault('candownloadrecordings', get_config('collaborate', 'candownloadrecordings'));
+        $mform->disabledIf('candownloadrecordings', 'instructorsettingstoggle', 0);
+
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
         /** @var MoodleQuickForm_modgrade $modgrade */

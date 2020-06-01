@@ -154,9 +154,15 @@ $string['privacy:metadata:collaborate:role'] = 'Your role within the Collaborate
 
 // Instructor settings.
 $string['instructorsettings'] = 'Instructor Settings';
-$string['instructorsettingshelp'] = 'Allow participants to:';
+$string['instructorsettings:allow'] = 'Allow participants to';
+$string['instructorsettings:allow_help'] = 'These settings will only take effect on the session participants';
+$string['instructorsettings:toggle'] = 'Turn on instructors settings';
+$string['instructorsettings:toggledesc'] = 'By checking this setting, instructors will be allowed to change the Collaborate session settings';
+$string['instructorsettings:defaultsettings'] = 'Default instructor settings';
+$string['instructorsettings:defaultsettingsdesc'] = 'Default settings for new Collaborate sessions';
 $string['cansharevideo'] = 'Share video feed';
 $string['canpostmessages'] = 'Post messages';
 $string['canannotatewhiteboard'] = 'Annotate on the whiteboard';
 $string['canshareaudio'] = 'Share audio feed';
 $string['candownloadrecordings'] = 'Download recordings';
+$string['collaborate:downloadrecordings'] = 'Download recordings';

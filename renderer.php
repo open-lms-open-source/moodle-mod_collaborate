@@ -287,8 +287,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 $output .= '<a alt="' . s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
                     format_string($name) . '</a> ';
                 $output .= '[' . $duration . ']';
-
-                if (!empty($recording->downloadurl)) {
+                $downloadcap = has_capability('mod/collaborate:downloadrecordings', $cm->context);
+                $showdownload = $collaborate->candownloadrecordings == 1 ? true : $downloadcap;
+                if (!empty($recording->downloadurl) && $showdownload) {
                     $params = ['c' => $cm->instance, 'action' => 'download', 'rid' => $recording->id,
                         'url' => urlencode($recording->downloadurl), 'sesskey' => sesskey(),
                         'sessionlinkid' => $sessionlinkrow->id
