@@ -547,10 +547,10 @@ class local {
      * @return string
      */
     public static function entitydecode($text) {
-        $other_entities = array (
+        $otherentities = array (
             '&apos;' => '\'',
             '&nbsp;' => ' '
         );
-        return html_entity_decode(strtr($text, $other_entities), ENT_QUOTES, 'UTF-8');
+        return html_entity_decode(strtr($text, $otherentities), ENT_QUOTES, 'UTF-8');
     }
 }
