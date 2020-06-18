@@ -541,4 +541,16 @@ class local {
         }
     }
 
+    /**
+     * decode html entities and other special characters
+     * @param $text
+     * @return string
+     */
+    public static function entitydecode($text) {
+        $other_entities = array (
+            '&apos;' => '\'',
+            '&nbsp;' => ' '
+        );
+        return html_entity_decode(strtr($text, $other_entities), ENT_QUOTES, 'UTF-8');
+    }
 }

@@ -94,6 +94,7 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
     $collaborate->timecreated = time();
     $collaborate->timestart = $data->timestart;
     $collaborate->timeend = $data->timeend;
+    $collaborate->intro = local::entitydecode($collaborate->intro);
     $collaborate->id = $DB->insert_record('collaborate', $collaborate);
 
     // Create session link records.
@@ -120,6 +121,7 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     $collaborate->timecreated = time();
     $collaborate->timestart = $data->timestart;
     $collaborate->timeend = $data->timeend;
+    $collaborate->intro = local::entitydecode($collaborate->intro);
     $cansharevideo = isset($collaborate->cansharevideo) && boolval($collaborate->cansharevideo);
     $collaborate->cansharevideo = $cansharevideo ?: 0;
     $canpostmessages = isset($collaborate->canpostmessages) && boolval($collaborate->canpostmessages);

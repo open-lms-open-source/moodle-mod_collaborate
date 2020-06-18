@@ -316,4 +316,9 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $this->assertEquals('ABCD', $record->sessionuid);
         $this->assertEquals(null, $record->sessionid);
     }
+
+    public function test_entity_decode() {
+        $entities = '&apos;&lt;&nbsp;&gt;&apos;';
+        $this->assertEquals('\'< >\'', local::entitydecode($entities));
+    }
 }
