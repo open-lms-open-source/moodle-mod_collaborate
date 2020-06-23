@@ -202,4 +202,16 @@ if ($ADMIN->fulltree) {
     $default = $unchecked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
+
+    // Performance settings.
+    $name = 'collaborate/performancesettings';
+    $setting = new \admin_setting_heading($name, get_string('performancesettings', 'mod_collaborate'), '');
+    $settings->add($setting);
+
+    $name = 'collaborate/disablerecentactivity';
+    $title = new lang_string('disablerecentactivity:toggle', 'collaborate');
+    $description = new lang_string('disablerecentactivity:desc', 'collaborate');
+    $default = $unchecked;
+    $setting = new \admin_setting_configcheckbox($name, $title, $description, $default, $checked, $unchecked);
+    $settings->add($setting);
 }

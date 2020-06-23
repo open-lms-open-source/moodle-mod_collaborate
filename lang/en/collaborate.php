@@ -166,3 +166,8 @@ $string['canannotatewhiteboard'] = 'Annotate on the whiteboard';
 $string['canshareaudio'] = 'Share audio feed';
 $string['candownloadrecordings'] = 'Download recordings';
 $string['collaborate:downloadrecordings'] = 'Download recordings';
+
+// Performance settings.
+$string['performancesettings'] = 'Performance settings';
+$string['disablerecentactivity:toggle'] = 'Disable recent activity';
+$string['disablerecentactivity:desc'] = 'Stop showing Collaborate session launches on recent activity feeds';
