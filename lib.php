@@ -360,6 +360,12 @@ function collaborate_cm_info_view(cm_info $cm) {
  */
 function collaborate_print_recent_mod_activity($activity, $courseid, $detail, $modnames) {
     global $PAGE;
+
+    $disablerecentactivity = get_config('collaborate', 'disablerecentactivity');
+    if (!empty($disablerecentactivity)) {
+        return;
+    }
+
     $renderer = $PAGE->get_renderer('collaborate');
     echo $renderer->recent_activity($activity, $courseid, $detail, $modnames);
 }
@@ -385,6 +391,11 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
     $reader = reset($readers);
     if (empty($reader)) {
         return; // No log reader found.
+    }
+
+    $disablerecentactivity = get_config('collaborate', 'disablerecentactivity');
+    if (!empty($disablerecentactivity)) {
+        return;
     }
 
     $modinfo = get_fast_modinfo($courseid);
