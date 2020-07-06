@@ -128,7 +128,7 @@ class meetingstatus implements \renderable, \templatable{
                             }
                         }
                     }
-                    if (count($this->groups) > 1 || $this->aag) {
+                    if ((!is_null($this->groups) && count($this->groups) > 1) || $this->aag) {
                         $this->statuslistgroups = true;
                     }
                 } else if (!$allowguestaccess) {
