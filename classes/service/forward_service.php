@@ -122,6 +122,8 @@ class forward_service extends base_visit_service {
         // since Collaborate avatar container have 200px width.
         $avatar->size = 200;
         $displayname = \core_text::substr(fullname($this->user), 0, 80);
+        $firstname = $this->user->firstname;
+        $lastname = $this->user->lastname;
 
         // Note, we get the avatar url for the site instance and don't use the $PAGE object so that this function is
         // unit testable.
@@ -137,7 +139,7 @@ class forward_service extends base_visit_service {
             $api = local::get_api();
         }
 
-        return $api->update_attendee($sessionid, $this->user->id, $avatarurl, $displayname, $role);
+        return $api->update_attendee($sessionid, $this->user->id, $avatarurl, $displayname, $role, $firstname, $lastname);
     }
 
     /**

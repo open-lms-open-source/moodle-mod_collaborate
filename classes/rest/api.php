@@ -482,10 +482,14 @@ class api {
      * @param int $userid - Moodle userid
      * @param string $avatarurl
      * @param string $displayname
+     * @param string $firstname
+     * @param string $lastname
      * @return mixed
      */
-    private function create_user($userid, $avatarurl, $displayname) {
+    private function create_user($userid, $avatarurl, $displayname, $firstname, $lastname) {
         $user = (object) [
+            "firstName" => $firstname,
+            "lastName" => $lastname,
             "avatarUrl" => $avatarurl,
             "displayName" => $displayname,
             "extId" => $userid,
@@ -520,12 +524,14 @@ class api {
      * @param int $userid - Moodle userid
      * @param $avatarurl
      * @param $displayname
+     * @param $firstname
+     * @param $lastname
      * @return mixed
      */
-    private function ensure_user($userid, $avatarurl, $displayname) {
+    private function ensure_user($userid, $avatarurl, $displayname, $firstname, $lastname) {
         $user = $this->get_user($userid);
         if (!$user) {
-            $user = $this->create_user($userid, $avatarurl, $displayname);
+            $user = $this->create_user($userid, $avatarurl, $displayname, $firstname, $lastname);
         }
         return $user;
     }
@@ -535,12 +541,16 @@ class api {
      * @param int $userid
      * @param string $avatarurl
      * @param string $displayname
+     * @param string $firstname
+     * @param string $lastname
      * @return mixed
      */
-    private function update_user($userid, $avatarurl, $displayname) {
-        $user = $this->ensure_user($userid, $avatarurl, $displayname);
+    private function update_user($userid, $avatarurl, $displayname, $firstname, $lastname) {
+        $user = $this->ensure_user($userid, $avatarurl, $displayname, $firstname, $lastname);
         $collaborateuserid = $user->id;
         $update = (object) [
+            "firstName" => $firstname,
+            "lastName" => $lastname,
             "avatarUrl" => $avatarurl,
             "displayName" => $displayname,
             "extId" => $userid,
@@ -551,9 +561,9 @@ class api {
         return $response->object;
     }
 
-    public function update_attendee($sessionid, $userid, $avatarurl, $displayname, $role) {
+    public function update_attendee($sessionid, $userid, $avatarurl, $displayname, $role, $firstname, $lastname) {
 
-        $user = $this->update_user($userid, $avatarurl, $displayname);
+        $user = $this->update_user($userid, $avatarurl, $displayname, $firstname, $lastname);
         $collabuserid = $user->id;
 
         $reqoptions = new requestoptions('', ['sessionId' => $sessionid], ['userId' => $collabuserid]);
