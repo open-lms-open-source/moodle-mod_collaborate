@@ -130,6 +130,8 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     $collaborate->canannotatewhiteboard = $canannotatewhiteboard ?: 0;
     $canshareaudio = isset($collaborate->canshareaudio) && boolval($collaborate->canshareaudio);
     $collaborate->canshareaudio = $canshareaudio ?: 0;
+    $candownloadrecordings = isset($collaborate->candownloadrecordings) && boolval($collaborate->candownloadrecordings);
+    $collaborate->candownloadrecordings = $candownloadrecordings ?: 0;
 
     local::prepare_sessionids_for_query($collaborate);
 

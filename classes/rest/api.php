@@ -353,6 +353,7 @@ class api {
         $canpostmessages = isset($collaborate->canpostmessages) && boolval($collaborate->canpostmessages) ? 1 : 0;
         $canannotatewhiteboard = isset($collaborate->canannotatewhiteboard) && boolval($collaborate->canannotatewhiteboard) ? 1 : 0;
         $canshareaudio = isset($collaborate->canshareaudio) && boolval($collaborate->canshareaudio) ? 1 : 0;
+        $candownloadrecordings = isset($collaborate->candownloadrecordings) && boolval($collaborate->candownloadrecordings) ? 1 : 0;
         $now = time();
 
         $session = (object) [
@@ -368,7 +369,7 @@ class api {
             "participantCanUseTools" => true, // Hard coded.
             "courseRoomEnabled" => true, // Hard coded.
             "canAnnotateWhiteboard" => $canannotatewhiteboard,
-            "canDownloadRecording" => true,
+            "canDownloadRecording" => $candownloadrecordings,
             "canShareVideo" => $cansharevideo,
             "raiseHandOnEnter" => false, // Hard coded.
             "boundaryTime" => local::boundary_time(),
