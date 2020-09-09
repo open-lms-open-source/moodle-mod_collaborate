@@ -127,18 +127,16 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return string
      */
     public function connection_verified($verified = false) {
-        global $OUTPUT;
-
         if ($verified) {
-            $apistatus = $OUTPUT->notification(get_string('connectionverified', 'collaborate'), 'success');
+            $apistatus = $this->output->notification(get_string('connectionverified', 'collaborate'), 'success');
         } else {
-            $apistatus = $OUTPUT->notification(get_string('connectionfailed', 'collaborate'), 'error');
+            $apistatus = $this->output->notification(get_string('connectionfailed', 'collaborate'), 'error');
         }
 
-        $o = $OUTPUT->header();
+        $o = $this->output->header();
         $o .= $apistatus;
-        $o .= $OUTPUT->close_window_button(get_string('exitapidiagnostics', 'mod_collaborate'));
-        $o .= $OUTPUT->footer();
+        $o .= $this->output->close_window_button(get_string('exitapidiagnostics', 'mod_collaborate'));
+        $o .= $this->output->footer();
 
         return $o;
     }
@@ -162,8 +160,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @throws coding_exception
      */
     public function render_view_action(view_action $viewaction) {
-        global $OUTPUT;
-
         $collaborate = $viewaction->get_collaborate();
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
@@ -183,7 +179,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         // Conditions to show the intro can change to look for own settings or whatever.
         if (!empty($collaborate->intro)) {
             $o .= '<hr />';
-            $o .= $OUTPUT->box(
+            $o .= $this->output->box(
                 format_module_intro('collaborate', $collaborate, $cm->id),
                 'generalbox mod_introbox', 'collaborateintro'
             );
@@ -385,19 +381,19 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return string
      */
     public function recent_activity($activity, $courseid, $detail, $modnames) {
-        global $CFG, $OUTPUT;
+        global $CFG;
 
         $o = '';
         $o .= '<table border="0" cellpadding="3" cellspacing="0" class="collaborate-recent">';
 
         $o .= '<tr><td class="userpicture" valign="top">';
-        $o .= $OUTPUT->user_picture($activity->user);
+        $o .= $this->output->user_picture($activity->user);
         $o .= '</td><td>';
 
         if ($detail) {
             $modname = $modnames[$activity->type];
             $o .= '<div class="title">';
-            $o .= '<img src="' . $OUTPUT->image_url('icon', 'collaborate') . '" '.
+            $o .= '<img src="' . $this->output->image_url('icon', 'collaborate') . '" '.
                 'class="icon" alt="' . $modname . '">';
             $o .= '<a href="' . $CFG->wwwroot . '/mod/collaborate/view.php?id=' . $activity->cmid . '">';
             $o .= $activity->name;
@@ -429,12 +425,10 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return string
      */
     public function api_diagnostics() {
-        global $OUTPUT;
-
         $o = '<div id="api_diag">';
-        $o .= '<div class="noticetemplate_problem">'.$OUTPUT->notification('', 'error').'</div>';
-        $o .= '<div class="noticetemplate_success">'.$OUTPUT->notification('', 'success').'</div>';
-        $o .= '<div class="noticetemplate_message">'.$OUTPUT->notification('', 'info').'</div>';
+        $o .= '<div class="noticetemplate_problem">'.$this->output->notification('', 'error').'</div>';
+        $o .= '<div class="noticetemplate_success">'.$this->output->notification('', 'success').'</div>';
+        $o .= '<div class="noticetemplate_message">'.$this->output->notification('', 'info').'</div>';
         $o .= '<div class="api-connection-status"></div>';
         $o .= '</div>';
         return $o;
