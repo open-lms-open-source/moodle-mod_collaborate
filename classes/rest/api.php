@@ -354,6 +354,7 @@ class api {
         $canannotatewhiteboard = isset($collaborate->canannotatewhiteboard) && boolval($collaborate->canannotatewhiteboard) ? 1 : 0;
         $canshareaudio = isset($collaborate->canshareaudio) && boolval($collaborate->canshareaudio) ? 1 : 0;
         $candownloadrecordings = isset($collaborate->candownloadrecordings) && boolval($collaborate->candownloadrecordings) ? 1 : 0;
+        $largesessionenable = isset($collaborate->largesessionenable) && boolval($collaborate->largesessionenable) ? 1 : 0;
         $now = time();
 
         $session = (object) [
@@ -375,6 +376,7 @@ class api {
             "boundaryTime" => local::boundary_time(),
             "showProfile" => false, // Hard coded.
             "canShareAudio" => $canshareaudio,
+            "largeSessionEnable" => $largesessionenable,
             "startTime" => $timestart,
             "modified" => $now
         ];
@@ -441,6 +443,7 @@ class api {
             // This is necessary as an unchecked check box just removes the property instead of setting it to 0.
             $collaborate->guestaccessenabled = 0;
         }
+        $collaborate->canenablelargesession = $respobj->canEnableLargeSession;
 
         $result = $DB->update_record('collaborate', $collaborate);
 

@@ -380,5 +380,20 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2018080802, 'collaborate');
     }
 
+    if ($oldversion < 2020061103) {
+        $table = new xmldb_table('collaborate');
+        $field = new xmldb_field('largesessionenable', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        $field = new xmldb_field('canenablelargesession', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2020061103, 'collaborate');
+    }
+
     return true;
 }

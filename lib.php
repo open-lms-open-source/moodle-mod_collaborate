@@ -132,6 +132,8 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     $collaborate->canshareaudio = $canshareaudio ?: 0;
     $candownloadrecordings = isset($collaborate->candownloadrecordings) && boolval($collaborate->candownloadrecordings);
     $collaborate->candownloadrecordings = $candownloadrecordings ?: 0;
+    $largesessionenable = isset($collaborate->largesessionenable) && boolval($collaborate->largesessionenable);
+    $collaborate->largesessionenable = $largesessionenable ?: 0;
 
     local::prepare_sessionids_for_query($collaborate);
 

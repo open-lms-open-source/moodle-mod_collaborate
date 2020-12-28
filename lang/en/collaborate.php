@@ -166,6 +166,9 @@ $string['canannotatewhiteboard'] = 'Annotate on the whiteboard';
 $string['canshareaudio'] = 'Share audio feed';
 $string['candownloadrecordings'] = 'Download recordings';
 $string['collaborate:downloadrecordings'] = 'Download recordings';
+$string['instructorsettings:largesession'] = 'Large sessions';
+$string['instructorsettings:largesession_help'] = 'This will enable sessions to grow up to 500 participants. If this setting is disabled upon saving and it shouldn\'t be, please contact your Collaborate representative.';
+$string['largesessionenable'] = 'Enable sessions to allocate up to 500 participants';
 
 // Performance settings.
 $string['performancesettings'] = 'Performance settings';

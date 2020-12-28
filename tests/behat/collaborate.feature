@@ -150,12 +150,8 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | Session name | Test collab |
       | Group mode | Separate groups |
     And I duplicate "Test collab" activity
-    And I edit the "2nd" collaborate instance entitled "Test collab"
-    And I set the following fields to these values:
-      | Session name | Test collab duplicated |
-    And I press "Save and return to course"
     # Make sure duplicated collaborate works.
-    And I follow "Test collab duplicated"
+    And I follow "Test collab (copy)"
     And ".mod-collaborate-group-selector" "css_element" should exist
     And I should see "No group" in the ".mod-collaborate-group-selector" "css_element"
     And I should see "Group 1" in the ".mod-collaborate-group-selector" "css_element"
@@ -167,7 +163,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     # Log in as student and make sure student doesn't see any group selectors if they are only in one group.
     And I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Test collab duplicated"
+    And I follow "Test collab (copy)"
     And ".mod-collaborate-group-selector" "css_element" should not exist
     And I should see "Join session" in the "a.btn-success" "css_element"
     And I follow "Join session"
@@ -176,7 +172,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     # Log in as student and make sure student sees group selectors if they are in more than one group.
     And I log in as "student2"
     And I am on "Course 1" course homepage
-    And I follow "Test collab duplicated"
+    And I follow "Test collab (copy)"
     And ".mod-collaborate-group-selector" "css_element" should exist
     And I should not see "No group" in the ".mod-collaborate-group-selector" "css_element"
     And I should see "Group 1" in the ".mod-collaborate-group-selector" "css_element"
@@ -185,7 +181,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I press "Join session"
     And I should see "Joined a fake session for group \"Group 1\""
     And I am on "Course 1" course homepage
-    And I follow "Test collab duplicated"
+    And I follow "Test collab (copy)"
     And I set the field "group" to "Group 2"
     When I press "Join session"
     Then I should see "Joined a fake session for group \"Group 2\""
@@ -232,26 +228,29 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see "Share video feed"
     And I should see "Share audio feed"
     And I should see "Download recordings"
+    And I should see "Enable sessions to allocate up to 500 participants"
     Then the following fields match these values:
-      | Post messages              | 0 |
-      | Annotate on the whiteboard | 0 |
-      | Share video feed           | 0 |
-      | Share audio feed           | 0 |
-      | Download recordings        | 0 |
+      | Post messages                                       | 0 |
+      | Annotate on the whiteboard                          | 0 |
+      | Share video feed                                    | 0 |
+      | Share audio feed                                    | 0 |
+      | Download recordings                                 | 0 |
+      | Enable sessions to allocate up to 500 participants  | 0 |
     And I set the following fields to these values:
-      | Post messages              | 1 |
-      | Annotate on the whiteboard | 1 |
-      | Share video feed           | 1 |
-      | Share audio feed           | 1 |
-      | Download recordings        | 1 |
+      | Post messages                                       | 1 |
+      | Annotate on the whiteboard                          | 1 |
+      | Share video feed                                    | 1 |
+      | Share audio feed                                    | 1 |
+      | Download recordings                                 | 1 |
+      | Enable sessions to allocate up to 500 participants  | 1 |
     And I should see "Post messages"
     And I click on "Save and display" "button"
     And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
     And I click on "Edit settings" "link"
     Then the following fields match these values:
-      | Post messages              | 1 |
-      | Annotate on the whiteboard | 1 |
-      | Share video feed           | 1 |
-      | Share audio feed           | 1 |
-      | Download recordings        | 1 |
-
+      | Post messages                                       | 1 |
+      | Annotate on the whiteboard                          | 1 |
+      | Share video feed                                    | 1 |
+      | Share audio feed                                    | 1 |
+      | Download recordings                                 | 1 |
+      | Enable sessions to allocate up to 500 participants  | 1 |

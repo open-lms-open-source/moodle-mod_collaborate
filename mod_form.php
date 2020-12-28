@@ -45,7 +45,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
      */
     public function definition() {
 
-        global $USER, $CFG;
+        global $CFG;
 
         $mform = $this->_form;
 
@@ -152,6 +152,21 @@ class mod_collaborate_mod_form extends moodleform_mod {
             get_string('candownloadrecordings', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
         $mform->setDefault('candownloadrecordings', get_config('collaborate', 'candownloadrecordings'));
         $mform->disabledIf('candownloadrecordings', 'instructorsettingstoggle', 0);
+
+        $mform->addElement('static', 'instructorsettings:largesession', '',
+            get_string('instructorsettings:largesession', 'mod_collaborate'));
+        $mform->addHelpButton('instructorsettings:largesession',
+            'instructorsettings:largesession', 'mod_collaborate');
+
+        $mform->addElement('hidden', 'canenablelargesession');
+        $mform->setType('canenablelargesession', PARAM_INT);
+        $mform->setDefault('canenablelargesession', 1);
+
+        $mform->addElement('advcheckbox', 'largesessionenable',
+            get_string('largesessionenable', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('largesessionenable', 0);
+        $mform->disabledIf('largesessionenable', 'instructorsettingstoggle', 0);
+        $mform->disabledIf('largesessionenable', 'canenablelargesession', 0);
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();
