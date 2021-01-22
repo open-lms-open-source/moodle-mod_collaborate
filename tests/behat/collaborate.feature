@@ -254,3 +254,44 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | Share audio feed                                    | 1 |
       | Download recordings                                 | 1 |
       | Enable sessions to allocate up to 500 participants  | 1 |
+
+  Scenario Outline: Collaborate instance enables large sessions only when there are no groups on common module settings.
+    Given the following config values are set as admin:
+      | instructorsettingstoggle | 1 | collaborate |
+      | canpostmessages          | 0 | collaborate |
+      | canannotatewhiteboard    | 0 | collaborate |
+      | canannotatewhiteboard    | 0 | collaborate |
+      | cansharevideo            | 0 | collaborate |
+      | canshareaudio            | 0 | collaborate |
+      | candownloadrecordings    | 0 | collaborate |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab Instructor settings |
+    And I follow "Test collab Instructor settings"
+    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
+    And I click on "Edit settings" "link"
+    And I set the following fields to these values:
+      | Post messages                                       | 1 |
+      | Annotate on the whiteboard                          | 1 |
+      | Share video feed                                    | 1 |
+      | Share audio feed                                    | 1 |
+      | Download recordings                                 | 1 |
+      | Enable sessions to allocate up to 500 participants  | 1 |
+      | Group mode                                          | <groupmode> |
+    And I click on "Save and display" "button"
+    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
+    And I click on "Edit settings" "link"
+    Then the following fields match these values:
+      | Post messages                                       | 1 |
+      | Annotate on the whiteboard                          | 1 |
+      | Share video feed                                    | 1 |
+      | Share audio feed                                    | 1 |
+      | Download recordings                                 | 1 |
+      | Enable sessions to allocate up to 500 participants  | <enabled> |
+
+    Examples:
+      | groupmode       | enabled |
+      | No groups       | 1       |
+      | Separate groups | 0       |
+      | Visible groups  | 0       |
