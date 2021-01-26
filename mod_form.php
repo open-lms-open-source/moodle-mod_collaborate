@@ -45,7 +45,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
      */
     public function definition() {
 
-        global $CFG;
+        global $CFG, $PAGE;
 
         $mform = $this->_form;
 
@@ -182,6 +182,8 @@ class mod_collaborate_mod_form extends moodleform_mod {
 
         // Add standard buttons, common to all modules.
         $this->add_action_buttons();
+
+        $PAGE->requires->js_call_amd('mod_collaborate/settings', 'uiinit');
     }
 
     /**

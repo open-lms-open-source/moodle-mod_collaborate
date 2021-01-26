@@ -20,7 +20,7 @@
  * @copyright Copyright (c) 2017 Blackboard Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/str'], function($, str) {
+define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
 
     return {
         /**
@@ -194,6 +194,63 @@ define(['jquery', 'core/str'], function($, str) {
                 initialised = true;
             });
 
+        },
+
+        // Method to initialize UI fixes.
+        uiinit: function() {
+            const targetNode = document.getElementById('id_largesessionenable');
+            const config = { attributes: true};
+            const callback = function(mutationsList) {
+                for (const i in mutationsList) {
+                    const mutation = mutationsList[i];
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+                        const selectNode = $('[id="id_largesessionenable"]');
+                        const disabled = selectNode.is(':disabled');
+                        // Remove all alerts if they exist
+                        if ($('.collab-alert').length > 0) {
+                            $('.collab-alert').remove();
+                        }
+                        if (disabled) {
+                            (function() {
+                                return str.get_strings([
+                                    {key: 'optionnotavailableforgroups', component: 'mod_collaborate'}
+                                ]);
+                            })()
+                                .then(function(localizedstring){
+                                    if (M.cfg.theme === 'snap') {
+                                        return templates.render('theme_snap/form_alert', {
+                                            type: 'warning',
+                                            classes: 'collab-alert',
+                                            message: localizedstring
+                                        });
+                                    } else {
+                                        return '<div class="alert alert-warning collab-alert" role="alert">\n' +
+                                            localizedstring +
+                                            '</div>';
+                                    }
+                                })
+                                .then(function (html) {
+                                    // Add warning.
+                                    selectNode.parent().parent().parent().append(html);
+                                    if (M.cfg.theme === 'snap') {
+                                        // Colors for disabling the divs.
+                                        const layoverbkcolor = "#f1f1f1";
+                                        const layovercolor = "#d5d5d5";
+                                        selectNode.parent().parent().parent().css('color', layovercolor);
+                                        selectNode.parent().parent().parent().css('background-color', layoverbkcolor);
+                                    }
+                                });
+                        } else {
+                            if (M.cfg.theme === 'snap') {
+                                selectNode.parent().parent().parent().css('color', '#565656');
+                                selectNode.parent().parent().parent().css('background-color', 'white');
+                            }
+                        }
+                    }
+                }
+            };
+            const observer = new MutationObserver(callback);
+            observer.observe(targetNode, config);
         }
     };
 });
