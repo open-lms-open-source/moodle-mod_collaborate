@@ -295,3 +295,28 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | No groups       | 1       |
       | Separate groups | 0       |
       | Visible groups  | 0       |
+
+  @javascript
+  Scenario: Collaborate large sessions option message is shown accordingly.
+    Given the following config values are set as admin:
+      | instructorsettingstoggle | 1 | collaborate |
+      | canpostmessages          | 0 | collaborate |
+      | canannotatewhiteboard    | 0 | collaborate |
+      | canannotatewhiteboard    | 0 | collaborate |
+      | cansharevideo            | 0 | collaborate |
+      | canshareaudio            | 0 | collaborate |
+      | candownloadrecordings    | 0 | collaborate |
+    And I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name | Test collab Instructor settings |
+    And I follow "Test collab Instructor settings"
+    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
+    And I click on "Edit settings" "link"
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Group mode | Separate groups |
+    Then I should see "This option is not available for groups"
+    Then I set the following fields to these values:
+      | Group mode | No groups |
+    Then I should not see "This option is not available for groups"

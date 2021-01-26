@@ -224,7 +224,7 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
                                             message: localizedstring
                                         });
                                     } else {
-                                        return '<div class="alert alert-warning collab-alert" role="alert">\n' +
+                                        return '<div class="alert alert-warning collab-alert" role="alert">' +
                                             localizedstring +
                                             '</div>';
                                     }
@@ -234,16 +234,12 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
                                     selectNode.parent().parent().parent().append(html);
                                     if (M.cfg.theme === 'snap') {
                                         // Colors for disabling the divs.
-                                        const layoverbkcolor = "#f1f1f1";
-                                        const layovercolor = "#d5d5d5";
-                                        selectNode.parent().parent().parent().css('color', layovercolor);
-                                        selectNode.parent().parent().parent().css('background-color', layoverbkcolor);
+                                        selectNode.parent().parent().parent().addClass('mod-collaborate-dimmed-option');
                                     }
                                 });
                         } else {
                             if (M.cfg.theme === 'snap') {
-                                selectNode.parent().parent().parent().css('color', '#565656');
-                                selectNode.parent().parent().parent().css('background-color', 'white');
+                                selectNode.parent().parent().parent().removeClass('mod-collaborate-dimmed-option');
                             }
                         }
                     }

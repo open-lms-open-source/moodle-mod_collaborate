@@ -12,3 +12,8 @@
     position: relative;
     bottom: 0.15rem;
 }
+
+.mod-collaborate-dimmed-option {
+    color: #d5d5d5;
+    background-color: #f1f1f1;
+}
