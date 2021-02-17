@@ -36,7 +36,7 @@ require_once(__DIR__ . '/fixtures/recordingstub.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_collaborate_recording_counter_testcase extends advanced_testcase {
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest();
     }
 

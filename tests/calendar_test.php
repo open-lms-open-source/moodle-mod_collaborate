@@ -33,7 +33,7 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
 
     private $user;
 
-    protected function setUp() {
+    protected function setUp(): void {
         global $USER;
         // The user we are going to test this on.
         $this->setAdminUser();
