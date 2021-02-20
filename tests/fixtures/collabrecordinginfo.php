@@ -35,9 +35,9 @@ return [
         ],
         [
             'id' => 2,
+            'action' => mod_collaborate\recording_counter::VIEW,
             'instanceid' => 1,
             'recordingid' => 1,
-            'action' => mod_collaborate\recording_counter::VIEW,
         ],
     ]
 ];

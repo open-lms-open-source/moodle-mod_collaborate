@@ -53,7 +53,7 @@ class mod_collaborate_recording_counter_testcase extends advanced_testcase {
 
         // Simulate firing view and download events by loading data and deleting cache.
         $data = include(__DIR__.'/fixtures/collabrecordinginfo.php');
-        $this->loadDataSet($this->createArrayDataSet($data));
+        $this->dataset_from_array($data)->to_database();
         $cache->delete($cminfo->id);
 
         $counts = $recordinghelper->get_recording_counts();
