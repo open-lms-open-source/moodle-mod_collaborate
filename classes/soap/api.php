@@ -49,7 +49,7 @@ use mod_collaborate\logging\constants,
  * The collab api.
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright Copyright (c) 2015 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class api extends generated\SASDefaultAdapter implements api_session, api_attendee, api_recordings {

@@ -18,8 +18,8 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Upgrade library for collaborate.
- * @author    Guy Thomas <osdev@blackboard.com>
- * @copyright Copyright (c) 2017 Blackboard Inc.
+ * @author    Guy Thomas
+ * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class collaborate_update_manager {
