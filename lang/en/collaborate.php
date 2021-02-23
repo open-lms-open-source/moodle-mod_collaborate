@@ -169,7 +169,7 @@ $string['collaborate:downloadrecordings'] = 'Download recordings';
 $string['instructorsettings:largesession'] = 'Large sessions';
 $string['instructorsettings:largesession_help'] = 'This will enable sessions to grow up to 500 participants. If this setting is disabled upon saving and it shouldn\'t be, please contact your Collaborate representative.';
 $string['largesessionenable'] = 'Enable sessions to allocate up to 500 participants';
-$string['optionnotavailableforgroups'] = 'This option is not available for groups';
+$string['optionnotavailableforgroupsnorguests'] = 'This option is not available for groups nor guests';
 
 // Performance settings.
 $string['performancesettings'] = 'Performance settings';
