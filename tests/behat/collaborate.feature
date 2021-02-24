@@ -320,3 +320,21 @@ Feature: Collaborate instances can be created by teachers and joined by students
     Then I set the following fields to these values:
       | Group mode | No groups |
     Then I should not see "This option is not available for groups"
+
+  Scenario: Collaborate large sessions can be created with guest access.
+    Given I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    And I add a "Collaborate" to section "1" and I fill the form with:
+      | Session name                                        | Test collab large guests |
+      | Allow Collaborate guest access                      | 1                        |
+      | Collaborate guest role                              | Participant              |
+      | Enable sessions to allocate up to 500 participants  | 1                        |
+    # Yep, it was added.
+    And I follow "Test collab large guests"
+    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
+    And I click on "Edit settings" "link"
+    And I expand all fieldsets
+    And I set the following fields to these values:
+      | Collaborate guest role | Presenter |
+    And I click on "Save and display" "button"
+    Then I should see "In large scale sessions, guests must be participants"

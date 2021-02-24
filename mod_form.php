@@ -237,9 +237,31 @@ class mod_collaborate_mod_form extends moodleform_mod {
             $defaultvalues = (array)$defaultvalues;
         }
         $groupmode = $defaultvalues['groupmode'];
+        $largesession = array_key_exists('largesessionenable', $defaultvalues) && $defaultvalues['largesessionenable'];
         if ($groupmode != NOGROUPS) {
             $defaultvalues['largesessionenable'] = 0;
         }
+        if ($largesession) {
+            $defaultvalues['guestrole'] = 'pa';
+        }
         parent::set_data($defaultvalues);
+    }
+    /**
+     * Perform minimal validation on the settings form
+     * @param array $data
+     * @param array $files
+     */
+    public function validation($data, $files) {
+
+        $errors = parent::validation($data, $files);
+
+        if (!empty($data['guestaccessenabled']) && !empty($data['largesessionenable']) &&
+            $data['guestaccessenabled'] == 1 && $data['largesessionenable'] == 1) {
+            if ($data['guestrole'] != 'pa') {
+                $errors['guestrole'] = get_string('rolenotavailableforlargesession', 'collaborate');
+            }
+        }
+
+        return $errors;
     }
 }
