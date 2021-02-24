@@ -167,7 +167,6 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->setDefault('largesessionenable', 0);
         $mform->disabledIf('largesessionenable', 'instructorsettingstoggle', 0);
         $mform->disabledIf('largesessionenable', 'canenablelargesession', 0);
-        $mform->disabledIf('largesessionenable', 'guestaccessenabled', 'eq', 1);
         $mform->disabledIf('largesessionenable', 'groupmode', 'neq', NOGROUPS);
 
         // Add standard grading elements.
@@ -238,8 +237,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
             $defaultvalues = (array)$defaultvalues;
         }
         $groupmode = $defaultvalues['groupmode'];
-        $guestaccess = array_key_exists('guestaccessenabled', $defaultvalues) && $defaultvalues['guestaccessenabled'];
-        if ($groupmode != NOGROUPS || $guestaccess) {
+        if ($groupmode != NOGROUPS) {
             $defaultvalues['largesessionenable'] = 0;
         }
         parent::set_data($defaultvalues);

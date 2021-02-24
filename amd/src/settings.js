@@ -213,7 +213,7 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
                         if (disabled) {
                             (function() {
                                 return str.get_strings([
-                                    {key: 'optionnotavailableforgroupsnorguests', component: 'mod_collaborate'}
+                                    {key: 'optionnotavailableforgroups', component: 'mod_collaborate'}
                                 ]);
                             })()
                                 .then(function(localizedstring){
@@ -230,15 +230,11 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
                                     }
                                 })
                                 .then(function (html) {
-                                    const shouldnotpaint = document.getElementsByClassName('collab-alert');
-                                    // Somehow the observer reports duplicated mutations sometimes. This avoids buggy displaying.
-                                    if (shouldnotpaint.length == 0) {
-                                        // Add warning.
-                                        selectNode.parent().parent().parent().append(html);
-                                        if (M.cfg.theme === 'snap') {
-                                            // Colors for disabling the divs.
-                                            selectNode.parent().parent().parent().addClass('mod-collaborate-dimmed-option');
-                                        }
+                                    // Add warning.
+                                    selectNode.parent().parent().parent().append(html);
+                                    if (M.cfg.theme === 'snap') {
+                                        // Colors for disabling the divs.
+                                        selectNode.parent().parent().parent().addClass('mod-collaborate-dimmed-option');
                                     }
                                 });
                         } else {
