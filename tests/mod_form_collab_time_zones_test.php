@@ -16,8 +16,8 @@
 
 /**
  * Tests for collab form.
- * @author    Jonathan Garcia Gomez <jonathan.garcia@blackboard.com>
- * @copyright Copyright (c) 2016 Blackboard Inc.
+ * @author    Jonathan Garcia Gomez <jonathan.garcia@openlms.net>
+ * @copyright Copyright (c) 2016 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

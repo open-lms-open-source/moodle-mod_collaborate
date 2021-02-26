@@ -18,7 +18,7 @@
  * The mod_collaborate instance list viewed event.
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright Copyright (c) 2015 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * The mod_collaborate instance list viewed event class.
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright Copyright (c) 2015 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {

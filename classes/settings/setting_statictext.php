@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * @author    Guy Thomas <osdev@blackboard.com>
- * @copyright Copyright (c) 2017 Blackboard Inc.
+ * @author    Guy Thomas
+ * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -24,8 +24,8 @@ namespace mod_collaborate\settings;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * @author    Guy Thomas <osdev@blackboard.com>
- * @copyright Copyright (c) 2017 Blackboard Inc.
+ * @author    Guy Thomas
+ * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class setting_statictext extends \admin_setting {

@@ -21,7 +21,7 @@
  * visit: http://docs.moodle.org/en/Development:lib/formslib.php
  *
  * @package   mod_collaborate
- * @copyright Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright Copyright (c) 2015 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -35,7 +35,7 @@ use mod_collaborate\local;
  * Module instance settings form
  *
  * @package    mod_collaborate
- * @copyright  Copyright (c) 2015 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright  Copyright (c) 2015 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_collaborate_mod_form extends moodleform_mod {
