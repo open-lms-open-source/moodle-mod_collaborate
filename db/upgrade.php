@@ -395,5 +395,30 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020061103, 'collaborate');
     }
 
+    if ($oldversion < 2020061104) {
+
+        // Define table collaborate_migration to be created.
+        $table = new xmldb_table('collaborate_migration');
+
+        // Adding fields to table collaborate_migration.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('sessionid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('sessionuid', XMLDB_TYPE_CHAR, '32', null, null, null, null);
+
+        // Adding keys to table collaborate_migration.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Adding indexes to table collaborate_migration.
+        $table->add_index('sessionid', XMLDB_INDEX_UNIQUE, array('sessionid'));
+
+        // Conditionally launch create table for collaborate_migration.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2020061104, 'collaborate');
+    }
+
     return true;
 }

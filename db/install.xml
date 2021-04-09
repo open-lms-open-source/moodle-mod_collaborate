@@ -86,5 +86,18 @@
         <KEY NAME="sessionuid" TYPE="foreign-unique" FIELDS="sessionuid" REFTABLE="collaborate" REFFIELDS="sessionuid"/>
       </KEYS>
     </TABLE>
+    <TABLE NAME="collaborate_migration" COMMENT="Stores the ID association list of migrated sessions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="sessionid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sessionuid" TYPE="char" LENGTH="32" NOTNULL="false" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="sessionid" UNIQUE="true" FIELDS="sessionid"/>
+      </INDEXES>
+    </TABLE>
   </TABLES>
 </XMLDB>
