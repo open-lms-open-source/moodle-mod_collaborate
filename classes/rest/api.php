@@ -742,4 +742,10 @@ class api {
             new requestoptions('', ['recordingId' => $recordingid])
         );
     }
+
+    public function launch_soap_migration() {
+        $requestobj = new requestoptions(''); // Docs says this call does not need params.
+        $validation = new http_code_validation([202]); // Default validates code 200, need to create a custom for 202.
+        $this->rest_call(self::POST, '/migration', $requestobj, $validation);
+    }
 }
