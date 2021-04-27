@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die;
 use mod_collaborate\logging\constants;
 use mod_collaborate\settings\setting_trimmed_configtext;
 use mod_collaborate\settings\setting_statictext;
+use mod_collaborate\task\soap_migrator_task;
 
 if ($ADMIN->fulltree) {
 
@@ -108,6 +109,33 @@ if ($ADMIN->fulltree) {
     $default = '';
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
     $settings->add($setting);
+
+    $migrationstatus = get_config('collaborate', 'migrationstatus');
+    if ($migrationstatus) {
+        switch ($migrationstatus) {
+            case soap_migrator_task::STATUS_IDLE:
+                $notify = new \core\output\notification(get_string('soapmigrationpending', 'mod_collaborate'),
+                    \core\output\notification::NOTIFY_WARNING);
+                break;
+            case soap_migrator_task::STATUS_LAUNCHED:
+            case soap_migrator_task::STATUS_READY:
+            case soap_migrator_task::STATUS_COLLECTED:
+                $notify = new \core\output\notification(get_string('soapmigrationinprogress', 'mod_collaborate'),
+                    \core\output\notification::NOTIFY_INFO);
+                break;
+            case soap_migrator_task::STATUS_MIGRATED:
+                $notify = new \core\output\notification(get_string('soapmigrationfinished', 'mod_collaborate'),
+                    \core\output\notification::NOTIFY_SUCCESS);
+                break;
+            default:
+                $notify = null;
+                break;
+        }
+        if ($notify) {
+            $settings->add(new admin_setting_heading('collaborate/migrationstatus', '',
+                $OUTPUT->render($notify)));
+        }
+    }
 
     $name = 'collaborate/restmigration';
     $migratebutton = '<button class="btn btn-primary" disabled="true">'.
