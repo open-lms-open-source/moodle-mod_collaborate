@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use core\task\adhoc_task,
     mod_collaborate\local,
+    mod_collaborate\exceptions\soap_migration_exception,
     mod_collaborate\rest\api as restapi;
 
 class soap_migrator_task extends adhoc_task {
@@ -56,6 +57,7 @@ class soap_migrator_task extends adhoc_task {
         $this->launch_soap_migration();
 
         // Request the status.
+        $this->check_migration_status();
 
         // Fetch and store data.
 
@@ -76,7 +78,7 @@ class soap_migrator_task extends adhoc_task {
             return;
         }
         // Should not happen but...
-        throw new \coding_exception('Credentials must not be empty');
+        throw new soap_migration_exception('Credentials must not be empty');
     }
 
     private function launch_soap_migration() {
@@ -89,7 +91,21 @@ class soap_migrator_task extends adhoc_task {
                 set_config('migrationstatus', self::STATUS_LAUNCHED, 'collaborate');
                 $this->log_migration_entry('Migration launched successfully');
             } catch (\Exception $e) {
-                throw new \coding_exception('Migration could not be launched');
+                throw new soap_migration_exception('Migration could not be launched');
+            }
+        }
+    }
+
+    private function check_migration_status() {
+        $current = get_config('collaborate', 'migrationstatus');
+        if ($current == self::STATUS_LAUNCHED) {
+            $api = local::get_api(false, null);
+            $result = $api->check_soap_migration_status();
+            if ($result == 'FINISHED') {
+                set_config('migrationstatus', self::STATUS_READY, 'collaborate');
+                $this->log_migration_entry('Migration data is ready to be collected');
+            } else {
+                throw new soap_migration_exception('Data is not ready yet, re-scheduling the task');
             }
         }
     }

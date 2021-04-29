@@ -57,4 +57,21 @@ class soap_migrator_task_test extends advanced_testcase {
         $count = $DB->count_records('task_adhoc');
         $this->assertEquals(1, $count);
     }
+
+    public function test_execute_task_check_migration_status() {
+        global $DB;
+        set_config('restserver', 'serverexample', 'collaborate');
+        set_config('restkey', 'keyexample', 'collaborate');
+        set_config('restsecret', 'secretexample', 'collaborate');
+        set_config('migrationstatus', soap_migrator_task::STATUS_LAUNCHED, 'collaborate');
+
+        $task = new soap_migrator_task();
+        $count = $DB->count_records('task_adhoc');
+        $this->assertEquals(0, $count);
+        $this->expectExceptionMessage('Curl options should be defined');
+        // Should fail because REST API has wrong credentials and the task should queue itself.
+        $task->execute();
+        $count = $DB->count_records('task_adhoc');
+        $this->assertEquals(1, $count);
+    }
 }
