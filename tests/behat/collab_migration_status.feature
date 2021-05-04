@@ -55,3 +55,15 @@ Feature: Collaborate migration status message changes
       |   4   | Migration from SOAP to REST is currently in progress.        |
       |   5   | Migration from SOAP to REST has been completed successfully. |
 
+  @javascript
+  Scenario: The migration button is disabled once the ad hoc task has been added.
+    Given I log in as "admin"
+    And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
+    And I click on "Migrate to REST API" "button"
+    And I click on "Continue" "button"
+    Then I should see "Migration execution has been scheduled."
+    And the following config values are set as admin:
+      |      config     |     value   |   plugin   |
+      | migrationstatus |   1         | collaborate|
+    And I reload the page
+    Then the "disabled" attribute of ".restapisettings input[type='button']" "css_element" should be set

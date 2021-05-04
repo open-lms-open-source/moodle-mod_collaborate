@@ -137,12 +137,20 @@ if ($ADMIN->fulltree) {
         }
     }
 
-    $name = 'collaborate/restmigration';
-    $migratebutton = '<button class="btn btn-primary" disabled="true">'.
-            get_string('configrestmigrate', 'mod_collaborate').'</button>';
-    $setting = new setting_statictext($name, $migratebutton);
-    $settings->add($setting);
-
+    if (empty($CFG->mod_collaborate_hide_migration_button)) {
+        $name = 'collaborate/restmigration';
+        $attributes = '';
+        if ($migrationstatus != false) {
+            $attributes = 'disabled="true"';
+        } else {
+            $url = $CFG->wwwroot . "/mod/collaborate/restmigration.php";
+            $attributes = 'onclick="window.location.href = \''.$url.'\';"';
+        }
+        $migratebutton = '<input type="button" class="btn btn-primary" ' . $attributes .'
+            value="'. get_string('configrestmigrate', 'mod_collaborate') . '" />';
+        $setting = new setting_statictext($name, $migratebutton);
+        $settings->add($setting);
+    }
     $name = 'collaborate/closerestapisettings';
     $setting = new setting_statictext($name, '</fieldset>');
     $settings->add($setting);
