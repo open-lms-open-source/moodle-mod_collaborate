@@ -176,3 +176,6 @@ $string['rolenotavailableforlargesession'] = 'In large scale sessions, guests mu
 $string['performancesettings'] = 'Performance settings';
 $string['disablerecentactivity:toggle'] = 'Disable recent activity';
 $string['disablerecentactivity:desc'] = 'Stop showing Collaborate session launches on recent activity feeds';
+
+$string['migrationoncourseerror:creation'] = 'Edition of collaborate sessions is disabled. Migration to REST in course.';
+$string['migrationoncourseerror:management'] = 'Management of collaborate sessions is disabled. Migration to REST in course.';

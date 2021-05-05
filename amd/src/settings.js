@@ -197,7 +197,17 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
         },
 
         // Method to initialize UI fixes.
-        uiinit: function() {
+        uiinit: function(migrationStatus) {
+            if (migrationStatus && migrationStatus < 5) {
+                let selector = '#page-mod-collaborate-mod section#region-main div[role=\'main\']';
+                if (M.cfg.theme === 'snap') {
+                    selector = '#page-mod-collaborate-mod main div[role=\'main\']';
+                }
+                const targetNode = document.querySelector(selector);
+                if (targetNode) {
+                    targetNode.setAttribute('style', 'display: none;');
+                }
+            }
             const targetNode = document.getElementById('id_largesessionenable');
             const config = { attributes: true};
             const callback = function(mutationsList) {

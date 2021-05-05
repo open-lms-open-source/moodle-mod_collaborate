@@ -37,6 +37,7 @@ use mod_collaborate\renderables\recording_counts;
 use mod_collaborate\recording_counter;
 use mod_collaborate\local;
 use mod_collaborate\sessionlink;
+use mod_collaborate\migration_status;
 
 class mod_collaborate_renderer extends plugin_renderer_base {
 
@@ -160,11 +161,16 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @throws coding_exception
      */
     public function render_view_action(view_action $viewaction) {
+        // Check if REST migration is on course.
+        if (migration_status::get_instance()->show_migration_notification(
+                get_string('migrationoncourseerror:management', 'mod_collaborate'))) {
+            return;
+        }
         $collaborate = $viewaction->get_collaborate();
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
-        $o = '<h2 class="activity-title">'.format_string($collaborate->name).'</h2>';
+        $o = '<h2 class="activity-title">' . format_string($collaborate->name) . '</h2>';
 
         // Guest url.
         $guesturls = $viewaction->get_guest_urls();
@@ -172,7 +178,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         $times = local::get_times($collaborate);
         $o .= '<div class="container">
-                <div class="tab-content">';
+            <div class="tab-content">';
         $meetingstatus = new meetingstatus($times, $viewaction, false, $usetabs);
         $o .= $this->render($meetingstatus);
 
