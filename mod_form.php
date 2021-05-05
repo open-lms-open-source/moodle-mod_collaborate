@@ -158,15 +158,10 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addHelpButton('instructorsettings:largesession',
             'instructorsettings:largesession', 'mod_collaborate');
 
-        $mform->addElement('hidden', 'canenablelargesession');
-        $mform->setType('canenablelargesession', PARAM_INT);
-        $mform->setDefault('canenablelargesession', 1);
-
         $mform->addElement('advcheckbox', 'largesessionenable',
             get_string('largesessionenable', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
         $mform->setDefault('largesessionenable', 0);
         $mform->disabledIf('largesessionenable', 'instructorsettingstoggle', 0);
-        $mform->disabledIf('largesessionenable', 'canenablelargesession', 0);
         $mform->disabledIf('largesessionenable', 'groupmode', 'neq', NOGROUPS);
 
         // Add standard grading elements.
