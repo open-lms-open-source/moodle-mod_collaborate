@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
 use mod_collaborate\local;
+use mod_collaborate\migration_status;
 
 /**
  * Module instance settings form
@@ -44,10 +45,13 @@ class mod_collaborate_mod_form extends moodleform_mod {
      * Defines forms elements
      */
     public function definition() {
-
         global $CFG, $PAGE;
 
         $mform = $this->_form;
+
+        // Show notification if REST migration is on course.
+        migration_status::get_instance()->show_migration_notification(
+            get_string('migrationoncourseerror:creation', 'mod_collaborate'));
 
         local::require_configured();
 
@@ -178,7 +182,8 @@ class mod_collaborate_mod_form extends moodleform_mod {
         // Add standard buttons, common to all modules.
         $this->add_action_buttons();
 
-        $PAGE->requires->js_call_amd('mod_collaborate/settings', 'uiinit');
+        $migrationstatus = migration_status::get_instance()->get_migration_status();
+        $PAGE->requires->js_call_amd('mod_collaborate/settings', 'uiinit', ['migrationstatus' => $migrationstatus]);
     }
 
     /**
@@ -247,7 +252,6 @@ class mod_collaborate_mod_form extends moodleform_mod {
      * @param array $files
      */
     public function validation($data, $files) {
-
         $errors = parent::validation($data, $files);
 
         if (!empty($data['guestaccessenabled']) && !empty($data['largesessionenable']) &&
