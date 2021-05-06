@@ -748,4 +748,15 @@ class api {
         $validation = new http_code_validation([202]); // Default validates code 200, need to create a custom for 202.
         $this->rest_call(self::POST, '/migration', $requestobj, $validation);
     }
+
+    public function check_soap_migration_status() {
+        $requestobj = new requestoptions(''); // Docs says this call does not need params.
+        $response = $this->rest_call(self::GET, '/migration/status', $requestobj);
+
+        if (!isset($response->object->status)) {
+            $this->process_error('error:restapimigrationstatus', loggingconstants::SEV_CRITICAL);
+        }
+
+        return $response->object->status;
+    }
 }

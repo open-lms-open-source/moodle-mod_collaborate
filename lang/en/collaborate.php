@@ -90,6 +90,7 @@ $string['error:restapifailedtoenroll'] = 'Failed to create enrollment for userid
 $string['error:restapiduplicatecontexts'] = 'Multiple contexts in Collaborate with extId {$a}.';
 $string['error:restapiduplicateusers'] = 'Multiple users in Collaborate with extId {$a}.';
 $string['error:restapisessionguesturlmissing'] = 'Guest url missing for sessionId {$a}.';
+$string['error:restapimigrationstatus'] = 'SOAP migration status could not be verified.';
 $string['error:serviceunreachable'] = 'WSDL unreachable';
 $string['error:unknownaction'] = 'Unknown action';
 $string['eventrecordingdeleted'] = 'Recording deleted';
