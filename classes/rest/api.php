@@ -34,6 +34,7 @@ use mod_collaborate\local,
     mod_collaborate\sessionlink,
     mod_collaborate\renderables\recording,
     mod_collaborate\recording_counter,
+    mod_collaborate\task\soap_migrator_task,
     cm_info,
     stdClass;
 
@@ -57,9 +58,22 @@ class api {
     const POST = 'POST';
     const PUT = 'PUT';
 
+    /**
+     * @var stdClass {expires_in, access_token}
+     */
+    private $accessmigrationtoken = null;
+
+    /**
+     * @var int
+     */
+    private $accessmigrationtokenexpires = null;
+
     private function __construct(stdClass $config) {
         $this->setup($config);
-        if (!(defined('PHPUNIT_TEST') && PHPUNIT_TEST)) {
+        if (isset($config->migrationstatus) && $config->migrationstatus != soap_migrator_task::STATUS_MIGRATED) {
+            self::require_configured();
+            $this->set_migration_accesstoken();
+        } else if (!(defined('PHPUNIT_TEST') && PHPUNIT_TEST)) {
             self::require_configured();
             $this->set_accesstoken();
         }
@@ -743,15 +757,157 @@ class api {
         );
     }
 
+    /**
+     * Set migration access token.
+     * @param bool $testingpurpose If true, returns the token generated instead of setting it.
+     * @return response access_token.
+     */
+    public function set_migration_accesstoken($testingpurpose = false) {
+        $data = [
+            'grant_type' => 'password',
+            'username' => $this->config->restkey,
+            'password' => $this->config->restsecret
+        ];
+
+        $this->logger->info('Getting access migration token with req data', $data);
+
+        $reqopts = new requestoptions('', [], $data);
+
+        try {
+            $validationerr = new http_validation_code_error('error:restapifailedtocreateaccesstoken',
+                loggingconstants::SEV_CRITICAL);
+            $validation = new http_code_validation([200], [
+                '400' => $validationerr,
+                '401' => $validationerr,
+            ]);
+            $response = $this->rest_migration_call(self::POST, 'token', $reqopts, $validation);
+            $this->accessmigrationtoken = $response->object;
+            if (!empty($this->accessmigrationtoken->access_token)) {
+                $this->accessmigrationtokenexpires = time() + $this->accessmigrationtoken->expires_in;
+                $this->usable = true;
+            } else {
+                $this->usable = false;
+            }
+            if ($testingpurpose) {
+                return $response->object;
+            }
+        } catch (Exception $e) {
+            $this->usable = false;
+        }
+    }
+
+    /**
+     * @param string $verb
+     * @param string $resourcepath
+     * @param requestoptions $requestoptions
+     * @param http_code_validation | null $validation
+     * @return response
+     */
+    public function rest_migration_call($verb, $resourcepath, requestoptions $requestoptions,
+                              http_code_validation $validation = null) {
+
+        global $CFG;
+
+        if (empty($validation)) {
+            $validation = new http_code_validation();
+        }
+        if ($resourcepath != 'token') {
+            if (!$this->is_usable()) {
+                if (!self::configured()) {
+                    throw new \moodle_exception('error:noconfiguration', 'collaborate');
+                } else {
+                    if (!$this->test_service_reachable($this->config->restserver)) {
+                        throw new \moodle_exception('error:restapiunreachable', 'collaborate');
+                    } else {
+                        throw new \moodle_exception('error:restapiunusable', 'collaborate');
+                    }
+                }
+            }
+        }
+        $ch = curl_init();
+        $headers = [];
+        if ($resourcepath != 'token') {
+            if (!self::configured()) {
+                throw new \moodle_exception('error:noconfiguration', 'collaborate');
+            }
+            if ($this->accessmigrationtokenexpires < time()) {
+                // Token has expired, get a new one!
+                $this->set_migration_accesstoken();
+            }
+            if (empty($this->accessmigrationtoken) || empty($this->accessmigrationtoken->access_token)) {
+                throw new \moodle_exception('error:restapifailedtocreateaccesstoken', 'collaborate');
+            }
+            $headers[] = 'Authorization: Bearer '.$this->accessmigrationtoken->access_token;
+        }
+        $curloutput = null;
+        if ($CFG->debugdeveloper) {
+            $curloutput = fopen('php://temp', 'w+');
+            if (is_resource($curloutput)) {
+                curl_setopt($ch, CURLOPT_VERBOSE, true);
+                curl_setopt($ch, CURLOPT_STDERR, $curloutput);
+            }
+        }
+        $query = empty($requestoptions->queryparams) ? '' : '?' . http_build_query($requestoptions->queryparams, '', '&');
+        $url = $this->api_url($this->process_resource_path($resourcepath, $requestoptions->pathparams) . $query);
+        $this->logger->info('making curl call', ['verb' => $verb,  'url' => $url, 'json' => $requestoptions->bodyjson]);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        switch ($verb) {
+            case 'DELETE':
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+                break;
+            case 'PATCH':
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
+                break;
+            case 'POST':
+                curl_setopt($ch, CURLOPT_POST, true);
+                break;
+            // Note, for PUT we cannot use CURLOPT_PUT as it adds the header Expect: 100-continue.
+            case 'PUT':
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                break;
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        if ($verb == 'POST') {
+            $postdata = !empty($requestoptions->postfields) ? $requestoptions->postfields : '';
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+        }
+        if (!empty($requestoptions->bodyjson)) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $requestoptions->bodyjson);
+            $headers[] = 'Content-Type: application/json';
+            $headers[] = 'Content-Length: ' . strlen($requestoptions->bodyjson);
+        }
+        if (!empty($headers)) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+        $jsonstr = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $this->logger->info('response', ['httpcode' => $httpcode]);
+        $this->logger->info('response', ['jsonstr' => $jsonstr]);
+
+        if ($CFG->debugdeveloper && is_resource($curloutput)) {
+            rewind($curloutput);
+            $output = stream_get_contents($curloutput);
+            if ($output !== false) {
+                $this->logger->info('debug request and response', [$output]);
+            }
+            fclose($curloutput);
+        }
+
+        $response = new response($jsonstr, $httpcode);
+        $validation->validate_response($response);
+        return $response;
+    }
+
     public function launch_soap_migration() {
         $requestobj = new requestoptions(''); // Docs says this call does not need params.
         $validation = new http_code_validation([202]); // Default validates code 200, need to create a custom for 202.
-        $this->rest_call(self::POST, '/migration', $requestobj, $validation);
+        $this->rest_migration_call(self::POST, '/migration', $requestobj, $validation);
     }
 
     public function check_soap_migration_status() {
         $requestobj = new requestoptions(''); // Docs says this call does not need params.
-        $response = $this->rest_call(self::GET, '/migration/status', $requestobj);
+        $response = $this->rest_migration_call(self::GET, '/migration/status', $requestobj);
 
         if (!isset($response->object->status)) {
             $this->process_error('error:restapimigrationstatus', loggingconstants::SEV_CRITICAL);
