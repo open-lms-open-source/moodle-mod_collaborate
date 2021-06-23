@@ -91,6 +91,7 @@ $string['error:restapiduplicatecontexts'] = 'Multiple contexts in Collaborate wi
 $string['error:restapiduplicateusers'] = 'Multiple users in Collaborate with extId {$a}.';
 $string['error:restapisessionguesturlmissing'] = 'Guest url missing for sessionId {$a}.';
 $string['error:restapimigrationstatus'] = 'SOAP migration status could not be verified.';
+$string['error:restapimigrationdata'] = 'SOAP migration data could not be retrieved.';
 $string['error:serviceunreachable'] = 'WSDL unreachable';
 $string['error:unknownaction'] = 'Unknown action';
 $string['eventrecordingdeleted'] = 'Recording deleted';

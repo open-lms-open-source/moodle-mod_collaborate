@@ -46,6 +46,7 @@ class soap_migrator_task extends adhoc_task {
         $config = get_config('collaborate');
         if (!isset($config->migrationstatus)) { // We need to do it just once.
             set_config('migrationstatus', self::STATUS_IDLE, 'collaborate');
+            set_config('migrationoffset', 0, 'collaborate');
         }
 
         // Copy SOAP credentials into REST credentials.
@@ -60,6 +61,7 @@ class soap_migrator_task extends adhoc_task {
         $this->check_migration_status();
 
         // Fetch and store data.
+        $this->fetch_migration_data();
 
         // Populate table.
 
@@ -72,13 +74,44 @@ class soap_migrator_task extends adhoc_task {
      */
     private function set_rest_credentials($server, $username, $password) {
         if (!empty($server) && !empty($username) && !empty($password)) {
-            set_config('restserver', $server, 'collaborate');
+            $restserver = $this->resolve_rest_server($server);
+            set_config('restserver', $restserver, 'collaborate');
             set_config('restkey', $username, 'collaborate');
             set_config('restsecret', $password, 'collaborate');
             return;
         }
         // Should not happen but...
         throw new soap_migration_exception('Credentials must not be empty');
+    }
+
+    /**
+     * Resolves the REST server given SOAP server.
+     * @param $soapserver string
+     * @return string
+     */
+    private function resolve_rest_server($soapserver) {
+        switch ($soapserver) {
+            case 'https://sas.elluminate.com/site/external/adapter/default/v3/webservice.event':
+            case 'https://ultra-us-prod-cusa.bbcollab.cloud/site/external/adapter/default/v3/webservice.event':
+            case 'https://us-sas.bbcollab.com/site/external/adapter/default/v3/webservice.event':
+                $restserver = 'https://us.bbcollab.com/collab/api/csa'; // US.
+                break;
+            case 'https://eu-sas.bbcollab.com/site/external/adapter/default/v3/webservice.event':
+            case 'https://eu1.bbcollab.com/site/external/adapter/default/v3/webservice.event':
+            case 'https://ultra-eu-prod-cusa.bbcollab.cloud/site/external/adapter/default/v3/webservice.event':
+                $restserver = 'https://eu.bbcollab.com/collab/api/csa'; // EU.
+                break;
+            case 'https://ultra-au-prod-cusa.bbcollab.cloud/site/external/adapter/default/v3/webservice.event':
+                $restserver = 'https://au.bbcollab.com/collab/api/csa'; // AU.
+                break;
+            case 'https://ultra-ca-prod-cusa.bbcollab.cloud/site/external/adapter/default/v3/webservice.event':
+                $restserver = 'https://ca.bbcollab.com/collab/api/csa'; // CA.
+                break;
+            default:
+                $restserver = 'https://citc-olms.bbcollabcloud.com/collab/api/csa'; // Default.
+                break;
+        }
+        return $restserver;
     }
 
     private function launch_soap_migration() {
@@ -105,8 +138,57 @@ class soap_migrator_task extends adhoc_task {
                 set_config('migrationstatus', self::STATUS_READY, 'collaborate');
                 $this->log_migration_entry('Migration data is ready to be collected');
             } else {
-                throw new soap_migration_exception('Data is not ready yet, re-scheduling the task');
+                throw new soap_migration_exception('Data is not ready yet, re-scheduling the task. Result: ' . $result);
             }
+        }
+    }
+
+    private function fetch_migration_data() {
+        $current = get_config('collaborate', 'migrationstatus');
+
+        if ($current == self::STATUS_READY) {
+            $api = local::get_api(false, null);
+            try {
+                $limit = 1000;
+                if (!empty($CFG->mod_collaborate_migration_data_limit) &&
+                        is_numeric($CFG->mod_collaborate_migration_data_limit)) {
+                    $limit = $CFG->mod_collaborate_migration_data_limit;
+                }
+                $offset = get_config('collaborate', 'migrationoffset');
+                $this->log_migration_entry('Requesting data with offset: ' . $offset);
+                $result = $api->collect_soap_migration_data($limit, $offset);
+                if (!empty($result)) {
+                    $this->log_migration_entry('Data received');
+                    $this->handle_migration_records($result);
+                    set_config('migrationoffset', $offset + $limit, 'collaborate');
+                    throw new soap_migration_exception('Re-scheduling task on purpose');
+                }
+                set_config('migrationstatus', self::STATUS_COLLECTED, 'collaborate');
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+                throw new soap_migration_exception('Data collection has not finished. Hint: ' . $message);
+            }
+        }
+    }
+
+    /**
+     * Necessary because Moodle does not allow uppercase in table columns and the API responds with uppercase.
+     */
+    public function handle_migration_records($dataobjects) {
+        global $DB;
+        if (!is_array($dataobjects) and !($dataobjects instanceof Traversable)) {
+            throw new coding_exception('records passed are non-traversable object');
+        }
+
+        foreach ($dataobjects as $dataobject) {
+            if (!is_array($dataobject) and !is_object($dataobject)) {
+                throw new coding_exception('record passed is invalid');
+            }
+            $dataobject->sessionid = $dataobject->sId;
+            $dataobject->sessionuid = $dataobject->sUid;
+            unset($dataobject->sId);
+            unset($dataobject->sUid);
+            $DB->insert_record('collaborate_migration', $dataobject, false);
         }
     }
 

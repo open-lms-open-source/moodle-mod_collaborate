@@ -849,7 +849,7 @@ class api {
         }
         $query = empty($requestoptions->queryparams) ? '' : '?' . http_build_query($requestoptions->queryparams, '', '&');
         $url = $this->api_url($this->process_resource_path($resourcepath, $requestoptions->pathparams) . $query);
-        $this->logger->info('making curl call', ['verb' => $verb,  'url' => $url, 'json' => $requestoptions->bodyjson]);
+        $this->logger->info('making migration curl call', ['verb' => $verb,  'url' => $url, 'json' => $requestoptions->bodyjson]);
         curl_setopt($ch, CURLOPT_URL, $url);
         switch ($verb) {
             case 'DELETE':
@@ -914,5 +914,20 @@ class api {
         }
 
         return $response->object->status;
+    }
+
+    public function collect_soap_migration_data($limit, $offset) {
+        $requestobj = new requestoptions('', [], ['limit' => $limit, 'offset' => $offset]);
+        $validation = new http_code_validation([200, 204]);
+        $response = $this->rest_migration_call(self::GET, '/migration', $requestobj, $validation);
+
+        if (!isset($response->object->sessionAssociationList) || !isset($response->object->oauthConsumer)) {
+            $this->process_error('error:restapimigrationdata', loggingconstants::SEV_CRITICAL);
+        }
+        // Here, do something to store new credentials.
+        $newcreds = $response->object->oauthConsumer;
+        set_config('newrestkey', $newcreds->consumerKey, 'collaborate');
+        set_config('newrestsecret', $newcreds->consumerSecret, 'collaborate');
+        return $response->object->sessionAssociationList;
     }
 }
