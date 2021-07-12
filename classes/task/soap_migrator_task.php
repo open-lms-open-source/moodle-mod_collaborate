@@ -37,6 +37,7 @@ class soap_migrator_task extends adhoc_task {
     const STATUS_READY = 3; // Data ready to be collected.
     const STATUS_COLLECTED = 4; // Data was stored in our table.
     const STATUS_MIGRATED = 5; // Migration process finished.
+    const STATUS_INCOMPLETE = 6; // Migration data left sessions with no sessionuid.
 
     /**
      * Runs the task for migrating SOAP sessions.
@@ -64,6 +65,7 @@ class soap_migrator_task extends adhoc_task {
         $this->fetch_migration_data();
 
         // Populate table.
+        $this->update_sessions();
 
         // Set new credentials given.
     }
@@ -198,6 +200,47 @@ class soap_migrator_task extends adhoc_task {
     private function log_migration_entry($message) {
         if (!local::duringtesting()) {
             mtrace($message);
+        }
+    }
+
+    /**
+     * Updates all references for SOAP sessionid records to use the new sessionuuid obtained from Collab
+     */
+
+    private function update_sessions() {
+        global $DB;
+        $current = get_config('collaborate', 'migrationstatus');
+
+        if ($current == self::STATUS_COLLECTED) {
+            try {
+                $transaction = $DB->start_delegated_transaction();
+
+                $DB->execute('
+                UPDATE {collaborate_sessionlink} csl
+                  JOIN {collaborate_migration} cm ON csl.sessionid = cm.sessionid
+                   SET csl.sessionuid = cm.sessionuid
+                 WHERE csl.sessionuid IS NULL');
+
+                $DB->execute('
+                UPDATE {collaborate} c
+                  JOIN {collaborate_migration} cm ON c.sessionid = cm.sessionid
+                   SET c.sessionuid = cm.sessionuid
+                 WHERE c.sessionuid IS NULL');
+
+                $transaction->allow_commit();
+                $this->log_migration_entry('Collaborate session records have been updated.');
+            } catch (\moodle_exception $e) {
+                throw new soap_migration_exception("An error occurred while updating collaborate session records: "
+                    . $e->getMessage());
+            }
+
+            if ($DB->count_records('collaborate', ['sessionuid' => null]) ||
+                $DB->count_records('collaborate_sessionlink', ['sessionuid' => null])) {
+                set_config('migrationstatus', self::STATUS_INCOMPLETE, 'collaborate');
+            } else {
+                set_config('migrationstatus', self::STATUS_MIGRATED, 'collaborate');
+            }
+
         }
     }
 }

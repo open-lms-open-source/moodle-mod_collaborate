@@ -144,6 +144,7 @@ $string['soapapisettings'] = 'SOAP (old) API settings';
 $string['soapmigrationpending'] = 'Migration from SOAP to REST has not been initiated.';
 $string['soapmigrationinprogress'] = 'Migration from SOAP to REST is currently in progress.';
 $string['soapmigrationfinished'] = 'Migration from SOAP to REST has been completed successfully.';
+$string['soapmigrationincomplete'] = 'Migration from SOAP to REST has encountered a problem, the migration service data have discrepancies with the existing records and it is possible for some sessions to not be migrated, please contact your administrator.';
 $string['soapmigrationconfirmation'] = 'Are you sure you want to start the migration from SOAP to REST?';
 $string['soapmigrationmessage'] = 'Migration execution has been scheduled.';
 $string['starts'] = 'Starts - {$a}';

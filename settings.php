@@ -127,6 +127,10 @@ if ($ADMIN->fulltree) {
                 $notify = new \core\output\notification(get_string('soapmigrationfinished', 'mod_collaborate'),
                     \core\output\notification::NOTIFY_SUCCESS);
                 break;
+            case soap_migrator_task::STATUS_INCOMPLETE:
+                $notify = new \core\output\notification(get_string('soapmigrationincomplete', 'mod_collaborate'),
+                    \core\output\notification::NOTIFY_WARNING);
+                break;
             default:
                 $notify = null;
                 break;
