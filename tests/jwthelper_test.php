@@ -32,7 +32,7 @@ class mod_collaborate_jwthelper_testcase extends advanced_testcase {
     public function test_get_token() {
         $token = jwthelper::get_token('mykey', 'mysecret');
         $this->assertNotEmpty($token);
-        $this->assertContains('.', $token);
+        $this->assertStringContainsString('.', $token);
         $parts = explode('.', $token);
         $json1 = json_decode(base64_decode($parts[0]));
         $this->assertEquals('JWT', $json1->typ);

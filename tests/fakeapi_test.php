@@ -163,12 +163,12 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $newhtmlsession = $htmlsessioncollection->getHtmlSession()[0];
         // Test guest url.
         $guesturl = $api->BuildHtmlSessionUrl(new BuildHtmlSessionUrl($newhtmlsession->getSessionId()));
-        $this->assertContains('&mode=guest', $guesturl->getUrl());
+        $this->assertStringContainsString('&mode=guest', $guesturl->getUrl());
         // Test user url.
         $param = new BuildHtmlSessionUrl($newhtmlsession->getSessionId());
         $param->setUserId(100);
         $userurl = $api->BuildHtmlSessionUrl($param);
-        $this->assertNotContains('&mode=guest', $userurl->getUrl());
+        $this->assertStringNotContainsString('&mode=guest', $userurl->getUrl());
     }
 
     public function test_updatehtmlsessionattendee() {
@@ -180,7 +180,7 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $htmlattendee = new HtmlAttendee($userid, 'Presenter');
         $updateattendee = new UpdateHtmlSessionAttendee($sessionid, $htmlattendee);
         $result = $api->UpdateHtmlSessionAttendee($updateattendee);
-        $this->assertContains('id=2&userid=100', $result->getUrl());
+        $this->assertStringContainsString('id=2&userid=100', $result->getUrl());
     }
 
     public function test_listhtmlsessionrecording() {
@@ -198,7 +198,7 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $this->assertCount(2, $recordings);
 
         $recordingurl = $recordings[0]->getRecordingUrl();
-        $this->assertContains('original_media_url=', $recordingurl);
+        $this->assertStringContainsString('original_media_url=', $recordingurl);
         $querystring = parse_url($recordingurl, PHP_URL_QUERY);
         $params = [];
         parse_str($querystring, $params);
@@ -208,7 +208,7 @@ class mod_collaborate_fakeapi_testcase extends advanced_testcase {
         $this->assertEquals('Recording 1', $recordings[0]->getDisplayName());
 
         $recordingurl = $recordings[1]->getRecordingUrl();
-        $this->assertContains('original_media_url=', $recordingurl);
+        $this->assertStringContainsString('original_media_url=', $recordingurl);
         $querystring = parse_url($recordingurl, PHP_URL_QUERY);
         $params = [];
         parse_str($querystring, $params);

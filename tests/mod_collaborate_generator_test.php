@@ -87,6 +87,6 @@ class mod_collaborate_generator_testcase extends advanced_testcase {
         $this->assertEquals('', $collab->guesturl);
         $guesturl = local::guest_url($collab);
         $collab->guesturl = $guesturl;
-        $this->assertContains($url->out(), $collab->guesturl);
+        $this->assertStringContainsString($url->out(), $collab->guesturl);
     }
 }
