@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 use mod_collaborate\task\soap_migrator_task;
+use mod_collaborate\testables\sessionlink;
 
 /**
  * Test SOAP migrator task.
@@ -113,5 +114,117 @@ class soap_migrator_task_test extends advanced_testcase {
         $task->handle_migration_records($dataarray);
         $countrecords = $DB->count_records('collaborate_migration');
         $this->assertEquals(3, $countrecords);
+    }
+
+    public function test_execute_task_update_sessions_completed() {
+        global $DB;
+
+        $sessionids = $this->create_migration_data();
+        // All sessions have been migrated.
+        $DB->insert_records('collaborate_migration', $sessionids);
+
+        $task = new soap_migrator_task();
+        $task->execute();
+
+        // Migration completed.
+        $this->assertEmpty($DB->get_records('collaborate', ['sessionuid' => null]));
+        $this->assertEmpty($DB->get_records('collaborate_sessionlink', ['sessionuid' => null]));
+        $this->assertEquals(5, get_config('collaborate', 'migrationstatus'));
+        $migrationdata = $DB->get_records_sql('SELECT sessionid, sessionuid FROM {collaborate_migration}');
+        $updatedrecords = $DB->get_records_sql('SELECT * FROM {collaborate_sessionlink} WHERE sessionuid iS NOT NULL');
+        $this->assertNotEmpty($migrationdata);
+
+        $migrationdata = $this->find_migration_discrepancies();
+        $this->assertEmpty($migrationdata);
+    }
+
+    public function test_execute_task_update_sessions_not_completed() {
+        global $DB;
+
+        $sessionids = $this->create_migration_data();
+        // Not all sessions have been migrated.
+        $session1 = array_shift($sessionids);
+        $session2 = array_pop($sessionids);
+        $DB->insert_records('collaborate_migration', $sessionids);
+
+        $task = new soap_migrator_task();
+        $task->execute();
+
+        // Migration not completed.
+        $this->assertNotEmpty($DB->get_records('collaborate', ['sessionuid' => null]));
+        $this->assertNotEmpty($DB->get_records('collaborate_sessionlink', ['sessionuid' => null]));
+        // Verify status as not completed.
+        $this->assertEquals(6, get_config('collaborate', 'migrationstatus'));
+
+        $migrationdata = $this->find_migration_discrepancies();
+        $this->assertCount(2, $migrationdata);
+        // We are missing 2 records, verify which ones by id.
+        $this->assertArrayHasKey($session1->sessionid, $migrationdata);
+        $this->assertArrayHasKey($session2->sessionid, $migrationdata);
+    }
+
+    public function create_migration_data () {
+        global $DB;
+        set_config('restserver', 'serverexample', 'collaborate');
+        set_config('restkey', 'keyexample', 'collaborate');
+        set_config('restsecret', 'secretexample', 'collaborate');
+        set_config('migrationstatus', soap_migrator_task::STATUS_COLLECTED, 'collaborate');
+
+        $gen = $this->getDataGenerator();
+        $course = $gen->create_course();
+        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
+        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+
+        $modgen = $gen->get_plugin_generator('mod_collaborate');
+        $collabdata = (object) [
+            'course'    => $course->id,
+            'groupmode' => SEPARATEGROUPS
+        ];
+        $collaborate = $modgen->create_instance($collabdata);
+        $linkscreated = sessionlink::apply_session_links($collaborate);
+        $this->assertTrue($linkscreated);
+        $collaborate = $DB->get_record('collaborate', ['id' => $collaborate->id]);
+        $this->assertNotEmpty($collaborate->sessionid);
+        $sessionlink = $DB->get_record('collaborate_sessionlink',
+            ['collaborateid' => $collaborate->id, 'groupid' => null]
+        );
+        $this->assertEquals($collaborate->sessionid, $sessionlink->sessionid);
+        $gplink1 = sessionlink::get_group_session_link($collaborate, $group1->id);
+        $this->assertNotNull($gplink1);
+        $gplink2 = sessionlink::get_group_session_link($collaborate, $group2->id);
+        $this->assertNotNull($gplink2);
+
+        $this->assertCount(1, $DB->get_records('collaborate'));
+        // Sessionlink will hold an additional record for the main activity.
+        $this->assertCount(3, $DB->get_records('collaborate_sessionlink'));
+        $collabdata = (object) [
+            'course'    => $course->id,
+        ];
+        for ($i = 1; $i <= 9; $i++) {
+            $collaborate = $modgen->create_instance($collabdata);
+            $this->assertTrue(sessionlink::apply_session_links($collaborate));
+        }
+        $this->assertCount(10, $DB->get_records('collaborate'));
+        // 3 records for the first activity and then 9 more.
+        $this->assertCount(12, $DB->get_records('collaborate_sessionlink'));
+
+        // Get all sessionids and create a new fake sessionuid.
+        return $DB->get_records_sql('
+            SELECT sessionid, CONCAT(sessionid, "uid") AS sessionuid
+              FROM {collaborate_sessionlink}');
+    }
+
+    public function find_migration_discrepancies() {
+        global $DB;
+        $migrationdata = $DB->get_records_sql('SELECT sessionid, sessionuid FROM {collaborate_migration}');
+        $updatedrecords = $DB->get_records_sql('SELECT sessionid, sessionuid FROM {collaborate_sessionlink}');
+        $this->assertNotEmpty($migrationdata);
+        // Verify data has been properly handled. If there are missing records, return them.
+        foreach ($migrationdata as $migratedrecord) {
+            if ($migratedrecord->sessionuid == $updatedrecords[$migratedrecord->sessionid]->sessionuid) {
+                unset($updatedrecords[$migratedrecord->sessionid]);
+            }
+        }
+        return $updatedrecords;
     }
 }
