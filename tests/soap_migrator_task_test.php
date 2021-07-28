@@ -116,6 +116,17 @@ class soap_migrator_task_test extends advanced_testcase {
         $this->assertEquals(3, $countrecords);
     }
 
+    public function test_handle_migration_records_wrong_parameter() {
+        global $DB;
+        $countrecords = $DB->count_records('collaborate_migration');
+        $this->assertEquals(0, $countrecords);
+        $data = time(); // Random data.
+        $task = new soap_migrator_task();
+        $this->expectException(coding_exception::class);
+        $this->expectExceptionMessage('non-traversable object');
+        $task->handle_migration_records($data);
+    }
+
     public function test_execute_task_update_sessions_completed() {
         global $DB;
 
@@ -209,9 +220,9 @@ class soap_migrator_task_test extends advanced_testcase {
         $this->assertCount(12, $DB->get_records('collaborate_sessionlink'));
 
         // Get all sessionids and create a new fake sessionuid.
-        return $DB->get_records_sql('
-            SELECT sessionid, CONCAT(sessionid, "uid") AS sessionuid
-              FROM {collaborate_sessionlink}');
+        return $DB->get_records_sql("
+            SELECT sessionid, CONCAT(sessionid, 'uid') AS sessionuid
+              FROM {collaborate_sessionlink}");
     }
 
     public function find_migration_discrepancies() {

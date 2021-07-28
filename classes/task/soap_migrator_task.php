@@ -67,7 +67,7 @@ class soap_migrator_task extends adhoc_task {
         // Populate table.
         $this->update_sessions();
 
-        // Set new credentials given.
+        // Gather recordings info.
     }
 
     /**
@@ -151,7 +151,7 @@ class soap_migrator_task extends adhoc_task {
         if ($current == self::STATUS_READY) {
             $api = local::get_api(false, null);
             try {
-                $limit = 1000;
+                $limit = 5000;
                 if (!empty($CFG->mod_collaborate_migration_data_limit) &&
                         is_numeric($CFG->mod_collaborate_migration_data_limit)) {
                     $limit = $CFG->mod_collaborate_migration_data_limit;
@@ -179,12 +179,12 @@ class soap_migrator_task extends adhoc_task {
     public function handle_migration_records($dataobjects) {
         global $DB;
         if (!is_array($dataobjects) and !($dataobjects instanceof Traversable)) {
-            throw new coding_exception('records passed are non-traversable object');
+            throw new \coding_exception('records passed are non-traversable object');
         }
 
         foreach ($dataobjects as $dataobject) {
             if (!is_array($dataobject) and !is_object($dataobject)) {
-                throw new coding_exception('record passed is invalid');
+                throw new \coding_exception('record passed is invalid');
             }
             $dataobject->sessionid = $dataobject->sId;
             $dataobject->sessionuid = $dataobject->sUid;
@@ -241,6 +241,10 @@ class soap_migrator_task extends adhoc_task {
                 set_config('migrationstatus', self::STATUS_MIGRATED, 'collaborate');
             }
 
+            $newusername = get_config('collaborate', 'newrestkey');
+            $newpassword = get_config('collaborate', 'newrestsecret');
+            set_config('restkey', $newusername, 'collaborate');
+            set_config('restsecret', $newpassword, 'collaborate');
         }
     }
 }
