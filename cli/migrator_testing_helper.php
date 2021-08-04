@@ -105,6 +105,16 @@ if (!empty($options['reset'])) {
         echo '[INFO] migrationstatus successfully deleted from plugin config' . PHP_EOL;
         die;
     }
+    $parameterstwo = [
+        'plugin' => 'collaborate',
+        'name' => 'migrationoffset'
+    ];
+    $delrecordtwo = $DB->get_record('config_plugins', $parameterstwo);
+    if (!empty($delrecordtwo)) {
+        $DB->delete_records('config_plugins', ['id' => $delrecordtwo->id]);
+        echo '[INFO] migrationoffset successfully deleted from plugin config' . PHP_EOL;
+        die;
+    }
 }
 
 echo '[INFO] Script execution finished without actions'. PHP_EOL;

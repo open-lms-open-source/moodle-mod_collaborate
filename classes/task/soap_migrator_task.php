@@ -151,9 +151,10 @@ class soap_migrator_task extends adhoc_task {
         if ($current == self::STATUS_READY) {
             $api = local::get_api(false, null);
             try {
-                $limit = 5000;
+                $limit = 900;
                 if (!empty($CFG->mod_collaborate_migration_data_limit) &&
-                        is_numeric($CFG->mod_collaborate_migration_data_limit)) {
+                        is_numeric($CFG->mod_collaborate_migration_data_limit) &&
+                            $CFG->mod_collaborate_migration_data_limit <= 1000) {
                     $limit = $CFG->mod_collaborate_migration_data_limit;
                 }
                 $offset = get_config('collaborate', 'migrationoffset');
