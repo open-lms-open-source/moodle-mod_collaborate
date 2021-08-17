@@ -33,6 +33,7 @@ use mod_collaborate\local,
     mod_collaborate\traits\api as apitrait,
     mod_collaborate\sessionlink,
     mod_collaborate\renderables\recording,
+    mod_collaborate\renderables\recording_counts,
     mod_collaborate\recording_counter,
     mod_collaborate\task\soap_migrator_task,
     cm_info,
@@ -70,7 +71,7 @@ class api {
 
     private function __construct(stdClass $config) {
         $this->setup($config);
-        if (isset($config->migrationstatus) && $config->migrationstatus != soap_migrator_task::STATUS_MIGRATED) {
+        if (isset($config->migrationstatus) && $config->migrationstatus < soap_migrator_task::STATUS_MIGRATED) {
             self::require_configured();
             $this->set_migration_accesstoken();
         } else if (!(defined('PHPUNIT_TEST') && PHPUNIT_TEST)) {
@@ -662,6 +663,8 @@ class api {
     }
 
     public function get_recordings(stdClass $collaborate, cm_info $cm, $canmoderate = false) {
+        global $CFG;
+
         $sessionlinks = sessionlink::my_active_links($collaborate, $cm);
 
         $sessionrecordings = [];
@@ -724,6 +727,12 @@ class api {
                 $model->name = $name;
                 $model->viewurl = $viewurl;
                 $model->downloadurl = $downloadurl;
+                if (!empty($CFG->mod_collaborate_alternative_counter && $CFG->mod_collaborate_alternative_counter == true)) {
+                    $alternativecount = new recording_counts($recid, $recording->canDownload);
+                    $alternativecount->views = $recording->playbackCount;
+                    $alternativecount->downloads = $recording->downloadCount;
+                    $model->count = $alternativecount;
+                }
 
                 $allrecordingmodels[$recid] = $model;
 
@@ -734,16 +743,18 @@ class api {
             }
         }
 
-        $recordingcounts = [];
-        if ($canmoderate) {
-            $recordingcounthelper = new recording_counter($cm, $allrecordingmodels);
-            $recordingcounts = $recordingcounthelper->get_recording_counts();
-        }
+        if (empty($CFG->mod_collaborate_alternative_counter)) {
+            $recordingcounts = [];
+            if ($canmoderate) {
+                $recordingcounthelper = new recording_counter($cm, $allrecordingmodels);
+                $recordingcounts = $recordingcounthelper->get_recording_counts();
+            }
 
-        foreach ($modelsbysessionuid as $sessionuid => $models) {
-            foreach ($models as $model) {
-                if (!empty($recordingcounts[$model->id])) {
-                    $model->count = $recordingcounts[$model->id];
+            foreach ($modelsbysessionuid as $sessionuid => $models) {
+                foreach ($models as $model) {
+                    if (!empty($recordingcounts[$model->id])) {
+                        $model->count = $recordingcounts[$model->id];
+                    }
                 }
             }
         }

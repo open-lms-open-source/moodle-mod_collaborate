@@ -67,7 +67,7 @@ class migration_status {
         $shown = false;
         // Check if REST migration is on course.
         $migrationstatus = $this->get_migration_status();
-        if ($migrationstatus && $migrationstatus != soap_migrator_task::STATUS_MIGRATED) {
+        if ($migrationstatus && $migrationstatus < soap_migrator_task::STATUS_MIGRATED) {
             \core\notification::error($message);
             $shown = true;
         }

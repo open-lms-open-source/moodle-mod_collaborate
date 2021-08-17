@@ -45,14 +45,16 @@ class soap_migrator_task extends adhoc_task {
     public function execute() {
         // Create the config value that stores the status.
         $config = get_config('collaborate');
+
         if (!isset($config->migrationstatus)) { // We need to do it just once.
+            // Copy SOAP credentials into REST credentials.
+            if (!empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret)) {
+                // If none is empty, it means the plugin is being used with REST and migration should not run.
+                throw new soap_migration_exception('REST Credentials in use, migration not required.');
+            }
+            $this->set_rest_credentials($config->server, $config->username, $config->password);
             set_config('migrationstatus', self::STATUS_IDLE, 'collaborate');
             set_config('migrationoffset', 0, 'collaborate');
-        }
-
-        // Copy SOAP credentials into REST credentials.
-        if (empty($config->restserver) && empty($config->restkey) && empty($config->restsecret)) {
-            $this->set_rest_credentials($config->server, $config->username, $config->password);
         }
 
         // Launch Migration.
@@ -66,8 +68,6 @@ class soap_migrator_task extends adhoc_task {
 
         // Populate table.
         $this->update_sessions();
-
-        // Gather recordings info.
     }
 
     /**

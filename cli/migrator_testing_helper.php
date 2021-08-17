@@ -32,17 +32,21 @@ global $DB;
 // CLI options.
 list($options, $unrecognized) = cli_get_params(
     [
-        'help'     => false,
-        'test'     => false,
-        'reset'    => false,
-        'server'   => null,
-        'key'      => null,
-        'secret'   => null,
+        'help'      => false,
+        'test'      => false,
+        'reset'     => false,
+        'schedule'  => false,
+        'zerodelay' => false,
+        'server'    => null,
+        'key'       => null,
+        'secret'    => null,
     ],
     [
         'h' => 'help',
         't' => 'test',
-        'r' => 'reset'
+        'r' => 'reset',
+        's' => 'schedule',
+        'z' => 'zerodelay'
     ]
 );
 
@@ -58,6 +62,8 @@ Options:
 -h, --help               Print out this help.
 -t, --test               Test the service is reachable.
 -r, --reset              Remove migration settings from the database.
+-s, --schedule           Schedule migration task.
+-z, --zerodelay          Reset the fail delay of the migration task.
 --server=servervalue     Optional. Provide a server URL.
 --key=keyvalue           Optional. Provide a key.
 --secret=secretvalue     Optional. Provide the secret for the given key.
@@ -93,8 +99,9 @@ if (!empty($options['test'])) {
         die;
     }
 }
+
 if (!empty($options['reset'])) {
-    echo '[INFO] Proceeding to delete migrationstatus from plugin config' . PHP_EOL;
+    echo '[INFO] Proceeding to delete migration data from config_plugins table' . PHP_EOL;
     $parameters = [
         'plugin' => 'collaborate',
         'name' => 'migrationstatus'
@@ -103,7 +110,6 @@ if (!empty($options['reset'])) {
     if (!empty($delrecord)) {
         $DB->delete_records('config_plugins', ['id' => $delrecord->id]);
         echo '[INFO] migrationstatus successfully deleted from plugin config' . PHP_EOL;
-        die;
     }
     $parameterstwo = [
         'plugin' => 'collaborate',
@@ -113,8 +119,47 @@ if (!empty($options['reset'])) {
     if (!empty($delrecordtwo)) {
         $DB->delete_records('config_plugins', ['id' => $delrecordtwo->id]);
         echo '[INFO] migrationoffset successfully deleted from plugin config' . PHP_EOL;
-        die;
     }
+    die;
+}
+
+if (!empty($options['schedule'])) {
+
+    echo '[INFO] Proceeding to schedule migrator task' . PHP_EOL;
+    $migratortask = [
+        'component' => 'mod_collaborate',
+        'classname' => '\mod_collaborate\task\soap_migrator_task',
+        'nextruntime' => time(),
+        'faildelay' => 1,
+        'customdata' => '',
+        'userid' => null,
+        'blocking' => 0,
+        'timestarted' => null,
+        'hostname' => null,
+        'pid' => null,
+        'timecreated' => time() - 100
+    ];
+    $migrationtask = (object)$migratortask;
+    $result = $DB->insert_record('task_adhoc', $migrationtask);
+    if (!empty($result)) {
+        echo '[INFO] Record added' . PHP_EOL;
+    }
+    die;
+}
+
+if (!empty($options['zerodelay'])) {
+    echo '[INFO] Proceeding to reset the fail delay on the migration task' . PHP_EOL;
+    $params = [
+        'component' => 'mod_collaborate',
+        'classname' => '\mod_collaborate\task\soap_migrator_task'
+    ];
+    $updaterecord = $DB->get_record('task_adhoc', $params);
+    if (!empty($updaterecord)) {
+        $updaterecord->faildelay = 0;
+        $DB->update_record('task_adhoc', $updaterecord);
+        echo '[INFO] Fail delay successfully reset' . PHP_EOL;
+    }
+    die;
 }
 
 echo '[INFO] Script execution finished without actions'. PHP_EOL;
