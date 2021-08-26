@@ -141,7 +141,8 @@ if ($ADMIN->fulltree) {
         }
     }
 
-    if (empty($CFG->mod_collaborate_hide_migration_button)) {
+    $runningbehattest = defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING;
+    if (!empty($CFG->mod_collaborate_show_migration_button) || $runningbehattest) {
         $name = 'collaborate/restmigration';
         $attributes = '';
         if ($migrationstatus != false) {
