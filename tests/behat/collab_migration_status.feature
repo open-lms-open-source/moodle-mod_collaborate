@@ -48,12 +48,12 @@ Feature: Collaborate migration status message changes
     And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
     And I should see "<message>"
     Examples:
-      | value |                      message                                 |
-      |   1   | Migration from SOAP to REST has not been initiated.          |
-      |   2   | Migration from SOAP to REST is currently in progress.        |
-      |   3   | Migration from SOAP to REST is currently in progress.        |
-      |   4   | Migration from SOAP to REST is currently in progress.        |
-      |   5   | Migration from SOAP to REST has been completed successfully. |
+      | value |                      message                                       |
+      |   1   | Migration from SOAP to REST has been scheduled, but not initiated. |
+      |   2   | Migration from SOAP to REST is currently in progress.              |
+      |   3   | Migration from SOAP to REST is currently in progress.              |
+      |   4   | Migration from SOAP to REST is currently in progress.              |
+      |   5   | Migration from SOAP to REST has been completed successfully.       |
 
   @javascript
   Scenario: The migration button is disabled once the ad hoc task has been added.
