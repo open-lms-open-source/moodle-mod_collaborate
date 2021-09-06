@@ -110,6 +110,7 @@ if ($ADMIN->fulltree) {
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
     $settings->add($setting);
 
+    $runningbehattest = defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING;
     $migrationstatus = get_config('collaborate', 'migrationstatus');
     if ($migrationstatus) {
         switch ($migrationstatus) {
@@ -136,12 +137,15 @@ if ($ADMIN->fulltree) {
                 break;
         }
         if ($notify) {
-            $settings->add(new admin_setting_heading('collaborate/migrationstatus', '',
-                $OUTPUT->render($notify)));
+            $migrationtimestamp = get_config('collaborate', 'migrationtimestamp');
+            $offset = time() - $migrationtimestamp;
+            if ($offset < (WEEKSECS * 4) || $runningbehattest) {
+                $settings->add(new admin_setting_heading('collaborate/migrationstatus', '',
+                    $OUTPUT->render($notify)));
+            }
         }
     }
 
-    $runningbehattest = defined('BEHAT_SITE_RUNNING') && BEHAT_SITE_RUNNING;
     if (!empty($CFG->mod_collaborate_show_migration_button) || $runningbehattest) {
         $name = 'collaborate/restmigration';
         $attributes = '';

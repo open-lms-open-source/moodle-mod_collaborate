@@ -55,6 +55,7 @@ class soap_migrator_task extends adhoc_task {
             $this->set_rest_credentials($config->server, $config->username, $config->password);
             set_config('migrationstatus', self::STATUS_IDLE, 'collaborate');
             set_config('migrationoffset', 0, 'collaborate');
+            set_config('migrationtimestamp', time(), 'collaborate');
         }
 
         // Launch Migration.
