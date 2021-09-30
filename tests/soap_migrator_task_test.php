@@ -24,8 +24,8 @@ use mod_collaborate\testables\sessionlink;
  * @copyright Copyright (c) 2021 Open LMS.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class soap_migrator_task_test extends advanced_testcase {
-    protected function setUp() :void {
+class soap_migrator_task_testcase extends advanced_testcase {
+    public function setUp() :void {
         $this->resetAfterTest();
     }
 

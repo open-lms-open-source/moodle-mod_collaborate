@@ -217,17 +217,32 @@ class soap_migrator_task extends adhoc_task {
             try {
                 $transaction = $DB->start_delegated_transaction();
 
-                $DB->execute('
-                UPDATE {collaborate_sessionlink} csl
-                  JOIN {collaborate_migration} cm ON csl.sessionid = cm.sessionid
-                   SET csl.sessionuid = cm.sessionuid
-                 WHERE csl.sessionuid IS NULL');
+                if ($DB->get_dbfamily() === 'mysql') {
+                    $DB->execute('
+                                UPDATE {collaborate_sessionlink} csl
+                                  JOIN {collaborate_migration} cm ON csl.sessionid = cm.sessionid
+                                   SET csl.sessionuid = cm.sessionuid
+                                 WHERE csl.sessionuid IS NULL');
 
-                $DB->execute('
-                UPDATE {collaborate} c
-                  JOIN {collaborate_migration} cm ON c.sessionid = cm.sessionid
-                   SET c.sessionuid = cm.sessionuid
-                 WHERE c.sessionuid IS NULL');
+                    $DB->execute('
+                                UPDATE {collaborate} c
+                                  JOIN {collaborate_migration} cm ON c.sessionid = cm.sessionid
+                                   SET c.sessionuid = cm.sessionuid
+                                 WHERE c.sessionuid IS NULL');
+                } else {
+                    $DB->execute('
+                                UPDATE {collaborate_sessionlink} csl
+                                   SET sessionuid = cm.sessionuid
+                                  FROM {collaborate_migration} cm
+                                 WHERE csl.sessionuid IS NULL
+                                   AND csl.sessionid = cm.sessionid');
+                    $DB->execute('
+                                UPDATE {collaborate} c
+                                   SET sessionuid = cm.sessionuid
+                                  FROM {collaborate_migration} cm
+                                 WHERE c.sessionuid IS NULL
+                                   AND c.sessionid = cm.sessionid');
+                }
 
                 $transaction->allow_commit();
                 $this->log_migration_entry('Collaborate session records have been updated.');
