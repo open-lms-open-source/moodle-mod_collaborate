@@ -146,7 +146,11 @@ if ($ADMIN->fulltree) {
         }
     }
 
-    if (!empty($CFG->mod_collaborate_show_migration_button) || $runningbehattest) {
+    $config = get_config('collaborate');
+    $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password);
+    $restconfig = !empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret);
+
+    if ($soapconfig && !$restconfig && !empty($CFG->mod_collaborate_show_migration_button) || $runningbehattest) {
         $name = 'collaborate/restmigration';
         $attributes = '';
         if ($migrationstatus != false) {
