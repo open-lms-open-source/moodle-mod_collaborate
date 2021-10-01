@@ -121,8 +121,8 @@ class soap_migrator_task extends adhoc_task {
         $current = get_config('collaborate', 'migrationstatus');
 
         if ($current == self::STATUS_IDLE) {
-            $api = local::get_api(false, null);
             try {
+                $api = local::get_api(false, null);
                 $api->launch_soap_migration();
                 set_config('migrationstatus', self::STATUS_LAUNCHED, 'collaborate');
                 $this->log_migration_entry('Migration launched successfully');
@@ -150,8 +150,9 @@ class soap_migrator_task extends adhoc_task {
         $current = get_config('collaborate', 'migrationstatus');
 
         if ($current == self::STATUS_READY) {
-            $api = local::get_api(false, null);
+
             try {
+                $api = local::get_api(false, null);
                 $limit = 900;
                 if (!empty($CFG->mod_collaborate_migration_data_limit) &&
                         is_numeric($CFG->mod_collaborate_migration_data_limit) &&

@@ -69,7 +69,7 @@ class soap_migrator_task_testcase extends advanced_testcase {
         $task = new soap_migrator_task();
         $count = $DB->count_records('task_adhoc');
         $this->assertEquals(0, $count);
-        $this->expectExceptionMessage('Curl options should be defined');
+        $this->expectException(moodle_exception::class);
         // Should fail because REST API has wrong credentials and the task should queue itself.
         $task->execute();
         $count = $DB->count_records('task_adhoc');
