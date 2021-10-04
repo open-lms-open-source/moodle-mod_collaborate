@@ -422,7 +422,7 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
     $events = $reader->get_events_select($select, $params, 'timecreated DESC', 0, 999);
 
     if (empty($userid)) {
-        $userfields = user_picture::fields('u', null);
+        $userfields = \core_user\fields::for_userpic()->get_sql('u', false, '', '', false)->selects;
         list($esql, $params) = get_enrolled_sql($cmcontext, '', 0, true);
         $sql = "SELECT $userfields
                   FROM {user} u
@@ -442,7 +442,7 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
         } else {
             // User not enrolled, if not for specific group then just get user.
             if (empty($groupid)) {
-                $userfields = user_picture::fields('', null);
+                $userfields = \core_user\fields::for_userpic()->get_sql('', false, '', '', false)->selects;
                 $user = $DB->get_record('user', ['id' => $eventdata['userid']], $userfields);
             }
         }
