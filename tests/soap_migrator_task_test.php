@@ -24,8 +24,8 @@ use mod_collaborate\testables\sessionlink;
  * @copyright Copyright (c) 2021 Open LMS.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class soap_migrator_task_test extends advanced_testcase {
-    protected function setUp() :void {
+class soap_migrator_task_testcase extends advanced_testcase {
+    public function setUp() :void {
         $this->resetAfterTest();
     }
 
@@ -69,7 +69,7 @@ class soap_migrator_task_test extends advanced_testcase {
         $task = new soap_migrator_task();
         $count = $DB->count_records('task_adhoc');
         $this->assertEquals(0, $count);
-        $this->expectExceptionMessage('Curl options should be defined');
+        $this->expectException(moodle_exception::class);
         // Should fail because REST API has wrong credentials and the task should queue itself.
         $task->execute();
         $count = $DB->count_records('task_adhoc');
