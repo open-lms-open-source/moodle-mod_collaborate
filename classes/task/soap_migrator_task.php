@@ -121,8 +121,8 @@ class soap_migrator_task extends adhoc_task {
         $current = get_config('collaborate', 'migrationstatus');
 
         if ($current == self::STATUS_IDLE) {
-            $api = local::get_api(false, null);
             try {
+                $api = local::get_api(false, null);
                 $api->launch_soap_migration();
                 set_config('migrationstatus', self::STATUS_LAUNCHED, 'collaborate');
                 $this->log_migration_entry('Migration launched successfully');
@@ -150,8 +150,9 @@ class soap_migrator_task extends adhoc_task {
         $current = get_config('collaborate', 'migrationstatus');
 
         if ($current == self::STATUS_READY) {
-            $api = local::get_api(false, null);
+
             try {
+                $api = local::get_api(false, null);
                 $limit = 900;
                 if (!empty($CFG->mod_collaborate_migration_data_limit) &&
                         is_numeric($CFG->mod_collaborate_migration_data_limit) &&
@@ -217,17 +218,32 @@ class soap_migrator_task extends adhoc_task {
             try {
                 $transaction = $DB->start_delegated_transaction();
 
-                $DB->execute('
-                UPDATE {collaborate_sessionlink} csl
-                  JOIN {collaborate_migration} cm ON csl.sessionid = cm.sessionid
-                   SET csl.sessionuid = cm.sessionuid
-                 WHERE csl.sessionuid IS NULL');
+                if ($DB->get_dbfamily() === 'mysql') {
+                    $DB->execute('
+                                UPDATE {collaborate_sessionlink} csl
+                                  JOIN {collaborate_migration} cm ON csl.sessionid = cm.sessionid
+                                   SET csl.sessionuid = cm.sessionuid
+                                 WHERE csl.sessionuid IS NULL');
 
-                $DB->execute('
-                UPDATE {collaborate} c
-                  JOIN {collaborate_migration} cm ON c.sessionid = cm.sessionid
-                   SET c.sessionuid = cm.sessionuid
-                 WHERE c.sessionuid IS NULL');
+                    $DB->execute('
+                                UPDATE {collaborate} c
+                                  JOIN {collaborate_migration} cm ON c.sessionid = cm.sessionid
+                                   SET c.sessionuid = cm.sessionuid
+                                 WHERE c.sessionuid IS NULL');
+                } else {
+                    $DB->execute('
+                                UPDATE {collaborate_sessionlink} csl
+                                   SET sessionuid = cm.sessionuid
+                                  FROM {collaborate_migration} cm
+                                 WHERE csl.sessionuid IS NULL
+                                   AND csl.sessionid = cm.sessionid');
+                    $DB->execute('
+                                UPDATE {collaborate} c
+                                   SET sessionuid = cm.sessionuid
+                                  FROM {collaborate_migration} cm
+                                 WHERE c.sessionuid IS NULL
+                                   AND c.sessionid = cm.sessionid');
+                }
 
                 $transaction->allow_commit();
                 $this->log_migration_entry('Collaborate session records have been updated.');
