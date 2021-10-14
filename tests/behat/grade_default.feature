@@ -38,19 +38,28 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
 
   Scenario: Teacher can create a Collaborate instance that has grade type default to None
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab                      |
+      | grade[modgrade_type]     | none                             |
+      | grade                    | 0                                |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
     And I follow "Test collab"
     And I navigate to "Edit settings" in current page administration
-    Then the field "grade[modgrade_type]" matches value "None"
+    Then the field "grade[modgrade_type]" matches value "none"
 
   Scenario: Teacher can create a Collaborate instance that has grade type of Point
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab                      |
+      | grade[modgrade_type]     | point                            |
+      | grade                    | 100                              |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
-      | grade[modgrade_type]   | Point       |
     And I follow "Test collab"
     And I navigate to "Edit settings" in current page administration
-    Then the field "grade[modgrade_type]" matches value "Point"
+    Then the field "grade[modgrade_type]" matches value "point"

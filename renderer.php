@@ -222,6 +222,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @param \cm_info $cm
      * @param boolean $canmoderate
      * @return string
+     * @throws coding_exception
      */
     public function render_recordings(stdClass $collaborate, array $sessionrecordings, $cm, $canmoderate) {
         $allrecordings = [];
@@ -289,8 +290,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 $output .= '<a alt="' . s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
                     format_string($name) . '</a> ';
                 $output .= '[' . $duration . ']';
-                $downloadcap = has_capability('mod/collaborate:downloadrecordings', $cm->context);
-                $showdownload = $collaborate->candownloadrecordings == 1 ? true : $downloadcap;
+                $candownloadrecords = $collaborate->candownloadrecordings == 1 ? 1 : 0;
+                $showdownload = $this->user_show_download_recordings($candownloadrecords, $cm->context);
+
                 if (!empty($recording->downloadurl) && $showdownload) {
                     $params = ['c' => $cm->instance, 'action' => 'download', 'rid' => $recording->id,
                         'url' => urlencode($recording->downloadurl), 'sesskey' => sesskey(),
@@ -451,5 +453,22 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             return get_string('recordingcounts', 'mod_collaborate', $counts);
         }
 
+    }
+
+    /**
+     * @param  int $candownloadrecordings
+     * @param  context $context
+     * @return bool $showdownload
+     * @throws coding_exception
+     */
+    public function user_show_download_recordings(int $candownloadrecordings = 0, $context): bool {
+        $showdownload = false;
+
+        if ($candownloadrecordings == 1) {
+            $downloadcap = has_capability('mod/collaborate:downloadrecordings', $context);
+            $showdownload = !empty($downloadcap);
+        }
+
+        return $showdownload;
     }
 }

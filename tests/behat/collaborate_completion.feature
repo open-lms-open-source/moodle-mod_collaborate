@@ -46,10 +46,13 @@ Feature: Set one action as a completion condition for a Collab activity
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
     And I press "Save and display"
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collaborate |
-      | completion   | 2 |
-      | completionview | 1 |
+    And the following "activity" exists:
+      | activity        | collaborate           |
+      | course          | C1                    |
+      | section         | 1                     |
+      | name            | Test collaborate      |
+      | completion      | 2                     |
+      | completionview  | 1                     |
     And I log out
     And I log in as "student1"
     And I am on "Course 1" course homepage
@@ -69,13 +72,14 @@ Feature: Set one action as a completion condition for a Collab activity
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
     And I press "Save and display"
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collaborate second |
-      | completion   | 2 |
-      | completionlaunch | 1 |
-    And I follow "Test collaborate second"
-    And I navigate to "Edit settings" in current page administration
-    And I press "Save and display"
+    And the following "activity" exists:
+      | activity         | collaborate             |
+      | course           | C1                      |
+      | section          | 1                       |
+      | name             | Test collaborate second |
+      | completion       | 2                       |
+      | completionlaunch | 1                       |
+    And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collaborate second"
     And I navigate to "Edit settings" in current page administration
     And I expand all fieldsets

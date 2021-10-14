@@ -40,9 +40,12 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
   Scenario: Teacher creates a collaborate instance, adds recordings and can view / delete them. Student cannot delete
   recordings.
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab                      |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
     And the following fake recordings exist for session "Test collab":
       | id | name       | starttime | endtime  |
       | 1  |Recording1  | +1 hours  | +2 hours |
@@ -100,9 +103,12 @@ Feature: Recordings are listed and can be deleted from collaborate sessions.
       | student2 | G1    |
       | student2 | G2    |
     And I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab                      |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
     And the following fake recordings exist for session "Test collab":
       | id | name                 | starttime | endtime  | group   |
       | 1  |Recording1            | +1 hours  | +2 hours |         |

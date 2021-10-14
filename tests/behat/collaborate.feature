@@ -17,7 +17,7 @@
 #
 # @package    mod_collaborate
 # @author     Guy Thomas
-# @copyright  Copyright (c) 2017 Blackboard Ltd
+# @copyright  Copyright (c) 2017 Open LMS (https://www.openlms.net)
 # @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 @mod @mod_collaborate
@@ -51,34 +51,46 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate instance can be created with various durations.
     Given I log in as "teacher1"
-    And I am on "Course 1" course homepage with editing mode on
     # Test 30 minutes duration
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab 30 mins |
-      | Duration     | 30 Minutes          |
+    And the following "activity" exists:
+      | activity        | collaborate           |
+      | course          | C1                    |
+      | section         | 1                     |
+      | name            | Test collab 30 mins   |
+      | duration        | 1800                  |
+    And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab 30 mins"
     And I should see Collaborate time span of "30 minutes"
     # Test 1 hour duration
+    And the following "activity" exists:
+      | activity        | collaborate           |
+      | course          | C1                    |
+      | section         | 1                     |
+      | name            | Test collab 1 hour    |
+      | duration        | 3600                  |
     And I am on "Course 1" course homepage
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab 1 hour |
-      | Duration     | 1 Hour             |
     And I follow "Test collab 1 hour"
     And I should see Collaborate time span of "1 hour"
     # Test duration of course
+    And the following "activity" exists:
+      | activity        | collaborate                  |
+      | course          | C1                           |
+      | section         | 1                            |
+      | name            | Test collab duration course  |
+      | duration        | 9999                         |
     And I am on "Course 1" course homepage
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab duration course |
-      | Duration     | Duration of course          |
     And I follow "Test collab duration course"
     And I should see Collaborate time span of "duration of course"
 
   Scenario: Collaborate instance with group mode enabled shows appropriate options for joining session.
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity        | collaborate           |
+      | course          | C1                    |
+      | section         | 1                     |
+      | name            | Test collab           |
+      | groupmode       | 1                     |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
-      | Group mode | Separate groups |
     And I follow "Test collab"
     And I should see "No group" in the ".mod-collaborate-group-selector" "css_element"
     And I should see "Group 1" in the ".mod-collaborate-group-selector" "css_element"
@@ -125,10 +137,13 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate - deleting a group removes the group from the list of available groups when joining a session.
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity        | collaborate                  |
+      | course          | C1                           |
+      | section         | 1                            |
+      | name            | Test collab                  |
+      | groupmode       | 1                            |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
-      | Group mode | Separate groups |
     And I log out
     And I log in as "student2"
     And I am on "Course 1" course homepage
@@ -145,10 +160,13 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate - duplicating an instance makes groups available post duplication.
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity        | collaborate                  |
+      | course          | C1                           |
+      | section         | 1                            |
+      | name            | Test collab                  |
+      | groupmode       | 1                            |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
-      | Group mode | Separate groups |
     And I duplicate "Test collab" activity
     # Make sure duplicated collaborate works.
     And I follow "Test collab (copy)"
@@ -188,11 +206,15 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate instance with group mode enabled and guest access should display nav tabs for teachers.
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate         |
+      | course                   | C1                  |
+      | section                  | 1                   |
+      | name                     | Test collab         |
+      | groupmode                | 1                   |
+      | guestaccessenabled       | 1                   |
+      | guestrole                | pr                  |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab |
-      | Group mode | Separate groups |
-      | Allow Collaborate guest access | 1 |
     And I follow "Test collab"
     And "#maintab" "css_element" should exist
     And "#guesttab" "css_element" should exist
@@ -216,9 +238,12 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | canshareaudio            | 0 | collaborate |
       | candownloadrecordings    | 0 | collaborate |
     And I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab Instructor settings  |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab Instructor settings |
     And I follow "Test collab Instructor settings"
     And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
     And I click on "Edit settings" "link"
@@ -229,13 +254,6 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see "Share audio feed"
     And I should see "Download recordings"
     And I should see "Enable sessions to allocate up to 500 participants"
-    Then the following fields match these values:
-      | Post messages                                       | 0 |
-      | Annotate on the whiteboard                          | 0 |
-      | Share video feed                                    | 0 |
-      | Share audio feed                                    | 0 |
-      | Download recordings                                 | 0 |
-      | Enable sessions to allocate up to 500 participants  | 0 |
     And I set the following fields to these values:
       | Post messages                                       | 1 |
       | Annotate on the whiteboard                          | 1 |
@@ -265,9 +283,12 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | canshareaudio            | 0 | collaborate |
       | candownloadrecordings    | 0 | collaborate |
     And I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab Instructor settings  |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name | Test collab Instructor settings |
     And I follow "Test collab Instructor settings"
     And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
     And I click on "Edit settings" "link"
@@ -323,12 +344,15 @@ Feature: Collaborate instances can be created by teachers and joined by students
 
   Scenario: Collaborate large sessions can be created with guest access.
     Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate                      |
+      | course                   | C1                               |
+      | section                  | 1                                |
+      | name                     | Test collab large guests         |
+      | guestaccessenabled       | 1                                |
+      | guestrole                | pa                               |
+      | largesessionenable       | 1                                |
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
-      | Session name                                        | Test collab large guests |
-      | Allow Collaborate guest access                      | 1                        |
-      | Collaborate guest role                              | Participant              |
-      | Enable sessions to allocate up to 500 participants  | 1                        |
     # Yep, it was added.
     And I follow "Test collab large guests"
     And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
