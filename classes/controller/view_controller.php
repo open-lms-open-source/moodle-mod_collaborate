@@ -122,6 +122,12 @@ class view_controller extends controller_abstract {
         // We get the content of the page before we output the header - otherwise set_module_viewed does not work.
         $view = $viewservice->handle_view();
         echo $OUTPUT->header();
+
+        // Render the activity information.
+        $completiondetails = \core_completion\cm_completion_details::get_instance($PAGE->cm, $USER->id);
+        $activitydates = \core\activity_dates::get_dates_for_module($PAGE->cm, $USER->id);
+        echo $OUTPUT->activity_information($PAGE->cm, $completiondetails, $activitydates);
+
         echo $view;
         echo $OUTPUT->footer();
     }
