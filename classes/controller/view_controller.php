@@ -29,7 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 use mod_collaborate\service\view_service;
 use mod_collaborate\service\forward_service;
 
-
 require_once(__DIR__.'/controller_abstract.php');
 
 class view_controller extends controller_abstract {
@@ -136,6 +135,7 @@ class view_controller extends controller_abstract {
 
         $PAGE->set_cacheable(false);
         $url = $forwardservice->handle_forward();
+
         if ($url) {
             redirect($url);
         }

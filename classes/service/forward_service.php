@@ -149,7 +149,7 @@ class forward_service extends base_visit_service {
      * @return bool|string
      */
     protected function forward() {
-        global $PAGE, $USER;
+        global $PAGE, $USER, $COURSE, $DB;
 
         $context = \context_course::instance($this->course->id);
         $aag = has_capability('moodle/site:accessallgroups', $context);
@@ -203,9 +203,25 @@ class forward_service extends base_visit_service {
         } else {
 
             if (!empty($USER->id) && $this->collaborate->completionlaunch) {
+
+                // Insert launched session log before update_state, so core can update and render
+                // the completion status as completed without having to purge caches.
+
+                $cm = $this->cm;
+                $launchedrecord = (object) [
+
+                    'userid' => $USER->id,
+                    'courseid' => $COURSE->id,
+                    'collaborateid' => $cm->instance,
+                    'timelaunched' => time()
+                ];
+
+                $DB->insert_record("collaborate_launched_log", $launchedrecord);
+
                 // Completion tracking on forward.
                 $completion = new \completion_info($this->course);
                 $completion->update_state($this->cm, COMPLETION_COMPLETE, $USER->id);
+
             }
             return $url;
         }

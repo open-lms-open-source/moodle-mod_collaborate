@@ -46,6 +46,7 @@ $string['collaboratefieldset'] = 'Custom example fieldset';
 $string['collaboratename'] = 'Session name';
 $string['collaboratename_help'] = 'This is the content of the help tooltip associated with the collaboratename field. Markdown syntax is supported.';
 $string['completionlaunch'] = 'Student must launch the collaborate session to complete it';
+$string['completiondetail:launch'] = 'Launch a session';
 $string['configlogging'] = 'Logging';
 $string['configloggingdesc'] = 'Logging levels - determines how much data is logged for debugging purposes. Note: This is different to moodle event based logs which are not designed for logging errors, soap calls, etc..';
 // The configpassword language string matches the customer welcome email. Don't change unless the welcome email changes.
@@ -159,6 +160,9 @@ $string['privacy:metadata:collaborate:userid'] = 'The userid is sent from Moodle
 $string['privacy:metadata:collaborate:fullname'] = 'Your full name is sent to the remote system to allow a better user experience.';
 $string['privacy:metadata:collaborate:avatarurl'] = 'Your profile picture is sent the Collaborate service.';
 $string['privacy:metadata:collaborate:role'] = 'Your role within the Collaborate session.';
+$string['privacy:metadata:launch:userid'] = 'The userid is sent from Moodle to allow you to access your data on the remote system.';
+$string['privacy:metadata:launch:timelaunched'] = 'Session launched date';
+$string['privacy:metadata:launch'] = 'In order to identify the user who is joining the session, user data is sent to the Collaborate service.';
 
 // Instructor settings.
 $string['instructorsettings'] = 'Instructor Settings';
