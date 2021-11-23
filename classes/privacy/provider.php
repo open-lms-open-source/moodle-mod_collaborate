@@ -53,6 +53,11 @@ class provider implements \core_privacy\local\metadata\provider,
             'role' => 'privacy:metadata:collaborate:role'
         ], 'privacy:metadata:collaborate');
 
+        $collection->add_database_table('collaborate_launched_log', [
+            'userid' => 'privacy:metadata:launch:userid',
+            'timelaunched' => 'privacy:metadata:launch:timelaunched',
+        ], 'privacy:metadata:launch');
+
         return $collection;
     }
 

@@ -72,6 +72,42 @@ function collaborate_supports($feature) {
 }
 
 /**
+ * Add a get_coursemodule_info function in case any collaborate type wants to add 'extra' information
+ * for the course (see resource).
+ *
+ * Given a course_module object, this function returns any "extra" information that may be needed
+ * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
+ *
+ * @param stdClass $coursemodule The coursemodule object (record).
+ * @return cached_cm_info An object on information that the courses
+ *                        will know about (most noticeably, an icon).
+ */
+function collaborate_get_coursemodule_info($coursemodule) {
+    global $DB;
+
+    $dbparams = ['id' => $coursemodule->instance];
+    $fields = 'id, name, intro, introformat, completionlaunch';
+    if (!$collaborate = $DB->get_record('collaborate', $dbparams, $fields)) {
+        return false;
+    }
+
+    $result = new cached_cm_info();
+    $result->name = $collaborate->name;
+
+    if ($coursemodule->showdescription) {
+        // Convert intro to html. Do not filter cached version, filters run at display time.
+        $result->content = format_module_intro('collaborate', $collaborate, $coursemodule->id, false);
+    }
+
+    // Populate the custom completion rules as key => value pairs, but only if the completion mode is 'automatic'.
+    if ($coursemodule->completion == COMPLETION_TRACKING_AUTOMATIC) {
+        $result->customdata['customcompletionrules']['completionlaunch'] = $collaborate->completionlaunch;
+    }
+
+    return $result;
+}
+
+/**
  * Saves a new instance of the collaborate into the database
  *
  * Given an object containing all the necessary data,
@@ -465,46 +501,4 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
         $activities[$index++]   = $activity;
     }
 
-}
-
-/**
- * Obtains the automatic completion state for this module based on any conditions
- * in Collaborate settings.
- *
- * @param object $course Course
- * @param object $cm Course-module
- * @param int $userid User ID
- * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
- * @return bool True if completed, false if not, $type if conditions not set.
- */
-
-function collaborate_get_completion_state($course, $cm, $userid, $type) {
-
-    global $USER, $DB;
-
-    $sessionsearcharray = array('id' => $cm->instance,
-        'course' => $cm->course);
-    $sessionsearch = $DB->get_record('collaborate', $sessionsearcharray);
-
-    // If grade completion is set, we skip this function and let core work.
-    if (!empty($USER->id) && $sessionsearch->grade > 0 && !$sessionsearch->completionlaunch) {
-        return true;
-    }
-
-    // Launch and view completion are marked individually for Collab on Moodle.
-    if ($USER->id != $userid) {
-        return false;
-    }
-
-    if (!empty($USER->id) && $sessionsearch->completionlaunch) {
-        $context = context_course::instance($course->id);
-
-        // Teachers and managers should not activate the student's launch completion.
-        if (!has_capability('mod/collaborate:addinstance', $context)) {
-            return true;
-        }
-        return false;
-    }
-    // Automatic view completion.
-    return true;
 }

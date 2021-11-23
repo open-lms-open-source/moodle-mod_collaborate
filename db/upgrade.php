@@ -420,5 +420,32 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2020061104, 'collaborate');
     }
 
+    if ($oldversion < 2021111105) {
+
+        // Define table collaborate_launched_sessions to be created.
+        $table = new xmldb_table('collaborate_launched_log');
+
+        // Adding fields to table collaborate_launched_log.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('collaborateid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timelaunched', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table collaborate_launched_log.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
+        $table->add_key('collaborateid', XMLDB_KEY_FOREIGN, ['collaborateid'], 'collaborate', ['id']);
+
+        // Conditionally launch create table for collaborate_launched_log.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2021111105, 'collaborate');
+    }
+
     return true;
 }
