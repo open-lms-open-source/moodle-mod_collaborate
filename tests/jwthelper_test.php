@@ -41,7 +41,7 @@ class mod_collaborate_jwthelper_testcase extends advanced_testcase {
         $this->assertEquals('mykey', $json2->iss);
         $this->assertEquals('mykey', $json2->sub);
         $this->assertNotEmpty($json2->exp);
-        $this->assertRegExp('/\d+/', strval($json2->exp));
+        $this->assertMatchesRegularExpression('/\d+/', strval($json2->exp));
         $this->assertNotEmpty($parts[2]);
     }
 }
