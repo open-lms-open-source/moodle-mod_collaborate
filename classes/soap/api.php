@@ -533,7 +533,11 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         return $dt;
     }
 
-    public function delete_session($sessionid) {
+    /**
+     * @param $sessionid
+     * @return bool
+     */
+    public function delete_session($sessionid): bool {
 
         // API request deletion.
         $this->set_silent(true);
@@ -541,7 +545,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         $params = new RemoveHtmlSession($sessionid);
         try {
             $result = $this->RemoveHtmlSession($params);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = false;
         }
         if ($result === null) {

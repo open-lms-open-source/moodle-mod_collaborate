@@ -170,7 +170,7 @@ class api {
             } else {
                 $this->usable = false;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->usable = false;
         }
     }
@@ -229,6 +229,7 @@ class api {
      * @param requestoptions $requestoptions
      * @param http_code_validation | null $validation
      * @return response
+     * @throws \moodle_exception
      */
     public function rest_call($verb, $resourcepath, requestoptions $requestoptions,
                               http_code_validation $validation = null) {
@@ -238,22 +239,21 @@ class api {
         if (empty($validation)) {
             $validation = new http_code_validation();
         }
-        if ($resourcepath != 'token') {
-            if (!$this->is_usable()) {
-                if (!self::configured()) {
-                    throw new \moodle_exception('error:noconfiguration', 'collaborate');
+        if (($resourcepath != 'token') && !$this->is_usable()) {
+            if (!self::configured()) {
+                throw new \moodle_exception('error:noconfiguration', 'collaborate');
+            } else {
+                if (!$this->test_service_reachable($this->config->restserver)) {
+                    throw new \moodle_exception('error:restapiunreachable', 'collaborate');
                 } else {
-                    if (!$this->test_service_reachable($this->config->restserver)) {
-                        throw new \moodle_exception('error:restapiunreachable', 'collaborate');
-                    } else {
-                        throw new \moodle_exception('error:restapiunusable', 'collaborate');
-                    }
+                    throw new \moodle_exception('error:restapiunusable', 'collaborate');
                 }
             }
         }
         $ch = curl_init();
         $headers = [];
-        if ($resourcepath != 'token') {
+        // Because the deletion may be due to invalid credentials, we omit validation in the activity deletion.
+        if ($resourcepath != 'token' && $verb != self::DELETE) {
             if (!self::configured()) {
                 throw new \moodle_exception('error:noconfiguration', 'collaborate');
             }
@@ -620,7 +620,11 @@ class api {
         return $enrollmentresponse->object->permanentUrl;
     }
 
-    public function delete_session($sessionid) {
+    /**
+     * @param $sessionid
+     * @return bool
+     */
+    public function delete_session($sessionid): bool {
 
         // API request deletion.
         $this->set_silent(true);
@@ -630,7 +634,7 @@ class api {
         // Deletion validation is taken care of by default check for 200 http code status.
         try {
             $this->rest_call(self::DELETE, '/sessions/{sessionId}', $reqopts);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -727,7 +731,7 @@ class api {
                 $model->name = $name;
                 $model->viewurl = $viewurl;
                 $model->downloadurl = $downloadurl;
-                if (!empty($CFG->mod_collaborate_alternative_counter && $CFG->mod_collaborate_alternative_counter == true)) {
+                if (!empty($CFG->mod_collaborate_alternative_counter)) {
                     $alternativecount = new recording_counts($recid, $recording->canDownload);
                     $alternativecount->views = $recording->playbackCount;
                     $alternativecount->downloads = $recording->downloadCount;
@@ -802,7 +806,7 @@ class api {
             if ($testingpurpose) {
                 return $response->object;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->usable = false;
         }
     }
