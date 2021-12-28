@@ -24,8 +24,7 @@ namespace mod_collaborate;
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\local,
-    stdClass;
+use mod_collaborate\local, stdClass;
 
 class sessionlink {
 
@@ -331,14 +330,16 @@ class sessionlink {
             return true;
         }
 
-        // Only delete the link records where the api delete call was successful.
-        list($sql, $params) = $DB->get_in_or_equal($delsuccesses);
-        $DB->delete_records_select('collaborate_sessionlink', 'sessionid '.$sql, $params);
+        if (!empty($delsuccesses)) {
+            // Only delete the link records where the api delete call was successful.
+            list($sql, $params) = $DB->get_in_or_equal($delsuccesses);
+            $DB->delete_records_select('collaborate_sessionlink', 'sessionid ' . $sql, $params);
+        }
 
         // Increment the deletion attempt count.
         // We can try to delete at a later date.
         list($sql, $params) = $DB->get_in_or_equal($delfails);
-        $links = $DB->get_records_select('collaborate_sessionlink', 'sessionid '.$sql, $params);
+        $links = $DB->get_records_select('collaborate_sessionlink', 'sessionid ' . $sql, $params);
 
         $transact = $DB->start_delegated_transaction();
         foreach ($links as $link) {

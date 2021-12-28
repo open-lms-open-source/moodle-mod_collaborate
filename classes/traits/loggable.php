@@ -102,7 +102,7 @@ trait loggable {
             return;
         }
 
-        // Developer orinetated error message.
+        // Developer oriented error message.
         $url = new \moodle_url('/course/view.php', ['id' => $COURSE->id]);
         if (!empty($errorarr)) {
             if (!empty($debuginfo)) {

@@ -27,11 +27,9 @@ use mod_collaborate\testables\sessionlink;
 use mod_collaborate\soap\fakeapi;
 use mod_collaborate\soap\generated\ListHtmlSession;
 
-class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
+class mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
     public function test_ensure_session_link() {
-
-        global $DB;
 
         $this->resetAfterTest();
 
@@ -523,6 +521,41 @@ class  mod_collaborate_sessionlink_testcase extends advanced_testcase {
 
     public function test_get_session_link_row_by_sessionuid() {
         $this->assert_session_link_row_by_sessionid_or_sessionuid(false);
+    }
+
+    public function test_attempt_delete_sessions() {
+        global $DB;
+
+        $this->resetAfterTest();
+
+        $gen = $this->getDataGenerator();
+        $course = $gen->create_course();
+
+        $modgen = $gen->get_plugin_generator('mod_collaborate');
+        $collabdata = (object) [
+            'course'    => $course->id,
+            'sessionid' => null,
+            'groupmode' => SEPARATEGROUPS
+        ];
+        $collaborate = $modgen->create_instance($collabdata);
+        $collaborateidbad = null;
+        $collaborateidgood = $collaborate->id;
+
+        $linkscreated = sessionlink::apply_session_links($collaborate);
+        $this->assertTrue($linkscreated);
+
+        // Records with return empty.
+        $linksbad = $DB->get_records('collaborate_sessionlink', ['collaborateid' => $collaborateidbad]);
+        $this->assertEmpty($linksbad);
+        unset($linksbad, $collaborateidbad);
+
+        // Records found.
+        $linksgood = $DB->get_records('collaborate_sessionlink', ['collaborateid' => $collaborateidgood]);
+        $this->assertNotEmpty($linksgood);
+
+        // Records found, assert attempt delete return true.
+        $attempt = sessionlink::attempt_delete_sessions($linksgood);
+        $this->assertTrue($attempt);
     }
 }
 

@@ -63,7 +63,7 @@ class http_code_validation {
                 set_config('preventtask', time(), 'collaborate');
             }
 
-            if (!empty($this->errorsbycode[strval($response->httpcode)])) {
+            if (!empty($this->errorsbycode[(string)$response->httpcode])) {
                 $valerr = $this->errorsbycode[$response->httpcode];
                 $this->process_error($valerr->errorcode, $valerr->severity,
                         $valerr->a, $valerr->debuginfo);
