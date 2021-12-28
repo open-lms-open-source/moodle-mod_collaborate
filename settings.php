@@ -29,6 +29,7 @@ use mod_collaborate\settings\setting_statictext;
 use mod_collaborate\task\soap_migrator_task;
 
 if ($ADMIN->fulltree) {
+    global $USER;
 
     // We have to require these classes even though they are autoloadable or we will get errors on upgrade.
     require_once(__DIR__.'/classes/settings/setting_statictext.php');
@@ -149,8 +150,12 @@ if ($ADMIN->fulltree) {
     $config = get_config('collaborate');
     $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password);
     $restconfig = !empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret);
+    $migphaseone = $soapconfig && !$restconfig && !empty($CFG->mod_collaborate_show_migration_button);
+    // Remove mrsupport validation after the phase 2 is entirely tested and ready for deployment.
+    $migphasetwo = $soapconfig && $restconfig && !empty($CFG->mod_collaborate_show_migration_button
+            && $USER->username === 'mrsupport');
 
-    if ($soapconfig && !$restconfig && !empty($CFG->mod_collaborate_show_migration_button) || $runningbehattest) {
+    if ($migphaseone || $migphasetwo || $runningbehattest) {
         $name = 'collaborate/restmigration';
         $attributes = '';
         if ($migrationstatus != false) {

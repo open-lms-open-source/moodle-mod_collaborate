@@ -50,7 +50,8 @@ class soap_migrator_task extends adhoc_task {
             // Copy SOAP credentials into REST credentials.
             if (!empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret)) {
                 // If none is empty, it means the plugin is being used with REST and migration should not run.
-                throw new soap_migration_exception('REST Credentials in use, migration not required.');
+                $this->log_migration_entry('REST Credentials in use, migration not required.');
+                return;
             }
             $this->set_rest_credentials($config->server, $config->username, $config->password);
             set_config('migrationstatus', self::STATUS_IDLE, 'collaborate');
