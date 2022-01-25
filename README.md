@@ -19,7 +19,7 @@ learners in virtual classrooms.
 ## Installation
 Extract the contents of the plugin into _/wwwroot/mod_ then visit `admin/upgrade.php` or use the CLI script to upgrade your site.
 
-For more information about installation, configuration and usage, please see https://help.blackboard.com/Blackboard_App/Collaborate and https://help.blackboard.com/Collaborate
+For more information about installation, configuration and usage, please see https://help.blackboard.com/Collaborate
 
 ## License
 Copyright (c) 2021 Open LMS (https://www.openlms.net)
