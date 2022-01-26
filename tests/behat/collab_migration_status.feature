@@ -26,8 +26,7 @@ Feature: Collaborate migration status message changes
   Scenario Outline: Not recognized configuration values have no impact on migration status messages.
     Given I log in as "admin"
     And the following config values are set as admin:
-      |      config     |    value    |   plugin   |
-      | migrationstatus |   <value>   | collaborate|
+      | migrationstatus |   <value>      | collaborate |
     And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
     And I should not see "Migration from SOAP to REST has not been initiated."
     And I should not see "Migration from SOAP to REST is currently in progress."
@@ -58,6 +57,13 @@ Feature: Collaborate migration status message changes
   @javascript
   Scenario: The migration button is disabled once the ad hoc task has been added.
     Given I log in as "admin"
+    And the following config values are set as admin:
+      | mod_collaborate_show_migration_button | 1 |
+    And the following config values are set as admin:
+      |      config     |     value   |   plugin   |
+      | username        |   usertest     | collaborate |
+      | server          |   servertest   | collaborate |
+      | password        |   passtest     | collaborate |
     And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
     And I click on "Migrate to REST API" "button"
     And I click on "Continue" "button"
@@ -67,3 +73,52 @@ Feature: Collaborate migration status message changes
       | migrationstatus |   1         | collaborate|
     And I reload the page
     Then the "disabled" attribute of ".restapisettings input[type='button']" "css_element" should be set
+
+  @javascript
+  Scenario: The migration button should show when Soap credentials exists.
+    Given I log in as "admin"
+    And the following config values are set as admin:
+      | mod_collaborate_show_migration_button | 1 |
+    And the following config values are set as admin:
+      | username        |   usertest     | collaborate |
+      | server          |   servertest   | collaborate |
+      | password        |   passtest     | collaborate |
+    And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
+    And "Migrate to REST API" "button" should exist
+
+  @javascript
+  Scenario: The migration button should show not show when the flag is not set.
+    Given I log in as "admin"
+    And the following config values are set as admin:
+      | username        |   usertest     | collaborate |
+      | server          |   servertest   | collaborate |
+      | password        |   passtest     | collaborate |
+    And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
+    And "Migrate to REST API" "button" should not exist
+
+  @javascript
+  Scenario: The migration button should not show when Soap credentials doesn't exists.
+    Given I log in as "admin"
+    And the following config values are set as admin:
+      | mod_collaborate_show_migration_button | 1 |
+    And the following config values are set as admin:
+      | restserver      |   restserver   | collaborate |
+      | restkey         |   restkey      | collaborate |
+      | restsecret      |   restsecret   | collaborate |
+    And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
+    And "Migrate to REST API" "button" should not exist
+
+  @javascript
+  Scenario: The migration button should show when Soap and Rest credentials co-exists.
+    Given I log in as "admin"
+    And the following config values are set as admin:
+      | mod_collaborate_show_migration_button | 1 |
+    And the following config values are set as admin:
+      | username        |   usertest     | collaborate |
+      | server          |   servertest   | collaborate |
+      | password        |   passtest     | collaborate |
+      | restserver      |   restserver   | collaborate |
+      | restkey         |   restkey      | collaborate |
+      | restsecret      |   restsecret   | collaborate |
+    And I navigate to "Plugins > Activity modules > Collaborate Ultra" in site administration
+    And "Migrate to REST API" "button" should exist

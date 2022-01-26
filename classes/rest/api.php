@@ -776,8 +776,8 @@ class api {
     public function set_migration_accesstoken($testingpurpose = false) {
         $data = [
             'grant_type' => 'password',
-            'username' => $this->config->restkey,
-            'password' => $this->config->restsecret
+            'username' => get_config('collaborate', 'username'),
+            'password' => get_config('collaborate', 'password')
         ];
 
         $this->logger->info('Getting access migration token with req data', $data);
@@ -911,8 +911,28 @@ class api {
     }
 
     public function launch_soap_migration() {
-        $requestobj = new requestoptions(''); // Docs says this call does not need params.
+
+        $config = get_config('collaborate');
+        $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
+            'server'   => $config->server,
+            'username' => $config->username,
+            'password' => $config->password
+        ] : false;
+
+        $restconfig = !empty($config->restkey) && !empty($config->username) && !empty($config->password) ? (object) [
+            'restserver'   => $config->restserver,
+            'restkey' => $config->restkey,
+            'restsecret' => $config->restsecret
+        ] : false;
+
+        $testsoapcredentials = $soapconfig ? local::api_verified(true, $soapconfig) : false;
+        $testrestcredentials = $restconfig ? local::api_verified(true, $restconfig) : false;
+
+        $userkey = $testsoapcredentials && $testrestcredentials ? ['consumerKey' => $config->restkey] : [];
+
+        $requestobj = new requestoptions('', [], $userkey); // If REST credentials work migrate to existing REST user.
         $validation = new http_code_validation([202]); // Default validates code 200, need to create a custom for 202.
+
         $this->rest_migration_call(self::POST, '/migration', $requestobj, $validation);
     }
 
@@ -932,13 +952,18 @@ class api {
         $validation = new http_code_validation([200, 204]);
         $response = $this->rest_migration_call(self::GET, '/migration', $requestobj, $validation);
 
-        if (!isset($response->object->sessionAssociationList) || !isset($response->object->oauthConsumer)) {
+        $updaterestcredentials = !local::api_verified(true, $this->config) && !isset($response->object->oauthConsumer);
+
+        if (!isset($response->object->sessionAssociationList) && $updaterestcredentials) {
             $this->process_error('error:restapimigrationdata', loggingconstants::SEV_CRITICAL);
         }
         // Here, do something to store new credentials.
-        $newcreds = $response->object->oauthConsumer;
-        set_config('newrestkey', $newcreds->consumerKey, 'collaborate');
-        set_config('newrestsecret', $newcreds->consumerSecret, 'collaborate');
+        if (isset($response->object->oauthConsumer)) {
+            $newcreds = $response->object->oauthConsumer;
+            set_config('newrestkey', $newcreds->consumerKey, 'collaborate');
+            set_config('newrestsecret', $newcreds->consumerSecret, 'collaborate');
+        }
+
         return $response->object->sessionAssociationList;
     }
 }

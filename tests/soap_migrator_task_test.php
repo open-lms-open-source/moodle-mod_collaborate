@@ -24,7 +24,7 @@ use mod_collaborate\testables\sessionlink;
  * @copyright Copyright (c) 2021 Open LMS.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class soap_migrator_task_testcase extends advanced_testcase {
+class soap_migrator_task_test extends advanced_testcase {
     public function setUp() :void {
         $this->resetAfterTest();
     }
@@ -172,6 +172,48 @@ class soap_migrator_task_testcase extends advanced_testcase {
         // We are missing 2 records, verify which ones by id.
         $this->assertArrayHasKey($session1->sessionid, $migrationdata);
         $this->assertArrayHasKey($session2->sessionid, $migrationdata);
+    }
+
+    public function test_migration_without_rest_user() {
+        $restapiclass = $this->getMockBuilder('mod_collaborate\rest\api')
+            ->onlyMethods(['rest_migration_call'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $expectedcode = new mod_collaborate\rest\http_code_validation([202]);
+        $optionsobject = new mod_collaborate\rest\requestoptions();
+
+        $restapiclass->expects($this->once())
+            ->method('rest_migration_call')
+            ->with('POST', '/migration', $optionsobject, $expectedcode);
+
+        $restapiclass->launch_soap_migration();
+    }
+
+    public function test_migration_with_rest_user() {
+        global $CFG;
+        $CFG->use_collab_test_api = true;
+
+        set_config('server', 'server', 'collaborate');
+        set_config('username', 'username', 'collaborate');
+        set_config('password', 'password', 'collaborate');
+        set_config('restserver', 'serverexample', 'collaborate');
+        set_config('restkey', 'keyexample', 'collaborate');
+        set_config('restsecret', 'secretexample', 'collaborate');
+
+        $restapiclass = $this->getMockBuilder('mod_collaborate\rest\api')
+            ->onlyMethods(['rest_migration_call'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $expectedcode = new mod_collaborate\rest\http_code_validation([202]);
+        $optionsobject = new mod_collaborate\rest\requestoptions('', [], ['consumerKey' => 'keyexample']);
+
+        $restapiclass->expects($this->once())
+            ->method('rest_migration_call')
+            ->with('POST', '/migration', $optionsobject, $expectedcode);
+
+        $restapiclass->launch_soap_migration();
     }
 
     public function create_migration_data () {
