@@ -30,7 +30,6 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
         init: function(contextId) {
 
             var modified = false,
-                initialised = false,
                 strings = {};
 
             /**
@@ -74,16 +73,18 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
              * @param string alertClass
              * @param string extraClasses
              */
-            var apiMsg = function(stringKey, alertClass, extraClasses) {
+            var apiMsg = function(stringKey, alertClass, extraClasses, api) {
                 var msg = strings[stringKey];
 
                 var msgContainer = $('#api_diag .noticetemplate_' + alertClass).children().first().clone();
 
                 $(msgContainer).addClass(extraClasses);
-                $(msgContainer).html('<span class="api-connection-msg">' + msg + '</span>');
+                $(msgContainer).addClass(api);
+                $(msgContainer).html('<span class="api-connection-msg">' + api + ' - ' + msg + '</span>');
 
                 // Wipe out existing connection status msg container.
-                $('#api_diag .api-connection-status').empty();
+                $('#api_diag .api-connection-status .undefined').remove();
+                $('#api_diag .api-connection-status .' + api).remove();
 
                 // Put in new msg container.
                 $('#api_diag .api-connection-status').append($(msgContainer));
@@ -92,46 +93,79 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
             /**
              * Test api.
              */
-            var testApi = function() {
-
-                apiMsg('verifyingapi', 'message', 'spinner');
-
-                var data;
+            var testRestApi = function() {
+                var dataRest;
 
                 if (checkRESTFieldsComplete()) {
-                    data = {
+                    apiMsg('verifyingapi', 'message', 'spinner', 'REST');
+                    dataRest = {
                         'server': $('#id_s_collaborate_restserver').val().trim(),
                         'restkey': $('#id_s_collaborate_restkey').val().trim(),
                         'restsecret': $('#id_s_collaborate_restsecret').val() // Never trim secrets!
                     };
-                } else {
-                    data = {
+                    dataRest.contextid = contextId;
+                    $.ajax({
+                        url: M.cfg.wwwroot + '/mod/collaborate/testapi.php',
+                        context: document.body,
+                        data: dataRest,
+                        success: function(data) {
+                            if (data.success) {
+                                if (!modified) {
+                                    apiMsg('connectionverified', 'success', '', 'REST');
+                                } else {
+                                    apiMsg('connectionverifiedchanged', 'success', '', 'REST');
+                                }
+                            } else {
+                                apiMsg('connectionfailed', 'problem', '', 'REST');
+                            }
+                        },
+                        error: function() {
+                            apiMsg('connectionfailed', 'problem', '', 'REST');
+                        }
+                    });
+                }
+            };
+
+            var testSoapApi = function() {
+                var dataSoap;
+
+                // If REST credentials are set only the message with Credentials Verified will show up.
+                if (checkSOAPFieldsComplete()) {
+                    if (!checkRESTFieldsComplete()) {
+                        apiMsg('verifyingapi', 'message', 'spinner', 'SOAP');
+                    }
+                    dataSoap = {
                         'server': $('#id_s_collaborate_server').val().trim(),
                         'username': $('#id_s_collaborate_username').val().trim(),
                         'password': $('#id_s_collaborate_password').val() // Never trim passwords!
                     };
-                }
-                data.contextid = contextId;
 
-                $.ajax({
-                    url: M.cfg.wwwroot + '/mod/collaborate/testapi.php',
-                    context: document.body,
-                    data: data,
-                    success: function(data) {
-                        if (data.success) {
-                            if (!modified) {
-                                apiMsg('connectionverified', 'success');
+                    dataSoap.contextid =  contextId;
+                    $.ajax({
+                        url: M.cfg.wwwroot + '/mod/collaborate/testapi.php',
+                        context: document.body,
+                        data: dataSoap,
+                        success: function(data) {
+                            if (data.success) {
+                                if (!modified) {
+                                    apiMsg('connectionverified', 'success', '', 'SOAP');
+                                } else {
+                                    apiMsg('connectionverifiedchanged', 'success', '', 'SOAP');
+                                }
+                                $('.soapapisettings').css('display', 'block');
                             } else {
-                                apiMsg('connectionverifiedchanged', 'success');
+                                if (!checkRESTFieldsComplete()) {
+                                    apiMsg('connectionfailed', 'problem', '', 'SOAP');
+                                }
                             }
-                        } else {
-                            apiMsg('connectionfailed', 'problem');
+                        },
+                        error: function() {
+                            if (!checkRESTFieldsComplete()) {
+                                apiMsg('connectionfailed', 'problem', '', 'SOAP');
+                            }
                         }
-                    },
-                    error: function() {
-                        apiMsg('connectionfailed', 'problem');
-                    }
-                });
+                    });
+                }
             };
 
             /**
@@ -142,7 +176,8 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
             var applyClickApiTest = function() {
                 $('.api_diag_btn').click(function(e) {
                     e.preventDefault();
-                    testApi();
+                    testRestApi();
+                    testSoapApi();
                 });
             };
 
@@ -170,14 +205,14 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
                 strings.verifyingapi = s[2];
                 strings.connectionstatusunknown = s[3];
 
-                if (!initialised) {
-                    apiMsg('connectionstatusunknown', 'message');
-                }
                 applySettingChangeCheck();
                 applyClickApiTest();
 
-                if (checkSOAPFieldsComplete() !== '' || checkRESTFieldsComplete() !== '') {
-                    testApi();
+                if (checkRESTFieldsComplete()) {
+                    testRestApi();
+                }
+                if (checkSOAPFieldsComplete()) {
+                    testSoapApi();
                 }
                 // For IE / Edge, disable fieldset fields.
                 if (/Edge\/\d./i.test(navigator.userAgent)
@@ -191,7 +226,6 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
                     $('.soapapisettings').css('display', 'block');
                 }
 
-                initialised = true;
             });
 
         },

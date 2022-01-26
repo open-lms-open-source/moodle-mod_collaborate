@@ -276,6 +276,8 @@ class local {
      * @return restapi|soapapi
      */
     public static function get_api($reset = false, stdClass $config = null, $forceapi = '') {
+        global $CFG;
+        $runningphpunittest = defined('PHPUNIT_TEST') && PHPUNIT_TEST;
         if (!empty($forceapi)) {
             if ($forceapi === 'rest') {
                 return restapi::instance($reset, $config);
@@ -286,6 +288,11 @@ class local {
                 return testable_api::instance($reset, $config);
             }
         }
+
+        if ($runningphpunittest && !empty($CFG->use_collab_test_api)) {
+            return testable_api::instance($reset, $config);
+        }
+
         // This should use self::select_api once testable_api is implemented fully and all unit tests migrated to not
         // use soap/fakeapi.
         if (restapi::configured($config)) {
@@ -304,12 +311,7 @@ class local {
      * @return bool
      */
     public static function api_verified($silent = false, $config = false) {
-        static $apiverified = null;
-
-        // Only do this once! settings.php was calling this 3 times, hence the static to stop this!
-        if ($apiverified !== null) {
-            return $apiverified;
-        }
+        $apiverified = null;
 
         if (self::configured($config)) {
             $api = self::get_api(true, $config);

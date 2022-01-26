@@ -23,6 +23,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+use mod_collaborate\local;
 use mod_collaborate\logging\constants;
 use mod_collaborate\settings\setting_trimmed_configtext;
 use mod_collaborate\settings\setting_statictext;
@@ -148,14 +149,16 @@ if ($ADMIN->fulltree) {
     }
 
     $config = get_config('collaborate');
-    $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password);
-    $restconfig = !empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret);
-    $migphaseone = $soapconfig && !$restconfig && !empty($CFG->mod_collaborate_show_migration_button);
-    // Remove mrsupport validation after the phase 2 is entirely tested and ready for deployment.
-    $migphasetwo = $soapconfig && $restconfig && !empty($CFG->mod_collaborate_show_migration_button
-            && $USER->username === 'mrsupport');
+    $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
+        'server'   => $config->server,
+        'username' => $config->username,
+        'password' => $config->password
+    ] : false;
 
-    if ($migphaseone || $migphasetwo || $runningbehattest) {
+    $testsoapcredentials = $soapconfig ? local::api_verified(true, $soapconfig) : false;
+    $migphaseone = $testsoapcredentials && !empty($CFG->mod_collaborate_show_migration_button);
+
+    if ($migphaseone) {
         $name = 'collaborate/restmigration';
         $attributes = '';
         if ($migrationstatus != false) {

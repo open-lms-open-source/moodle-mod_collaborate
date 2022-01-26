@@ -39,21 +39,42 @@ class soap_migrator_task extends adhoc_task {
     const STATUS_MIGRATED = 5; // Migration process finished.
     const STATUS_INCOMPLETE = 6; // Migration data left sessions with no sessionuid.
 
+    private $soapconfig = false;
+    private $restconfig = false;
+
     /**
      * Runs the task for migrating SOAP sessions.
      */
     public function execute() {
         // Create the config value that stores the status.
         $config = get_config('collaborate');
+        $this->soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
+            'server'   => $config->server,
+            'username' => $config->username,
+            'password' => $config->password
+        ] : false;
+
+        $this->restconfig = !empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret) ? (object) [
+            'restserver'   => $config->restserver,
+            'restkey' => $config->restkey,
+            'restsecret' => $config->restsecret
+        ] : false;
+
+        $testsoapcredentials = $this->soapconfig ? local::api_verified(true, $this->soapconfig) : false;
+        $testrestcredentials = $this->restconfig ? local::api_verified(true, $this->restconfig) : false;
 
         if (!isset($config->migrationstatus)) { // We need to do it just once.
-            // Copy SOAP credentials into REST credentials.
-            if (!empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret)) {
-                // If none is empty, it means the plugin is being used with REST and migration should not run.
+            // Copy SOAP credentials into REST credentials if REST credentials doesn't work.
+            if ($testrestcredentials && !$testsoapcredentials) {
+                // If both credentials works, it means is a migration on an existing REST user.
                 $this->log_migration_entry('REST Credentials in use, migration not required.');
                 return;
             }
-            $this->set_rest_credentials($config->server, $config->username, $config->password);
+
+            if (!$testrestcredentials) {
+                $this->set_rest_credentials($config->server, $config->username, $config->password);
+            }
+
             set_config('migrationstatus', self::STATUS_IDLE, 'collaborate');
             set_config('migrationoffset', 0, 'collaborate');
             set_config('migrationtimestamp', time(), 'collaborate');
@@ -260,10 +281,12 @@ class soap_migrator_task extends adhoc_task {
                 set_config('migrationstatus', self::STATUS_MIGRATED, 'collaborate');
             }
 
-            $newusername = get_config('collaborate', 'newrestkey');
-            $newpassword = get_config('collaborate', 'newrestsecret');
-            set_config('restkey', $newusername, 'collaborate');
-            set_config('restsecret', $newpassword, 'collaborate');
+            if (!local::api_verified(true, $this->restconfig)) {
+                $newusername = get_config('collaborate', 'newrestkey');
+                $newpassword = get_config('collaborate', 'newrestsecret');
+                set_config('restkey', $newusername, 'collaborate');
+                set_config('restsecret', $newpassword, 'collaborate');
+            }
         }
     }
 }
