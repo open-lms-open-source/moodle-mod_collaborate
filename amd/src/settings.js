@@ -16,7 +16,7 @@
 /**
  * Settings JS.
  *
- * @package   mod_collaborate
+ * @package
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -69,9 +69,10 @@ define(['jquery', 'core/str', 'core/templates'], function($, str, templates) {
             /**
              * Render new api status message.
              *
-             * @param string stringKey
-             * @param string alertClass
-             * @param string extraClasses
+             * @param {string} stringKey
+             * @param {string} alertClass
+             * @param {string} extraClasses
+             * @param {string} api
              */
             var apiMsg = function(stringKey, alertClass, extraClasses, api) {
                 var msg = strings[stringKey];

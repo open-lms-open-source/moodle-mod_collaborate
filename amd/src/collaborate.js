@@ -16,7 +16,7 @@
 /**
  * Module javascript.
  *
- * @package   mod_collaborate
+ * @package
  * @copyright Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -52,7 +52,7 @@ define(['jquery'], function($) {
 
     /**
      * Copy text of specific element
-     * @param element
+     * @param {node} element
      * @constructor
      */
     var copyText = function(element) {
