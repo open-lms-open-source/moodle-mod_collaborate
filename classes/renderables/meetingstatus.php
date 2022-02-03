@@ -100,7 +100,9 @@ class meetingstatus implements \renderable, \templatable{
         /** @var mod_collaborate_renderer $output */
         $output = $PAGE->get_renderer('mod_collaborate');
         // This should be migrated to a renderable and template at some point.
-        $this->meetingtimes = $output->meeting_times($times);
+        if (empty($collaborate->hideduration)) {
+            $this->meetingtimes = $output->meeting_times($times);
+        }
 
         $params = ['action' => 'forward', 'id' => $cm->id, 'sesskey' => sesskey()];
         $this->fwdurl = new \moodle_url('view.php', $params);

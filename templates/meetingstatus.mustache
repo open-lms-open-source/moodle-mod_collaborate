@@ -34,8 +34,9 @@
 
 <div class="tab-pane active" id="maininfo" role="tabpanel">
     <div class = "path-mod-collaborate__meetingstatus">
-        <div class = "path-mod-collaborate__meetingstatus_times">{{{meetingtimes}}}</div>
-
+        {{#meetingtimes}}
+            <div class = "path-mod-collaborate__meetingstatus_times">{{{meetingtimes}}}</div>
+        {{/meetingtimes}}
         {{#statusunrestored}}
             {{> core/notification_info}}
         {{/statusunrestored}}

@@ -158,6 +158,8 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
     $collaborate->timestart = $data->timestart;
     $collaborate->timeend = $data->timeend;
     $collaborate->intro = local::entitydecode($collaborate->intro);
+    $hideduration = isset($collaborate->hideduration) && boolval($collaborate->hideduration);
+    $collaborate->hideduration = $hideduration ?: 0;
     $cansharevideo = isset($collaborate->cansharevideo) && boolval($collaborate->cansharevideo);
     $collaborate->cansharevideo = $cansharevideo ?: 0;
     $canpostmessages = isset($collaborate->canpostmessages) && boolval($collaborate->canpostmessages);
@@ -382,11 +384,15 @@ function collaborate_pluginfile($course, $cm, $context, $filearea, array $args, 
  * @param cm_info $cm
  */
 function collaborate_cm_info_view(cm_info $cm) {
-    global $PAGE;
+    global $PAGE, $DB;
     $renderer = $PAGE->get_renderer('mod_collaborate');
-    $times = local::get_times($cm->instance);
-    $o = html_writer::tag('span', $renderer->meeting_times($times), ['class' => 'label label-info']);
-    $cm->set_after_link($o);
+
+    $hideduration = $DB->get_field('collaborate', 'hideduration', array('id' => $cm->instance));
+    if (empty($hideduration)) {
+        $times = local::get_times($cm->instance);
+        $o = html_writer::tag('span', $renderer->meeting_times($times), ['class' => 'label label-info']);
+        $cm->set_after_link($o);
+    }
 }
 
 /**

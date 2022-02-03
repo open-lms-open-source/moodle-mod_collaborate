@@ -108,6 +108,10 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addElement('select', 'duration', get_string('duration', 'mod_collaborate'), $options);
         $mform->setDefault('duration', HOURSECS);
 
+        $mform->addElement('advcheckbox', 'hideduration',
+            get_string('hideduration', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+        $mform->setDefault('hideduration', get_config('collaborate', 'hideduration'));
+
         // Guest access enabled yes / no.
         $mform->addElement('checkbox', 'guestaccessenabled',
                 get_string('guestaccessenabled', 'mod_collaborate'), '', array('group' => 1), array(0, 1));

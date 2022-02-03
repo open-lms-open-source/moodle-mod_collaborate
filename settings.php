@@ -260,6 +260,13 @@ if ($ADMIN->fulltree) {
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
+    $name = 'collaborate/hideduration';
+    $title = new lang_string('hideduration', 'collaborate');
+    $description = new lang_string('hideduration', 'collaborate');
+    $default = $unchecked;
+    $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
+    $settings->add($setting);
+
     // Performance settings.
     $name = 'collaborate/performancesettings';
     $setting = new \admin_setting_heading($name, get_string('performancesettings', 'mod_collaborate'), '');

@@ -74,6 +74,7 @@ $string['deleterecording'] = 'Delete recording entitled "{$a}"';
 $string['deleterecordingconfirmation'] = 'Are you sure you want to delete the recording entitled "{$a}"?';
 $string['downloadrec'] = 'Download recording';
 $string['duration'] = 'Duration';
+$string['hideduration'] = 'Hide duration view';
 $string['ends'] = 'Ends - {$a}';
 $string['error:apicallfailed'] = 'API call failed ( {$a} )';
 $string['error:apifailure'] = 'An error occurred whilst talking to the collaborate server - please try again later. If the problem persists, please contact support.';

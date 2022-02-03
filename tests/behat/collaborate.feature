@@ -362,3 +362,31 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | Collaborate guest role | Presenter |
     And I click on "Save and display" "button"
     Then I should see "In large scale sessions, guests must be participants"
+
+  Scenario: Collaborate instance with hide duration view configuration enable does not show the duration.
+    Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate         |
+      | course                   | C1                  |
+      | section                  | 1                   |
+      | name                     | Test collab         |
+      | hideduration             | 1                   |
+      | duration                 | 9999                |
+    And I am on "Course 1" course homepage with editing mode on
+    And I should not see "(Duration of course)"
+    And I follow "Test collab"
+    And I should not see "(Duration of course)"
+
+  Scenario: Collaborate instance with hide duration view configuration disable show the duration.
+    Given I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate         |
+      | course                   | C1                  |
+      | section                  | 1                   |
+      | name                     | Test collab         |
+      | hideduration             | 0                   |
+      | duration                 | 9999                |
+    And I am on "Course 1" course homepage with editing mode on
+    And I should see "(Duration of course)"
+    And I follow "Test collab"
+    And I should see "(Duration of course)"
