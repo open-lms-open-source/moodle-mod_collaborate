@@ -252,9 +252,9 @@ class api {
         }
         $ch = curl_init();
         $headers = [];
-        // Because the deletion may be due to invalid credentials, we omit validation in the activity deletion.
-        if ($resourcepath != 'token' && $verb != self::DELETE) {
-            if (!self::configured()) {
+        if ($resourcepath != 'token') {
+            // Because the deletion may be due to invalid credentials, we omit validation in the activity deletion.
+            if (!self::configured()  && $verb != self::DELETE) {
                 throw new \moodle_exception('error:noconfiguration', 'collaborate');
             }
             if ($this->accesstokenexpires < time()) {
