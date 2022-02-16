@@ -449,7 +449,7 @@ function xmldb_collaborate_upgrade($oldversion) {
 
     if ($oldversion < 2022020301) {
 
-        // Define field completionlaunch to be added to collaborate.
+        // Define field hideduration to be added to collaborate.
         $table = new xmldb_table('collaborate');
         $field = new xmldb_field('hideduration', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
         if (!$dbman->field_exists($table, $field)) {

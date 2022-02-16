@@ -184,6 +184,10 @@ $string['instructorsettings:largesession_help'] = 'This will enable sessions to 
 $string['largesessionenable'] = 'Enable sessions to allocate up to 500 participants';
 $string['optionnotavailableforgroups'] = 'This option is not available for groups';
 $string['rolenotavailableforlargesession'] = 'In large scale sessions, guests must be participants.';
+// Override group mode.
+$string['overridegroupmodeoff'] = 'Override Group Mode';
+$string['overridegroupmode'] = 'Override group mode to off';
+$string['overridegroupmodedesc'] = 'This will override and lock all Group Mode settings for all courses and activities in which they were created.';
 
 // Performance settings.
 $string['performancesettings'] = 'Performance settings';

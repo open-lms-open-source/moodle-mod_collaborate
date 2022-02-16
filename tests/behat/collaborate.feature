@@ -390,3 +390,41 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I should see "(Duration of course)"
     And I follow "Test collab"
     And I should see "(Duration of course)"
+
+  Scenario: Collaborate instance with override group mode setting ON will not allow you choose Groups Mode.
+    Given the following config values are set as admin:
+      | overridegroupmode | 1 | collaborate |
+    And I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate         |
+      | course                   | C1                  |
+      | section                  | 1                   |
+      | name                     | Test collab         |
+      | duration                 | 9999                |
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Test collab"
+    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
+    And I click on "Edit settings" "link"
+    And I expand all fieldsets
+    And I should not see "Separate groups" in the "#id_groupmode" "css_element"
+    And I should not see "Visible groups" in the "#id_groupmode" "css_element"
+    Then I should see "No groups" in the "#id_groupmode" "css_element"
+
+  Scenario: Collaborate instance with override group mode setting OFF will allow you choose Groups Mode.
+    Given the following config values are set as admin:
+      | overridegroupmode | 0 | collaborate |
+    And I log in as "teacher1"
+    And the following "activity" exists:
+      | activity                 | collaborate         |
+      | course                   | C1                  |
+      | section                  | 1                   |
+      | name                     | Test collab         |
+      | duration                 | 9999                |
+    And I am on "Course 1" course homepage with editing mode on
+    And I follow "Test collab"
+    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
+    And I click on "Edit settings" "link"
+    And I expand all fieldsets
+    And I should see "Separate groups" in the "#id_groupmode" "css_element"
+    And I should see "Visible groups" in the "#id_groupmode" "css_element"
+    Then I should see "No groups" in the "#id_groupmode" "css_element"

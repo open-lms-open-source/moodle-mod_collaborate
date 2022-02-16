@@ -180,8 +180,11 @@ class mod_collaborate_mod_form extends moodleform_mod {
             $mform->setDefault('grade[modgrade_type]', 'none');
         }
 
+        // Check if we have to override group mode to off.
+        $overridegroupmode = !empty(get_config('collaborate', 'overridegroupmode')) ? 1 : false;
+
         // Add standard elements, common to all modules.
-        $this->standard_coursemodule_elements();
+        $this->standard_coursemodule_elements($overridegroupmode);
 
         // Add standard buttons, common to all modules.
         $this->add_action_buttons();
