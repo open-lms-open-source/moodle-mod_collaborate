@@ -267,6 +267,19 @@ if ($ADMIN->fulltree) {
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
+    // Override Group Mode to Off.
+    $name = 'collaborate/overridegroupmodeoff';
+    $setting = new \admin_setting_heading($name, get_string('overridegroupmodeoff', 'mod_collaborate'), '');
+    $settings->add($setting);
+
+    $name = 'collaborate/overridegroupmode';
+    $title = new lang_string('overridegroupmode', 'collaborate');
+    $description = new lang_string('overridegroupmode', 'collaborate');
+    $default = $unchecked;
+    $description = new lang_string('overridegroupmodedesc', 'collaborate');
+    $setting = new \admin_setting_configcheckbox($name, $title, $description, $default, $checked, $unchecked);
+    $settings->add($setting);
+
     // Performance settings.
     $name = 'collaborate/performancesettings';
     $setting = new \admin_setting_heading($name, get_string('performancesettings', 'mod_collaborate'), '');
