@@ -138,8 +138,12 @@ class soap_migrator_task_test extends advanced_testcase {
         $task->execute();
 
         // Migration completed.
-        $this->assertEmpty($DB->get_records('collaborate', ['sessionuid' => null]));
+        $this->assertEquals(1, $DB->count_records('collaborate', ['sessionuid' => null]));
         $this->assertEmpty($DB->get_records('collaborate_sessionlink', ['sessionuid' => null]));
+        $selection = 'sessionid IS NOT NULL AND sessionuid IS NULL';
+        $this->assertEmpty($DB->get_records_select('collaborate', $selection));
+        $this->assertEmpty($DB->get_records_select('collaborate_sessionlink', $selection));
+        // Very important assertion. Having an orphaned record must not prevent the completion of the migration.
         $this->assertEquals(5, get_config('collaborate', 'migrationstatus'));
         $migrationdata = $DB->get_records_sql('SELECT sessionid, sessionuid FROM {collaborate_migration}');
         $updatedrecords = $DB->get_records_sql('SELECT * FROM {collaborate_sessionlink} WHERE sessionuid iS NOT NULL');
@@ -162,8 +166,9 @@ class soap_migrator_task_test extends advanced_testcase {
         $task->execute();
 
         // Migration not completed.
-        $this->assertNotEmpty($DB->get_records('collaborate', ['sessionuid' => null]));
-        $this->assertNotEmpty($DB->get_records('collaborate_sessionlink', ['sessionuid' => null]));
+        $selection = 'sessionid IS NOT NULL AND sessionuid IS NULL';
+        $this->assertNotEmpty($DB->get_records_select('collaborate', $selection));
+        $this->assertNotEmpty($DB->get_records_select('collaborate_sessionlink', $selection));
         // Verify status as not completed.
         $this->assertEquals(6, get_config('collaborate', 'migrationstatus'));
 
@@ -260,6 +265,18 @@ class soap_migrator_task_test extends advanced_testcase {
         $this->assertCount(10, $DB->get_records('collaborate'));
         // 3 records for the first activity and then 9 more.
         $this->assertCount(12, $DB->get_records('collaborate_sessionlink'));
+
+        // Insert an orphaned record to guarantee that having them does not break the process.
+        $orphaned = new stdClass();
+        $orphaned->course = $course->id;
+        $orphaned->name = 'examplename';
+        $orphaned->timestart = time();
+        $orphaned->duration = 3600;
+        $orphaned->timeend = time() + 3600;
+        $orphaned->timecreated = time();
+        $orphaned = (array) $orphaned;
+        $DB->insert_record('collaborate', $orphaned);
+        $this->assertCount(11, $DB->get_records('collaborate'));
 
         // Get all sessionids and create a new fake sessionuid.
         return $DB->get_records_sql("
