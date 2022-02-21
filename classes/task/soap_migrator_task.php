@@ -274,8 +274,9 @@ class soap_migrator_task extends adhoc_task {
                     . $e->getMessage());
             }
 
-            if ($DB->count_records('collaborate', ['sessionuid' => null]) ||
-                $DB->count_records('collaborate_sessionlink', ['sessionuid' => null])) {
+            $selection = 'sessionid IS NOT NULL AND sessionuid IS NULL';
+            if ($DB->count_records_select('collaborate', $selection) ||
+                $DB->count_records_select('collaborate_sessionlink', $selection)) {
                 set_config('migrationstatus', self::STATUS_INCOMPLETE, 'collaborate');
             } else {
                 set_config('migrationstatus', self::STATUS_MIGRATED, 'collaborate');
