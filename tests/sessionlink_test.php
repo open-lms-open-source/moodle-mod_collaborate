@@ -20,14 +20,12 @@
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
+namespace mod_collaborate;
 use mod_collaborate\testables\sessionlink;
 use mod_collaborate\soap\fakeapi;
 use mod_collaborate\soap\generated\ListHtmlSession;
 
-class mod_collaborate_sessionlink_testcase extends advanced_testcase {
+class sessionlink_test extends \advanced_testcase {
 
     public function test_ensure_session_link() {
 

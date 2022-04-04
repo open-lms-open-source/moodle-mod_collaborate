@@ -20,12 +20,10 @@
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
+namespace mod_collaborate;
 use mod_collaborate\testables\trait_exportable;
 
-class  mod_collaborate_trait_exportable_testcase extends advanced_testcase {
+class  trait_exportable_test extends \advanced_testcase {
 
     public function test_array_keys_numeric() {
         $object = new trait_exportable();

@@ -21,8 +21,6 @@
 
 namespace mod_collaborate\settings;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @author    Guy Thomas
  * @copyright Copyright (c) 2017 Open LMS

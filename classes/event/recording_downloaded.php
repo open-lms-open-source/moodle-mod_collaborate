@@ -26,8 +26,6 @@ namespace mod_collaborate\event;
 
 use core\event\base;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Recording downloaded event.
  *

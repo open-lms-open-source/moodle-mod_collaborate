@@ -23,8 +23,6 @@
  */
 namespace mod_collaborate\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 use mod_collaborate\sessionlink;
 
 class cleanup_sessions_task extends \core\task\scheduled_task {

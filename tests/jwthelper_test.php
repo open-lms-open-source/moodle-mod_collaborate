@@ -22,13 +22,13 @@
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 global $CFG, $DB;
 
 use mod_collaborate\rest\jwthelper;
 
-class mod_collaborate_jwthelper_testcase extends advanced_testcase {
+class jwthelper_test extends \advanced_testcase {
     public function test_get_token() {
         $token = jwthelper::get_token('mykey', 'mysecret');
         $this->assertNotEmpty($token);

@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_collaborate\iface;
-
+// Prepare for code checker update. Will be removed on INT-17966.
+// @codingStandardsIgnoreLine
 defined('MOODLE_INTERNAL') || die();
 
 use stdClass,

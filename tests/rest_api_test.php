@@ -22,13 +22,13 @@
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 global $CFG, $DB;
 
 use mod_collaborate\rest\api;
 
-class mod_collaborate_rest_api_testcase extends advanced_testcase {
+class rest_api_test extends \advanced_testcase {
 
     public function test_configured() {
 

@@ -20,13 +20,13 @@
  * @copyright Copyright (c) 2016 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 require_once($CFG->dirroot.'/mod/collaborate/mod_form.php');
 
-class mod_form_collab_time_zones_testcase extends advanced_testcase {
+class mod_form_collab_time_zones_test extends \advanced_testcase {
 
     public function test_get_validated_time_zones() {
         global $DB;
@@ -38,21 +38,21 @@ class mod_form_collab_time_zones_testcase extends advanced_testcase {
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, $teacherrole->id);
         $this->setUser($teacher);
 
-        $coretzones = core_date::get_list_of_timezones();
-        $tzone = mod_collaborate_mod_form::get_validated_time_zone();
+        $coretzones = \core_date::get_list_of_timezones();
+        $tzone = \mod_collaborate_mod_form::get_validated_time_zone();
         $this->assertEquals(get_user_timezone(), $tzone);
         $teacher->timezone = 'Indian/Mayotte';
         $DB->update_record('user', $teacher);
         $this->setUser($teacher);
-        $tzone = mod_collaborate_mod_form::get_validated_time_zone();
-        $this->assertNotEquals($coretzones[core_date::get_server_timezone()], $tzone);
+        $tzone = \mod_collaborate_mod_form::get_validated_time_zone();
+        $this->assertNotEquals($coretzones[\core_date::get_server_timezone()], $tzone);
         $this->assertArrayHasKey($tzone, $coretzones);
         $this->assertEquals(get_user_timezone(), $tzone);
         $teacher->timezone = '';
         $DB->update_record('user', $teacher);
         $this->setUser($teacher);
-        $tzone = mod_collaborate_mod_form::get_validated_time_zone();
-        $this->assertEquals($coretzones[core_date::get_server_timezone()], $tzone);
+        $tzone = \mod_collaborate_mod_form::get_validated_time_zone();
+        $this->assertEquals($coretzones[\core_date::get_server_timezone()], $tzone);
         $this->assertArrayHasKey($tzone, $coretzones);
     }
 }

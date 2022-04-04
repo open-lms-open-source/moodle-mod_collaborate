@@ -28,8 +28,6 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Implementation of the privacy subsystem plugin provider for the Collaborate activity module.
  *

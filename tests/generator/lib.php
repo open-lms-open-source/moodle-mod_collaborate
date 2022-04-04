@@ -22,7 +22,6 @@
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Collaborate module data generator class.

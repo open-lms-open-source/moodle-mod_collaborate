@@ -22,6 +22,7 @@
  * @copyright Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_collaborate;
 
 defined('MOODLE_INTERNAL') || die();
 global $CFG, $DB;
@@ -29,7 +30,7 @@ global $CFG, $DB;
 use mod_collaborate\local;
 require_once($CFG->dirroot.'/calendar/lib.php');
 
-class mod_collaborate_calendar_testcase extends advanced_testcase {
+class calendar_test extends \advanced_testcase {
 
     private $user;
 
@@ -52,7 +53,7 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $now = time();
 
         // Create a collaborate activity.
-        $collabactivity = new stdClass();
+        $collabactivity = new \stdClass();
         $collabactivity->name = 'Task One';
         $collabactivity->intro = 'Description of task one';
         $collabactivity->introformat = 1;
@@ -147,7 +148,7 @@ class mod_collaborate_calendar_testcase extends advanced_testcase {
         $now = time();
 
         // Create another activity.
-        $collabactivity = new stdClass();
+        $collabactivity = new \stdClass();
         $collabactivity->name = 'Task Two';
         $collabactivity->intro = 'Description of task two';
         $collabactivity->introformat = 1;

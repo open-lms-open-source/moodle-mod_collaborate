@@ -24,9 +24,7 @@
 
 namespace mod_collaborate\renderables;
 
-defined('MOODLE_INTERNAL') || die();
-
-class view_action implements \renderable{
+class view_action implements \renderable {
 
     /**
      * @var \stdClass

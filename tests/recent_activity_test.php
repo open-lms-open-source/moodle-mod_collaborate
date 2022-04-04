@@ -22,8 +22,7 @@
  * @copyright  Copyright (c) 2020 Open LMS. (http://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
+namespace mod_collaborate;
 use mod_collaborate\event\session_launched;
 
 /**
@@ -33,7 +32,7 @@ use mod_collaborate\event\session_launched;
  * @copyright  Copyright (c) 2020 Open LMS. (http://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_collaborate_recent_activity_testcase extends advanced_testcase {
+class recent_activity_test extends \advanced_testcase {
     /**
      * Recent activity in Collab only works if standard log is enabled.
      * @throws coding_exception
@@ -55,7 +54,7 @@ class mod_collaborate_recent_activity_testcase extends advanced_testcase {
         $this->setUser($teacher);
         $now = time();
         $oneweekago = $now - WEEKSECS;
-        $collabcontext = context_module::instance($collab->cmid);
+        $collabcontext = \context_module::instance($collab->cmid);
         $event = session_launched::create([
             'objectid' => $collab->id,
             'context' => $collabcontext,

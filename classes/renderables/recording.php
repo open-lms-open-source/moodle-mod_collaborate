@@ -22,8 +22,6 @@
  */
 namespace mod_collaborate\renderables;
 
-defined('MOODLE_INTERNAL') || die();
-
 class recording implements \renderable {
 
     /**

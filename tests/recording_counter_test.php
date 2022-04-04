@@ -22,6 +22,7 @@
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 
 use mod_collaborate\recording_counter;
@@ -35,7 +36,7 @@ require_once(__DIR__ . '/fixtures/recordingstub.php');
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_collaborate_recording_counter_testcase extends advanced_testcase {
+class recording_counter_test extends \advanced_testcase {
     public function setUp(): void {
         $this->resetAfterTest();
     }
@@ -43,10 +44,10 @@ class mod_collaborate_recording_counter_testcase extends advanced_testcase {
     public function test_get_recording_counts() {
         $cminfo = (object) ['id' => 1, 'course' => 1, 'instance' => 1];
         $recordings = [
-            new mod_collaborate_recordingstub(1),
-            new mod_collaborate_recordingstub(2),
+            new \mod_collaborate_recordingstub(1),
+            new \mod_collaborate_recordingstub(2),
         ];
-        $cache = cache::make('mod_collaborate', 'recordingcounts');
+        $cache = \cache::make('mod_collaborate', 'recordingcounts');
         $recordinghelper = new recording_counter($cminfo, $recordings, null, $cache);
         $counts = $recordinghelper->get_recording_counts();
         $this->assert_empty_counts($counts);

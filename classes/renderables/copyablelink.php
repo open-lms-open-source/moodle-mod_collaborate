@@ -23,9 +23,7 @@
 
 namespace mod_collaborate\renderables;
 
-defined('MOODLE_INTERNAL') || die();
-
-class copyablelink implements \renderable{
+class copyablelink implements \renderable {
 
     public function __construct($label, $id, $groups) {
         $nogrouplabel = get_string('nogroup', 'mod_collaborate');

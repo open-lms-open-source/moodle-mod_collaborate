@@ -72,8 +72,8 @@ class view_controller extends controller_abstract {
         global $DB;
 
         // Set class properties from params.
-        $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
-        $n  = optional_param('n', 0, PARAM_INT);  // collaborate instance ID.
+        $id = optional_param('id', 0, PARAM_INT); // Course_module ID or collaborate instance ID.
+        $n  = optional_param('n', 0, PARAM_INT);
 
         if ($id) {
             $cm         = get_coursemodule_from_id('collaborate', $id, 0, false, MUST_EXIST);
@@ -84,7 +84,7 @@ class view_controller extends controller_abstract {
             $course     = $DB->get_record('course', array('id' => $collaborate->course), '*', MUST_EXIST);
             $cm         = get_coursemodule_from_instance('collaborate', $collaborate->id, $course->id, false, MUST_EXIST);
         } else {
-            print_error('error:invalidmoduleid', 'mod_collaborate');
+            throw new \moodle_exception('error:invalidmoduleid', 'mod_collaborate');
         }
 
         $this->cm = $cm;

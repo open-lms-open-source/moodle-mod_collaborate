@@ -19,8 +19,6 @@ namespace mod_collaborate\testables;
 use mod_collaborate\local as baselocal;
 use mod_collaborate\traits\testable_class;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Testable version of local class
  * @author    Guy Thomas

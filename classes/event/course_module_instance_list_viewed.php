@@ -24,8 +24,6 @@
 
 namespace mod_collaborate\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_collaborate instance list viewed event class.
  *

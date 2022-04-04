@@ -16,8 +16,6 @@
 
 namespace mod_collaborate\grades;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Grading functions.
  *

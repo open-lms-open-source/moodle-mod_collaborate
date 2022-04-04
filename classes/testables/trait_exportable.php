@@ -19,8 +19,6 @@ namespace mod_collaborate\testables;
 use mod_collaborate\traits\exportable;
 use mod_collaborate\traits\testable_class;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Testable exportable trait
  * @author    Guy Thomas

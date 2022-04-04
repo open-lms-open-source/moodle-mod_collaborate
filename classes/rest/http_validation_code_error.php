@@ -23,8 +23,6 @@
 
 namespace mod_collaborate\rest;
 
-defined('MOODLE_INTERNAL') || die();
-
 use mod_collaborate\logging\constants;
 
 class http_validation_code_error {

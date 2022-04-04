@@ -23,7 +23,6 @@
  */
 
 namespace mod_collaborate\exceptions;
-defined('MOODLE_INTERNAL') || die();
 
 class soap_migration_exception extends \Exception {
 

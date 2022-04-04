@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+namespace mod_collaborate;
 use mod_collaborate\task\soap_migrator_task;
 use mod_collaborate\testables\sessionlink;
 
@@ -24,7 +24,7 @@ use mod_collaborate\testables\sessionlink;
  * @copyright Copyright (c) 2021 Open LMS.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class soap_migrator_task_test extends advanced_testcase {
+class soap_migrator_task_test extends \advanced_testcase {
     public function setUp() :void {
         $this->resetAfterTest();
     }
@@ -69,7 +69,7 @@ class soap_migrator_task_test extends advanced_testcase {
         $task = new soap_migrator_task();
         $count = $DB->count_records('task_adhoc');
         $this->assertEquals(0, $count);
-        $this->expectException(moodle_exception::class);
+        $this->expectException(\moodle_exception::class);
         // Should fail because REST API has wrong credentials and the task should queue itself.
         $task->execute();
         $count = $DB->count_records('task_adhoc');
@@ -98,15 +98,15 @@ class soap_migrator_task_test extends advanced_testcase {
         $countrecords = $DB->count_records('collaborate_migration');
         $this->assertEquals(0, $countrecords);
         $dataarray = array();
-        $migrationobj = new stdClass();
+        $migrationobj = new \stdClass();
         $migrationobj->sId = 1010;
         $migrationobj->sUid = 'D969D7DA5DB9127BF592533D479DE59F';
         array_push($dataarray, $migrationobj);
-        $migrationobjtwo = new stdClass();
+        $migrationobjtwo = new \stdClass();
         $migrationobjtwo->sId = 1011;
         $migrationobjtwo->sUid = 'B04AD515B4EDF360DB96B8441052D57A';
         array_push($dataarray, $migrationobjtwo);
-        $migrationobjthree = new stdClass();
+        $migrationobjthree = new \stdClass();
         $migrationobjthree->sId = 1012;
         $migrationobjthree->sUid = '33EDD3A4DE31FE9E961636B31D8562AB';
         array_push($dataarray, $migrationobjthree);
@@ -122,7 +122,7 @@ class soap_migrator_task_test extends advanced_testcase {
         $this->assertEquals(0, $countrecords);
         $data = time(); // Random data.
         $task = new soap_migrator_task();
-        $this->expectException(coding_exception::class);
+        $this->expectException(\coding_exception::class);
         $this->expectExceptionMessage('non-traversable object');
         $task->handle_migration_records($data);
     }
@@ -185,8 +185,8 @@ class soap_migrator_task_test extends advanced_testcase {
             ->disableOriginalConstructor()
             ->getMock();
 
-        $expectedcode = new mod_collaborate\rest\http_code_validation([202]);
-        $optionsobject = new mod_collaborate\rest\requestoptions();
+        $expectedcode = new \mod_collaborate\rest\http_code_validation([202]);
+        $optionsobject = new \mod_collaborate\rest\requestoptions();
 
         $restapiclass->expects($this->once())
             ->method('rest_migration_call')
@@ -211,8 +211,8 @@ class soap_migrator_task_test extends advanced_testcase {
             ->disableOriginalConstructor()
             ->getMock();
 
-        $expectedcode = new mod_collaborate\rest\http_code_validation([202]);
-        $optionsobject = new mod_collaborate\rest\requestoptions('', [], ['consumerKey' => 'keyexample']);
+        $expectedcode = new \mod_collaborate\rest\http_code_validation([202]);
+        $optionsobject = new \mod_collaborate\rest\requestoptions('', [], ['consumerKey' => 'keyexample']);
 
         $restapiclass->expects($this->once())
             ->method('rest_migration_call')
@@ -267,7 +267,7 @@ class soap_migrator_task_test extends advanced_testcase {
         $this->assertCount(12, $DB->get_records('collaborate_sessionlink'));
 
         // Insert an orphaned record to guarantee that having them does not break the process.
-        $orphaned = new stdClass();
+        $orphaned = new \stdClass();
         $orphaned->course = $course->id;
         $orphaned->name = 'examplename';
         $orphaned->timestart = time();

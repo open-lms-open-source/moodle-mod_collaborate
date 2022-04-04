@@ -26,8 +26,6 @@ namespace mod_collaborate\testables;
 use mod_collaborate\traits\testable_class;
 use mod_collaborate\sessionlink as basesessionlink;
 
-defined('MOODLE_INTERNAL') || die();
-
 class sessionlink extends basesessionlink {
     use testable_class;
 }
