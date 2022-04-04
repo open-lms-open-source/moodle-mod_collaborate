@@ -16,8 +16,6 @@
 
 namespace mod_collaborate\iface;
 
-defined('MOODLE_INTERNAL') || die();
-
 use stdClass;
 
 /**

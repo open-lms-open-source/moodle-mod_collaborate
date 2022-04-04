@@ -24,8 +24,6 @@
  */
 namespace mod_collaborate\renderables;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Simple recording count renderable model.
  *

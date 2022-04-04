@@ -22,7 +22,7 @@
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
+namespace mod_collaborate;
 use mod_collaborate\local;
 
 /**
@@ -32,7 +32,7 @@ use mod_collaborate\local;
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_collaborate_generator_testcase extends advanced_testcase {
+class mod_collaborate_generator_test extends \advanced_testcase {
     public function test_generator() {
         global $DB;
 
@@ -81,7 +81,7 @@ class mod_collaborate_generator_testcase extends advanced_testcase {
         $this->assertEquals('pa', $collab->guestrole);
 
         // Test valid guest URL.
-        $url = new moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
+        $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
         $collab = $generator->create_instance(['course' => $course->id, 'guestaccessenabled' => 1, 'guestrole' => 'pa',
             'guesturl' => $url->out()]);
         $this->assertEquals('', $collab->guesturl);

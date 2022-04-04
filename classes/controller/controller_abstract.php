@@ -24,8 +24,6 @@
 
 namespace mod_collaborate\controller;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Controllers handle requests.  Any methods that end with "_action"
  * can be routed to via the URL.  See the router for how this happens.

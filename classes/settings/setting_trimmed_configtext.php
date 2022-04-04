@@ -16,8 +16,6 @@
 
 namespace mod_collaborate\settings;
 
-defined('MOODLE_INTERNAL') || die();
-
 class setting_trimmed_configtext extends \admin_setting_configtext {
     /**
      * Config text constructor

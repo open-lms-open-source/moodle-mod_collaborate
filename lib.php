@@ -29,8 +29,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 use mod_collaborate\soap\api;
 use mod_collaborate\soap\generated\RemoveHtmlSession;
 use mod_collaborate\soap\generated\SuccessResponse;

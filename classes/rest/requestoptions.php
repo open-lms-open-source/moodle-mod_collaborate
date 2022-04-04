@@ -23,8 +23,6 @@
 
 namespace mod_collaborate\rest;
 
-defined('MOODLE_INTERNAL') || die();
-
 class requestoptions {
 
     /**

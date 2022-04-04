@@ -16,8 +16,6 @@
 
 namespace mod_collaborate\logging;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Define logging constants.
  *

@@ -21,6 +21,7 @@
  * @copyright  Copyright (c) 2021 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -34,7 +35,7 @@ require_once($CFG->dirroot.'/mod/collaborate/renderer.php');
  * @copyright  Copyright (c) 2021 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class recording_download_test extends advanced_testcase {
+class recording_download_test extends \advanced_testcase {
     public function setUp(): void {
         $this->resetAfterTest();
     }

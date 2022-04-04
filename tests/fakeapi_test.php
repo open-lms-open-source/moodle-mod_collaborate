@@ -22,7 +22,7 @@
  * @copyright Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
 global $CFG, $DB;
 
@@ -43,13 +43,13 @@ use mod_collaborate\soap\generated\RemoveHtmlSessionRecording;
 use mod_collaborate\local;
 use mod_collaborate\logging\constants;
 
-class mod_collaborate_fakeapi_testcase extends advanced_testcase {
+class fakeapi_test extends \advanced_testcase {
 
     /**
      * @param DateTime $a
      * @param DateTime $b
      */
-    protected function assert_dates_equal(DateTime $a, DateTime $b) {
+    protected function assert_dates_equal(\DateTime $a, \DateTime $b) {
         $this->assertEquals($a->getTimestamp(), $b->getTimestamp());
         $tzonea = $a->getTimezone()->getName();
         $tzoneb = $b->getTimezone()->getName();

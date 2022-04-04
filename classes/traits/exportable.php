@@ -23,8 +23,6 @@
 
 namespace mod_collaborate\traits;
 
-defined('MOODLE_INTERNAL') || die();
-
 use stdClass;
 
 trait exportable {

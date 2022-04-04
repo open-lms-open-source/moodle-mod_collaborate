@@ -25,8 +25,6 @@ namespace mod_collaborate;
 use core\event\group_deleted;
 use core\event\group_updated;
 
-defined('MOODLE_INTERNAL') || die();
-
 class event_handlers {
 
     /**

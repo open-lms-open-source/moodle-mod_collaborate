@@ -23,8 +23,6 @@
 
 namespace mod_collaborate\traits;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Makes a class with private / protected methods testable.
  * @author    Guy Thomas

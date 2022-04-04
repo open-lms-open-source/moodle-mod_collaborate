@@ -20,7 +20,7 @@
  * @copyright Copyright (c) 2016 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace mod_collaborate;
 use mod_collaborate\testables\local;
 use mod_collaborate\soap\fakeapi;
 use mod_collaborate\soap\generated\HtmlSession;
@@ -29,9 +29,7 @@ use mod_collaborate\recording_counter;
 use mod_collaborate\sessionlink;
 use mod_collaborate\event\recording_viewed;
 
-defined('MOODLE_INTERNAL') || die();
-
-class mod_collaborate_local_testcase extends advanced_testcase {
+class local_test extends \advanced_testcase {
 
     public function test_servertime_to_utc() {
 
@@ -48,7 +46,8 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $amtoutc = date($format, local::servertime_to_utc($time0));
 
         // Make sure conversion to utc is as expected:
-        $this->assertEquals('2017-01-01 07:00:00', $pmtoutc); // PM LA converts to next day AM.
+        // PM LA converts to next day AM.
+        $this->assertEquals('2017-01-01 07:00:00', $pmtoutc);
         $this->assertEquals('2017-01-01 08:00:00', $amtoutc);
     }
 
@@ -140,7 +139,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $record = [
             'instanceid'  => $collab->id,
             'recordingid' => $rec1->getRecordingId(),
-            'action'      => mod_collaborate\recording_counter::VIEW
+            'action'      => \mod_collaborate\recording_counter::VIEW
         ];
         // Delete the cached recording counts.
         \cache::make('mod_collaborate', 'recordingcounts')->delete($collab->id);
@@ -282,7 +281,7 @@ class mod_collaborate_local_testcase extends advanced_testcase {
 
     public function test_select_api() {
         $expected = 'mod_collaborate\testable_api';
-        $api = phpunit_util::call_internal_method(null, 'select_api', [null], 'mod_collaborate\local');
+        $api = \phpunit_util::call_internal_method(null, 'select_api', [null], 'mod_collaborate\local');
         $this->assertEquals($expected, $api);
     }
 
@@ -290,9 +289,9 @@ class mod_collaborate_local_testcase extends advanced_testcase {
         $soap = local::get_api(false, null, 'soap');
         $this->assertTrue($soap instanceof fakeapi);
         $rest = local::get_api(false, null, 'rest');
-        $this->assertTrue($rest instanceof mod_collaborate\rest\api);
+        $this->assertTrue($rest instanceof \mod_collaborate\rest\api);
         $testable = local::get_api(false, null, 'testable');
-        $this->assertTrue($testable instanceof mod_collaborate\testable_api);
+        $this->assertTrue($testable instanceof \mod_collaborate\testable_api);
     }
 
     public function test_legacy_record() {

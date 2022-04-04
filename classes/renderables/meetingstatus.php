@@ -23,12 +23,10 @@
 
 namespace mod_collaborate\renderables;
 
-defined('MOODLE_INTERNAL') || die();
-
 use mod_collaborate\local;
 use mod_collaborate\traits\exportable;
 
-class meetingstatus implements \renderable, \templatable{
+class meetingstatus implements \renderable, \templatable {
 
     use exportable;
 
