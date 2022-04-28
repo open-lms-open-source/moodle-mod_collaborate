@@ -316,6 +316,16 @@ class sessionlink {
             $sessionid = local::get_sessionid_or_sessionuid($link);
             $api = local::select_api_by_sessionidfield($link);
             $delok = $api->delete_session($sessionid);
+            $recsql = "SELECT DISTINCT rec.recordingid
+                                  FROM {collaborate_recording_info} rec
+                                 WHERE rec.sessionlinkid = ?";
+            $recparams = [$link->id];
+            $delrecs = $DB->get_fieldset_sql($recsql, $recparams);
+            if (!empty($delrecs)) {
+                foreach ($delrecs as $rec) {
+                    $api->delete_recording($rec);
+                }
+            }
             if ($delok) {
                 $delsuccesses[] = $sessionid;
             } else {

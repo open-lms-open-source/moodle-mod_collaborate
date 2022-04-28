@@ -60,6 +60,11 @@ class recording_counter {
     const DELETE_CONFIRM = 4;
 
     /**
+     * @const int
+     */
+    const STORE = 5;
+
+    /**
      * @var \cm_info
      */
     private $cm;

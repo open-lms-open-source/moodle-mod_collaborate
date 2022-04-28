@@ -225,6 +225,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @throws coding_exception
      */
     public function render_recordings(stdClass $collaborate, array $sessionrecordings, $cm, $canmoderate) {
+        global $DB;
         $allrecordings = [];
         foreach ($sessionrecordings as $recordings) {
             $allrecordings = array_merge($allrecordings, $recordings);
@@ -271,6 +272,12 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $output .= '<h4>' . $sessiontitle . '</h4>';
 
             foreach ($recordings as $recording) {
+                // It's necessary to always store recording IDs so deletions can be guaranteed (GDPR).
+                $recrecord = ['instanceid' => $collaborate->id, 'sessionlinkid' => $sessionlinkrow->id,
+                    'recordingid' => $recording->id, 'action' => recording_counter::STORE];
+                if (!$DB->record_exists('collaborate_recording_info', $recrecord)) {
+                    $DB->insert_record('collaborate_recording_info', (object) $recrecord);
+                }
 
                 $name = $recording->name;
                 if (preg_match('/^recording_\d+$/', $name)) {

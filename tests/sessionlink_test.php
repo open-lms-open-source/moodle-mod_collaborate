@@ -541,6 +541,11 @@ class sessionlink_test extends \advanced_testcase {
 
         $linkscreated = sessionlink::apply_session_links($collaborate);
         $this->assertTrue($linkscreated);
+        // Add a recording.
+        $linkobj = $DB->get_record('collaborate_sessionlink', ['collaborateid' => $collaborateidgood]);
+        $recrecord = ['instanceid' => $collaborate->id, 'sessionlinkid' => $linkobj->id,
+            'recordingid' => 'exampleid123', 'action' => 5];
+        $DB->insert_record('collaborate_recording_info', (object) $recrecord);
 
         // Records with return empty.
         $linksbad = $DB->get_records('collaborate_sessionlink', ['collaborateid' => $collaborateidbad]);
@@ -551,9 +556,15 @@ class sessionlink_test extends \advanced_testcase {
         $linksgood = $DB->get_records('collaborate_sessionlink', ['collaborateid' => $collaborateidgood]);
         $this->assertNotEmpty($linksgood);
 
+        $foundrecording = $DB->get_records('collaborate_recording_info', ['instanceid' => $collaborateidgood]);
+        $this->assertNotEmpty($foundrecording);
+
         // Records found, assert attempt delete return true.
         $attempt = sessionlink::attempt_delete_sessions($linksgood);
         $this->assertTrue($attempt);
+
+        $deletedrecording = $DB->get_records('collaborate_recording_info', ['instanceid' => $collaborateidgood]);
+        $this->assertEmpty($deletedrecording);
     }
 }
 
