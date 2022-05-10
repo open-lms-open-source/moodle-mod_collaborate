@@ -406,9 +406,8 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
     And I click on "Edit settings" "link"
     And I expand all fieldsets
-    And I should not see "Separate groups" in the "#id_groupmode" "css_element"
-    And I should not see "Visible groups" in the "#id_groupmode" "css_element"
-    Then I should see "No groups" in the "#id_groupmode" "css_element"
+    # We remove Groups selector via mod_form.
+    And "#id_groupmode" "css_element" should not exist
 
   Scenario: Collaborate instance with override group mode setting OFF will allow you choose Groups Mode.
     Given the following config values are set as admin:
