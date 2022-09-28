@@ -170,7 +170,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $cm = $viewaction->get_cm();
         $canmoderate = $viewaction->get_canmoderate();
         $canparticipate = $viewaction->get_canparticipate();
-        $o = '<h2 class="activity-title">' . format_string($collaborate->name) . '</h2>';
+        $o = '';
 
         // Guest url.
         $guesturls = $viewaction->get_guest_urls();
