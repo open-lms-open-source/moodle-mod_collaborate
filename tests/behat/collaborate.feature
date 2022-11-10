@@ -245,8 +245,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | name                     | Test collab Instructor settings  |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab Instructor settings"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     And I should see "Instructor Settings"
     And I should see "Post messages"
     And I should see "Annotate on the whiteboard"
@@ -263,8 +262,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | Enable sessions to allocate up to 500 participants  | 1 |
     And I should see "Post messages"
     And I click on "Save and display" "button"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     Then the following fields match these values:
       | Post messages                                       | 1 |
       | Annotate on the whiteboard                          | 1 |
@@ -290,8 +288,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | name                     | Test collab Instructor settings  |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab Instructor settings"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Post messages                                       | 1 |
       | Annotate on the whiteboard                          | 1 |
@@ -301,8 +298,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | Enable sessions to allocate up to 500 participants  | 1 |
       | Group mode                                          | <groupmode> |
     And I click on "Save and display" "button"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     Then the following fields match these values:
       | Post messages                                       | 1 |
       | Annotate on the whiteboard                          | 1 |
@@ -331,9 +327,8 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I am on "Course 1" course homepage with editing mode on
     And I add a "Collaborate" to section "1" and I fill the form with:
       | Session name | Test collab Instructor settings |
-    And I follow "Test collab Instructor settings"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I click on "span[data-value='Test collab Instructor settings'] .stretched-link" "css_element"
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     And I set the following fields to these values:
       | Group mode | Separate groups |
@@ -355,8 +350,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
     And I am on "Course 1" course homepage with editing mode on
     # Yep, it was added.
     And I follow "Test collab large guests"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     And I set the following fields to these values:
       | Collaborate guest role | Presenter |
@@ -403,8 +397,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | duration                 | 9999                |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     # We remove Groups selector via mod_form.
     And "#id_groupmode" "css_element" should not exist
@@ -421,8 +414,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | duration                 | 9999                |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab"
-    And I click on "#region-main-box .action-menu-trigger .dropdown .dropdown-toggle" "css_element"
-    And I click on "Edit settings" "link"
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     And I should see "Separate groups" in the "#id_groupmode" "css_element"
     And I should see "Visible groups" in the "#id_groupmode" "css_element"

@@ -56,7 +56,7 @@ Feature: Guest access can be provided for a Collaborate session
     And "#guestlink" "css_element" should exist
     And I click on "Copy link" "button"
     Then I should see "Link copied to clipboard."
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the field "Allow Collaborate guest access" to "0"
     And I press "Save and display"
     Then I should not see "Collaborate guest link"
@@ -73,7 +73,7 @@ Feature: Guest access can be provided for a Collaborate session
       | guestrole                | pr                               |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     Then the field "Collaborate guest role" matches value "Presenter"
 
   Scenario: Teacher select Collaborate guest role for a Collaborate instance
@@ -87,7 +87,7 @@ Feature: Guest access can be provided for a Collaborate session
       | guestrole                | pa                               |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     Then the field "Collaborate guest role" matches value "Participant"
 
   Scenario: Groups guest access are created depending on the group mode

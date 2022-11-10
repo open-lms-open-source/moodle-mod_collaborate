@@ -72,7 +72,7 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
       | migrationstatus | <Status> | collaborate |
     And I log in as "teacher1"
     Then I am on "Course 1" course homepage
-    And I follow "Test collab"
+    And I click on ".modtype_collaborate a" "css_element"
     Then I should see "Management of collaborate sessions is disabled. Migration to REST in course"
     And "#page-mod-collaborate-view section#region-main div[role='main'] div.container" "css_element" should not be visible
     Examples:
@@ -88,6 +88,6 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
       | migrationstatus | 5 | collaborate |
     And I log in as "teacher1"
     Then I am on "Course 1" course homepage
-    And I follow "Test collab"
+    And I click on ".modtype_collaborate a" "css_element"
     Then I should not see "Management of collaborate sessions is disabled. Migration to REST in course"
     And "#page-mod-collaborate-view section#region-main div[role='main'] div.container" "css_element" should be visible
