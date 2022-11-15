@@ -47,7 +47,7 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
       | grade                    | 0                                |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     Then the field "grade[modgrade_type]" matches value "none"
 
   Scenario: Teacher can create a Collaborate instance that has grade type of Point
@@ -61,5 +61,5 @@ Feature: Have a sensible default grade type when creating a Collaborate instance
       | grade                    | 100                              |
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collab"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     Then the field "grade[modgrade_type]" matches value "point"

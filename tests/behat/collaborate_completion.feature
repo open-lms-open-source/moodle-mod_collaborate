@@ -42,7 +42,7 @@ Feature: Set one action as a completion condition for a Collab activity
   Scenario: Automatic view completion
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
     And I press "Save and display"
@@ -61,14 +61,14 @@ Feature: Set one action as a completion condition for a Collab activity
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I follow "Test collaborate"
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     Then I should see "Completion options locked"
 
   @javascript @_switch_window
   Scenario: Edit settings on Collab are not completing activities automatically
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I set the following fields to these values:
       | Enable completion tracking | Yes |
     And I press "Save and display"
@@ -80,8 +80,8 @@ Feature: Set one action as a completion condition for a Collab activity
       | completion       | 2                       |
       | completionlaunch | 1                       |
     And I am on "Course 1" course homepage with editing mode on
-    And I follow "Test collaborate second"
-    And I navigate to "Edit settings" in current page administration
+    And I click on "span[data-value='Test collaborate second'] .stretched-link" "css_element"
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     Then I should not see "Completion options locked"
     And I log out
@@ -94,9 +94,9 @@ Feature: Set one action as a completion condition for a Collab activity
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
-    And I follow "Test collaborate second"
+    And I click on ".activityname" "css_element"
     # This pause is a workaround till MDL-58053 is fixed.
     And I wait "3" seconds
-    And I navigate to "Edit settings" in current page administration
+    And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     Then I should see "Completion options locked"
