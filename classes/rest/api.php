@@ -767,9 +767,14 @@ class api {
     }
 
     public function delete_recording($recordingid) {
-        $this->rest_call(self::DELETE, 'recordings/{recordingId}',
-            new requestoptions('', ['recordingId' => $recordingid])
-        );
+        try {
+            $this->rest_call(self::DELETE, 'recordings/{recordingId}',
+                new requestoptions('', ['recordingId' => $recordingid])
+            );
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
     }
 
     /**
