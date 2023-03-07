@@ -182,12 +182,12 @@
 }
 
 /** Icon color for the activities. **/
-li.activity.modtype_collaborate .activityiconcontainer,
-.modchoosercontainer div[data-internal="collaborate"] .modicon_collaborate {
-    background-color: #c800a1;
+body:not(.theme-snap) li.activity.modtype_collaborate .activityiconcontainer,
+body:not(.theme-snap) .modchoosercontainer div[data-internal="collaborate"] .modicon_collaborate {
+    background-color: #ce46b3;
 }
 
-li.activity.modtype_collaborate .activityiconcontainer img.activityicon,
-.modchoosercontainer div[data-internal="collaborate"] .modicon_collaborate img.activityicon {
+body:not(.theme-snap) li.activity.modtype_collaborate .activityiconcontainer img.activityicon,
+body:not(.theme-snap) .modchoosercontainer div[data-internal="collaborate"] .modicon_collaborate img.activityicon {
     filter: brightness(0) invert(1);
 }
