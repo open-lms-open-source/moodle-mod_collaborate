@@ -182,16 +182,6 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         $meetingstatus = new meetingstatus($times, $viewaction, false, $usetabs);
         $o .= $this->render($meetingstatus);
 
-        // Conditions to show the intro can change to look for own settings or whatever.
-        if (!empty($collaborate->intro)) {
-            $o .= '<hr />';
-            $o .= $this->output->box(
-                format_module_intro('collaborate', $collaborate, $cm->id),
-                'generalbox mod_introbox', 'collaborateintro'
-            );
-            $o .= '<hr />';
-        }
-
         if ($guesturls) {
             $clinks = new copyablelink(get_string('guestlink', 'mod_collaborate'), 'guestlink', $guesturls);
             $o .= $this->render($clinks);
