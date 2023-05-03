@@ -458,7 +458,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
      * @return bool $showdownload
      * @throws coding_exception
      */
-    public function user_show_download_recordings(int $candownloadrecordings = 0, $context = null): bool {
+    public function user_show_download_recordings(int $candownloadrecordings, $context): bool {
         $showdownload = false;
 
         if ($candownloadrecordings == 1) {

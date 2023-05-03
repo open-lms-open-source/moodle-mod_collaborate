@@ -83,8 +83,8 @@ class meetingstatus implements \renderable, \templatable {
 
     public function __construct($times,
                                 view_action $viewaction,
-                                $allowguestaccess = false,
-                                $usetabs = false) {
+                                $allowguestaccess,
+                                $usetabs) {
 
         global $PAGE, $USER, $COURSE;
 
