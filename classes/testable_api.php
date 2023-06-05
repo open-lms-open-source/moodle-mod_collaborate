@@ -30,6 +30,7 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 use mod_collaborate\logging\loggerdb,
     mod_collaborate\traits\api as apitrait,
     Psr\Log\LoggerAwareTrait;
+use stdClass;
 
 class testable_api {
 
@@ -65,7 +66,7 @@ class testable_api {
         return true;
     }
 
-    public static function configured() {
+    public static function configured(stdClass $config = null) {
         return true;
     }
 
