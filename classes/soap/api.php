@@ -235,7 +235,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
      * @return mixed
      * @throws \moodle_exception
      */
-    public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
+    public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null): mixed {
 
         $start = microtime(true);
 
@@ -610,7 +610,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             }
 
             usort($recordings, function($a, $b) {
-                return ($a->getStartTs() > $b->getStartTs());
+                return ($a->getStartTs() <=> $b->getStartTs());
             });
 
             // Only segregate by titles if there are multiple sessions per this instance.

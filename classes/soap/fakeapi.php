@@ -85,7 +85,7 @@ class fakeapi extends api {
      * @return mixed
      * @throws \moodle_exception
      */
-    public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
+    public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null): mixed {
         throw new \coding_exception('Soap calls should not be made with the fake api.'.
                 'Possibly you are trying to test a function that has not been implemented in the fake api.');
     }
