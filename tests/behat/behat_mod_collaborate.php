@@ -32,16 +32,6 @@ use mod_collaborate\sessionlink;
 class behat_mod_collaborate extends behat_base {
 
     /**
-     * Returns to Moodle tab after Joining collab session.
-     * @Given /^I change to main window$/
-     */
-    public function i_change_to_main_window() {
-        $session = $this->getSession();
-        $mainwindow = $session->getWindowName();
-        $session->switchToWindow($mainwindow);
-    }
-
-    /**
      * Deletes a group by name
      * @Given /^the group "([^"]*)" is deleted$/
      * @param $groupname

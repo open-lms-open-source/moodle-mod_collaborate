@@ -90,7 +90,7 @@ Feature: Set one action as a completion condition for a Collab activity
     And I follow "Test collaborate second"
     And I click on "Join session" "link"
     And I wait to be redirected
-    And I change to main window
+    And I switch to the main window
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
