@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Behat feature for Collab grade default
+# Behat feature for Collaborate grade default
 #
 # @author     Rafael Monterroza
 # @package    mod_collaborate
@@ -21,10 +21,10 @@
 # @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 @mod @mod_collaborate
-Feature: Set one action as a completion condition for a Collab activity
-  In order to ensure students are participating on sessions
+Feature: Set and validate activity completion options for a Collaborate activity
+  In order to ensure that students are participating on Collaborate sessions
   As a teacher
-  I need to set a minimum number of conditions to mark the Collab activity as completed
+  I need to set and validate activity completion options to mark the Collaborate activity as completed
 
   Background:
     Given the following "users" exist:
@@ -39,7 +39,7 @@ Feature: Set one action as a completion condition for a Collab activity
       | teacher1 | C1 | editingteacher |
       | student1 | C1 | student |
 
-  Scenario: Automatic view completion
+  Scenario: Student must view the Collaborate activity to lock the Completion options
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I navigate to "Settings" in current page administration
@@ -65,7 +65,7 @@ Feature: Set one action as a completion condition for a Collab activity
     Then I should see "Completion options locked"
 
   @javascript @_switch_window
-  Scenario: Edit settings on Collab are not completing activities automatically
+  Scenario: Student must launch the Collaborate activity to lock the Completion options
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
     And I navigate to "Settings" in current page administration
@@ -89,14 +89,12 @@ Feature: Set one action as a completion condition for a Collab activity
     And I am on "Course 1" course homepage
     And I follow "Test collaborate second"
     And I click on "Join session" "link"
-    And I wait to be redirected
+    And I click on "button[data-action='newwindow']" "css_element"
     And I switch to the main window
     And I log out
     And I log in as "teacher1"
     And I am on "Course 1" course homepage
     And I click on ".activityname" "css_element"
-    # This pause is a workaround till MDL-58053 is fixed.
-    And I wait "3" seconds
     And I navigate to "Settings" in current page administration
     And I expand all fieldsets
     Then I should see "Completion options locked"
