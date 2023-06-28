@@ -89,6 +89,7 @@ Feature: Set one action as a completion condition for a Collab activity
     And I am on "Course 1" course homepage
     And I follow "Test collaborate second"
     And I click on "Join session" "link"
+    And I click on "New Window" "button"
     And I wait to be redirected
     And I change to main window
     And I log out
