@@ -21,6 +21,13 @@ Extract the contents of the plugin into _/wwwroot/mod_ then visit `admin/upgrade
 
 For more information about installation, configuration and usage, please see https://help.blackboard.com/Collaborate
 
+## Flag
+
+### The  `mod_collaborate_migration_data_limit` flag.
+### The  `mod_collaborate_alternative_counter` flag.
+### The  `use_collab_test_api` flag.
+### The  `mod_collaborate_show_migration_button` flag.
+
 ## License
 Copyright (c) 2021 Open LMS (https://www.openlms.net)
 
