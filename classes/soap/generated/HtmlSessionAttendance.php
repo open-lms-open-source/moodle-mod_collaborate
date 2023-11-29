@@ -42,8 +42,8 @@ class HtmlSessionAttendance
      */
     public function __construct($sessionId, \DateTime $startTime)
     {
-      $this->sessionId = $sessionId;
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        $this->sessionId = $sessionId;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
     }
 
     /**
@@ -51,7 +51,7 @@ class HtmlSessionAttendance
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -60,8 +60,8 @@ class HtmlSessionAttendance
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
@@ -69,15 +69,15 @@ class HtmlSessionAttendance
      */
     public function getStartTime()
     {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -86,8 +86,8 @@ class HtmlSessionAttendance
      */
     public function setStartTime(\DateTime $startTime)
     {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
 }

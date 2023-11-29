@@ -46,7 +46,7 @@ class UpdateHtmlSessionOccurrence
      */
     public function __construct($occurrenceId)
     {
-      $this->occurrenceId = $occurrenceId;
+        $this->occurrenceId = $occurrenceId;
     }
 
     /**
@@ -54,7 +54,7 @@ class UpdateHtmlSessionOccurrence
      */
     public function getOccurrenceId()
     {
-      return $this->occurrenceId;
+        return $this->occurrenceId;
     }
 
     /**
@@ -63,8 +63,8 @@ class UpdateHtmlSessionOccurrence
      */
     public function setOccurrenceId($occurrenceId)
     {
-      $this->occurrenceId = $occurrenceId;
-      return $this;
+        $this->occurrenceId = $occurrenceId;
+        return $this;
     }
 
     /**
@@ -72,15 +72,15 @@ class UpdateHtmlSessionOccurrence
      */
     public function getStartTime()
     {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -89,8 +89,8 @@ class UpdateHtmlSessionOccurrence
      */
     public function setStartTime(\DateTime $startTime)
     {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -98,15 +98,15 @@ class UpdateHtmlSessionOccurrence
      */
     public function getEndTime()
     {
-      if ($this->endTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->endTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->endTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->endTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -115,8 +115,8 @@ class UpdateHtmlSessionOccurrence
      */
     public function setEndTime(\DateTime $endTime)
     {
-      $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
 }

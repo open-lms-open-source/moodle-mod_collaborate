@@ -36,7 +36,7 @@ class SuccessResponse
      */
     public function __construct($success)
     {
-      $this->success = $success;
+        $this->success = $success;
     }
 
     /**
@@ -44,7 +44,7 @@ class SuccessResponse
      */
     public function getSuccess()
     {
-      return $this->success;
+        return $this->success;
     }
 
     /**
@@ -53,8 +53,8 @@ class SuccessResponse
      */
     public function setSuccess($success)
     {
-      $this->success = $success;
-      return $this;
+        $this->success = $success;
+        return $this;
     }
 
 }

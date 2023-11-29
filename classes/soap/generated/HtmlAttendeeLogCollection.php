@@ -42,7 +42,7 @@ class HtmlAttendeeLogCollection
      */
     public function getHtmlAttendeeLog()
     {
-      return $this->HtmlAttendeeLog;
+        return $this->HtmlAttendeeLog;
     }
 
     /**
@@ -51,8 +51,8 @@ class HtmlAttendeeLogCollection
      */
     public function setHtmlAttendeeLog(array $HtmlAttendeeLog)
     {
-      $this->HtmlAttendeeLog = $HtmlAttendeeLog;
-      return $this;
+        $this->HtmlAttendeeLog = $HtmlAttendeeLog;
+        return $this;
     }
 
 }

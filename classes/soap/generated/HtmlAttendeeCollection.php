@@ -42,7 +42,7 @@ class HtmlAttendeeCollection
      */
     public function getHtmlAttendee()
     {
-      return $this->HtmlAttendee;
+        return $this->HtmlAttendee;
     }
 
     /**
@@ -51,8 +51,8 @@ class HtmlAttendeeCollection
      */
     public function setHtmlAttendee(array $HtmlAttendee)
     {
-      $this->HtmlAttendee = $HtmlAttendee;
-      return $this;
+        $this->HtmlAttendee = $HtmlAttendee;
+        return $this;
     }
 
 }

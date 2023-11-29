@@ -61,7 +61,7 @@ class BuildHtmlSessionUrl
      */
     public function __construct($sessionId)
     {
-      $this->sessionId = $sessionId;
+        $this->sessionId  = $sessionId;
     }
 
     /**
@@ -69,7 +69,7 @@ class BuildHtmlSessionUrl
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -78,8 +78,8 @@ class BuildHtmlSessionUrl
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
@@ -87,7 +87,7 @@ class BuildHtmlSessionUrl
      */
     public function getUserId()
     {
-      return $this->userId;
+        return $this->userId;
     }
 
     /**
@@ -96,8 +96,8 @@ class BuildHtmlSessionUrl
      */
     public function setUserId($userId)
     {
-      $this->userId = $userId;
-      return $this;
+        $this->userId = $userId;
+        return $this;
     }
 
     /**
@@ -105,7 +105,7 @@ class BuildHtmlSessionUrl
      */
     public function getLocale()
     {
-      return $this->locale;
+        return $this->locale;
     }
 
     /**
@@ -114,8 +114,8 @@ class BuildHtmlSessionUrl
      */
     public function setLocale($locale)
     {
-      $this->locale = $locale;
-      return $this;
+        $this->locale = $locale;
+        return $this;
     }
 
     /**
@@ -123,7 +123,7 @@ class BuildHtmlSessionUrl
      */
     public function getReturnUrl()
     {
-      return $this->returnUrl;
+        return $this->returnUrl;
     }
 
     /**
@@ -132,8 +132,8 @@ class BuildHtmlSessionUrl
      */
     public function setReturnUrl($returnUrl)
     {
-      $this->returnUrl = $returnUrl;
-      return $this;
+        $this->returnUrl = $returnUrl;
+        return $this;
     }
 
     /**
@@ -141,7 +141,7 @@ class BuildHtmlSessionUrl
      */
     public function getReconnectUrl()
     {
-      return $this->reconnectUrl;
+        return $this->reconnectUrl;
     }
 
     /**
@@ -150,8 +150,8 @@ class BuildHtmlSessionUrl
      */
     public function setReconnectUrl($reconnectUrl)
     {
-      $this->reconnectUrl = $reconnectUrl;
-      return $this;
+        $this->reconnectUrl = $reconnectUrl;
+        return $this;
     }
 
     /**
@@ -159,7 +159,7 @@ class BuildHtmlSessionUrl
      */
     public function getOriginDomain()
     {
-      return $this->originDomain;
+        return $this->originDomain;
     }
 
     /**
@@ -168,8 +168,8 @@ class BuildHtmlSessionUrl
      */
     public function setOriginDomain($originDomain)
     {
-      $this->originDomain = $originDomain;
-      return $this;
+        $this->originDomain = $originDomain;
+        return $this;
     }
 
 }

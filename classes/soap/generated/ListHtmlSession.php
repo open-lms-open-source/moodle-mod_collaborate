@@ -72,7 +72,7 @@ class ListHtmlSession
      */
     public function getUserId()
     {
-      return $this->userId;
+        return $this->userId;
     }
 
     /**
@@ -81,8 +81,8 @@ class ListHtmlSession
      */
     public function setUserId($userId)
     {
-      $this->userId = $userId;
-      return $this;
+        $this->userId = $userId;
+        return $this;
     }
 
     /**
@@ -90,7 +90,7 @@ class ListHtmlSession
      */
     public function getGroupingId()
     {
-      return $this->groupingId;
+        return $this->groupingId;
     }
 
     /**
@@ -99,8 +99,8 @@ class ListHtmlSession
      */
     public function setGroupingId($groupingId)
     {
-      $this->groupingId = $groupingId;
-      return $this;
+        $this->groupingId = $groupingId;
+        return $this;
     }
 
     /**
@@ -108,7 +108,7 @@ class ListHtmlSession
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -117,8 +117,8 @@ class ListHtmlSession
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
@@ -126,7 +126,7 @@ class ListHtmlSession
      */
     public function getCreatorId()
     {
-      return $this->creatorId;
+        return $this->creatorId;
     }
 
     /**
@@ -135,8 +135,8 @@ class ListHtmlSession
      */
     public function setCreatorId($creatorId)
     {
-      $this->creatorId = $creatorId;
-      return $this;
+        $this->creatorId = $creatorId;
+        return $this;
     }
 
     /**
@@ -144,15 +144,15 @@ class ListHtmlSession
      */
     public function getStartTime()
     {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -161,8 +161,8 @@ class ListHtmlSession
      */
     public function setStartTime(\DateTime $startTime)
     {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -170,15 +170,15 @@ class ListHtmlSession
      */
     public function getEndTime()
     {
-      if ($this->endTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->endTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->endTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->endTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -187,8 +187,8 @@ class ListHtmlSession
      */
     public function setEndTime(\DateTime $endTime)
     {
-      $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -196,7 +196,7 @@ class ListHtmlSession
      */
     public function getName()
     {
-      return $this->name;
+        return $this->name;
     }
 
     /**
@@ -205,8 +205,8 @@ class ListHtmlSession
      */
     public function setName($name)
     {
-      $this->name = $name;
-      return $this;
+        $this->name = $name;
+        return $this;
     }
 
 }

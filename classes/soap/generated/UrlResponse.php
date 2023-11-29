@@ -36,7 +36,7 @@ class UrlResponse
      */
     public function __construct($url)
     {
-      $this->url = $url;
+        $this->url = $url;
     }
 
     /**
@@ -44,7 +44,7 @@ class UrlResponse
      */
     public function getUrl()
     {
-      return $this->url;
+        return $this->url;
     }
 
     /**
@@ -53,8 +53,8 @@ class UrlResponse
      */
     public function setUrl($url)
     {
-      $this->url = $url;
-      return $this;
+        $this->url = $url;
+        return $this;
     }
 
 }

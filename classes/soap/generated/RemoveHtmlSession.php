@@ -36,7 +36,7 @@ class RemoveHtmlSession
      */
     public function __construct($sessionId)
     {
-      $this->sessionId = $sessionId;
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -44,7 +44,7 @@ class RemoveHtmlSession
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -53,8 +53,8 @@ class RemoveHtmlSession
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
 }

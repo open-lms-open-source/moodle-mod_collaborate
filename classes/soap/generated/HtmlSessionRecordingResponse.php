@@ -78,14 +78,14 @@ class HtmlSessionRecordingResponse
      */
     public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId)
     {
-      $this->recordingId = $recordingId;
-      $this->createdTs = $createdTs;
-      $this->startTs = $startTs;
-      $this->endTs = $endTs;
-      $this->durationMillis = $durationMillis;
-      $this->recordingUrl = $recordingUrl;
-      $this->displayName = $displayName;
-      $this->sessionId = $sessionId;
+        $this->recordingId = $recordingId;
+        $this->createdTs = $createdTs;
+        $this->startTs = $startTs;
+        $this->endTs = $endTs;
+        $this->durationMillis = $durationMillis;
+        $this->recordingUrl = $recordingUrl;
+        $this->displayName = $displayName;
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -93,7 +93,7 @@ class HtmlSessionRecordingResponse
      */
     public function getRecordingId()
     {
-      return $this->recordingId;
+        return $this->recordingId;
     }
 
     /**
@@ -102,8 +102,8 @@ class HtmlSessionRecordingResponse
      */
     public function setRecordingId($recordingId)
     {
-      $this->recordingId = $recordingId;
-      return $this;
+        $this->recordingId = $recordingId;
+        return $this;
     }
 
     /**
@@ -111,7 +111,7 @@ class HtmlSessionRecordingResponse
      */
     public function getCreatedTs()
     {
-      return $this->createdTs;
+        return $this->createdTs;
     }
 
     /**
@@ -120,8 +120,8 @@ class HtmlSessionRecordingResponse
      */
     public function setCreatedTs($createdTs)
     {
-      $this->createdTs = $createdTs;
-      return $this;
+        $this->createdTs = $createdTs;
+        return $this;
     }
 
     /**
@@ -129,7 +129,7 @@ class HtmlSessionRecordingResponse
      */
     public function getStartTs()
     {
-      return $this->startTs;
+        return $this->startTs;
     }
 
     /**
@@ -138,8 +138,8 @@ class HtmlSessionRecordingResponse
      */
     public function setStartTs($startTs)
     {
-      $this->startTs = $startTs;
-      return $this;
+        $this->startTs = $startTs;
+        return $this;
     }
 
     /**
@@ -147,7 +147,7 @@ class HtmlSessionRecordingResponse
      */
     public function getEndTs()
     {
-      return $this->endTs;
+        return $this->endTs;
     }
 
     /**
@@ -156,8 +156,8 @@ class HtmlSessionRecordingResponse
      */
     public function setEndTs($endTs)
     {
-      $this->endTs = $endTs;
-      return $this;
+        $this->endTs = $endTs;
+        return $this;
     }
 
     /**
@@ -165,7 +165,7 @@ class HtmlSessionRecordingResponse
      */
     public function getDurationMillis()
     {
-      return $this->durationMillis;
+        return $this->durationMillis;
     }
 
     /**
@@ -174,8 +174,8 @@ class HtmlSessionRecordingResponse
      */
     public function setDurationMillis($durationMillis)
     {
-      $this->durationMillis = $durationMillis;
-      return $this;
+        $this->durationMillis = $durationMillis;
+        return $this;
     }
 
     /**
@@ -183,7 +183,7 @@ class HtmlSessionRecordingResponse
      */
     public function getRecordingUrl()
     {
-      return $this->recordingUrl;
+        return $this->recordingUrl;
     }
 
     /**
@@ -192,8 +192,8 @@ class HtmlSessionRecordingResponse
      */
     public function setRecordingUrl($recordingUrl)
     {
-      $this->recordingUrl = $recordingUrl;
-      return $this;
+        $this->recordingUrl = $recordingUrl;
+        return $this;
     }
 
     /**
@@ -201,7 +201,7 @@ class HtmlSessionRecordingResponse
      */
     public function getDisplayName()
     {
-      return $this->displayName;
+        return $this->displayName;
     }
 
     /**
@@ -210,8 +210,8 @@ class HtmlSessionRecordingResponse
      */
     public function setDisplayName($displayName)
     {
-      $this->displayName = $displayName;
-      return $this;
+        $this->displayName = $displayName;
+        return $this;
     }
 
     /**
@@ -219,7 +219,7 @@ class HtmlSessionRecordingResponse
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -228,8 +228,8 @@ class HtmlSessionRecordingResponse
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
 }

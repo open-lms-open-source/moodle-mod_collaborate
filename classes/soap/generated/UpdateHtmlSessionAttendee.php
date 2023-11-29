@@ -62,8 +62,8 @@ class UpdateHtmlSessionAttendee
      */
     public function __construct($sessionId, $htmlAttendee)
     {
-      $this->sessionId = $sessionId;
-      $this->htmlAttendee = $htmlAttendee;
+        $this->sessionId = $sessionId;
+        $this->htmlAttendee = $htmlAttendee;
     }
 
     /**
@@ -71,7 +71,7 @@ class UpdateHtmlSessionAttendee
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -80,8 +80,8 @@ class UpdateHtmlSessionAttendee
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
@@ -89,7 +89,7 @@ class UpdateHtmlSessionAttendee
      */
     public function getHtmlAttendee()
     {
-      return $this->htmlAttendee;
+        return $this->htmlAttendee;
     }
 
     /**
@@ -98,8 +98,8 @@ class UpdateHtmlSessionAttendee
      */
     public function setHtmlAttendee($htmlAttendee)
     {
-      $this->htmlAttendee = $htmlAttendee;
-      return $this;
+        $this->htmlAttendee = $htmlAttendee;
+        return $this;
     }
 
     /**
@@ -107,7 +107,7 @@ class UpdateHtmlSessionAttendee
      */
     public function getLocale()
     {
-      return $this->locale;
+        return $this->locale;
     }
 
     /**
@@ -116,8 +116,8 @@ class UpdateHtmlSessionAttendee
      */
     public function setLocale($locale)
     {
-      $this->locale = $locale;
-      return $this;
+        $this->locale = $locale;
+        return $this;
     }
 
     /**
@@ -125,7 +125,7 @@ class UpdateHtmlSessionAttendee
      */
     public function getReturnUrl()
     {
-      return $this->returnUrl;
+        return $this->returnUrl;
     }
 
     /**
@@ -134,8 +134,8 @@ class UpdateHtmlSessionAttendee
      */
     public function setReturnUrl($returnUrl)
     {
-      $this->returnUrl = $returnUrl;
-      return $this;
+        $this->returnUrl = $returnUrl;
+        return $this;
     }
 
     /**
@@ -143,7 +143,7 @@ class UpdateHtmlSessionAttendee
      */
     public function getReconnectUrl()
     {
-      return $this->reconnectUrl;
+        return $this->reconnectUrl;
     }
 
     /**
@@ -152,8 +152,8 @@ class UpdateHtmlSessionAttendee
      */
     public function setReconnectUrl($reconnectUrl)
     {
-      $this->reconnectUrl = $reconnectUrl;
-      return $this;
+        $this->reconnectUrl = $reconnectUrl;
+        return $this;
     }
 
     /**
@@ -161,7 +161,7 @@ class UpdateHtmlSessionAttendee
      */
     public function getOriginDomain()
     {
-      return $this->originDomain;
+        return $this->originDomain;
     }
 
     /**
@@ -170,8 +170,8 @@ class UpdateHtmlSessionAttendee
      */
     public function setOriginDomain($originDomain)
     {
-      $this->originDomain = $originDomain;
-      return $this;
+        $this->originDomain = $originDomain;
+        return $this;
     }
 
 }

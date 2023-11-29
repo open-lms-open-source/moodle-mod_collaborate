@@ -36,7 +36,7 @@ class RemoveHtmlSessionOccurrence
      */
     public function __construct($occurrenceId)
     {
-      $this->occurrenceId = $occurrenceId;
+        $this->occurrenceId = $occurrenceId;
     }
 
     /**
@@ -44,7 +44,7 @@ class RemoveHtmlSessionOccurrence
      */
     public function getOccurrenceId()
     {
-      return $this->occurrenceId;
+        return $this->occurrenceId;
     }
 
     /**
@@ -53,8 +53,8 @@ class RemoveHtmlSessionOccurrence
      */
     public function setOccurrenceId($occurrenceId)
     {
-      $this->occurrenceId = $occurrenceId;
-      return $this;
+        $this->occurrenceId = $occurrenceId;
+        return $this;
     }
 
 }

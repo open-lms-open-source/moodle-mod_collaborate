@@ -78,14 +78,14 @@ class ServerConfigurationResponse
      */
     public function __construct($boundaryTime, $maxAvailableTalkers, $maxAvailableCameras, $raiseHandOnEnter, $mayUseTelephony, $mayUseSecureSignOn, $mustReserveSeats, $timeZone)
     {
-      $this->boundaryTime = $boundaryTime;
-      $this->maxAvailableTalkers = $maxAvailableTalkers;
-      $this->maxAvailableCameras = $maxAvailableCameras;
-      $this->raiseHandOnEnter = $raiseHandOnEnter;
-      $this->mayUseTelephony = $mayUseTelephony;
-      $this->mayUseSecureSignOn = $mayUseSecureSignOn;
-      $this->mustReserveSeats = $mustReserveSeats;
-      $this->timeZone = $timeZone;
+        $this->boundaryTime = $boundaryTime;
+        $this->maxAvailableTalkers = $maxAvailableTalkers;
+        $this->maxAvailableCameras = $maxAvailableCameras;
+        $this->raiseHandOnEnter = $raiseHandOnEnter;
+        $this->mayUseTelephony = $mayUseTelephony;
+        $this->mayUseSecureSignOn = $mayUseSecureSignOn;
+        $this->mustReserveSeats = $mustReserveSeats;
+        $this->timeZone = $timeZone;
     }
 
     /**
@@ -93,7 +93,7 @@ class ServerConfigurationResponse
      */
     public function getBoundaryTime()
     {
-      return $this->boundaryTime;
+        return $this->boundaryTime;
     }
 
     /**
@@ -102,8 +102,8 @@ class ServerConfigurationResponse
      */
     public function setBoundaryTime($boundaryTime)
     {
-      $this->boundaryTime = $boundaryTime;
-      return $this;
+        $this->boundaryTime = $boundaryTime;
+        return $this;
     }
 
     /**
@@ -111,7 +111,7 @@ class ServerConfigurationResponse
      */
     public function getMaxAvailableTalkers()
     {
-      return $this->maxAvailableTalkers;
+        return $this->maxAvailableTalkers;
     }
 
     /**
@@ -120,8 +120,8 @@ class ServerConfigurationResponse
      */
     public function setMaxAvailableTalkers($maxAvailableTalkers)
     {
-      $this->maxAvailableTalkers = $maxAvailableTalkers;
-      return $this;
+        $this->maxAvailableTalkers = $maxAvailableTalkers;
+        return $this;
     }
 
     /**
@@ -129,7 +129,7 @@ class ServerConfigurationResponse
      */
     public function getMaxAvailableCameras()
     {
-      return $this->maxAvailableCameras;
+        return $this->maxAvailableCameras;
     }
 
     /**
@@ -138,8 +138,8 @@ class ServerConfigurationResponse
      */
     public function setMaxAvailableCameras($maxAvailableCameras)
     {
-      $this->maxAvailableCameras = $maxAvailableCameras;
-      return $this;
+        $this->maxAvailableCameras = $maxAvailableCameras;
+        return $this;
     }
 
     /**
@@ -147,7 +147,7 @@ class ServerConfigurationResponse
      */
     public function getRaiseHandOnEnter()
     {
-      return $this->raiseHandOnEnter;
+        return $this->raiseHandOnEnter;
     }
 
     /**
@@ -156,8 +156,8 @@ class ServerConfigurationResponse
      */
     public function setRaiseHandOnEnter($raiseHandOnEnter)
     {
-      $this->raiseHandOnEnter = $raiseHandOnEnter;
-      return $this;
+        $this->raiseHandOnEnter = $raiseHandOnEnter;
+        return $this;
     }
 
     /**
@@ -165,7 +165,7 @@ class ServerConfigurationResponse
      */
     public function getMayUseTelephony()
     {
-      return $this->mayUseTelephony;
+        return $this->mayUseTelephony;
     }
 
     /**
@@ -174,8 +174,8 @@ class ServerConfigurationResponse
      */
     public function setMayUseTelephony($mayUseTelephony)
     {
-      $this->mayUseTelephony = $mayUseTelephony;
-      return $this;
+        $this->mayUseTelephony = $mayUseTelephony;
+        return $this;
     }
 
     /**
@@ -183,7 +183,7 @@ class ServerConfigurationResponse
      */
     public function getMayUseSecureSignOn()
     {
-      return $this->mayUseSecureSignOn;
+        return $this->mayUseSecureSignOn;
     }
 
     /**
@@ -192,8 +192,8 @@ class ServerConfigurationResponse
      */
     public function setMayUseSecureSignOn($mayUseSecureSignOn)
     {
-      $this->mayUseSecureSignOn = $mayUseSecureSignOn;
-      return $this;
+        $this->mayUseSecureSignOn = $mayUseSecureSignOn;
+        return $this;
     }
 
     /**
@@ -201,7 +201,7 @@ class ServerConfigurationResponse
      */
     public function getMustReserveSeats()
     {
-      return $this->mustReserveSeats;
+        return $this->mustReserveSeats;
     }
 
     /**
@@ -210,8 +210,8 @@ class ServerConfigurationResponse
      */
     public function setMustReserveSeats($mustReserveSeats)
     {
-      $this->mustReserveSeats = $mustReserveSeats;
-      return $this;
+        $this->mustReserveSeats = $mustReserveSeats;
+        return $this;
     }
 
     /**
@@ -219,7 +219,7 @@ class ServerConfigurationResponse
      */
     public function getTimeZone()
     {
-      return $this->timeZone;
+        return $this->timeZone;
     }
 
     /**
@@ -228,8 +228,8 @@ class ServerConfigurationResponse
      */
     public function setTimeZone($timeZone)
     {
-      $this->timeZone = $timeZone;
-      return $this;
+        $this->timeZone = $timeZone;
+        return $this;
     }
 
 }
