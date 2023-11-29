@@ -36,7 +36,7 @@ class HtmlRoomCollection
      */
     public function __construct(array $HtmlRoom)
     {
-      $this->HtmlRoom = $HtmlRoom;
+        $this->HtmlRoom = $HtmlRoom;
     }
 
     /**
@@ -44,7 +44,7 @@ class HtmlRoomCollection
      */
     public function getHtmlRoom()
     {
-      return $this->HtmlRoom;
+        return $this->HtmlRoom;
     }
 
     /**
@@ -53,8 +53,8 @@ class HtmlRoomCollection
      */
     public function setHtmlRoom(array $HtmlRoom)
     {
-      $this->HtmlRoom = $HtmlRoom;
-      return $this;
+        $this->HtmlRoom = $HtmlRoom;
+        return $this;
     }
 
 }

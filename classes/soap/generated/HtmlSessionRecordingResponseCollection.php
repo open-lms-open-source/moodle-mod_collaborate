@@ -42,7 +42,7 @@ class HtmlSessionRecordingResponseCollection
      */
     public function getHtmlSessionRecordingResponse()
     {
-      return $this->HtmlSessionRecordingResponse;
+        return $this->HtmlSessionRecordingResponse;
     }
 
     /**
@@ -51,8 +51,8 @@ class HtmlSessionRecordingResponseCollection
      */
     public function setHtmlSessionRecordingResponse(array $HtmlSessionRecordingResponse)
     {
-      $this->HtmlSessionRecordingResponse = $HtmlSessionRecordingResponse;
-      return $this;
+        $this->HtmlSessionRecordingResponse = $HtmlSessionRecordingResponse;
+        return $this;
     }
 
 }

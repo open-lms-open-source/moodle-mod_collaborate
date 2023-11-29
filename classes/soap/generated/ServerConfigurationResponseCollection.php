@@ -42,7 +42,7 @@ class ServerConfigurationResponseCollection
      */
     public function getServerConfigurationResponse()
     {
-      return $this->ServerConfigurationResponse;
+        return $this->ServerConfigurationResponse;
     }
 
     /**
@@ -51,8 +51,8 @@ class ServerConfigurationResponseCollection
      */
     public function setServerConfigurationResponse(array $ServerConfigurationResponse)
     {
-      $this->ServerConfigurationResponse = $ServerConfigurationResponse;
-      return $this;
+        $this->ServerConfigurationResponse = $ServerConfigurationResponse;
+        return $this;
     }
 
 }

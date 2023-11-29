@@ -42,7 +42,7 @@ class HtmlSessionCollection
      */
     public function getHtmlSession()
     {
-      return $this->HtmlSession;
+        return $this->HtmlSession;
     }
 
     /**
@@ -51,8 +51,8 @@ class HtmlSessionCollection
      */
     public function setHtmlSession(array $HtmlSession)
     {
-      $this->HtmlSession = $HtmlSession;
-      return $this;
+        $this->HtmlSession = $HtmlSession;
+        return $this;
     }
 
 }

@@ -193,24 +193,24 @@ class HtmlSession
      */
     public function __construct($sessionId, $name, $description, \DateTime $startTime, \DateTime $endTime, $boundaryTime, $noEndDate, $allowGuest, $guestUrl, $guestRole, $showProfile, $canShareVideo, $canShareAudio, $canPostMessage, $canAnnotateWhiteboard, array $htmlAttendees, $creatorId, $recordingEnabled)
     {
-      $this->sessionId = $sessionId;
-      $this->name = $name;
-      $this->description = $description;
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
-      $this->boundaryTime = $boundaryTime;
-      $this->noEndDate = $noEndDate;
-      $this->allowGuest = $allowGuest;
-      $this->guestUrl = $guestUrl;
-      $this->guestRole = $guestRole;
-      $this->showProfile = $showProfile;
-      $this->canShareVideo = $canShareVideo;
-      $this->canShareAudio = $canShareAudio;
-      $this->canPostMessage = $canPostMessage;
-      $this->canAnnotateWhiteboard = $canAnnotateWhiteboard;
-      $this->htmlAttendees = $htmlAttendees;
-      $this->creatorId = $creatorId;
-      $this->recordingEnabled = $recordingEnabled;
+        $this->sessionId = $sessionId;
+        $this->name = $name;
+        $this->description = $description;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
+        $this->boundaryTime = $boundaryTime;
+        $this->noEndDate = $noEndDate;
+        $this->allowGuest = $allowGuest;
+        $this->guestUrl = $guestUrl;
+        $this->guestRole = $guestRole;
+        $this->showProfile = $showProfile;
+        $this->canShareVideo = $canShareVideo;
+        $this->canShareAudio = $canShareAudio;
+        $this->canPostMessage = $canPostMessage;
+        $this->canAnnotateWhiteboard = $canAnnotateWhiteboard;
+        $this->htmlAttendees = $htmlAttendees;
+        $this->creatorId = $creatorId;
+        $this->recordingEnabled = $recordingEnabled;
     }
 
     /**
@@ -218,7 +218,7 @@ class HtmlSession
      */
     public function getSessionId()
     {
-      return $this->sessionId;
+        return $this->sessionId;
     }
 
     /**
@@ -227,8 +227,8 @@ class HtmlSession
      */
     public function setSessionId($sessionId)
     {
-      $this->sessionId = $sessionId;
-      return $this;
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
@@ -236,7 +236,7 @@ class HtmlSession
      */
     public function getName()
     {
-      return $this->name;
+        return $this->name;
     }
 
     /**
@@ -245,8 +245,8 @@ class HtmlSession
      */
     public function setName($name)
     {
-      $this->name = $name;
-      return $this;
+        $this->name = $name;
+        return $this;
     }
 
     /**
@@ -254,7 +254,7 @@ class HtmlSession
      */
     public function getDescription()
     {
-      return $this->description;
+        return $this->description;
     }
 
     /**
@@ -263,8 +263,8 @@ class HtmlSession
      */
     public function setDescription($description)
     {
-      $this->description = $description;
-      return $this;
+        $this->description = $description;
+        return $this;
     }
 
     /**
@@ -272,15 +272,15 @@ class HtmlSession
      */
     public function getStartTime()
     {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -289,8 +289,8 @@ class HtmlSession
      */
     public function setStartTime(\DateTime $startTime)
     {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -298,15 +298,15 @@ class HtmlSession
      */
     public function getEndTime()
     {
-      if ($this->endTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->endTime);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->endTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->endTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -315,8 +315,8 @@ class HtmlSession
      */
     public function setEndTime(\DateTime $endTime)
     {
-      $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -324,7 +324,7 @@ class HtmlSession
      */
     public function getBoundaryTime()
     {
-      return $this->boundaryTime;
+        return $this->boundaryTime;
     }
 
     /**
@@ -333,8 +333,8 @@ class HtmlSession
      */
     public function setBoundaryTime($boundaryTime)
     {
-      $this->boundaryTime = $boundaryTime;
-      return $this;
+        $this->boundaryTime = $boundaryTime;
+        return $this;
     }
 
     /**
@@ -342,7 +342,7 @@ class HtmlSession
      */
     public function getNoEndDate()
     {
-      return $this->noEndDate;
+        return $this->noEndDate;
     }
 
     /**
@@ -351,8 +351,8 @@ class HtmlSession
      */
     public function setNoEndDate($noEndDate)
     {
-      $this->noEndDate = $noEndDate;
-      return $this;
+        $this->noEndDate = $noEndDate;
+        return $this;
     }
 
     /**
@@ -360,7 +360,7 @@ class HtmlSession
      */
     public function getAllowGuest()
     {
-      return $this->allowGuest;
+        return $this->allowGuest;
     }
 
     /**
@@ -369,8 +369,8 @@ class HtmlSession
      */
     public function setAllowGuest($allowGuest)
     {
-      $this->allowGuest = $allowGuest;
-      return $this;
+        $this->allowGuest = $allowGuest;
+        return $this;
     }
 
     /**
@@ -378,7 +378,7 @@ class HtmlSession
      */
     public function getGuestUrl()
     {
-      return $this->guestUrl;
+        return $this->guestUrl;
     }
 
     /**
@@ -387,8 +387,8 @@ class HtmlSession
      */
     public function setGuestUrl($guestUrl)
     {
-      $this->guestUrl = $guestUrl;
-      return $this;
+        $this->guestUrl = $guestUrl;
+        return $this;
     }
 
     /**
@@ -396,7 +396,7 @@ class HtmlSession
      */
     public function getGuestRole()
     {
-      return $this->guestRole;
+        return $this->guestRole;
     }
 
     /**
@@ -405,8 +405,8 @@ class HtmlSession
      */
     public function setGuestRole($guestRole)
     {
-      $this->guestRole = $guestRole;
-      return $this;
+        $this->guestRole = $guestRole;
+        return $this;
     }
 
     /**
@@ -414,7 +414,7 @@ class HtmlSession
      */
     public function getShowProfile()
     {
-      return $this->showProfile;
+        return $this->showProfile;
     }
 
     /**
@@ -423,8 +423,8 @@ class HtmlSession
      */
     public function setShowProfile($showProfile)
     {
-      $this->showProfile = $showProfile;
-      return $this;
+        $this->showProfile = $showProfile;
+        return $this;
     }
 
     /**
@@ -432,7 +432,7 @@ class HtmlSession
      */
     public function getCanShareVideo()
     {
-      return $this->canShareVideo;
+        return $this->canShareVideo;
     }
 
     /**
@@ -441,8 +441,8 @@ class HtmlSession
      */
     public function setCanShareVideo($canShareVideo)
     {
-      $this->canShareVideo = $canShareVideo;
-      return $this;
+        $this->canShareVideo = $canShareVideo;
+        return $this;
     }
 
     /**
@@ -450,7 +450,7 @@ class HtmlSession
      */
     public function getCanShareAudio()
     {
-      return $this->canShareAudio;
+        return $this->canShareAudio;
     }
 
     /**
@@ -459,8 +459,8 @@ class HtmlSession
      */
     public function setCanShareAudio($canShareAudio)
     {
-      $this->canShareAudio = $canShareAudio;
-      return $this;
+        $this->canShareAudio = $canShareAudio;
+        return $this;
     }
 
     /**
@@ -468,7 +468,7 @@ class HtmlSession
      */
     public function getCanPostMessage()
     {
-      return $this->canPostMessage;
+        return $this->canPostMessage;
     }
 
     /**
@@ -477,8 +477,8 @@ class HtmlSession
      */
     public function setCanPostMessage($canPostMessage)
     {
-      $this->canPostMessage = $canPostMessage;
-      return $this;
+        $this->canPostMessage = $canPostMessage;
+        return $this;
     }
 
     /**
@@ -486,7 +486,7 @@ class HtmlSession
      */
     public function getCanAnnotateWhiteboard()
     {
-      return $this->canAnnotateWhiteboard;
+        return $this->canAnnotateWhiteboard;
     }
 
     /**
@@ -495,8 +495,8 @@ class HtmlSession
      */
     public function setCanAnnotateWhiteboard($canAnnotateWhiteboard)
     {
-      $this->canAnnotateWhiteboard = $canAnnotateWhiteboard;
-      return $this;
+        $this->canAnnotateWhiteboard = $canAnnotateWhiteboard;
+        return $this;
     }
 
     /**
@@ -504,7 +504,7 @@ class HtmlSession
      */
     public function getHtmlAttendees()
     {
-      return $this->htmlAttendees;
+        return $this->htmlAttendees;
     }
 
     /**
@@ -513,8 +513,8 @@ class HtmlSession
      */
     public function setHtmlAttendees(array $htmlAttendees)
     {
-      $this->htmlAttendees = $htmlAttendees;
-      return $this;
+        $this->htmlAttendees = $htmlAttendees;
+        return $this;
     }
 
     /**
@@ -522,7 +522,7 @@ class HtmlSession
      */
     public function getGroupingList()
     {
-      return $this->groupingList;
+        return $this->groupingList;
     }
 
     /**
@@ -531,8 +531,8 @@ class HtmlSession
      */
     public function setGroupingList($groupingList)
     {
-      $this->groupingList = $groupingList;
-      return $this;
+        $this->groupingList = $groupingList;
+        return $this;
     }
 
     /**
@@ -540,7 +540,7 @@ class HtmlSession
      */
     public function getCreatorId()
     {
-      return $this->creatorId;
+        return $this->creatorId;
     }
 
     /**
@@ -549,8 +549,8 @@ class HtmlSession
      */
     public function setCreatorId($creatorId)
     {
-      $this->creatorId = $creatorId;
-      return $this;
+        $this->creatorId = $creatorId;
+        return $this;
     }
 
     /**
@@ -558,7 +558,7 @@ class HtmlSession
      */
     public function getMustBeSupervised()
     {
-      return $this->mustBeSupervised;
+        return $this->mustBeSupervised;
     }
 
     /**
@@ -567,8 +567,8 @@ class HtmlSession
      */
     public function setMustBeSupervised($mustBeSupervised)
     {
-      $this->mustBeSupervised = $mustBeSupervised;
-      return $this;
+        $this->mustBeSupervised = $mustBeSupervised;
+        return $this;
     }
 
     /**
@@ -576,7 +576,7 @@ class HtmlSession
      */
     public function getOpenChair()
     {
-      return $this->openChair;
+        return $this->openChair;
     }
 
     /**
@@ -585,8 +585,8 @@ class HtmlSession
      */
     public function setOpenChair($openChair)
     {
-      $this->openChair = $openChair;
-      return $this;
+        $this->openChair = $openChair;
+        return $this;
     }
 
     /**
@@ -594,7 +594,7 @@ class HtmlSession
      */
     public function getPermissionsOn()
     {
-      return $this->permissionsOn;
+        return $this->permissionsOn;
     }
 
     /**
@@ -603,8 +603,8 @@ class HtmlSession
      */
     public function setPermissionsOn($permissionsOn)
     {
-      $this->permissionsOn = $permissionsOn;
-      return $this;
+        $this->permissionsOn = $permissionsOn;
+        return $this;
     }
 
     /**
@@ -612,7 +612,7 @@ class HtmlSession
      */
     public function getRaiseHandOnEnter()
     {
-      return $this->raiseHandOnEnter;
+        return $this->raiseHandOnEnter;
     }
 
     /**
@@ -621,8 +621,8 @@ class HtmlSession
      */
     public function setRaiseHandOnEnter($raiseHandOnEnter)
     {
-      $this->raiseHandOnEnter = $raiseHandOnEnter;
-      return $this;
+        $this->raiseHandOnEnter = $raiseHandOnEnter;
+        return $this;
     }
 
     /**
@@ -630,7 +630,7 @@ class HtmlSession
      */
     public function getAllowInSessionInvitees()
     {
-      return $this->allowInSessionInvitees;
+        return $this->allowInSessionInvitees;
     }
 
     /**
@@ -639,8 +639,8 @@ class HtmlSession
      */
     public function setAllowInSessionInvitees($allowInSessionInvitees)
     {
-      $this->allowInSessionInvitees = $allowInSessionInvitees;
-      return $this;
+        $this->allowInSessionInvitees = $allowInSessionInvitees;
+        return $this;
     }
 
     /**
@@ -648,7 +648,7 @@ class HtmlSession
      */
     public function getContextId()
     {
-      return $this->contextId;
+        return $this->contextId;
     }
 
     /**
@@ -657,8 +657,8 @@ class HtmlSession
      */
     public function setContextId($contextId)
     {
-      $this->contextId = $contextId;
-      return $this;
+        $this->contextId = $contextId;
+        return $this;
     }
 
     /**
@@ -666,7 +666,7 @@ class HtmlSession
      */
     public function getContextTitle()
     {
-      return $this->contextTitle;
+        return $this->contextTitle;
     }
 
     /**
@@ -675,8 +675,8 @@ class HtmlSession
      */
     public function setContextTitle($contextTitle)
     {
-      $this->contextTitle = $contextTitle;
-      return $this;
+        $this->contextTitle = $contextTitle;
+        return $this;
     }
 
     /**
@@ -684,7 +684,7 @@ class HtmlSession
      */
     public function getRecordingEnabled()
     {
-      return $this->recordingEnabled;
+        return $this->recordingEnabled;
     }
 
     /**
@@ -693,8 +693,8 @@ class HtmlSession
      */
     public function setRecordingEnabled($recordingEnabled)
     {
-      $this->recordingEnabled = $recordingEnabled;
-      return $this;
+        $this->recordingEnabled = $recordingEnabled;
+        return $this;
     }
 
     /**
@@ -702,7 +702,7 @@ class HtmlSession
      */
     public function getRecordingCallBackUrl()
     {
-      return $this->recordingCallBackUrl;
+        return $this->recordingCallBackUrl;
     }
 
     /**
@@ -711,8 +711,8 @@ class HtmlSession
      */
     public function setRecordingCallBackUrl($recordingCallBackUrl)
     {
-      $this->recordingCallBackUrl = $recordingCallBackUrl;
-      return $this;
+        $this->recordingCallBackUrl = $recordingCallBackUrl;
+        return $this;
     }
 
     /**
@@ -720,7 +720,7 @@ class HtmlSession
      */
     public function getSessionType()
     {
-      return $this->sessionType;
+        return $this->sessionType;
     }
 
     /**
@@ -729,8 +729,8 @@ class HtmlSession
      */
     public function setSessionType($sessionType)
     {
-      $this->sessionType = $sessionType;
-      return $this;
+        $this->sessionType = $sessionType;
+        return $this;
     }
 
     /**
@@ -738,7 +738,7 @@ class HtmlSession
      */
     public function getSessionRule()
     {
-      return $this->sessionRule;
+        return $this->sessionRule;
     }
 
     /**
@@ -747,8 +747,8 @@ class HtmlSession
      */
     public function setSessionRule($sessionRule)
     {
-      $this->sessionRule = $sessionRule;
-      return $this;
+        $this->sessionRule = $sessionRule;
+        return $this;
     }
 
 }

@@ -57,8 +57,8 @@ class HtmlAttendee
      */
     public function __construct($userId, $role)
     {
-      $this->userId = $userId;
-      $this->role = $role;
+        $this->userId = $userId;
+        $this->role = $role;
     }
 
     /**
@@ -66,7 +66,7 @@ class HtmlAttendee
      */
     public function getUserId()
     {
-      return $this->userId;
+        return $this->userId;
     }
 
     /**
@@ -75,8 +75,8 @@ class HtmlAttendee
      */
     public function setUserId($userId)
     {
-      $this->userId = $userId;
-      return $this;
+        $this->userId = $userId;
+        return $this;
     }
 
     /**
@@ -84,7 +84,7 @@ class HtmlAttendee
      */
     public function getRole()
     {
-      return $this->role;
+        return $this->role;
     }
 
     /**
@@ -93,8 +93,8 @@ class HtmlAttendee
      */
     public function setRole($role)
     {
-      $this->role = $role;
-      return $this;
+        $this->role = $role;
+        return $this;
     }
 
     /**
@@ -102,7 +102,7 @@ class HtmlAttendee
      */
     public function getDisplayName()
     {
-      return $this->displayName;
+        return $this->displayName;
     }
 
     /**
@@ -111,8 +111,8 @@ class HtmlAttendee
      */
     public function setDisplayName($displayName)
     {
-      $this->displayName = $displayName;
-      return $this;
+        $this->displayName = $displayName;
+        return $this;
     }
 
     /**
@@ -120,7 +120,7 @@ class HtmlAttendee
      */
     public function getAvatarUrl()
     {
-      return $this->avatarUrl;
+        return $this->avatarUrl;
     }
 
     /**
@@ -129,8 +129,8 @@ class HtmlAttendee
      */
     public function setAvatarUrl($avatarUrl)
     {
-      $this->avatarUrl = $avatarUrl;
-      return $this;
+        $this->avatarUrl = $avatarUrl;
+        return $this;
     }
 
     /**
@@ -138,7 +138,7 @@ class HtmlAttendee
      */
     public function getHtmlAttendeeLogs()
     {
-      return $this->htmlAttendeeLogs;
+        return $this->htmlAttendeeLogs;
     }
 
     /**
@@ -147,8 +147,8 @@ class HtmlAttendee
      */
     public function setHtmlAttendeeLogs(array $htmlAttendeeLogs)
     {
-      $this->htmlAttendeeLogs = $htmlAttendeeLogs;
-      return $this;
+        $this->htmlAttendeeLogs = $htmlAttendeeLogs;
+        return $this;
     }
 
 }

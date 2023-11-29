@@ -42,8 +42,8 @@ class HtmlAttendeeLog
      */
     public function __construct(\DateTime $joined, \DateTime $left)
     {
-      $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
-      $this->left = $left->format('Y-m-d\TH:i:s\Z');
+        $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
+        $this->left = $left->format('Y-m-d\TH:i:s\Z');
     }
 
     /**
@@ -51,15 +51,15 @@ class HtmlAttendeeLog
      */
     public function getJoined()
     {
-      if ($this->joined == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->joined);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->joined == null) {
+            return null;
+        }else {
+            try {
+                return new \DateTime($this->joined);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -68,8 +68,8 @@ class HtmlAttendeeLog
      */
     public function setJoined(\DateTime $joined)
     {
-      $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -77,15 +77,15 @@ class HtmlAttendeeLog
      */
     public function getLeft()
     {
-      if ($this->left == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->left);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->left == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->left);
+            } catch (\Exception $e) {
+                  return false;
+            }
         }
-      }
     }
 
     /**
@@ -94,8 +94,8 @@ class HtmlAttendeeLog
      */
     public function setLeft(\DateTime $left)
     {
-      $this->left = $left->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->left = $left->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
 }

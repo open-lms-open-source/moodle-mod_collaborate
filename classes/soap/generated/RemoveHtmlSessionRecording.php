@@ -36,7 +36,7 @@ class RemoveHtmlSessionRecording
      */
     public function __construct($recordingId)
     {
-      $this->recordingId = $recordingId;
+        $this->recordingId = $recordingId;
     }
 
     /**
@@ -44,7 +44,7 @@ class RemoveHtmlSessionRecording
      */
     public function getRecordingId()
     {
-      return $this->recordingId;
+        return $this->recordingId;
     }
 
     /**
@@ -53,8 +53,8 @@ class RemoveHtmlSessionRecording
      */
     public function setRecordingId($recordingId)
     {
-      $this->recordingId = $recordingId;
-      return $this;
+        $this->recordingId = $recordingId;
+        return $this;
     }
 
 }

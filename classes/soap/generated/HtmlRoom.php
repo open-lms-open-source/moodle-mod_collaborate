@@ -54,10 +54,10 @@ class HtmlRoom
      */
     public function __construct($name, \DateTime $opened, \DateTime $closed, $htmlAttendees)
     {
-      $this->name = $name;
-      $this->opened = $opened->format('Y-m-d\TH:i:s\Z');
-      $this->closed = $closed->format('Y-m-d\TH:i:s\Z');
-      $this->htmlAttendees = $htmlAttendees;
+        $this->name = $name;
+        $this->opened = $opened->format('Y-m-d\TH:i:s\Z');
+        $this->closed = $closed->format('Y-m-d\TH:i:s\Z');
+        $this->htmlAttendees = $htmlAttendees;
     }
 
     /**
@@ -65,7 +65,7 @@ class HtmlRoom
      */
     public function getName()
     {
-      return $this->name;
+        return $this->name;
     }
 
     /**
@@ -74,8 +74,8 @@ class HtmlRoom
      */
     public function setName($name)
     {
-      $this->name = $name;
-      return $this;
+        $this->name = $name;
+        return $this;
     }
 
     /**
@@ -83,15 +83,15 @@ class HtmlRoom
      */
     public function getOpened()
     {
-      if ($this->opened == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->opened);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->opened == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->opened);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -100,8 +100,8 @@ class HtmlRoom
      */
     public function setOpened(\DateTime $opened)
     {
-      $this->opened = $opened->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->opened = $opened->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -109,15 +109,15 @@ class HtmlRoom
      */
     public function getClosed()
     {
-      if ($this->closed == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->closed);
-        } catch (\Exception $e) {
-          return false;
+        if ($this->closed == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->closed);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
@@ -126,8 +126,8 @@ class HtmlRoom
      */
     public function setClosed(\DateTime $closed)
     {
-      $this->closed = $closed->format('Y-m-d\TH:i:s\Z');
-      return $this;
+        $this->closed = $closed->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
@@ -135,7 +135,7 @@ class HtmlRoom
      */
     public function getHtmlAttendees()
     {
-      return $this->htmlAttendees;
+        return $this->htmlAttendees;
     }
 
     /**
@@ -144,8 +144,8 @@ class HtmlRoom
      */
     public function setHtmlAttendees($htmlAttendees)
     {
-      $this->htmlAttendees = $htmlAttendees;
-      return $this;
+        $this->htmlAttendees = $htmlAttendees;
+        return $this;
     }
 
 }
