@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org
+// This file is part of Moodle - https://moodle.org
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,24 +12,21 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Ad-hoc task to migrate SOAP clients.
  *
  * @package    mod_collaborate
  * @copyright  Copyright (c) 2021 Open LMS.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_collaborate\task;
-// Prepare for code checker update. Will be removed on INT-17966.
-// @codingStandardsIgnoreLine
-defined('MOODLE_INTERNAL') || die();
 
-use core\task\adhoc_task,
-    mod_collaborate\local,
-    mod_collaborate\exceptions\soap_migration_exception,
-    mod_collaborate\rest\api as restapi;
+namespace mod_collaborate\task;
+
+use core\task\adhoc_task;
+use mod_collaborate\local;
+use mod_collaborate\exceptions\soap_migration_exception;
 
 class soap_migrator_task extends adhoc_task {
 
@@ -52,13 +49,13 @@ class soap_migrator_task extends adhoc_task {
         $this->soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
             'server'   => $config->server,
             'username' => $config->username,
-            'password' => $config->password
+            'password' => $config->password,
         ] : false;
 
         $this->restconfig = !empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret) ? (object) [
             'restserver'   => $config->restserver,
             'restkey' => $config->restkey,
-            'restsecret' => $config->restsecret
+            'restsecret' => $config->restsecret,
         ] : false;
 
         $testsoapcredentials = $this->soapconfig ? local::api_verified(true, $this->soapconfig) : false;
@@ -204,12 +201,12 @@ class soap_migrator_task extends adhoc_task {
      */
     public function handle_migration_records($dataobjects) {
         global $DB;
-        if (!is_array($dataobjects) and !($dataobjects instanceof Traversable)) {
+        if (!is_array($dataobjects) && !($dataobjects instanceof Traversable)) {
             throw new \coding_exception('records passed are non-traversable object');
         }
 
         foreach ($dataobjects as $dataobject) {
-            if (!is_array($dataobject) and !is_object($dataobject)) {
+            if (!is_array($dataobject) && !is_object($dataobject)) {
                 throw new \coding_exception('record passed is invalid');
             }
             $dataobject->sessionid = $dataobject->sId;

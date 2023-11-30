@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Recording count helper class.
@@ -20,22 +20,20 @@
  * @package    mod_collaborate
  * @author     Sam Chaffee
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_collaborate;
-// Prepare for code checker update. Will be removed on INT-17966.
-// @codingStandardsIgnoreLine
-defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\renderables\recording_counts,
-    mod_collaborate\renderables\recording;
+namespace mod_collaborate;
+
+use mod_collaborate\renderables\recording_counts;
+use mod_collaborate\renderables\recording;
 
 /**
  * Recording count helper class.
  *
  * @package    mod_collaborate
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class recording_counter {
 
@@ -117,7 +115,7 @@ class recording_counter {
         $numrecordings = count($this->recordings);
         // Try the cache first.
         $counts = $this->cache->get($this->cm->instance);
-        if (empty($counts) or (count($counts) != $numrecordings)) {
+        if (empty($counts) || (count($counts) != $numrecordings)) {
             // Miss on the cache, query for the counts.
             $counts = $this->query_counts();
 

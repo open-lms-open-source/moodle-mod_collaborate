@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,26 +12,23 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Common local functions used by the collaborate module.
  *
  * @package   mod_collaborate
  * @copyright Copyright (c) 2015 Open LMS (https://www.openlms.net)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_collaborate;
-// Prepare for code checker update. Will be removed on INT-17966.
-// @codingStandardsIgnoreLine
-defined('MOODLE_INTERNAL') || die();
 
-use mod_collaborate\soap\generated\ServerConfiguration,
-    mod_collaborate\soap\api as soapapi,
-    mod_collaborate\rest\api as restapi,
-    mod_collaborate\event\recording_deleted,
-    stdClass;
+use mod_collaborate\soap\generated\ServerConfiguration;
+use mod_collaborate\soap\api as soapapi;
+use mod_collaborate\rest\api as restapi;
+use mod_collaborate\event\recording_deleted;
+use stdClass;
 
 class local {
 
@@ -84,13 +81,13 @@ class local {
         global $DB;
 
         if (!is_object($collaborate)) {
-            $collaborate = $DB->get_record('collaborate', array('id' => $collaborate));
+            $collaborate = $DB->get_record('collaborate', ['id' => $collaborate]);
         }
-        $times = (object) array(
+        $times = (object) [
             'start' => intval($collaborate->timestart),
             'end' => self::timeend_from_duration($collaborate->timestart, $collaborate->duration),
-            'duration' => $collaborate->duration
-        );
+            'duration' => $collaborate->duration,
+        ];
         return ($times);
     }
 
@@ -107,7 +104,7 @@ class local {
 
         $event = new \stdClass();
 
-        $params = array('modulename' => 'collaborate', 'instance' => $collaborate->id);
+        $params = ['modulename' => 'collaborate', 'instance' => $collaborate->id];
         $event->id = $DB->get_field('event', 'id', $params);
         $event->name = $collaborate->name;
         $event->timestart = $collaborate->timestart;
@@ -135,10 +132,10 @@ class local {
         // to support module events with file areas.
         $intro = strip_pluginfile_content($intro);
 
-        $event->description = array(
+        $event->description = [
             'text' => $intro,
-            'format' => $collaborate->introformat
-        );
+            'format' => $collaborate->introformat,
+        ];
 
         if ($event->id) {
             $calendarevent = \calendar_event::load($event->id);
@@ -472,7 +469,7 @@ class local {
             'objectid' => intval($cm->instance),
             'other' => [
                 'recordingid' => $recordingid,
-                'recordingname' => $recordingname
+                'recordingname' => $recordingname,
             ],
         ];
         $event = recording_deleted::create($data);
@@ -513,7 +510,7 @@ class local {
         // Update collaborate record with guest url.
         $record = (object) [
             'id' => $collaborate->id,
-            'guesturl' => $url
+            'guesturl' => $url,
         ];
         $DB->update_record('collaborate', $record);
 
@@ -550,10 +547,10 @@ class local {
      * @return string
      */
     public static function entitydecode($text) {
-        $otherentities = array (
+        $otherentities = [
             '&apos;' => '\'',
-            '&nbsp;' => ' '
-        );
+            '&nbsp;' => ' ',
+        ];
         return html_entity_decode(strtr($text, $otherentities), ENT_QUOTES, 'UTF-8');
     }
 }
