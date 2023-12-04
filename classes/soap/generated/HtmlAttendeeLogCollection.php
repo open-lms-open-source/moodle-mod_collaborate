@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlAttendeeLogCollection
-{
+class HtmlAttendeeLogCollection {
 
     /**
      * @var HtmlAttendeeLog[] $HtmlAttendeeLog
@@ -32,16 +31,14 @@ class HtmlAttendeeLogCollection
     protected $HtmlAttendeeLog = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return HtmlAttendeeLog[]
      */
-    public function getHtmlAttendeeLog()
-    {
+    public function getHtmlAttendeeLog() {
         return $this->HtmlAttendeeLog;
     }
 
@@ -49,8 +46,7 @@ class HtmlAttendeeLogCollection
      * @param HtmlAttendeeLog[] $HtmlAttendeeLog
      * @return \mod_collaborate\soap\generated\HtmlAttendeeLogCollection
      */
-    public function setHtmlAttendeeLog(array $HtmlAttendeeLog)
-    {
+    public function setHtmlAttendeeLog(array $HtmlAttendeeLog) {
         $this->HtmlAttendeeLog = $HtmlAttendeeLog;
         return $this;
     }

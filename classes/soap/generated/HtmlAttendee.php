@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlAttendee
-{
+class HtmlAttendee {
 
     /**
      * @var string $userId
@@ -55,8 +54,7 @@ class HtmlAttendee
      * @param string $userId
      * @param string $role
      */
-    public function __construct($userId, $role)
-    {
+    public function __construct($userId, $role) {
         $this->userId = $userId;
         $this->role = $role;
     }
@@ -64,8 +62,7 @@ class HtmlAttendee
     /**
      * @return string
      */
-    public function getUserId()
-    {
+    public function getUserId() {
         return $this->userId;
     }
 
@@ -73,8 +70,7 @@ class HtmlAttendee
      * @param string $userId
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setUserId($userId)
-    {
+    public function setUserId($userId) {
         $this->userId = $userId;
         return $this;
     }
@@ -82,8 +78,7 @@ class HtmlAttendee
     /**
      * @return string
      */
-    public function getRole()
-    {
+    public function getRole() {
         return $this->role;
     }
 
@@ -91,8 +86,7 @@ class HtmlAttendee
      * @param string $role
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setRole($role)
-    {
+    public function setRole($role) {
         $this->role = $role;
         return $this;
     }
@@ -100,8 +94,7 @@ class HtmlAttendee
     /**
      * @return string
      */
-    public function getDisplayName()
-    {
+    public function getDisplayName() {
         return $this->displayName;
     }
 
@@ -109,8 +102,7 @@ class HtmlAttendee
      * @param string $displayName
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setDisplayName($displayName)
-    {
+    public function setDisplayName($displayName) {
         $this->displayName = $displayName;
         return $this;
     }
@@ -118,8 +110,7 @@ class HtmlAttendee
     /**
      * @return string
      */
-    public function getAvatarUrl()
-    {
+    public function getAvatarUrl() {
         return $this->avatarUrl;
     }
 
@@ -127,8 +118,7 @@ class HtmlAttendee
      * @param string $avatarUrl
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setAvatarUrl($avatarUrl)
-    {
+    public function setAvatarUrl($avatarUrl) {
         $this->avatarUrl = $avatarUrl;
         return $this;
     }
@@ -136,8 +126,7 @@ class HtmlAttendee
     /**
      * @return HtmlAttendeeLogCollection[]
      */
-    public function getHtmlAttendeeLogs()
-    {
+    public function getHtmlAttendeeLogs() {
         return $this->htmlAttendeeLogs;
     }
 
@@ -145,8 +134,7 @@ class HtmlAttendee
      * @param HtmlAttendeeLogCollection[] $htmlAttendeeLogs
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setHtmlAttendeeLogs(array $htmlAttendeeLogs)
-    {
+    public function setHtmlAttendeeLogs(array $htmlAttendeeLogs) {
         $this->htmlAttendeeLogs = $htmlAttendeeLogs;
         return $this;
     }

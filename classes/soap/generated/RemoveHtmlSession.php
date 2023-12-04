@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class RemoveHtmlSession
-{
+class RemoveHtmlSession {
 
     /**
      * @var int $sessionId
@@ -34,16 +33,14 @@ class RemoveHtmlSession
     /**
      * @param int $sessionId
      */
-    public function __construct($sessionId)
-    {
+    public function __construct($sessionId) {
         $this->sessionId = $sessionId;
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
+    public function getSessionId() {
         return $this->sessionId;
     }
 
@@ -51,8 +48,7 @@ class RemoveHtmlSession
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\RemoveHtmlSession
      */
-    public function setSessionId($sessionId)
-    {
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
         return $this;
     }

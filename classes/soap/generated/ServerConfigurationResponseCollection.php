@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class ServerConfigurationResponseCollection
-{
+class ServerConfigurationResponseCollection {
 
     /**
      * @var ServerConfigurationResponse[] $ServerConfigurationResponse
@@ -32,16 +31,14 @@ class ServerConfigurationResponseCollection
     protected $ServerConfigurationResponse = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return ServerConfigurationResponse[]
      */
-    public function getServerConfigurationResponse()
-    {
+    public function getServerConfigurationResponse() {
         return $this->ServerConfigurationResponse;
     }
 
@@ -49,8 +46,7 @@ class ServerConfigurationResponseCollection
      * @param ServerConfigurationResponse[] $ServerConfigurationResponse
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponseCollection
      */
-    public function setServerConfigurationResponse(array $ServerConfigurationResponse)
-    {
+    public function setServerConfigurationResponse(array $ServerConfigurationResponse) {
         $this->ServerConfigurationResponse = $ServerConfigurationResponse;
         return $this;
     }

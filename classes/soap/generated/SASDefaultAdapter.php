@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class SASDefaultAdapter extends \SoapClient
-{
+class SASDefaultAdapter extends \SoapClient {
 
     /**
      * @var array $classmap The defined classes
@@ -147,8 +146,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param array $options A array of config values
      * @param string $wsdl The wsdl file to use
      */
-    public function __construct(array $options = array(), $wsdl = 'http://joule2.dev/mod/collaborate/wsdl.xml')
-    {
+    public function __construct(array $options = array(), $wsdl = 'http://joule2.dev/mod/collaborate/wsdl.xml') {
         foreach (self::$classmap as $key => $value) {
             if (!isset($options['classmap'][$key])) {
                 $options['classmap'][$key] = $value;
@@ -164,8 +162,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RecordingUrl $parameters
      * @return UrlResponse
      */
-    public function BuildRecordingUrl(RecordingUrl $parameters)
-    {
+    public function BuildRecordingUrl(RecordingUrl $parameters) {
         return $this->__soapCall('BuildRecordingUrl', array($parameters));
     }
 
@@ -173,8 +170,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param HtmlRecordingUrl $parameters
      * @return UrlResponse
      */
-    public function BuildHtmlRecordingUrl(HtmlRecordingUrl $parameters)
-    {
+    public function BuildHtmlRecordingUrl(HtmlRecordingUrl $parameters) {
         return $this->__soapCall('BuildHtmlRecordingUrl', array($parameters));
     }
 
@@ -182,8 +178,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SessionUrl $parameters
      * @return UrlResponse
      */
-    public function BuildSessionUrl(SessionUrl $parameters)
-    {
+    public function BuildSessionUrl(SessionUrl $parameters) {
         return $this->__soapCall('BuildSessionUrl', array($parameters));
     }
 
@@ -191,8 +186,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ConvertRecording $parameters
      * @return RecordingFileResponseCollection
      */
-    public function ConvertRecording(ConvertRecording $parameters)
-    {
+    public function ConvertRecording(ConvertRecording $parameters) {
         return $this->__soapCall('ConvertRecording', array($parameters));
     }
 
@@ -200,8 +194,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param EmailBody $parameters
      * @return EmailBodyResponse
      */
-    public function GetEmailBody(EmailBody $parameters)
-    {
+    public function GetEmailBody(EmailBody $parameters) {
         return $this->__soapCall('GetEmailBody', array($parameters));
     }
 
@@ -209,8 +202,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param GetMobilePlatforms $parameters
      * @return GetMobilePlatformResponseCollection
      */
-    public function GetMobilePlatforms(GetMobilePlatforms $parameters)
-    {
+    public function GetMobilePlatforms(GetMobilePlatforms $parameters) {
         return $this->__soapCall('GetMobilePlatforms', array($parameters));
     }
 
@@ -218,8 +210,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param GetOptionLicenses $parameters
      * @return GetOptionLicenseResponseCollection
      */
-    public function GetOptionLicenses(GetOptionLicenses $parameters)
-    {
+    public function GetOptionLicenses(GetOptionLicenses $parameters) {
         return $this->__soapCall('GetOptionLicenses', array($parameters));
     }
 
@@ -227,8 +218,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param GetQuotaLimits $parameters
      * @return GetQuotaLimitsResponseCollection
      */
-    public function GetQuotaLimits(GetQuotaLimits $parameters)
-    {
+    public function GetQuotaLimits(GetQuotaLimits $parameters) {
         return $this->__soapCall('GetQuotaLimits', array($parameters));
     }
 
@@ -236,8 +226,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ServerConfiguration $parameters
      * @return ServerConfigurationResponseCollection
      */
-    public function GetServerConfiguration(ServerConfiguration $parameters)
-    {
+    public function GetServerConfiguration(ServerConfiguration $parameters) {
         return $this->__soapCall('GetServerConfiguration', array($parameters));
     }
 
@@ -245,8 +234,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ServerQuotas $parameters
      * @return ServerQuotasResponseCollection
      */
-    public function GetServerQuotas(ServerQuotas $parameters)
-    {
+    public function GetServerQuotas(ServerQuotas $parameters) {
         return $this->__soapCall('GetServerQuotas', array($parameters));
     }
 
@@ -254,8 +242,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SchedulingManager $parameters
      * @return SchedulingManagerResponseCollection
      */
-    public function GetSchedulingManager(SchedulingManager $parameters)
-    {
+    public function GetSchedulingManager(SchedulingManager $parameters) {
         return $this->__soapCall('GetSchedulingManager', array($parameters));
     }
 
@@ -263,8 +250,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ServerVersions $parameters
      * @return ServerVersionResponseCollection
      */
-    public function GetServerVersions(ServerVersions $parameters)
-    {
+    public function GetServerVersions(ServerVersions $parameters) {
         return $this->__soapCall('GetServerVersions', array($parameters));
     }
 
@@ -272,8 +258,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UploadRepositoryContent $parameters
      * @return MultimediaResponseCollection
      */
-    public function UploadRepositoryMultimedia(UploadRepositoryContent $parameters)
-    {
+    public function UploadRepositoryMultimedia(UploadRepositoryContent $parameters) {
         return $this->__soapCall('UploadRepositoryMultimedia', array($parameters));
     }
 
@@ -281,8 +266,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UploadRepositoryContent $parameters
      * @return PresentationResponseCollection
      */
-    public function UploadRepositoryPresentation(UploadRepositoryContent $parameters)
-    {
+    public function UploadRepositoryPresentation(UploadRepositoryContent $parameters) {
         return $this->__soapCall('UploadRepositoryPresentation', array($parameters));
     }
 
@@ -290,8 +274,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListRepositoryMultimediaContent $parameters
      * @return MultimediaResponseCollection
      */
-    public function ListRepositoryMultimedia(ListRepositoryMultimediaContent $parameters)
-    {
+    public function ListRepositoryMultimedia(ListRepositoryMultimediaContent $parameters) {
         return $this->__soapCall('ListRepositoryMultimedia', array($parameters));
     }
 
@@ -299,8 +282,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListRepositoryPresentationContent $parameters
      * @return PresentationResponseCollection
      */
-    public function ListRepositoryPresentation(ListRepositoryPresentationContent $parameters)
-    {
+    public function ListRepositoryPresentation(ListRepositoryPresentationContent $parameters) {
         return $this->__soapCall('ListRepositoryPresentation', array($parameters));
     }
 
@@ -308,8 +290,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveRepositoryMultimedia $parameters
      * @return SuccessResponse
      */
-    public function RemoveRepositoryMultimedia(RemoveRepositoryMultimedia $parameters)
-    {
+    public function RemoveRepositoryMultimedia(RemoveRepositoryMultimedia $parameters) {
         return $this->__soapCall('RemoveRepositoryMultimedia', array($parameters));
     }
 
@@ -317,8 +298,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveRepositoryPresentation $parameters
      * @return SuccessResponse
      */
-    public function RemoveRepositoryPresentation(RemoveRepositoryPresentation $parameters)
-    {
+    public function RemoveRepositoryPresentation(RemoveRepositoryPresentation $parameters) {
         return $this->__soapCall('RemoveRepositoryPresentation', array($parameters));
     }
 
@@ -326,8 +306,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListSessionContent $parameters
      * @return MultimediaResponseCollection
      */
-    public function ListSessionMultimedia(ListSessionContent $parameters)
-    {
+    public function ListSessionMultimedia(ListSessionContent $parameters) {
         return $this->__soapCall('ListSessionMultimedia', array($parameters));
     }
 
@@ -335,8 +314,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListSessionContent $parameters
      * @return PresentationResponseCollection
      */
-    public function ListSessionPresentation(ListSessionContent $parameters)
-    {
+    public function ListSessionPresentation(ListSessionContent $parameters) {
         return $this->__soapCall('ListSessionPresentation', array($parameters));
     }
 
@@ -344,8 +322,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetApiCallbackUrl $parameters
      * @return SuccessResponse
      */
-    public function SetApiCallbackUrl(SetApiCallbackUrl $parameters)
-    {
+    public function SetApiCallbackUrl(SetApiCallbackUrl $parameters) {
         return $this->__soapCall('SetApiCallbackUrl', array($parameters));
     }
 
@@ -353,8 +330,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetSessionMultimediaContent $parameters
      * @return SuccessResponse
      */
-    public function SetSessionMultimedia(SetSessionMultimediaContent $parameters)
-    {
+    public function SetSessionMultimedia(SetSessionMultimediaContent $parameters) {
         return $this->__soapCall('SetSessionMultimedia', array($parameters));
     }
 
@@ -362,8 +338,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetSessionPresentationContent $parameters
      * @return SuccessResponse
      */
-    public function SetSessionPresentation(SetSessionPresentationContent $parameters)
-    {
+    public function SetSessionPresentation(SetSessionPresentationContent $parameters) {
         return $this->__soapCall('SetSessionPresentation', array($parameters));
     }
 
@@ -371,8 +346,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveSessionMultimediaContent $parameters
      * @return SuccessResponse
      */
-    public function RemoveSessionMultimedia(RemoveSessionMultimediaContent $parameters)
-    {
+    public function RemoveSessionMultimedia(RemoveSessionMultimediaContent $parameters) {
         return $this->__soapCall('RemoveSessionMultimedia', array($parameters));
     }
 
@@ -380,8 +354,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveSessionPresentationContent $parameters
      * @return SuccessResponse
      */
-    public function RemoveSessionPresentation(RemoveSessionPresentationContent $parameters)
-    {
+    public function RemoveSessionPresentation(RemoveSessionPresentationContent $parameters) {
         return $this->__soapCall('RemoveSessionPresentation', array($parameters));
     }
 
@@ -389,8 +362,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListRecordingFiles $parameters
      * @return ListRecordingFileResponseCollection
      */
-    public function ListRecordingFiles(ListRecordingFiles $parameters)
-    {
+    public function ListRecordingFiles(ListRecordingFiles $parameters) {
         return $this->__soapCall('ListRecordingFiles', array($parameters));
     }
 
@@ -398,8 +370,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListRecordings $parameters
      * @return RecordingResponseCollection
      */
-    public function ListRecordings(ListRecordings $parameters)
-    {
+    public function ListRecordings(ListRecordings $parameters) {
         return $this->__soapCall('ListRecordings', array($parameters));
     }
 
@@ -407,8 +378,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListRecordingLong $parameters
      * @return RecordingLongResponseCollection
      */
-    public function ListRecordingLong(ListRecordingLong $parameters)
-    {
+    public function ListRecordingLong(ListRecordingLong $parameters) {
         return $this->__soapCall('ListRecordingLong', array($parameters));
     }
 
@@ -416,8 +386,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RecordingShort $parameters
      * @return RecordingShortResponseCollection
      */
-    public function ListRecordingShort(RecordingShort $parameters)
-    {
+    public function ListRecordingShort(RecordingShort $parameters) {
         return $this->__soapCall('ListRecordingShort', array($parameters));
     }
 
@@ -425,8 +394,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param HtmlSessionRecording $parameters
      * @return HtmlSessionRecordingResponseCollection
      */
-    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters)
-    {
+    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters) {
         return $this->__soapCall('ListHtmlSessionRecording', array($parameters));
     }
 
@@ -434,8 +402,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListSession $parameters
      * @return SessionResponseCollection
      */
-    public function ListSession(ListSession $parameters)
-    {
+    public function ListSession(ListSession $parameters) {
         return $this->__soapCall('ListSession', array($parameters));
     }
 
@@ -443,8 +410,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SessionAttendance $parameters
      * @return SessionAttendanceResponseCollection
      */
-    public function ListSessionAttendance(SessionAttendance $parameters)
-    {
+    public function ListSessionAttendance(SessionAttendance $parameters) {
         return $this->__soapCall('ListSessionAttendance', array($parameters));
     }
 
@@ -452,8 +418,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param HtmlSessionAttendance $parameters
      * @return HtmlRoomCollection
      */
-    public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters)
-    {
+    public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters) {
         return $this->__soapCall('ListHtmlSessionAttendance', array($parameters));
     }
 
@@ -461,8 +426,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param HtmlSessionOccurrence $parameters
      * @return HtmlSessionOccurrenceCollection
      */
-    public function ListHtmlSessionOccurrences(HtmlSessionOccurrence $parameters)
-    {
+    public function ListHtmlSessionOccurrences(HtmlSessionOccurrence $parameters) {
         return $this->__soapCall('ListHtmlSessionOccurrences', array($parameters));
     }
 
@@ -470,8 +434,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveHtmlSessionOccurrence $parameters
      * @return SuccessResponse
      */
-    public function RemoveHtmlSessionOccurrence(RemoveHtmlSessionOccurrence $parameters)
-    {
+    public function RemoveHtmlSessionOccurrence(RemoveHtmlSessionOccurrence $parameters) {
         return $this->__soapCall('RemoveHtmlSessionOccurrence', array($parameters));
     }
 
@@ -479,8 +442,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UpdateHtmlSessionOccurrence $parameters
      * @return SuccessResponse
      */
-    public function UpdateHtmlSessionOccurrence(UpdateHtmlSessionOccurrence $parameters)
-    {
+    public function UpdateHtmlSessionOccurrence(UpdateHtmlSessionOccurrence $parameters) {
         return $this->__soapCall('UpdateHtmlSessionOccurrence', array($parameters));
     }
 
@@ -488,8 +450,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetSession $parameters
      * @return SessionResponseCollection
      */
-    public function SetSession(SetSession $parameters)
-    {
+    public function SetSession(SetSession $parameters) {
         return $this->__soapCall('SetSession', array($parameters));
     }
 
@@ -497,8 +458,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UpdateSession $parameters
      * @return SessionResponseCollection
      */
-    public function UpdateSession(UpdateSession $parameters)
-    {
+    public function UpdateSession(UpdateSession $parameters) {
         return $this->__soapCall('UpdateSession', array($parameters));
     }
 
@@ -506,8 +466,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UpdateSessionAttendees $parameters
      * @return UrlResponse
      */
-    public function UpdateSessionAttendee(UpdateSessionAttendees $parameters)
-    {
+    public function UpdateSessionAttendee(UpdateSessionAttendees $parameters) {
         return $this->__soapCall('UpdateSessionAttendee', array($parameters));
     }
 
@@ -515,8 +474,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UpdateHtmlSessionAttendee $parameters
      * @return UrlResponse
      */
-    public function UpdateHtmlSessionAttendee(UpdateHtmlSessionAttendee $parameters)
-    {
+    public function UpdateHtmlSessionAttendee(UpdateHtmlSessionAttendee $parameters) {
         return $this->__soapCall('UpdateHtmlSessionAttendee', array($parameters));
     }
 
@@ -524,8 +482,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param UpdateHtmlSessionDetails $parameters
      * @return HtmlSessionCollection
      */
-    public function UpdateHtmlSession(UpdateHtmlSessionDetails $parameters)
-    {
+    public function UpdateHtmlSession(UpdateHtmlSessionDetails $parameters) {
         return $this->__soapCall('UpdateHtmlSession', array($parameters));
     }
 
@@ -533,8 +490,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetHtmlSession $parameters
      * @return HtmlSessionCollection
      */
-    public function SetHtmlSession(SetHtmlSession $parameters)
-    {
+    public function SetHtmlSession(SetHtmlSession $parameters) {
         return $this->__soapCall('SetHtmlSession', array($parameters));
     }
 
@@ -542,8 +498,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param BuildHtmlSessionUrl $parameters
      * @return UrlResponse
      */
-    public function BuildHtmlSessionUrl(BuildHtmlSessionUrl $parameters)
-    {
+    public function BuildHtmlSessionUrl(BuildHtmlSessionUrl $parameters) {
         return $this->__soapCall('BuildHtmlSessionUrl', array($parameters));
     }
 
@@ -551,8 +506,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ListHtmlSession $parameters
      * @return HtmlSessionCollection
      */
-    public function ListHtmlSession(ListHtmlSession $parameters)
-    {
+    public function ListHtmlSession(ListHtmlSession $parameters) {
         return $this->__soapCall('ListHtmlSession', array($parameters));
     }
 
@@ -560,8 +514,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveHtmlSession $parameters
      * @return SuccessResponse
      */
-    public function RemoveHtmlSession(RemoveHtmlSession $parameters)
-    {
+    public function RemoveHtmlSession(RemoveHtmlSession $parameters) {
         return $this->__soapCall('RemoveHtmlSession', array($parameters));
     }
 
@@ -569,8 +522,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SendEmail $parameters
      * @return SuccessResponse
      */
-    public function SendEmail(SendEmail $parameters)
-    {
+    public function SendEmail(SendEmail $parameters) {
         return $this->__soapCall('SendEmail', array($parameters));
     }
 
@@ -578,8 +530,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveSession $parameters
      * @return SuccessResponse
      */
-    public function RemoveSession(RemoveSession $parameters)
-    {
+    public function RemoveSession(RemoveSession $parameters) {
         return $this->__soapCall('RemoveSession', array($parameters));
     }
 
@@ -587,8 +538,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveRecording $parameters
      * @return SuccessResponse
      */
-    public function RemoveRecording(RemoveRecording $parameters)
-    {
+    public function RemoveRecording(RemoveRecording $parameters) {
         return $this->__soapCall('RemoveRecording', array($parameters));
     }
 
@@ -596,8 +546,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RemoveHtmlSessionRecording $parameters
      * @return SuccessResponse
      */
-    public function RemoveHtmlSessionRecording(RemoveHtmlSessionRecording $parameters)
-    {
+    public function RemoveHtmlSessionRecording(RemoveHtmlSessionRecording $parameters) {
         return $this->__soapCall('RemoveHtmlSessionRecording', array($parameters));
     }
 
@@ -605,8 +554,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetTelephony $parameters
      * @return TelephonyResponseItemCollection
      */
-    public function SetTelephony(SetTelephony $parameters)
-    {
+    public function SetTelephony(SetTelephony $parameters) {
         return $this->__soapCall('SetTelephony', array($parameters));
     }
 
@@ -614,8 +562,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param GetTelephony $parameters
      * @return TelephonyResponseItemCollection
      */
-    public function GetTelephony(GetTelephony $parameters)
-    {
+    public function GetTelephony(GetTelephony $parameters) {
         return $this->__soapCall('GetTelephony', array($parameters));
     }
 
@@ -623,8 +570,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param GetTelephonyLicenseInfo $parameters
      * @return GetTelephonyLicenseInfoResponse
      */
-    public function GetTelephonyLicenseInfo(GetTelephonyLicenseInfo $parameters)
-    {
+    public function GetTelephonyLicenseInfo(GetTelephonyLicenseInfo $parameters) {
         return $this->__soapCall('GetTelephonyLicenseInfo', array($parameters));
     }
 
@@ -632,8 +578,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SetSessionTelephony $parameters
      * @return SessionTelephonyResponseCollection
      */
-    public function SetSessionTelephony(SetSessionTelephony $parameters)
-    {
+    public function SetSessionTelephony(SetSessionTelephony $parameters) {
         return $this->__soapCall('SetSessionTelephony', array($parameters));
     }
 
@@ -641,8 +586,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SessionTelephony $parameters
      * @return SessionTelephonyResponseCollection
      */
-    public function ListSessionTelephony(SessionTelephony $parameters)
-    {
+    public function ListSessionTelephony(SessionTelephony $parameters) {
         return $this->__soapCall('ListSessionTelephony', array($parameters));
     }
 
@@ -650,8 +594,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param SessionTelephony $parameters
      * @return SuccessResponse
      */
-    public function RemoveSessionTelephony(SessionTelephony $parameters)
-    {
+    public function RemoveSessionTelephony(SessionTelephony $parameters) {
         return $this->__soapCall('RemoveSessionTelephony', array($parameters));
     }
 
@@ -659,8 +602,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param RecordingSecureSignOn $parameters
      * @return SuccessResponse
      */
-    public function SetRecordingSecureSignOn(RecordingSecureSignOn $parameters)
-    {
+    public function SetRecordingSecureSignOn(RecordingSecureSignOn $parameters) {
         return $this->__soapCall('SetRecordingSecureSignOn', array($parameters));
     }
 
@@ -668,8 +610,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ClearSessionUserList $parameters
      * @return SuccessResponse
      */
-    public function ClearSessionChairList(ClearSessionUserList $parameters)
-    {
+    public function ClearSessionChairList(ClearSessionUserList $parameters) {
         return $this->__soapCall('ClearSessionChairList', array($parameters));
     }
 
@@ -677,8 +618,7 @@ class SASDefaultAdapter extends \SoapClient
      * @param ClearSessionUserList $parameters
      * @return SuccessResponse
      */
-    public function ClearSessionNonChairList(ClearSessionUserList $parameters)
-    {
+    public function ClearSessionNonChairList(ClearSessionUserList $parameters) {
         return $this->__soapCall('ClearSessionNonChairList', array($parameters));
     }
 

@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionRecordingResponse
-{
+class HtmlSessionRecordingResponse {
 
     /**
      * @var int $recordingId
@@ -76,8 +75,7 @@ class HtmlSessionRecordingResponse
      * @param string $displayName
      * @param int $sessionId
      */
-    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId)
-    {
+    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId) {
         $this->recordingId = $recordingId;
         $this->createdTs = $createdTs;
         $this->startTs = $startTs;
@@ -91,8 +89,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return int
      */
-    public function getRecordingId()
-    {
+    public function getRecordingId() {
         return $this->recordingId;
     }
 
@@ -100,8 +97,7 @@ class HtmlSessionRecordingResponse
      * @param int $recordingId
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setRecordingId($recordingId)
-    {
+    public function setRecordingId($recordingId) {
         $this->recordingId = $recordingId;
         return $this;
     }
@@ -109,8 +105,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return string
      */
-    public function getCreatedTs()
-    {
+    public function getCreatedTs() {
         return $this->createdTs;
     }
 
@@ -118,8 +113,7 @@ class HtmlSessionRecordingResponse
      * @param string $createdTs
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setCreatedTs($createdTs)
-    {
+    public function setCreatedTs($createdTs) {
         $this->createdTs = $createdTs;
         return $this;
     }
@@ -127,8 +121,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return string
      */
-    public function getStartTs()
-    {
+    public function getStartTs() {
         return $this->startTs;
     }
 
@@ -136,8 +129,7 @@ class HtmlSessionRecordingResponse
      * @param string $startTs
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setStartTs($startTs)
-    {
+    public function setStartTs($startTs) {
         $this->startTs = $startTs;
         return $this;
     }
@@ -145,8 +137,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return string
      */
-    public function getEndTs()
-    {
+    public function getEndTs() {
         return $this->endTs;
     }
 
@@ -154,8 +145,7 @@ class HtmlSessionRecordingResponse
      * @param string $endTs
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setEndTs($endTs)
-    {
+    public function setEndTs($endTs) {
         $this->endTs = $endTs;
         return $this;
     }
@@ -163,8 +153,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return int
      */
-    public function getDurationMillis()
-    {
+    public function getDurationMillis() {
         return $this->durationMillis;
     }
 
@@ -172,8 +161,7 @@ class HtmlSessionRecordingResponse
      * @param int $durationMillis
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setDurationMillis($durationMillis)
-    {
+    public function setDurationMillis($durationMillis) {
         $this->durationMillis = $durationMillis;
         return $this;
     }
@@ -181,8 +169,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return string
      */
-    public function getRecordingUrl()
-    {
+    public function getRecordingUrl() {
         return $this->recordingUrl;
     }
 
@@ -190,8 +177,7 @@ class HtmlSessionRecordingResponse
      * @param string $recordingUrl
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setRecordingUrl($recordingUrl)
-    {
+    public function setRecordingUrl($recordingUrl) {
         $this->recordingUrl = $recordingUrl;
         return $this;
     }
@@ -199,8 +185,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return string
      */
-    public function getDisplayName()
-    {
+    public function getDisplayName() {
         return $this->displayName;
     }
 
@@ -208,8 +193,7 @@ class HtmlSessionRecordingResponse
      * @param string $displayName
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setDisplayName($displayName)
-    {
+    public function setDisplayName($displayName) {
         $this->displayName = $displayName;
         return $this;
     }
@@ -217,8 +201,7 @@ class HtmlSessionRecordingResponse
     /**
      * @return int
      */
-    public function getSessionId()
-    {
+    public function getSessionId() {
         return $this->sessionId;
     }
 
@@ -226,8 +209,7 @@ class HtmlSessionRecordingResponse
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setSessionId($sessionId)
-    {
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
         return $this;
     }

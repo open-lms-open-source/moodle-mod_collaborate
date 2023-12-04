@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlRoom
-{
+class HtmlRoom {
 
     /**
      * @var string $name
@@ -52,8 +51,7 @@ class HtmlRoom
      * @param \DateTime $closed
      * @param HtmlAttendeeCollection $htmlAttendees
      */
-    public function __construct($name, \DateTime $opened, \DateTime $closed, $htmlAttendees)
-    {
+    public function __construct($name, \DateTime $opened, \DateTime $closed, $htmlAttendees) {
         $this->name = $name;
         $this->opened = $opened->format('Y-m-d\TH:i:s\Z');
         $this->closed = $closed->format('Y-m-d\TH:i:s\Z');
@@ -63,8 +61,7 @@ class HtmlRoom
     /**
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -72,8 +69,7 @@ class HtmlRoom
      * @param string $name
      * @return \mod_collaborate\soap\generated\HtmlRoom
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
         return $this;
     }
@@ -81,8 +77,7 @@ class HtmlRoom
     /**
      * @return \DateTime
      */
-    public function getOpened()
-    {
+    public function getOpened() {
         if ($this->opened == null) {
             return null;
         } else {
@@ -98,8 +93,7 @@ class HtmlRoom
      * @param \DateTime $opened
      * @return \mod_collaborate\soap\generated\HtmlRoom
      */
-    public function setOpened(\DateTime $opened)
-    {
+    public function setOpened(\DateTime $opened) {
         $this->opened = $opened->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -107,8 +101,7 @@ class HtmlRoom
     /**
      * @return \DateTime
      */
-    public function getClosed()
-    {
+    public function getClosed() {
         if ($this->closed == null) {
             return null;
         } else {
@@ -124,8 +117,7 @@ class HtmlRoom
      * @param \DateTime $closed
      * @return \mod_collaborate\soap\generated\HtmlRoom
      */
-    public function setClosed(\DateTime $closed)
-    {
+    public function setClosed(\DateTime $closed) {
         $this->closed = $closed->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -133,8 +125,7 @@ class HtmlRoom
     /**
      * @return HtmlAttendeeCollection
      */
-    public function getHtmlAttendees()
-    {
+    public function getHtmlAttendees() {
         return $this->htmlAttendees;
     }
 
@@ -142,8 +133,7 @@ class HtmlRoom
      * @param HtmlAttendeeCollection $htmlAttendees
      * @return \mod_collaborate\soap\generated\HtmlRoom
      */
-    public function setHtmlAttendees($htmlAttendees)
-    {
+    public function setHtmlAttendees($htmlAttendees) {
         $this->htmlAttendees = $htmlAttendees;
         return $this;
     }

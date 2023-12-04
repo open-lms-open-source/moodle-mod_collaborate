@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlAttendeeLog
-{
+class HtmlAttendeeLog {
 
     /**
      * @var \DateTime $joined
@@ -40,8 +39,7 @@ class HtmlAttendeeLog
      * @param \DateTime $joined
      * @param \DateTime $left
      */
-    public function __construct(\DateTime $joined, \DateTime $left)
-    {
+    public function __construct(\DateTime $joined, \DateTime $left) {
         $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
         $this->left = $left->format('Y-m-d\TH:i:s\Z');
     }
@@ -49,8 +47,7 @@ class HtmlAttendeeLog
     /**
      * @return \DateTime
      */
-    public function getJoined()
-    {
+    public function getJoined() {
         if ($this->joined == null) {
             return null;
         }else {
@@ -66,8 +63,7 @@ class HtmlAttendeeLog
      * @param \DateTime $joined
      * @return \mod_collaborate\soap\generated\HtmlAttendeeLog
      */
-    public function setJoined(\DateTime $joined)
-    {
+    public function setJoined(\DateTime $joined) {
         $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -75,8 +71,7 @@ class HtmlAttendeeLog
     /**
      * @return \DateTime
      */
-    public function getLeft()
-    {
+    public function getLeft() {
         if ($this->left == null) {
             return null;
         } else {
@@ -92,8 +87,7 @@ class HtmlAttendeeLog
      * @param \DateTime $left
      * @return \mod_collaborate\soap\generated\HtmlAttendeeLog
      */
-    public function setLeft(\DateTime $left)
-    {
+    public function setLeft(\DateTime $left) {
         $this->left = $left->format('Y-m-d\TH:i:s\Z');
         return $this;
     }

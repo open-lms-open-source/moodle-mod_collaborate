@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlRecordingUrl
-{
+class HtmlRecordingUrl {
 
     /**
      * @var int $recordingId
@@ -34,16 +33,14 @@ class HtmlRecordingUrl
     /**
      * @param int $recordingId
      */
-    public function __construct($recordingId)
-    {
+    public function __construct($recordingId) {
         $this->recordingId = $recordingId;
     }
 
     /**
      * @return int
      */
-    public function getRecordingId()
-    {
+    public function getRecordingId() {
         return $this->recordingId;
     }
 
@@ -51,8 +48,7 @@ class HtmlRecordingUrl
      * @param int $recordingId
      * @return \mod_collaborate\soap\generated\HtmlRecordingUrl
      */
-    public function setRecordingId($recordingId)
-    {
+    public function setRecordingId($recordingId) {
         $this->recordingId = $recordingId;
         return $this;
     }
