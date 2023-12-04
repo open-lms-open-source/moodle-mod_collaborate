@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionRecordingResponseCollection
-{
+class HtmlSessionRecordingResponseCollection {
 
     /**
      * @var HtmlSessionRecordingResponse[] $HtmlSessionRecordingResponse
@@ -32,16 +31,14 @@ class HtmlSessionRecordingResponseCollection
     protected $HtmlSessionRecordingResponse = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return HtmlSessionRecordingResponse[]
      */
-    public function getHtmlSessionRecordingResponse()
-    {
+    public function getHtmlSessionRecordingResponse() {
         return $this->HtmlSessionRecordingResponse;
     }
 
@@ -49,8 +46,7 @@ class HtmlSessionRecordingResponseCollection
      * @param HtmlSessionRecordingResponse[] $HtmlSessionRecordingResponse
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponseCollection
      */
-    public function setHtmlSessionRecordingResponse(array $HtmlSessionRecordingResponse)
-    {
+    public function setHtmlSessionRecordingResponse(array $HtmlSessionRecordingResponse) {
         $this->HtmlSessionRecordingResponse = $HtmlSessionRecordingResponse;
         return $this;
     }

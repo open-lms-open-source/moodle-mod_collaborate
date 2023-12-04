@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class UpdateHtmlSessionOccurrence
-{
+class UpdateHtmlSessionOccurrence {
 
     /**
      * @var int $occurrenceId
@@ -44,16 +43,14 @@ class UpdateHtmlSessionOccurrence
     /**
      * @param int $occurrenceId
      */
-    public function __construct($occurrenceId)
-    {
+    public function __construct($occurrenceId) {
         $this->occurrenceId = $occurrenceId;
     }
 
     /**
      * @return int
      */
-    public function getOccurrenceId()
-    {
+    public function getOccurrenceId() {
         return $this->occurrenceId;
     }
 
@@ -61,8 +58,7 @@ class UpdateHtmlSessionOccurrence
      * @param int $occurrenceId
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionOccurrence
      */
-    public function setOccurrenceId($occurrenceId)
-    {
+    public function setOccurrenceId($occurrenceId) {
         $this->occurrenceId = $occurrenceId;
         return $this;
     }
@@ -70,8 +66,7 @@ class UpdateHtmlSessionOccurrence
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
+    public function getStartTime() {
         if ($this->startTime == null) {
             return null;
         } else {
@@ -87,8 +82,7 @@ class UpdateHtmlSessionOccurrence
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionOccurrence
      */
-    public function setStartTime(\DateTime $startTime)
-    {
+    public function setStartTime(\DateTime $startTime) {
         $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -96,8 +90,7 @@ class UpdateHtmlSessionOccurrence
     /**
      * @return \DateTime
      */
-    public function getEndTime()
-    {
+    public function getEndTime() {
         if ($this->endTime == null) {
             return null;
         } else {
@@ -113,8 +106,7 @@ class UpdateHtmlSessionOccurrence
      * @param \DateTime $endTime
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionOccurrence
      */
-    public function setEndTime(\DateTime $endTime)
-    {
+    public function setEndTime(\DateTime $endTime) {
         $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }

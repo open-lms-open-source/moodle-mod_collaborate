@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class UrlResponse
-{
+class UrlResponse {
 
     /**
      * @var string $url
@@ -34,16 +33,14 @@ class UrlResponse
     /**
      * @param string $url
      */
-    public function __construct($url)
-    {
+    public function __construct($url) {
         $this->url = $url;
     }
 
     /**
      * @return string
      */
-    public function getUrl()
-    {
+    public function getUrl() {
         return $this->url;
     }
 
@@ -51,8 +48,7 @@ class UrlResponse
      * @param string $url
      * @return \mod_collaborate\soap\generated\UrlResponse
      */
-    public function setUrl($url)
-    {
+    public function setUrl($url) {
         $this->url = $url;
         return $this;
     }

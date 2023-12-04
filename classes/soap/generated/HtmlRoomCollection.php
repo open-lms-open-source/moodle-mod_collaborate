@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlRoomCollection
-{
+class HtmlRoomCollection {
 
     /**
      * @var HtmlRoom[] $HtmlRoom
@@ -34,16 +33,14 @@ class HtmlRoomCollection
     /**
      * @param HtmlRoom[] $HtmlRoom
      */
-    public function __construct(array $HtmlRoom)
-    {
+    public function __construct(array $HtmlRoom) {
         $this->HtmlRoom = $HtmlRoom;
     }
 
     /**
      * @return HtmlRoom[]
      */
-    public function getHtmlRoom()
-    {
+    public function getHtmlRoom() {
         return $this->HtmlRoom;
     }
 
@@ -51,8 +48,7 @@ class HtmlRoomCollection
      * @param HtmlRoom[] $HtmlRoom
      * @return \mod_collaborate\soap\generated\HtmlRoomCollection
      */
-    public function setHtmlRoom(array $HtmlRoom)
-    {
+    public function setHtmlRoom(array $HtmlRoom) {
         $this->HtmlRoom = $HtmlRoom;
         return $this;
     }

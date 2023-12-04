@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionAttendance
-{
+class HtmlSessionAttendance {
 
     /**
      * @var int $sessionId
@@ -40,8 +39,7 @@ class HtmlSessionAttendance
      * @param int $sessionId
      * @param \DateTime $startTime
      */
-    public function __construct($sessionId, \DateTime $startTime)
-    {
+    public function __construct($sessionId, \DateTime $startTime) {
         $this->sessionId = $sessionId;
         $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
     }
@@ -49,8 +47,7 @@ class HtmlSessionAttendance
     /**
      * @return int
      */
-    public function getSessionId()
-    {
+    public function getSessionId() {
         return $this->sessionId;
     }
 
@@ -58,8 +55,7 @@ class HtmlSessionAttendance
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\HtmlSessionAttendance
      */
-    public function setSessionId($sessionId)
-    {
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
         return $this;
     }
@@ -67,8 +63,7 @@ class HtmlSessionAttendance
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
+    public function getStartTime() {
         if ($this->startTime == null) {
             return null;
         } else {
@@ -84,8 +79,7 @@ class HtmlSessionAttendance
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\HtmlSessionAttendance
      */
-    public function setStartTime(\DateTime $startTime)
-    {
+    public function setStartTime(\DateTime $startTime) {
         $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }

@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionOccurrenceCollection
-{
+class HtmlSessionOccurrenceCollection {
 
     /**
      * @var int $id
@@ -47,16 +46,14 @@ class HtmlSessionOccurrenceCollection
     protected $endTime = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return int
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -64,8 +61,7 @@ class HtmlSessionOccurrenceCollection
      * @param int $id
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrenceCollection
      */
-    public function setId($id)
-    {
+    public function setId($id) {
         $this->id = $id;
         return $this;
     }
@@ -73,8 +69,7 @@ class HtmlSessionOccurrenceCollection
     /**
      * @return int
      */
-    public function getSessionId()
-    {
+    public function getSessionId() {
         return $this->sessionId;
     }
 
@@ -82,8 +77,7 @@ class HtmlSessionOccurrenceCollection
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrenceCollection
      */
-    public function setSessionId($sessionId)
-    {
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
         return $this;
     }
@@ -91,8 +85,7 @@ class HtmlSessionOccurrenceCollection
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
+    public function getStartTime() {
         if ($this->startTime == null) {
             return null;
         } else {
@@ -108,8 +101,7 @@ class HtmlSessionOccurrenceCollection
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrenceCollection
      */
-    public function setStartTime(\DateTime $startTime)
-    {
+    public function setStartTime(\DateTime $startTime) {
         $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -117,8 +109,7 @@ class HtmlSessionOccurrenceCollection
     /**
      * @return \DateTime
      */
-    public function getEndTime()
-    {
+    public function getEndTime() {
         if ($this->endTime == null) {
             return null;
         } else {
@@ -134,8 +125,7 @@ class HtmlSessionOccurrenceCollection
      * @param \DateTime $endTime
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrenceCollection
      */
-    public function setEndTime(\DateTime $endTime)
-    {
+    public function setEndTime(\DateTime $endTime) {
         $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }

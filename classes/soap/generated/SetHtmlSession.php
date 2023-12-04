@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class SetHtmlSession
-{
+class SetHtmlSession {
 
     /**
      * @var string $name
@@ -162,8 +161,7 @@ class SetHtmlSession
      * @param \DateTime $endTime
      * @param string $creatorId
      */
-    public function __construct($name, \DateTime $startTime, \DateTime $endTime, $creatorId)
-    {
+    public function __construct($name, \DateTime $startTime, \DateTime $endTime, $creatorId) {
         $this->name = $name;
         $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
         $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
@@ -173,8 +171,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -182,8 +179,7 @@ class SetHtmlSession
      * @param string $name
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
         return $this;
     }
@@ -191,8 +187,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -200,8 +195,7 @@ class SetHtmlSession
      * @param string $description
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
         return $this;
     }
@@ -209,8 +203,7 @@ class SetHtmlSession
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
+    public function getStartTime() {
         if ($this->startTime == null) {
             return null;
         } else {
@@ -226,8 +219,7 @@ class SetHtmlSession
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setStartTime(\DateTime $startTime)
-    {
+    public function setStartTime(\DateTime $startTime) {
         $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -235,8 +227,7 @@ class SetHtmlSession
     /**
      * @return \DateTime
      */
-    public function getEndTime()
-    {
+    public function getEndTime() {
         if ($this->endTime == null) {
             return null;
         } else {
@@ -252,8 +243,7 @@ class SetHtmlSession
      * @param \DateTime $endTime
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setEndTime(\DateTime $endTime)
-    {
+    public function setEndTime(\DateTime $endTime) {
         $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
         return $this;
     }
@@ -261,8 +251,7 @@ class SetHtmlSession
     /**
      * @return int
      */
-    public function getBoundaryTime()
-    {
+    public function getBoundaryTime() {
         return $this->boundaryTime;
     }
 
@@ -270,8 +259,7 @@ class SetHtmlSession
      * @param int $boundaryTime
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setBoundaryTime($boundaryTime)
-    {
+    public function setBoundaryTime($boundaryTime) {
         $this->boundaryTime = $boundaryTime;
         return $this;
     }
@@ -279,8 +267,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getAllowGuest()
-    {
+    public function getAllowGuest() {
         return $this->allowGuest;
     }
 
@@ -288,8 +275,7 @@ class SetHtmlSession
      * @param boolean $allowGuest
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setAllowGuest($allowGuest)
-    {
+    public function setAllowGuest($allowGuest) {
         $this->allowGuest = $allowGuest;
         return $this;
     }
@@ -297,8 +283,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getNoEndDate()
-    {
+    public function getNoEndDate() {
         return $this->noEndDate;
     }
 
@@ -306,8 +291,7 @@ class SetHtmlSession
      * @param boolean $noEndDate
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setNoEndDate($noEndDate)
-    {
+    public function setNoEndDate($noEndDate) {
         $this->noEndDate = $noEndDate;
         return $this;
     }
@@ -315,8 +299,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getShowProfile()
-    {
+    public function getShowProfile() {
         return $this->showProfile;
     }
 
@@ -324,8 +307,7 @@ class SetHtmlSession
      * @param boolean $showProfile
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setShowProfile($showProfile)
-    {
+    public function setShowProfile($showProfile) {
         $this->showProfile = $showProfile;
         return $this;
     }
@@ -333,8 +315,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getCanShareVideo()
-    {
+    public function getCanShareVideo() {
         return $this->canShareVideo;
     }
 
@@ -342,8 +323,7 @@ class SetHtmlSession
      * @param boolean $canShareVideo
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setCanShareVideo($canShareVideo)
-    {
+    public function setCanShareVideo($canShareVideo) {
         $this->canShareVideo = $canShareVideo;
         return $this;
     }
@@ -351,8 +331,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getCanShareAudio()
-    {
+    public function getCanShareAudio() {
         return $this->canShareAudio;
     }
 
@@ -360,8 +339,7 @@ class SetHtmlSession
      * @param boolean $canShareAudio
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setCanShareAudio($canShareAudio)
-    {
+    public function setCanShareAudio($canShareAudio) {
         $this->canShareAudio = $canShareAudio;
         return $this;
     }
@@ -369,8 +347,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getCanPostMessage()
-    {
+    public function getCanPostMessage() {
         return $this->canPostMessage;
     }
 
@@ -378,8 +355,7 @@ class SetHtmlSession
      * @param boolean $canPostMessage
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setCanPostMessage($canPostMessage)
-    {
+    public function setCanPostMessage($canPostMessage) {
         $this->canPostMessage = $canPostMessage;
         return $this;
     }
@@ -387,8 +363,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getCanAnnotateWhiteboard()
-    {
+    public function getCanAnnotateWhiteboard() {
         return $this->canAnnotateWhiteboard;
     }
 
@@ -396,8 +371,7 @@ class SetHtmlSession
      * @param boolean $canAnnotateWhiteboard
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setCanAnnotateWhiteboard($canAnnotateWhiteboard)
-    {
+    public function setCanAnnotateWhiteboard($canAnnotateWhiteboard) {
         $this->canAnnotateWhiteboard = $canAnnotateWhiteboard;
         return $this;
     }
@@ -405,8 +379,7 @@ class SetHtmlSession
     /**
      * @return HtmlAttendeeCollection
      */
-    public function getHtmlAttendees()
-    {
+    public function getHtmlAttendees() {
         return $this->htmlAttendees;
     }
 
@@ -414,8 +387,7 @@ class SetHtmlSession
      * @param HtmlAttendeeCollection $htmlAttendees
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setHtmlAttendees($htmlAttendees)
-    {
+    public function setHtmlAttendees($htmlAttendees) {
         $this->htmlAttendees = $htmlAttendees;
         return $this;
     }
@@ -423,8 +395,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getGroupingList()
-    {
+    public function getGroupingList() {
         return $this->groupingList;
     }
 
@@ -432,8 +403,7 @@ class SetHtmlSession
      * @param string $groupingList
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setGroupingList($groupingList)
-    {
+    public function setGroupingList($groupingList) {
         $this->groupingList = $groupingList;
         return $this;
     }
@@ -441,8 +411,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getCreatorId()
-    {
+    public function getCreatorId() {
         return $this->creatorId;
     }
 
@@ -450,8 +419,7 @@ class SetHtmlSession
      * @param string $creatorId
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setCreatorId($creatorId)
-    {
+    public function setCreatorId($creatorId) {
         $this->creatorId = $creatorId;
         return $this;
     }
@@ -459,8 +427,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getGuestRole()
-    {
+    public function getGuestRole() {
         return $this->guestRole;
     }
 
@@ -468,8 +435,7 @@ class SetHtmlSession
      * @param string $guestRole
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setGuestRole($guestRole)
-    {
+    public function setGuestRole($guestRole) {
         $this->guestRole = $guestRole;
         return $this;
     }
@@ -477,8 +443,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getMustBeSupervised()
-    {
+    public function getMustBeSupervised() {
         return $this->mustBeSupervised;
     }
 
@@ -486,8 +451,7 @@ class SetHtmlSession
      * @param boolean $mustBeSupervised
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setMustBeSupervised($mustBeSupervised)
-    {
+    public function setMustBeSupervised($mustBeSupervised) {
         $this->mustBeSupervised = $mustBeSupervised;
         return $this;
     }
@@ -495,8 +459,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getOpenChair()
-    {
+    public function getOpenChair() {
         return $this->openChair;
     }
 
@@ -504,8 +467,7 @@ class SetHtmlSession
      * @param boolean $openChair
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setOpenChair($openChair)
-    {
+    public function setOpenChair($openChair) {
         $this->openChair = $openChair;
         return $this;
     }
@@ -513,8 +475,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getPermissionsOn()
-    {
+    public function getPermissionsOn() {
         return $this->permissionsOn;
     }
 
@@ -522,8 +483,7 @@ class SetHtmlSession
      * @param boolean $permissionsOn
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setPermissionsOn($permissionsOn)
-    {
+    public function setPermissionsOn($permissionsOn) {
         $this->permissionsOn = $permissionsOn;
         return $this;
     }
@@ -531,8 +491,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getRaiseHandOnEnter()
-    {
+    public function getRaiseHandOnEnter() {
         return $this->raiseHandOnEnter;
     }
 
@@ -540,8 +499,7 @@ class SetHtmlSession
      * @param boolean $raiseHandOnEnter
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setRaiseHandOnEnter($raiseHandOnEnter)
-    {
+    public function setRaiseHandOnEnter($raiseHandOnEnter) {
         $this->raiseHandOnEnter = $raiseHandOnEnter;
         return $this;
     }
@@ -549,8 +507,7 @@ class SetHtmlSession
     /**
      * @return boolean
      */
-    public function getAllowInSessionInvitees()
-    {
+    public function getAllowInSessionInvitees() {
         return $this->allowInSessionInvitees;
     }
 
@@ -558,8 +515,7 @@ class SetHtmlSession
      * @param boolean $allowInSessionInvitees
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setAllowInSessionInvitees($allowInSessionInvitees)
-    {
+    public function setAllowInSessionInvitees($allowInSessionInvitees) {
         $this->allowInSessionInvitees = $allowInSessionInvitees;
         return $this;
     }
@@ -567,8 +523,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getContextId()
-    {
+    public function getContextId() {
         return $this->contextId;
     }
 
@@ -576,8 +531,7 @@ class SetHtmlSession
      * @param string $contextId
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setContextId($contextId)
-    {
+    public function setContextId($contextId) {
         $this->contextId = $contextId;
         return $this;
     }
@@ -585,8 +539,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getContextTitle()
-    {
+    public function getContextTitle() {
         return $this->contextTitle;
     }
 
@@ -594,8 +547,7 @@ class SetHtmlSession
      * @param string $contextTitle
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setContextTitle($contextTitle)
-    {
+    public function setContextTitle($contextTitle) {
         $this->contextTitle = $contextTitle;
         return $this;
     }
@@ -603,8 +555,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getRecordingCallbackUrl()
-    {
+    public function getRecordingCallbackUrl() {
         return $this->recordingCallbackUrl;
     }
 
@@ -612,8 +563,7 @@ class SetHtmlSession
      * @param string $recordingCallbackUrl
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setRecordingCallbackUrl($recordingCallbackUrl)
-    {
+    public function setRecordingCallbackUrl($recordingCallbackUrl) {
         $this->recordingCallbackUrl = $recordingCallbackUrl;
         return $this;
     }
@@ -621,8 +571,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getSessionType()
-    {
+    public function getSessionType() {
         return $this->sessionType;
     }
 
@@ -630,8 +579,7 @@ class SetHtmlSession
      * @param string $sessionType
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setSessionType($sessionType)
-    {
+    public function setSessionType($sessionType) {
         $this->sessionType = $sessionType;
         return $this;
     }
@@ -639,8 +587,7 @@ class SetHtmlSession
     /**
      * @return string
      */
-    public function getSessionRule()
-    {
+    public function getSessionRule() {
         return $this->sessionRule;
     }
 
@@ -648,8 +595,7 @@ class SetHtmlSession
      * @param string $sessionRule
      * @return \mod_collaborate\soap\generated\SetHtmlSession
      */
-    public function setSessionRule($sessionRule)
-    {
+    public function setSessionRule($sessionRule) {
         $this->sessionRule = $sessionRule;
         return $this;
     }

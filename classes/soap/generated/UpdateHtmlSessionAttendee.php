@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class UpdateHtmlSessionAttendee
-{
+class UpdateHtmlSessionAttendee {
 
     /**
      * @var int $sessionId
@@ -60,8 +59,7 @@ class UpdateHtmlSessionAttendee
      * @param int $sessionId
      * @param HtmlAttendee $htmlAttendee
      */
-    public function __construct($sessionId, $htmlAttendee)
-    {
+    public function __construct($sessionId, $htmlAttendee) {
         $this->sessionId = $sessionId;
         $this->htmlAttendee = $htmlAttendee;
     }
@@ -69,8 +67,7 @@ class UpdateHtmlSessionAttendee
     /**
      * @return int
      */
-    public function getSessionId()
-    {
+    public function getSessionId() {
         return $this->sessionId;
     }
 
@@ -78,8 +75,7 @@ class UpdateHtmlSessionAttendee
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionAttendee
      */
-    public function setSessionId($sessionId)
-    {
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
         return $this;
     }
@@ -87,8 +83,7 @@ class UpdateHtmlSessionAttendee
     /**
      * @return HtmlAttendee
      */
-    public function getHtmlAttendee()
-    {
+    public function getHtmlAttendee() {
         return $this->htmlAttendee;
     }
 
@@ -96,8 +91,7 @@ class UpdateHtmlSessionAttendee
      * @param HtmlAttendee $htmlAttendee
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionAttendee
      */
-    public function setHtmlAttendee($htmlAttendee)
-    {
+    public function setHtmlAttendee($htmlAttendee) {
         $this->htmlAttendee = $htmlAttendee;
         return $this;
     }
@@ -105,8 +99,7 @@ class UpdateHtmlSessionAttendee
     /**
      * @return string
      */
-    public function getLocale()
-    {
+    public function getLocale() {
         return $this->locale;
     }
 
@@ -114,8 +107,7 @@ class UpdateHtmlSessionAttendee
      * @param string $locale
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionAttendee
      */
-    public function setLocale($locale)
-    {
+    public function setLocale($locale) {
         $this->locale = $locale;
         return $this;
     }
@@ -123,8 +115,7 @@ class UpdateHtmlSessionAttendee
     /**
      * @return string
      */
-    public function getReturnUrl()
-    {
+    public function getReturnUrl() {
         return $this->returnUrl;
     }
 
@@ -132,8 +123,7 @@ class UpdateHtmlSessionAttendee
      * @param string $returnUrl
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionAttendee
      */
-    public function setReturnUrl($returnUrl)
-    {
+    public function setReturnUrl($returnUrl) {
         $this->returnUrl = $returnUrl;
         return $this;
     }
@@ -141,8 +131,7 @@ class UpdateHtmlSessionAttendee
     /**
      * @return string
      */
-    public function getReconnectUrl()
-    {
+    public function getReconnectUrl() {
         return $this->reconnectUrl;
     }
 
@@ -150,8 +139,7 @@ class UpdateHtmlSessionAttendee
      * @param string $reconnectUrl
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionAttendee
      */
-    public function setReconnectUrl($reconnectUrl)
-    {
+    public function setReconnectUrl($reconnectUrl) {
         $this->reconnectUrl = $reconnectUrl;
         return $this;
     }
@@ -159,8 +147,7 @@ class UpdateHtmlSessionAttendee
     /**
      * @return string
      */
-    public function getOriginDomain()
-    {
+    public function getOriginDomain() {
         return $this->originDomain;
     }
 
@@ -168,8 +155,7 @@ class UpdateHtmlSessionAttendee
      * @param string $originDomain
      * @return \mod_collaborate\soap\generated\UpdateHtmlSessionAttendee
      */
-    public function setOriginDomain($originDomain)
-    {
+    public function setOriginDomain($originDomain) {
         $this->originDomain = $originDomain;
         return $this;
     }

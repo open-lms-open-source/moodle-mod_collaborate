@@ -23,12 +23,10 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class ServerConfiguration
-{
+class ServerConfiguration {
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 

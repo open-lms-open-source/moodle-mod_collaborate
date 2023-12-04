@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionCollection
-{
+class HtmlSessionCollection {
 
     /**
      * @var HtmlSession[] $HtmlSession
@@ -32,16 +31,14 @@ class HtmlSessionCollection
     protected $HtmlSession = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return HtmlSession[]
      */
-    public function getHtmlSession()
-    {
+    public function getHtmlSession() {
         return $this->HtmlSession;
     }
 
@@ -49,8 +46,7 @@ class HtmlSessionCollection
      * @param HtmlSession[] $HtmlSession
      * @return \mod_collaborate\soap\generated\HtmlSessionCollection
      */
-    public function setHtmlSession(array $HtmlSession)
-    {
+    public function setHtmlSession(array $HtmlSession) {
         $this->HtmlSession = $HtmlSession;
         return $this;
     }

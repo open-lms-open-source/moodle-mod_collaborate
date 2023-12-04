@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class ServerConfigurationResponse
-{
+class ServerConfigurationResponse {
 
     /**
      * @var int $boundaryTime
@@ -76,8 +75,7 @@ class ServerConfigurationResponse
      * @param boolean $mustReserveSeats
      * @param string $timeZone
      */
-    public function __construct($boundaryTime, $maxAvailableTalkers, $maxAvailableCameras, $raiseHandOnEnter, $mayUseTelephony, $mayUseSecureSignOn, $mustReserveSeats, $timeZone)
-    {
+    public function __construct($boundaryTime, $maxAvailableTalkers, $maxAvailableCameras, $raiseHandOnEnter, $mayUseTelephony, $mayUseSecureSignOn, $mustReserveSeats, $timeZone) {
         $this->boundaryTime = $boundaryTime;
         $this->maxAvailableTalkers = $maxAvailableTalkers;
         $this->maxAvailableCameras = $maxAvailableCameras;
@@ -91,8 +89,7 @@ class ServerConfigurationResponse
     /**
      * @return int
      */
-    public function getBoundaryTime()
-    {
+    public function getBoundaryTime() {
         return $this->boundaryTime;
     }
 
@@ -100,8 +97,7 @@ class ServerConfigurationResponse
      * @param int $boundaryTime
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setBoundaryTime($boundaryTime)
-    {
+    public function setBoundaryTime($boundaryTime) {
         $this->boundaryTime = $boundaryTime;
         return $this;
     }
@@ -109,8 +105,7 @@ class ServerConfigurationResponse
     /**
      * @return int
      */
-    public function getMaxAvailableTalkers()
-    {
+    public function getMaxAvailableTalkers() {
         return $this->maxAvailableTalkers;
     }
 
@@ -118,8 +113,7 @@ class ServerConfigurationResponse
      * @param int $maxAvailableTalkers
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMaxAvailableTalkers($maxAvailableTalkers)
-    {
+    public function setMaxAvailableTalkers($maxAvailableTalkers) {
         $this->maxAvailableTalkers = $maxAvailableTalkers;
         return $this;
     }
@@ -127,8 +121,7 @@ class ServerConfigurationResponse
     /**
      * @return int
      */
-    public function getMaxAvailableCameras()
-    {
+    public function getMaxAvailableCameras() {
         return $this->maxAvailableCameras;
     }
 
@@ -136,8 +129,7 @@ class ServerConfigurationResponse
      * @param int $maxAvailableCameras
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMaxAvailableCameras($maxAvailableCameras)
-    {
+    public function setMaxAvailableCameras($maxAvailableCameras) {
         $this->maxAvailableCameras = $maxAvailableCameras;
         return $this;
     }
@@ -145,8 +137,7 @@ class ServerConfigurationResponse
     /**
      * @return boolean
      */
-    public function getRaiseHandOnEnter()
-    {
+    public function getRaiseHandOnEnter() {
         return $this->raiseHandOnEnter;
     }
 
@@ -154,8 +145,7 @@ class ServerConfigurationResponse
      * @param boolean $raiseHandOnEnter
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setRaiseHandOnEnter($raiseHandOnEnter)
-    {
+    public function setRaiseHandOnEnter($raiseHandOnEnter) {
         $this->raiseHandOnEnter = $raiseHandOnEnter;
         return $this;
     }
@@ -163,8 +153,7 @@ class ServerConfigurationResponse
     /**
      * @return boolean
      */
-    public function getMayUseTelephony()
-    {
+    public function getMayUseTelephony() {
         return $this->mayUseTelephony;
     }
 
@@ -172,8 +161,7 @@ class ServerConfigurationResponse
      * @param boolean $mayUseTelephony
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMayUseTelephony($mayUseTelephony)
-    {
+    public function setMayUseTelephony($mayUseTelephony) {
         $this->mayUseTelephony = $mayUseTelephony;
         return $this;
     }
@@ -181,8 +169,7 @@ class ServerConfigurationResponse
     /**
      * @return boolean
      */
-    public function getMayUseSecureSignOn()
-    {
+    public function getMayUseSecureSignOn() {
         return $this->mayUseSecureSignOn;
     }
 
@@ -190,8 +177,7 @@ class ServerConfigurationResponse
      * @param boolean $mayUseSecureSignOn
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMayUseSecureSignOn($mayUseSecureSignOn)
-    {
+    public function setMayUseSecureSignOn($mayUseSecureSignOn) {
         $this->mayUseSecureSignOn = $mayUseSecureSignOn;
         return $this;
     }
@@ -199,8 +185,7 @@ class ServerConfigurationResponse
     /**
      * @return boolean
      */
-    public function getMustReserveSeats()
-    {
+    public function getMustReserveSeats() {
         return $this->mustReserveSeats;
     }
 
@@ -208,8 +193,7 @@ class ServerConfigurationResponse
      * @param boolean $mustReserveSeats
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMustReserveSeats($mustReserveSeats)
-    {
+    public function setMustReserveSeats($mustReserveSeats) {
         $this->mustReserveSeats = $mustReserveSeats;
         return $this;
     }
@@ -217,8 +201,7 @@ class ServerConfigurationResponse
     /**
      * @return string
      */
-    public function getTimeZone()
-    {
+    public function getTimeZone() {
         return $this->timeZone;
     }
 
@@ -226,8 +209,7 @@ class ServerConfigurationResponse
      * @param string $timeZone
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setTimeZone($timeZone)
-    {
+    public function setTimeZone($timeZone) {
         $this->timeZone = $timeZone;
         return $this;
     }

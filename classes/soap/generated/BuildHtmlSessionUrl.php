@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class BuildHtmlSessionUrl
-{
+class BuildHtmlSessionUrl {
 
     /**
      * @var int $sessionId
@@ -59,16 +58,14 @@ class BuildHtmlSessionUrl
     /**
      * @param int $sessionId
      */
-    public function __construct($sessionId)
-    {
+    public function __construct($sessionId) {
         $this->sessionId  = $sessionId;
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
+    public function getSessionId() {
         return $this->sessionId;
     }
 
@@ -76,8 +73,7 @@ class BuildHtmlSessionUrl
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setSessionId($sessionId)
-    {
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
         return $this;
     }
@@ -85,8 +81,7 @@ class BuildHtmlSessionUrl
     /**
      * @return string
      */
-    public function getUserId()
-    {
+    public function getUserId() {
         return $this->userId;
     }
 
@@ -94,8 +89,7 @@ class BuildHtmlSessionUrl
      * @param string $userId
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setUserId($userId)
-    {
+    public function setUserId($userId) {
         $this->userId = $userId;
         return $this;
     }
@@ -103,8 +97,7 @@ class BuildHtmlSessionUrl
     /**
      * @return string
      */
-    public function getLocale()
-    {
+    public function getLocale() {
         return $this->locale;
     }
 
@@ -112,8 +105,7 @@ class BuildHtmlSessionUrl
      * @param string $locale
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setLocale($locale)
-    {
+    public function setLocale($locale) {
         $this->locale = $locale;
         return $this;
     }
@@ -121,8 +113,7 @@ class BuildHtmlSessionUrl
     /**
      * @return string
      */
-    public function getReturnUrl()
-    {
+    public function getReturnUrl() {
         return $this->returnUrl;
     }
 
@@ -130,8 +121,7 @@ class BuildHtmlSessionUrl
      * @param string $returnUrl
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setReturnUrl($returnUrl)
-    {
+    public function setReturnUrl($returnUrl) {
         $this->returnUrl = $returnUrl;
         return $this;
     }
@@ -139,8 +129,7 @@ class BuildHtmlSessionUrl
     /**
      * @return string
      */
-    public function getReconnectUrl()
-    {
+    public function getReconnectUrl() {
         return $this->reconnectUrl;
     }
 
@@ -148,8 +137,7 @@ class BuildHtmlSessionUrl
      * @param string $reconnectUrl
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setReconnectUrl($reconnectUrl)
-    {
+    public function setReconnectUrl($reconnectUrl) {
         $this->reconnectUrl = $reconnectUrl;
         return $this;
     }
@@ -157,8 +145,7 @@ class BuildHtmlSessionUrl
     /**
      * @return string
      */
-    public function getOriginDomain()
-    {
+    public function getOriginDomain() {
         return $this->originDomain;
     }
 
@@ -166,8 +153,7 @@ class BuildHtmlSessionUrl
      * @param string $originDomain
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setOriginDomain($originDomain)
-    {
+    public function setOriginDomain($originDomain) {
         $this->originDomain = $originDomain;
         return $this;
     }
