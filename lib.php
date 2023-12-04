@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,40 +12,36 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Library of interface functions and constants for module collaborate
+ * Library of interface functions and constants for module Collaborate
  *
  * All the core Moodle functions, neeeded to allow the module to work
  * integrated in Moodle should be placed here.
  *
- * All the collaborate specific functions, needed to implement all the module
+ * All the Collaborate specific functions, needed to implement all the module
  * logic, should go to locallib.php. This will help to save some memory when
  * Moodle is performing actions across all modules.
  *
  * @package   mod_collaborate
  * @copyright Copyright (c) 2015 Open LMS (https://www.openlms.net)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use mod_collaborate\soap\api;
-use mod_collaborate\soap\generated\RemoveHtmlSession;
-use mod_collaborate\soap\generated\SuccessResponse;
 use mod_collaborate\local;
 use mod_collaborate\sessionlink;
-use mod_collaborate\logging\constants;
-
 
 /* Moodle core API */
 
 /**
- * Returns the information on whether the module supports a feature
+ * Returns the information on whether the module supports a feature.
  *
  * See {@link plugin_supports()} for more info.
  *
  * @param string $feature FEATURE_xx constant for requested feature
- * @return mixed true if the feature is supported, null if unknown
+ *
+ * @return true | null true if the feature is supported, null if unknown
  */
 function collaborate_supports($feature) {
 
@@ -70,15 +66,16 @@ function collaborate_supports($feature) {
 }
 
 /**
- * Add a get_coursemodule_info function in case any collaborate type wants to add 'extra' information
+ * Add a get_coursemodule_info function in case any Collaborate type wants to add 'extra' information
  * for the course (see resource).
  *
  * Given a course_module object, this function returns any "extra" information that may be needed
  * when printing this activity in a course listing.  See get_array_of_activities() in course/lib.php.
  *
  * @param stdClass $coursemodule The coursemodule object (record).
- * @return cached_cm_info An object on information that the courses
- *                        will know about (most noticeably, an icon).
+ *
+ * @return cached_cm_info An object on information that the courses will know about (most noticeably, an icon).
+ * @throws dml_exception
  */
 function collaborate_get_coursemodule_info($coursemodule) {
     global $DB;
@@ -106,16 +103,18 @@ function collaborate_get_coursemodule_info($coursemodule) {
 }
 
 /**
- * Saves a new instance of the collaborate into the database
+ * Saves a new Collaborate instance into the database.
  *
  * Given an object containing all the necessary data,
  * (defined by the form in mod_form.php) this function
- * will create a new instance and return the id number
+ * will create a new instance and return the ID number
  * of the new instance.
  *
  * @param stdClass $collaborate Submitted data from the form in mod_form.php
- * @param mod_collaborate_mod_form $mform The form instance itself (if needed)
- * @return int The id of the newly inserted collaborate record
+ * @param mod_collaborate_mod_form | null $mform The form instance itself (if needed)
+ *
+ * @return int The ID of the newly inserted Collaborate record
+ * @throws dml_exception
  */
 function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
     global $DB;
@@ -138,14 +137,15 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
 }
 
 /**
- * Updates an instance of the collaborate in the database
+ * Updates a Collaborate instance in the database.
  *
  * Given an object containing all the necessary data,
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
  *
  * @param stdClass $collaborate An object from the form in mod_form.php
- * @param mod_collaborate_mod_form $mform The form instance itself (if needed)
+ * @param mod_collaborate_mod_form | null $mform The form instance itself (if needed)
+ *
  * @return boolean Success/Fail
  */
 function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_form $mform = null) {
@@ -188,19 +188,21 @@ function collaborate_update_instance(stdClass $collaborate, mod_collaborate_mod_
 }
 
 /**
- * Removes an instance of the collaborate from the database
+ * Removes a Collaborate instance from the database.
  *
  * Given an ID of an instance of this module,
  * this function will permanently delete the instance
  * and any data that depends on it.
  *
- * @param int $id Id of the module instance
+ * @param int $id ID of the module instance
+ *
  * @return boolean Success/Failure
+ * @throws dml_exception
  */
 function collaborate_delete_instance($id) {
     global $DB;
 
-    if (! $collaborate = $DB->get_record('collaborate', array('id' => $id))) {
+    if (! $collaborate = $DB->get_record('collaborate', ['id' => $id])) {
         return false;
     }
 
@@ -208,7 +210,7 @@ function collaborate_delete_instance($id) {
     sessionlink::delete_sessions($id);
 
     // Delete main record.
-    $DB->delete_records('collaborate', array('id' => $id));
+    $DB->delete_records('collaborate', ['id' => $id]);
 
     // Delete the recording counts info.
     $DB->delete_records('collaborate_recording_info', ['instanceid' => $id]);
@@ -231,9 +233,10 @@ function collaborate_delete_instance($id) {
  *
  * @param stdClass $course The course record
  * @param stdClass $user The user record
- * @param cm_info|stdClass $mod The course module info object or record
- * @param stdClass $collaborate The collaborate instance record
- * @return stdClass|null
+ * @param cm_info | stdClass $mod The course module info object or record
+ * @param stdClass $collaborate The Collaborate instance record
+ *
+ * @return stdClass | null
  */
 function collaborate_user_outline($course, $user, $mod, $collaborate) {
 
@@ -243,21 +246,22 @@ function collaborate_user_outline($course, $user, $mod, $collaborate) {
     return $return;
 }
 
-
 /* Gradebook API */
 
 /**
- * Checks if scale is being used by any instance of collaborate.
+ * Checks if scale is being used by any instance of Collaborate.
  *
  * This is used to find out if scale used anywhere.
  *
  * @param int $scaleid ID of the scale
- * @return boolean true if the scale is used by any collaborate instance
+ *
+ * @return boolean true if the scale is used by any Collaborate instance
+ * @throws dml_exception
  */
 function collaborate_scale_used_anywhere($scaleid) {
     global $DB;
 
-    if ($scaleid and $DB->record_exists('collaborate', array('grade' => -$scaleid))) {
+    if ($scaleid && $DB->record_exists('collaborate', ['grade' => -$scaleid])) {
         return true;
     } else {
         return false;
@@ -265,19 +269,21 @@ function collaborate_scale_used_anywhere($scaleid) {
 }
 
 /**
- * Creates or updates grade item for the given collaborate instance
+ * Creates or updates grade item for the given Collaborate instance.
  *
  * Needed by {@link grade_update_mod_grades()}.
  *
  * @param stdClass $collaborate instance object with extra cmidnumber and modname property
  * @param bool $reset reset grades in the gradebook
+ *
  * @return void
+ * @throws coding_exception
  */
 function collaborate_grade_item_update(stdClass $collaborate, $reset=false) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
-    $item = array();
+    $item = [];
     $item['itemname'] = clean_param($collaborate->name, PARAM_NOTAGS);
     $item['gradetype'] = GRADE_TYPE_VALUE;
 
@@ -301,23 +307,37 @@ function collaborate_grade_item_update(stdClass $collaborate, $reset=false) {
 }
 
 /**
- * Delete grade item for given collaborate instance
+ * Updates grade(s) for the given Collaborate instance and supplied user.
+ *
+ * @param stdClass $collaborate Collaborate instance
+ * @param int $userid User ID for grade updates
+ * @param bool $nullifnone If a single user is specified and $nullifnone is
+ *                         true, a grade item with a null rawgrade will be
+ *                         inserted if the user has no existing grade
+ */
+function collaborate_update_grades(stdClass $collaborate, int $userid = 0, bool $nullifnone = true) {
+    // To be reviewed in INT-19474.
+}
+
+/**
+ * Delete grade item for given Collaborate instance.
  *
  * @param stdClass $collaborate instance object
- * @return grade_item
+ *
+ * @return int Grade Update status
  */
-function collaborate_grade_item_delete($collaborate) {
+function collaborate_grade_item_delete(stdClass $collaborate) {
     global $CFG;
     require_once($CFG->libdir.'/gradelib.php');
 
     return grade_update('mod/collaborate', $collaborate->course, 'mod', 'collaborate',
-            $collaborate->id, 0, null, array('deleted' => 1));
+            $collaborate->id, 0, null, ['deleted' => 1]);
 }
 
 /* File API */
 
 /**
- * Returns the lists of all browsable file areas within the given module context
+ * Returns the lists of all browsable file areas within the given module context.
  *
  * The file area 'intro' for the activity introduction field is added automatically
  * by {@link file_browser::get_file_info_context_module()}
@@ -325,14 +345,15 @@ function collaborate_grade_item_delete($collaborate) {
  * @param stdClass $course
  * @param stdClass $cm
  * @param stdClass $context
+ *
  * @return array of [(string)filearea] => (string)description
  */
 function collaborate_get_file_areas($course, $cm, $context) {
-    return array();
+    return [];
 }
 
 /**
- * File browsing support for collaborate file areas
+ * File browsing support for Collaborate file areas.
  *
  * @package mod_collaborate
  * @category files
@@ -346,27 +367,29 @@ function collaborate_get_file_areas($course, $cm, $context) {
  * @param int $itemid
  * @param string $filepath
  * @param string $filename
- * @return file_info instance or null if not found
+ *
+ * @return file_info | null instance or null if not found
  */
 function collaborate_get_file_info($browser, $areas, $course, $cm, $context, $filearea, $itemid, $filepath, $filename) {
     return null;
 }
 
 /**
- * Serves the files from the collaborate file areas
- *
- * @package mod_collaborate
- * @category files
+ * Serves the files from the Collaborate file areas.
  *
  * @param stdClass $course the course object
  * @param stdClass $cm the course module object
- * @param stdClass $context the collaborate's context
+ * @param stdClass $context the Collaborate's context
  * @param string $filearea the name of the file area
  * @param array $args extra arguments (itemid, path)
  * @param bool $forcedownload whether or not force download
  * @param array $options additional options affecting the file serving
+ *
+ * @throws moodle_exception
+ * @package mod_collaborate
+ * @category files
  */
-function collaborate_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=array()) {
+function collaborate_pluginfile($course, $cm, $context, $filearea, array $args, $forcedownload, array $options=[]) {
     if ($context->contextlevel != CONTEXT_MODULE) {
         send_file_not_found();
     }
@@ -380,12 +403,13 @@ function collaborate_pluginfile($course, $cm, $context, $filearea, array $args, 
  * Collaborate course module info - meeting times.
  *
  * @param cm_info $cm
+ * @throws dml_exception
  */
 function collaborate_cm_info_view(cm_info $cm) {
     global $PAGE, $DB;
     $renderer = $PAGE->get_renderer('mod_collaborate');
 
-    $hideduration = $DB->get_field('collaborate', 'hideduration', array('id' => $cm->instance));
+    $hideduration = $DB->get_field('collaborate', 'hideduration', ['id' => $cm->instance]);
     if (empty($hideduration)) {
         $times = local::get_times($cm->instance);
         $o = html_writer::tag('span', $renderer->meeting_times($times), ['class' => 'label label-info']);
@@ -394,13 +418,15 @@ function collaborate_cm_info_view(cm_info $cm) {
 }
 
 /**
- * Print recent activity from all collaborate instances in a given course
+ * Print recent activity from all Collaborate instances in a given course
  *
  * This is used by course/recent.php
  * @param stdClass $activity
  * @param int $courseid
  * @param bool $detail
  * @param array $modnames
+ *
+ * @throws dml_exception
  */
 function collaborate_print_recent_mod_activity($activity, $courseid, $detail, $modnames) {
     global $PAGE;
@@ -415,16 +441,17 @@ function collaborate_print_recent_mod_activity($activity, $courseid, $detail, $m
 }
 
 /**
- * Returns all collaborate instances since a given time.
+ * Returns all Collaborate instances since a given time.
  *
  * @param array $activities The activity information is returned in this array
  * @param int $index The current index in the activities array
  * @param int $timestart The earliest activity to show
  * @param int $courseid Limit the search to this course
- * @param int $cmid The course module id
- * @param int $userid Optional user id
- * @param int $groupid Optional group id
- * @return void
+ * @param int $cmid The course module ID
+ * @param int $userid Optional user ID
+ * @param int $groupid Optional group ID
+ *
+ * @throws dml_exception | moodle_exception
  */
 function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid,
                                              $cmid, $userid=0, $groupid=0) {
@@ -447,12 +474,12 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
     $cmcontext = context_module::instance($cmid);
 
     $select = "courseid = :courseid AND eventname = :eventname AND objectid = :objectid AND timecreated > :since";
-    $params = array(
+    $params = [
         'since' => $timestart,
         'objectid'     => $cminfo->instance,
         'courseid'     => $courseid,
-        'eventname'    => '\mod_collaborate\event\session_launched'
-    );
+        'eventname'    => '\mod_collaborate\event\session_launched',
+    ];
 
     if (!empty($userid)) {
         $select .= ' AND userid = :userid';
@@ -504,5 +531,4 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
         $activity->grade        = null;
         $activities[$index++]   = $activity;
     }
-
 }
