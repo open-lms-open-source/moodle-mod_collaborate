@@ -174,7 +174,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         // Guest url.
         $guesturls = $viewaction->get_guest_urls();
-        $usetabs = $guesturls and $canmoderate;
+        $usetabs = $guesturls && $canmoderate;
 
         $times = local::get_times($collaborate);
         $o .= '<div class="container">
