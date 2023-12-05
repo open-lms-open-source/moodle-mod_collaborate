@@ -257,7 +257,7 @@ function collaborate_user_outline($course, $user, $mod, $collaborate) {
 function collaborate_scale_used_anywhere($scaleid) {
     global $DB;
 
-    if ($scaleid and $DB->record_exists('collaborate', array('grade' => -$scaleid))) {
+    if ($scaleid && $DB->record_exists('collaborate', array('grade' => -$scaleid))) {
         return true;
     } else {
         return false;

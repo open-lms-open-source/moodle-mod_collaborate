@@ -117,7 +117,7 @@ class recording_counter {
         $numrecordings = count($this->recordings);
         // Try the cache first.
         $counts = $this->cache->get($this->cm->instance);
-        if (empty($counts) or (count($counts) != $numrecordings)) {
+        if (empty($counts) || (count($counts) != $numrecordings)) {
             // Miss on the cache, query for the counts.
             $counts = $this->query_counts();
 

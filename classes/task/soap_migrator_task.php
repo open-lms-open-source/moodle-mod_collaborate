@@ -204,12 +204,12 @@ class soap_migrator_task extends adhoc_task {
      */
     public function handle_migration_records($dataobjects) {
         global $DB;
-        if (!is_array($dataobjects) and !($dataobjects instanceof Traversable)) {
+        if (!is_array($dataobjects) && !($dataobjects instanceof Traversable)) {
             throw new \coding_exception('records passed are non-traversable object');
         }
 
         foreach ($dataobjects as $dataobject) {
-            if (!is_array($dataobject) and !is_object($dataobject)) {
+            if (!is_array($dataobject) && !is_object($dataobject)) {
                 throw new \coding_exception('record passed is invalid');
             }
             $dataobject->sessionid = $dataobject->sId;
