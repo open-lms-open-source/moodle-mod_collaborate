@@ -19,7 +19,7 @@ namespace mod_collaborate\logging;
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
-use \Psr\Log as log;
+use Psr\Log as log;
 
 /**
  * Define database logging class.
