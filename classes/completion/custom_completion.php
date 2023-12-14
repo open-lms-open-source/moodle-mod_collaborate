@@ -88,7 +88,7 @@ class custom_completion extends activity_custom_completion {
         return [
             'completionusegrade',
             'completionview',
-            'completionlaunch'
+            'completionlaunch',
         ];
     }
 }

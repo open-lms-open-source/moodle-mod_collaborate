@@ -53,7 +53,7 @@ class jwthelper {
             $payload = [
                 'iss' => $key,
                 'sub' => $key,
-                'exp' => $exp
+                'exp' => $exp,
             ];
 
             try {

@@ -152,7 +152,7 @@ if ($ADMIN->fulltree) {
     $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
         'server'   => $config->server,
         'username' => $config->username,
-        'password' => $config->password
+        'password' => $config->password,
     ] : false;
 
     $testsoapcredentials = $soapconfig ? local::api_verified(true, $soapconfig) : false;

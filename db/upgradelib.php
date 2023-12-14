@@ -66,7 +66,7 @@ class collaborate_update_manager {
                 if (!$slrow) {
                     $DB->insert_record('collaborate_sessionlink', (object) [
                         'collaborateid' => $row->instanceid,
-                        'sessionid' => $instance->sessionid
+                        'sessionid' => $instance->sessionid,
                     ]);
                     $slrow = $DB->get_record('collaborate_sessionlink', ['sessionid' => $instance->sessionid]);
                     if (!$slrow) {

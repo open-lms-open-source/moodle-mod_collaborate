@@ -279,7 +279,7 @@ class fakeapi extends api {
             $parameters->getHtmlAttendees(),
             $parameters->getCreatorId(),
             true
-        )]);
+        ), ]);
         $this->setobject($ret->getHtmlSession()[0], $fakeid);
         return $ret;
     }

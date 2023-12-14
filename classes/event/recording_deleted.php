@@ -56,7 +56,7 @@ class recording_deleted extends base {
             'c' => $this->contextinstanceid,
             'action' => 'delete_confirmation',
             'rid' => $this->other['recordingid'],
-            'rname' => $this->other['recordingname']
+            'rname' => $this->other['recordingname'],
         ));
         return $delurl;
     }

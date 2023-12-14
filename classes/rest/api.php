@@ -148,7 +148,7 @@ class api {
     private function set_accesstoken() {
         $data = [
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion' => jwthelper::get_token($this->config->restkey, $this->config->restsecret)
+            'assertion' => jwthelper::get_token($this->config->restkey, $this->config->restsecret),
         ];
 
         $this->logger->info('Getting access token with req data', $data);
@@ -209,7 +209,7 @@ class api {
             CURLOPT_CONNECTTIMEOUT => 15,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0
+            CURLOPT_SSL_VERIFYPEER => 0,
         ];
         $curl = new \curl();
         $curl->setopt($options);
@@ -393,7 +393,7 @@ class api {
             "canShareAudio" => $canshareaudio,
             "largeSessionEnable" => $largesessionenable,
             "startTime" => $timestart,
-            "modified" => $now
+            "modified" => $now,
         ];
 
         if (!empty($guestrole)) {
@@ -513,7 +513,7 @@ class api {
             "displayName" => $displayname,
             "extId" => $userid,
             "created" => $this->api_datetime(time()),
-            "modified" => $this->api_datetime(time())
+            "modified" => $this->api_datetime(time()),
         ];
         $reqopts = new requestoptions(json_encode($user));
         $this->rest_call(self::POST, '/users', $reqopts);
@@ -573,7 +573,7 @@ class api {
             "avatarUrl" => $avatarurl,
             "displayName" => $displayname,
             "extId" => $userid,
-            "modified" => $this->api_datetime(time())
+            "modified" => $this->api_datetime(time()),
         ];
         $reqops = new requestoptions(json_encode($update), ['userId' => $collaborateuserid]);
         $response = $this->rest_call(self::PUT, '/users/{userId}', $reqops);
@@ -601,7 +601,7 @@ class api {
         $enrollobj = (object) [
             "launchingRole" => $role,
             "editingPermission" => $role === 'moderator' ? 'writer' : 'reader',
-            "userId" => $collabuserid
+            "userId" => $collabuserid,
         ];
         if (!$enrollment) {
             // Enrolllment does not exist!
@@ -786,7 +786,7 @@ class api {
         $data = [
             'grant_type' => 'password',
             'username' => get_config('collaborate', 'username'),
-            'password' => get_config('collaborate', 'password')
+            'password' => get_config('collaborate', 'password'),
         ];
 
         $this->logger->info('Getting access migration token with req data', $data);
@@ -925,13 +925,13 @@ class api {
         $soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
             'server'   => $config->server,
             'username' => $config->username,
-            'password' => $config->password
+            'password' => $config->password,
         ] : false;
 
         $restconfig = !empty($config->restkey) && !empty($config->username) && !empty($config->password) ? (object) [
             'restserver'   => $config->restserver,
             'restkey' => $config->restkey,
-            'restsecret' => $config->restsecret
+            'restsecret' => $config->restsecret,
         ] : false;
 
         $testsoapcredentials = $soapconfig ? local::api_verified(true, $soapconfig) : false;

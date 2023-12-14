@@ -127,7 +127,7 @@ class behat_mod_collaborate extends behat_base {
                 'starttime' => $starttime,
                 'endtime' => $endtime,
                 'name' => null,
-                'group' => null
+                'group' => null,
             ];
 
             $row = (object) array_replace($rowdefaults, $row);
@@ -163,7 +163,7 @@ class behat_mod_collaborate extends behat_base {
             $this->execute('behat_general::assert_element_contains_text', [
                     '(Duration of course)',
                     '.path-mod-collaborate__meetingstatus_times',
-                    'css_element'
+                    'css_element',
                 ]
             );
             return;
