@@ -120,12 +120,12 @@ class sessionlink {
             $sessionlink->groupid = null;
             $existinglink = $DB->get_record('collaborate_sessionlink', [
                 'collaborateid' => $collaborate->id,
-                'groupid' => null
+                'groupid' => null,
             ]);
         } else {
             $existinglink = $DB->get_record('collaborate_sessionlink', [
                 'collaborateid' => $collaborate->id,
-                'groupid' => $sessionlink->groupid
+                'groupid' => $sessionlink->groupid,
             ]);
         }
         return $existinglink;
@@ -204,12 +204,12 @@ class sessionlink {
     public static function get_group_session_link($collaborate, $groupid) {
         global $DB;
         $sessionlink = $DB->get_record('collaborate_sessionlink', [
-            'collaborateid' => $collaborate->id, 'groupid' => $groupid
+            'collaborateid' => $collaborate->id, 'groupid' => $groupid,
         ]);
         if (!$sessionlink) {
             $newsessionlink = (object) [
                 'collaborateid' => $collaborate->id,
-                'groupid' => $groupid
+                'groupid' => $groupid,
             ];
             $course = get_course($collaborate->course);
             $sessionlink = self::ensure_session_link($collaborate, $newsessionlink, $course);
@@ -223,7 +223,7 @@ class sessionlink {
         local::prepare_sessionids_for_query($collaborate);
         $sessionlink = (object) [
             'collaborateid' => $collaborate->id,
-            'groupid' => null
+            'groupid' => null,
         ];
         if (!empty($collaborate->sessionid)) {
             $sessionlink->sessionid = $collaborate->sessionid;
@@ -238,7 +238,7 @@ class sessionlink {
             foreach ($groups as $group) {
                 $sessionlink = (object) [
                     'collaborateid' => $collaborate->id,
-                    'groupid' => $group->id
+                    'groupid' => $group->id,
                 ];
                 self::ensure_session_link($collaborate, $sessionlink, $course);
             }
@@ -276,7 +276,7 @@ class sessionlink {
             $sessionlink = (object) [
                 'collaborateid' => $collaborate->id,
                 'sessionuid' => $collaborate->sessionuid,
-                'groupid' => null
+                'groupid' => null,
             ];
             self::ensure_session_link($collaborate, $sessionlink, $course);
             if ($groupmode > NOGROUPS) {
@@ -285,7 +285,7 @@ class sessionlink {
                 foreach ($groups as $group) {
                     $sessionlink = (object) [
                         'collaborateid' => $collaborate->id,
-                        'groupid' => $group->id
+                        'groupid' => $group->id,
                     ];
                     self::ensure_session_link($collaborate, $sessionlink, $course);
                 }

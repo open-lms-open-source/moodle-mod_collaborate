@@ -52,13 +52,13 @@ class soap_migrator_task extends adhoc_task {
         $this->soapconfig = !empty($config->server) && !empty($config->username) && !empty($config->password) ? (object) [
             'server'   => $config->server,
             'username' => $config->username,
-            'password' => $config->password
+            'password' => $config->password,
         ] : false;
 
         $this->restconfig = !empty($config->restserver) && !empty($config->restkey) && !empty($config->restsecret) ? (object) [
             'restserver'   => $config->restserver,
             'restkey' => $config->restkey,
-            'restsecret' => $config->restsecret
+            'restsecret' => $config->restsecret,
         ] : false;
 
         $testsoapcredentials = $this->soapconfig ? local::api_verified(true, $this->soapconfig) : false;

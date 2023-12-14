@@ -139,7 +139,7 @@ class meetingstatus implements \renderable, \templatable {
             // This can already be inferred by the title and times.
         } else {
             $this->statusmeetingtimepassed = (object) [
-                'message' => get_string('meetingtimepast', 'mod_collaborate', $times)
+                'message' => get_string('meetingtimepast', 'mod_collaborate', $times),
             ];
         }
     }

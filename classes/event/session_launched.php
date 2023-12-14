@@ -86,7 +86,7 @@ class session_launched extends base {
      */
     protected function get_legacy_logdata() {
         return array($this->courseid, 'collaborate', 'launch', 'view.php?id=' . $this->contextinstanceid,
-                $this->other['session']);
+                $this->other['session'], );
     }
 
     /**

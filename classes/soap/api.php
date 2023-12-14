@@ -196,7 +196,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
                 'Service debugging not enabled in config',
                 'Service debugging not enabled in config',
                 'Service debugging not enabled in config',
-                'Service debugging not enabled in config'
+                'Service debugging not enabled in config',
             ];
         }
 
@@ -220,7 +220,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             $lastrequestheaders,
             $lastrequest,
             $lastresponseheaders,
-            $lastresponse
+            $lastresponse,
         ];
     }
 
@@ -250,7 +250,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
         $config = $this->config;
 
         $headerbody = array('Name' => $config->username,
-        'Password' => $config->password);
+        'Password' => $config->password, );
         $ns = 'http://sas.elluminate.com/';
         $header = new \SOAPHeader($ns, 'BasicAuth', $headerbody);
         $this->__setSoapHeaders($header);
@@ -265,7 +265,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
                 'request_headers' => $lreqheaders,
                 'request' => $lastreq,
                 'response_headers' => $lrespheaders,
-                'response' => $lastresp
+                'response' => $lastresp,
             ];
 
             $this->process_error('error:apifailure', constants::SEV_CRITICAL, $soapfault, $errorarr);
@@ -284,7 +284,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             'request_headers' => $lreqheaders,
             'request' => $lastreq,
             'response_headers' => $lrespheaders,
-            'response' => $lastresp]);
+            'response' => $lastresp, ]);
 
         return ($result);
     }

@@ -63,7 +63,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
         }
 
         return html_writer::tag('time', $visualtime, array(
-            'datetime' => date('c', $time))
+            'datetime' => date('c', $time), )
         );
     }
 
@@ -264,7 +264,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             foreach ($recordings as $recording) {
                 // It's necessary to always store recording IDs so deletions can be guaranteed (GDPR).
                 $recrecord = ['instanceid' => $collaborate->id, 'sessionlinkid' => $sessionlinkrow->id,
-                    'recordingid' => $recording->id, 'action' => recording_counter::STORE];
+                    'recordingid' => $recording->id, 'action' => recording_counter::STORE, ];
                 if (!$DB->record_exists('collaborate_recording_info', $recrecord)) {
                     $DB->insert_record('collaborate_recording_info', (object) $recrecord);
                 }
@@ -278,7 +278,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
                 $params = ['c' => $cm->instance, 'action' => 'view', 'rid' => $recording->id,
                     'url' => urlencode($recording->viewurl), 'sesskey' => sesskey(),
-                    'sessionlinkid' => $sessionlinkrow->id
+                    'sessionlinkid' => $sessionlinkrow->id,
                 ];
 
                 $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
@@ -293,7 +293,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 if (!empty($recording->downloadurl) && $showdownload) {
                     $params = ['c' => $cm->instance, 'action' => 'download', 'rid' => $recording->id,
                         'url' => urlencode($recording->downloadurl), 'sesskey' => sesskey(),
-                        'sessionlinkid' => $sessionlinkrow->id
+                        'sessionlinkid' => $sessionlinkrow->id,
                     ];
                     $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
                     $output .= '<a aria-label="' . s($downloadstr) . '" title="'.s($downloadstr).'"'.
@@ -303,7 +303,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 if (has_capability('mod/collaborate:deleterecordings', $cm->context)) {
                     $params = ['c' => $cm->instance, 'action' => 'view', 'rid' => $recording->id,
                         'url' => urlencode($recording->viewurl), 'sesskey' => sesskey(),
-                        'sessionlinkid' => $sessionlinkrow->id, 'action' => 'delete', 'rname' => $name
+                        'sessionlinkid' => $sessionlinkrow->id, 'action' => 'delete', 'rname' => $name,
                     ];
                     $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params);
 

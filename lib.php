@@ -451,7 +451,7 @@ function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, 
         'since' => $timestart,
         'objectid'     => $cminfo->instance,
         'courseid'     => $courseid,
-        'eventname'    => '\mod_collaborate\event\session_launched'
+        'eventname'    => '\mod_collaborate\event\session_launched',
     );
 
     if (!empty($userid)) {

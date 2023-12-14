@@ -89,7 +89,7 @@ class local {
         $times = (object) array(
             'start' => intval($collaborate->timestart),
             'end' => self::timeend_from_duration($collaborate->timestart, $collaborate->duration),
-            'duration' => $collaborate->duration
+            'duration' => $collaborate->duration,
         );
         return ($times);
     }
@@ -137,7 +137,7 @@ class local {
 
         $event->description = array(
             'text' => $intro,
-            'format' => $collaborate->introformat
+            'format' => $collaborate->introformat,
         );
 
         if ($event->id) {
@@ -472,7 +472,7 @@ class local {
             'objectid' => intval($cm->instance),
             'other' => [
                 'recordingid' => $recordingid,
-                'recordingname' => $recordingname
+                'recordingname' => $recordingname,
             ],
         ];
         $event = recording_deleted::create($data);
@@ -513,7 +513,7 @@ class local {
         // Update collaborate record with guest url.
         $record = (object) [
             'id' => $collaborate->id,
-            'guesturl' => $url
+            'guesturl' => $url,
         ];
         $DB->update_record('collaborate', $record);
 
@@ -552,7 +552,7 @@ class local {
     public static function entitydecode($text) {
         $otherentities = array (
             '&apos;' => '\'',
-            '&nbsp;' => ' '
+            '&nbsp;' => ' ',
         );
         return html_entity_decode(strtr($text, $otherentities), ENT_QUOTES, 'UTF-8');
     }

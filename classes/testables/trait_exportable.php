@@ -38,7 +38,7 @@ class trait_exportable {
     public function __construct() {
         $this->arr = [
             300 => (object) ['url' => new \moodle_url('/profile.php'), 'name' => 'profile'],
-            400 => (object) ['url' => new \moodle_url('/my'), 'name' => 'dashboard']
+            400 => (object) ['url' => new \moodle_url('/my'), 'name' => 'dashboard'],
         ];
     }
 }
