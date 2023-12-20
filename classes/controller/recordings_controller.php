@@ -141,7 +141,7 @@ class recordings_controller extends controller_abstract {
         }
 
         $record = ['instanceid' => $this->collaborate->id, 'sessionlinkid' => $sessionlinkid,
-                'recordingid' => $recordingid, 'action' => $actionint];
+                'recordingid' => $recordingid, 'action' => $actionint, ];
         $DB->insert_record('collaborate_recording_info', (object) $record);
 
         // Trigger the event.
@@ -194,7 +194,7 @@ class recordings_controller extends controller_abstract {
             'c' => $this->cm->instance,
             'rid' => $recordingid,
             'rname' => $recordingname,
-            'sesskey' => sesskey()
+            'sesskey' => sesskey(),
         ];
 
         $PAGE->set_url('/mod/collaborate/recordings.php', $baseparams + ['action' => 'delete']);
@@ -225,7 +225,7 @@ class recordings_controller extends controller_abstract {
             'c' => $this->cm->id,
             'action' => 'delete_confirmation',
             'rid' => $recordingid,
-            'rname' => $recordingname
+            'rname' => $recordingname,
         ));
 
         local::delete_recording($recordingid, $recordingname, $this->cm);

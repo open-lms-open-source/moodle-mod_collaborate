@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class ListHtmlSession
-{
+class ListHtmlSession {
 
     /**
      * @var string $userId
@@ -62,151 +61,136 @@ class ListHtmlSession
     protected $name = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return string
      */
-    public function getUserId()
-    {
-      return $this->userId;
+    public function getUserId() {
+        return $this->userId;
     }
 
     /**
      * @param string $userId
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setUserId($userId)
-    {
-      $this->userId = $userId;
-      return $this;
+    public function setUserId($userId) {
+        $this->userId = $userId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getGroupingId()
-    {
-      return $this->groupingId;
+    public function getGroupingId() {
+        return $this->groupingId;
     }
 
     /**
      * @param string $groupingId
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setGroupingId($groupingId)
-    {
-      $this->groupingId = $groupingId;
-      return $this;
+    public function setGroupingId($groupingId) {
+        $this->groupingId = $groupingId;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
-      return $this->sessionId;
+    public function getSessionId() {
+        return $this->sessionId;
     }
 
     /**
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setSessionId($sessionId)
-    {
-      $this->sessionId = $sessionId;
-      return $this;
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getCreatorId()
-    {
-      return $this->creatorId;
+    public function getCreatorId() {
+        return $this->creatorId;
     }
 
     /**
      * @param string $creatorId
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setCreatorId($creatorId)
-    {
-      $this->creatorId = $creatorId;
-      return $this;
+    public function setCreatorId($creatorId) {
+        $this->creatorId = $creatorId;
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+    public function getStartTime() {
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setStartTime(\DateTime $startTime)
-    {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setStartTime(\DateTime $startTime) {
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getEndTime()
-    {
-      if ($this->endTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->endTime);
-        } catch (\Exception $e) {
-          return false;
+    public function getEndTime() {
+        if ($this->endTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->endTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $endTime
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setEndTime(\DateTime $endTime)
-    {
-      $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setEndTime(\DateTime $endTime) {
+        $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getName()
-    {
-      return $this->name;
+    public function getName() {
+        return $this->name;
     }
 
     /**
      * @param string $name
      * @return \mod_collaborate\soap\generated\ListHtmlSession
      */
-    public function setName($name)
-    {
-      $this->name = $name;
-      return $this;
+    public function setName($name) {
+        $this->name = $name;
+        return $this;
     }
 
 }

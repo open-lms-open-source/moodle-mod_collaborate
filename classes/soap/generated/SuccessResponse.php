@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class SuccessResponse
-{
+class SuccessResponse {
 
     /**
      * @var boolean $success
@@ -34,27 +33,24 @@ class SuccessResponse
     /**
      * @param boolean $success
      */
-    public function __construct($success)
-    {
-      $this->success = $success;
+    public function __construct($success) {
+        $this->success = $success;
     }
 
     /**
      * @return boolean
      */
-    public function getSuccess()
-    {
-      return $this->success;
+    public function getSuccess() {
+        return $this->success;
     }
 
     /**
      * @param boolean $success
      * @return \mod_collaborate\soap\generated\SuccessResponse
      */
-    public function setSuccess($success)
-    {
-      $this->success = $success;
-      return $this;
+    public function setSuccess($success) {
+        $this->success = $success;
+        return $this;
     }
 
 }

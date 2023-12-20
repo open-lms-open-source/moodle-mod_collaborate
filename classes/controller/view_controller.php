@@ -115,7 +115,7 @@ class view_controller extends controller_abstract {
         $PAGE->set_heading(format_string($this->course->fullname));
         $PAGE->set_url('/mod/collaborate/view.php', array(
             'id' => $PAGE->cm->id,
-            'action'    => 'view'
+            'action'    => 'view',
         ));
 
         // We get the content of the page before we output the header - otherwise set_module_viewed does not work.

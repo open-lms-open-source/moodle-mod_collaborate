@@ -28,5 +28,5 @@ $definitions = [
     'recordingcounts' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
-    ]
+    ],
 ];

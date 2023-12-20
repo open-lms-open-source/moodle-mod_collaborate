@@ -30,7 +30,7 @@ class  trait_exportable_test extends \advanced_testcase {
         $array = [
             200 => 'a',
             300 => 'b',
-            400 => 'c'
+            400 => 'c',
         ];
         $expected = true;
         $actual = $object->array_keys_numeric($array);
@@ -39,7 +39,7 @@ class  trait_exportable_test extends \advanced_testcase {
         $array = [
             'one' => 'a',
             'two' => 'b',
-            'three' => 'c'
+            'three' => 'c',
         ];
         $expected = false;
         $actual = $object->array_keys_numeric($array);

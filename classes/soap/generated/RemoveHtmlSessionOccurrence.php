@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class RemoveHtmlSessionOccurrence
-{
+class RemoveHtmlSessionOccurrence {
 
     /**
      * @var int $occurrenceId
@@ -34,27 +33,24 @@ class RemoveHtmlSessionOccurrence
     /**
      * @param int $occurrenceId
      */
-    public function __construct($occurrenceId)
-    {
-      $this->occurrenceId = $occurrenceId;
+    public function __construct($occurrenceId) {
+        $this->occurrenceId = $occurrenceId;
     }
 
     /**
      * @return int
      */
-    public function getOccurrenceId()
-    {
-      return $this->occurrenceId;
+    public function getOccurrenceId() {
+        return $this->occurrenceId;
     }
 
     /**
      * @param int $occurrenceId
      * @return \mod_collaborate\soap\generated\RemoveHtmlSessionOccurrence
      */
-    public function setOccurrenceId($occurrenceId)
-    {
-      $this->occurrenceId = $occurrenceId;
-      return $this;
+    public function setOccurrenceId($occurrenceId) {
+        $this->occurrenceId = $occurrenceId;
+        return $this;
     }
 
 }

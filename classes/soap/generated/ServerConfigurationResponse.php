@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class ServerConfigurationResponse
-{
+class ServerConfigurationResponse {
 
     /**
      * @var int $boundaryTime
@@ -76,160 +75,143 @@ class ServerConfigurationResponse
      * @param boolean $mustReserveSeats
      * @param string $timeZone
      */
-    public function __construct($boundaryTime, $maxAvailableTalkers, $maxAvailableCameras, $raiseHandOnEnter, $mayUseTelephony, $mayUseSecureSignOn, $mustReserveSeats, $timeZone)
-    {
-      $this->boundaryTime = $boundaryTime;
-      $this->maxAvailableTalkers = $maxAvailableTalkers;
-      $this->maxAvailableCameras = $maxAvailableCameras;
-      $this->raiseHandOnEnter = $raiseHandOnEnter;
-      $this->mayUseTelephony = $mayUseTelephony;
-      $this->mayUseSecureSignOn = $mayUseSecureSignOn;
-      $this->mustReserveSeats = $mustReserveSeats;
-      $this->timeZone = $timeZone;
+    public function __construct($boundaryTime, $maxAvailableTalkers, $maxAvailableCameras, $raiseHandOnEnter, $mayUseTelephony, $mayUseSecureSignOn, $mustReserveSeats, $timeZone) {
+        $this->boundaryTime = $boundaryTime;
+        $this->maxAvailableTalkers = $maxAvailableTalkers;
+        $this->maxAvailableCameras = $maxAvailableCameras;
+        $this->raiseHandOnEnter = $raiseHandOnEnter;
+        $this->mayUseTelephony = $mayUseTelephony;
+        $this->mayUseSecureSignOn = $mayUseSecureSignOn;
+        $this->mustReserveSeats = $mustReserveSeats;
+        $this->timeZone = $timeZone;
     }
 
     /**
      * @return int
      */
-    public function getBoundaryTime()
-    {
-      return $this->boundaryTime;
+    public function getBoundaryTime() {
+        return $this->boundaryTime;
     }
 
     /**
      * @param int $boundaryTime
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setBoundaryTime($boundaryTime)
-    {
-      $this->boundaryTime = $boundaryTime;
-      return $this;
+    public function setBoundaryTime($boundaryTime) {
+        $this->boundaryTime = $boundaryTime;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getMaxAvailableTalkers()
-    {
-      return $this->maxAvailableTalkers;
+    public function getMaxAvailableTalkers() {
+        return $this->maxAvailableTalkers;
     }
 
     /**
      * @param int $maxAvailableTalkers
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMaxAvailableTalkers($maxAvailableTalkers)
-    {
-      $this->maxAvailableTalkers = $maxAvailableTalkers;
-      return $this;
+    public function setMaxAvailableTalkers($maxAvailableTalkers) {
+        $this->maxAvailableTalkers = $maxAvailableTalkers;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getMaxAvailableCameras()
-    {
-      return $this->maxAvailableCameras;
+    public function getMaxAvailableCameras() {
+        return $this->maxAvailableCameras;
     }
 
     /**
      * @param int $maxAvailableCameras
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMaxAvailableCameras($maxAvailableCameras)
-    {
-      $this->maxAvailableCameras = $maxAvailableCameras;
-      return $this;
+    public function setMaxAvailableCameras($maxAvailableCameras) {
+        $this->maxAvailableCameras = $maxAvailableCameras;
+        return $this;
     }
 
     /**
      * @return boolean
      */
-    public function getRaiseHandOnEnter()
-    {
-      return $this->raiseHandOnEnter;
+    public function getRaiseHandOnEnter() {
+        return $this->raiseHandOnEnter;
     }
 
     /**
      * @param boolean $raiseHandOnEnter
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setRaiseHandOnEnter($raiseHandOnEnter)
-    {
-      $this->raiseHandOnEnter = $raiseHandOnEnter;
-      return $this;
+    public function setRaiseHandOnEnter($raiseHandOnEnter) {
+        $this->raiseHandOnEnter = $raiseHandOnEnter;
+        return $this;
     }
 
     /**
      * @return boolean
      */
-    public function getMayUseTelephony()
-    {
-      return $this->mayUseTelephony;
+    public function getMayUseTelephony() {
+        return $this->mayUseTelephony;
     }
 
     /**
      * @param boolean $mayUseTelephony
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMayUseTelephony($mayUseTelephony)
-    {
-      $this->mayUseTelephony = $mayUseTelephony;
-      return $this;
+    public function setMayUseTelephony($mayUseTelephony) {
+        $this->mayUseTelephony = $mayUseTelephony;
+        return $this;
     }
 
     /**
      * @return boolean
      */
-    public function getMayUseSecureSignOn()
-    {
-      return $this->mayUseSecureSignOn;
+    public function getMayUseSecureSignOn() {
+        return $this->mayUseSecureSignOn;
     }
 
     /**
      * @param boolean $mayUseSecureSignOn
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMayUseSecureSignOn($mayUseSecureSignOn)
-    {
-      $this->mayUseSecureSignOn = $mayUseSecureSignOn;
-      return $this;
+    public function setMayUseSecureSignOn($mayUseSecureSignOn) {
+        $this->mayUseSecureSignOn = $mayUseSecureSignOn;
+        return $this;
     }
 
     /**
      * @return boolean
      */
-    public function getMustReserveSeats()
-    {
-      return $this->mustReserveSeats;
+    public function getMustReserveSeats() {
+        return $this->mustReserveSeats;
     }
 
     /**
      * @param boolean $mustReserveSeats
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setMustReserveSeats($mustReserveSeats)
-    {
-      $this->mustReserveSeats = $mustReserveSeats;
-      return $this;
+    public function setMustReserveSeats($mustReserveSeats) {
+        $this->mustReserveSeats = $mustReserveSeats;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getTimeZone()
-    {
-      return $this->timeZone;
+    public function getTimeZone() {
+        return $this->timeZone;
     }
 
     /**
      * @param string $timeZone
      * @return \mod_collaborate\soap\generated\ServerConfigurationResponse
      */
-    public function setTimeZone($timeZone)
-    {
-      $this->timeZone = $timeZone;
-      return $this;
+    public function setTimeZone($timeZone) {
+        $this->timeZone = $timeZone;
+        return $this;
     }
 
 }

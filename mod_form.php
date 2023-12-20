@@ -103,7 +103,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
             (HOURSECS * 1.5)        => get_string('hourminutes', 'mod_collaborate', (object) ['hours' => 1, 'minutes' => 30]),
             (HOURSECS * 2)          => get_string('hours', 'mod_collaborate', 2),
             (HOURSECS * 2.5)        => get_string('hoursminutes', 'mod_collaborate', (object) ['hours' => 2, 'minutes' => 30]),
-            local::DURATIONOFCOURSE => get_string('openended', 'mod_collaborate')
+            local::DURATIONOFCOURSE => get_string('openended', 'mod_collaborate'),
         ];
         $mform->addElement('select', 'duration', get_string('duration', 'mod_collaborate'), $options);
         $mform->setDefault('duration', HOURSECS);
@@ -120,7 +120,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $options = [
             'pa'  => get_string('participant', 'mod_collaborate'),
             'pr'  => get_string('presenter', 'mod_collaborate'),
-            'mo'  => get_string('moderator', 'mod_collaborate')
+            'mo'  => get_string('moderator', 'mod_collaborate'),
         ];
         $mform->addElement('select', 'guestrole', get_string('guestrole', 'mod_collaborate'), $options);
         $mform->setDefault('guestrole', 'pr');

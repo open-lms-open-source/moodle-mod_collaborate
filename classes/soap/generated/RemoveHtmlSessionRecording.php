@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class RemoveHtmlSessionRecording
-{
+class RemoveHtmlSessionRecording {
 
     /**
      * @var int $recordingId
@@ -34,27 +33,24 @@ class RemoveHtmlSessionRecording
     /**
      * @param int $recordingId
      */
-    public function __construct($recordingId)
-    {
-      $this->recordingId = $recordingId;
+    public function __construct($recordingId) {
+        $this->recordingId = $recordingId;
     }
 
     /**
      * @return int
      */
-    public function getRecordingId()
-    {
-      return $this->recordingId;
+    public function getRecordingId() {
+        return $this->recordingId;
     }
 
     /**
      * @param int $recordingId
      * @return \mod_collaborate\soap\generated\RemoveHtmlSessionRecording
      */
-    public function setRecordingId($recordingId)
-    {
-      $this->recordingId = $recordingId;
-      return $this;
+    public function setRecordingId($recordingId) {
+        $this->recordingId = $recordingId;
+        return $this;
     }
 
 }

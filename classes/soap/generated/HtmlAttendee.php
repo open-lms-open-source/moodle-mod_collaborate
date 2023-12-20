@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlAttendee
-{
+class HtmlAttendee {
 
     /**
      * @var string $userId
@@ -55,100 +54,89 @@ class HtmlAttendee
      * @param string $userId
      * @param string $role
      */
-    public function __construct($userId, $role)
-    {
-      $this->userId = $userId;
-      $this->role = $role;
+    public function __construct($userId, $role) {
+        $this->userId = $userId;
+        $this->role = $role;
     }
 
     /**
      * @return string
      */
-    public function getUserId()
-    {
-      return $this->userId;
+    public function getUserId() {
+        return $this->userId;
     }
 
     /**
      * @param string $userId
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setUserId($userId)
-    {
-      $this->userId = $userId;
-      return $this;
+    public function setUserId($userId) {
+        $this->userId = $userId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getRole()
-    {
-      return $this->role;
+    public function getRole() {
+        return $this->role;
     }
 
     /**
      * @param string $role
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setRole($role)
-    {
-      $this->role = $role;
-      return $this;
+    public function setRole($role) {
+        $this->role = $role;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getDisplayName()
-    {
-      return $this->displayName;
+    public function getDisplayName() {
+        return $this->displayName;
     }
 
     /**
      * @param string $displayName
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setDisplayName($displayName)
-    {
-      $this->displayName = $displayName;
-      return $this;
+    public function setDisplayName($displayName) {
+        $this->displayName = $displayName;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getAvatarUrl()
-    {
-      return $this->avatarUrl;
+    public function getAvatarUrl() {
+        return $this->avatarUrl;
     }
 
     /**
      * @param string $avatarUrl
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setAvatarUrl($avatarUrl)
-    {
-      $this->avatarUrl = $avatarUrl;
-      return $this;
+    public function setAvatarUrl($avatarUrl) {
+        $this->avatarUrl = $avatarUrl;
+        return $this;
     }
 
     /**
      * @return HtmlAttendeeLogCollection[]
      */
-    public function getHtmlAttendeeLogs()
-    {
-      return $this->htmlAttendeeLogs;
+    public function getHtmlAttendeeLogs() {
+        return $this->htmlAttendeeLogs;
     }
 
     /**
      * @param HtmlAttendeeLogCollection[] $htmlAttendeeLogs
      * @return \mod_collaborate\soap\generated\HtmlAttendee
      */
-    public function setHtmlAttendeeLogs(array $htmlAttendeeLogs)
-    {
-      $this->htmlAttendeeLogs = $htmlAttendeeLogs;
-      return $this;
+    public function setHtmlAttendeeLogs(array $htmlAttendeeLogs) {
+        $this->htmlAttendeeLogs = $htmlAttendeeLogs;
+        return $this;
     }
 
 }

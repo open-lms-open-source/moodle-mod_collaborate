@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class SASDefaultAdapter extends \SoapClient
-{
+class SASDefaultAdapter extends \SoapClient {
 
     /**
      * @var array $classmap The defined classes
@@ -147,539 +146,480 @@ class SASDefaultAdapter extends \SoapClient
      * @param array $options A array of config values
      * @param string $wsdl The wsdl file to use
      */
-    public function __construct(array $options = array(), $wsdl = 'http://joule2.dev/mod/collaborate/wsdl.xml')
-    {
-      foreach (self::$classmap as $key => $value) {
-        if (!isset($options['classmap'][$key])) {
-          $options['classmap'][$key] = $value;
+    public function __construct(array $options = array(), $wsdl = 'http://joule2.dev/mod/collaborate/wsdl.xml') {
+        foreach (self::$classmap as $key => $value) {
+            if (!isset($options['classmap'][$key])) {
+                $options['classmap'][$key] = $value;
+            }
         }
-      }
-      $options = array_merge(array (
-      'features' => 1,
-    ), $options);
-      parent::__construct($wsdl, $options);
+        $options = array_merge(array (
+        'features' => 1,
+        ),$options);
+        parent::__construct($wsdl, $options);
     }
 
     /**
      * @param RecordingUrl $parameters
      * @return UrlResponse
      */
-    public function BuildRecordingUrl(RecordingUrl $parameters)
-    {
-      return $this->__soapCall('BuildRecordingUrl', array($parameters));
+    public function BuildRecordingUrl(RecordingUrl $parameters) {
+        return $this->__soapCall('BuildRecordingUrl', array($parameters));
     }
 
     /**
      * @param HtmlRecordingUrl $parameters
      * @return UrlResponse
      */
-    public function BuildHtmlRecordingUrl(HtmlRecordingUrl $parameters)
-    {
-      return $this->__soapCall('BuildHtmlRecordingUrl', array($parameters));
+    public function BuildHtmlRecordingUrl(HtmlRecordingUrl $parameters) {
+        return $this->__soapCall('BuildHtmlRecordingUrl', array($parameters));
     }
 
     /**
      * @param SessionUrl $parameters
      * @return UrlResponse
      */
-    public function BuildSessionUrl(SessionUrl $parameters)
-    {
-      return $this->__soapCall('BuildSessionUrl', array($parameters));
+    public function BuildSessionUrl(SessionUrl $parameters) {
+        return $this->__soapCall('BuildSessionUrl', array($parameters));
     }
 
     /**
      * @param ConvertRecording $parameters
      * @return RecordingFileResponseCollection
      */
-    public function ConvertRecording(ConvertRecording $parameters)
-    {
-      return $this->__soapCall('ConvertRecording', array($parameters));
+    public function ConvertRecording(ConvertRecording $parameters) {
+        return $this->__soapCall('ConvertRecording', array($parameters));
     }
 
     /**
      * @param EmailBody $parameters
      * @return EmailBodyResponse
      */
-    public function GetEmailBody(EmailBody $parameters)
-    {
-      return $this->__soapCall('GetEmailBody', array($parameters));
+    public function GetEmailBody(EmailBody $parameters) {
+        return $this->__soapCall('GetEmailBody', array($parameters));
     }
 
     /**
      * @param GetMobilePlatforms $parameters
      * @return GetMobilePlatformResponseCollection
      */
-    public function GetMobilePlatforms(GetMobilePlatforms $parameters)
-    {
-      return $this->__soapCall('GetMobilePlatforms', array($parameters));
+    public function GetMobilePlatforms(GetMobilePlatforms $parameters) {
+        return $this->__soapCall('GetMobilePlatforms', array($parameters));
     }
 
     /**
      * @param GetOptionLicenses $parameters
      * @return GetOptionLicenseResponseCollection
      */
-    public function GetOptionLicenses(GetOptionLicenses $parameters)
-    {
-      return $this->__soapCall('GetOptionLicenses', array($parameters));
+    public function GetOptionLicenses(GetOptionLicenses $parameters) {
+        return $this->__soapCall('GetOptionLicenses', array($parameters));
     }
 
     /**
      * @param GetQuotaLimits $parameters
      * @return GetQuotaLimitsResponseCollection
      */
-    public function GetQuotaLimits(GetQuotaLimits $parameters)
-    {
-      return $this->__soapCall('GetQuotaLimits', array($parameters));
+    public function GetQuotaLimits(GetQuotaLimits $parameters) {
+        return $this->__soapCall('GetQuotaLimits', array($parameters));
     }
 
     /**
      * @param ServerConfiguration $parameters
      * @return ServerConfigurationResponseCollection
      */
-    public function GetServerConfiguration(ServerConfiguration $parameters)
-    {
-      return $this->__soapCall('GetServerConfiguration', array($parameters));
+    public function GetServerConfiguration(ServerConfiguration $parameters) {
+        return $this->__soapCall('GetServerConfiguration', array($parameters));
     }
 
     /**
      * @param ServerQuotas $parameters
      * @return ServerQuotasResponseCollection
      */
-    public function GetServerQuotas(ServerQuotas $parameters)
-    {
-      return $this->__soapCall('GetServerQuotas', array($parameters));
+    public function GetServerQuotas(ServerQuotas $parameters) {
+        return $this->__soapCall('GetServerQuotas', array($parameters));
     }
 
     /**
      * @param SchedulingManager $parameters
      * @return SchedulingManagerResponseCollection
      */
-    public function GetSchedulingManager(SchedulingManager $parameters)
-    {
-      return $this->__soapCall('GetSchedulingManager', array($parameters));
+    public function GetSchedulingManager(SchedulingManager $parameters) {
+        return $this->__soapCall('GetSchedulingManager', array($parameters));
     }
 
     /**
      * @param ServerVersions $parameters
      * @return ServerVersionResponseCollection
      */
-    public function GetServerVersions(ServerVersions $parameters)
-    {
-      return $this->__soapCall('GetServerVersions', array($parameters));
+    public function GetServerVersions(ServerVersions $parameters) {
+        return $this->__soapCall('GetServerVersions', array($parameters));
     }
 
     /**
      * @param UploadRepositoryContent $parameters
      * @return MultimediaResponseCollection
      */
-    public function UploadRepositoryMultimedia(UploadRepositoryContent $parameters)
-    {
-      return $this->__soapCall('UploadRepositoryMultimedia', array($parameters));
+    public function UploadRepositoryMultimedia(UploadRepositoryContent $parameters) {
+        return $this->__soapCall('UploadRepositoryMultimedia', array($parameters));
     }
 
     /**
      * @param UploadRepositoryContent $parameters
      * @return PresentationResponseCollection
      */
-    public function UploadRepositoryPresentation(UploadRepositoryContent $parameters)
-    {
-      return $this->__soapCall('UploadRepositoryPresentation', array($parameters));
+    public function UploadRepositoryPresentation(UploadRepositoryContent $parameters) {
+        return $this->__soapCall('UploadRepositoryPresentation', array($parameters));
     }
 
     /**
      * @param ListRepositoryMultimediaContent $parameters
      * @return MultimediaResponseCollection
      */
-    public function ListRepositoryMultimedia(ListRepositoryMultimediaContent $parameters)
-    {
-      return $this->__soapCall('ListRepositoryMultimedia', array($parameters));
+    public function ListRepositoryMultimedia(ListRepositoryMultimediaContent $parameters) {
+        return $this->__soapCall('ListRepositoryMultimedia', array($parameters));
     }
 
     /**
      * @param ListRepositoryPresentationContent $parameters
      * @return PresentationResponseCollection
      */
-    public function ListRepositoryPresentation(ListRepositoryPresentationContent $parameters)
-    {
-      return $this->__soapCall('ListRepositoryPresentation', array($parameters));
+    public function ListRepositoryPresentation(ListRepositoryPresentationContent $parameters) {
+        return $this->__soapCall('ListRepositoryPresentation', array($parameters));
     }
 
     /**
      * @param RemoveRepositoryMultimedia $parameters
      * @return SuccessResponse
      */
-    public function RemoveRepositoryMultimedia(RemoveRepositoryMultimedia $parameters)
-    {
-      return $this->__soapCall('RemoveRepositoryMultimedia', array($parameters));
+    public function RemoveRepositoryMultimedia(RemoveRepositoryMultimedia $parameters) {
+        return $this->__soapCall('RemoveRepositoryMultimedia', array($parameters));
     }
 
     /**
      * @param RemoveRepositoryPresentation $parameters
      * @return SuccessResponse
      */
-    public function RemoveRepositoryPresentation(RemoveRepositoryPresentation $parameters)
-    {
-      return $this->__soapCall('RemoveRepositoryPresentation', array($parameters));
+    public function RemoveRepositoryPresentation(RemoveRepositoryPresentation $parameters) {
+        return $this->__soapCall('RemoveRepositoryPresentation', array($parameters));
     }
 
     /**
      * @param ListSessionContent $parameters
      * @return MultimediaResponseCollection
      */
-    public function ListSessionMultimedia(ListSessionContent $parameters)
-    {
-      return $this->__soapCall('ListSessionMultimedia', array($parameters));
+    public function ListSessionMultimedia(ListSessionContent $parameters) {
+        return $this->__soapCall('ListSessionMultimedia', array($parameters));
     }
 
     /**
      * @param ListSessionContent $parameters
      * @return PresentationResponseCollection
      */
-    public function ListSessionPresentation(ListSessionContent $parameters)
-    {
-      return $this->__soapCall('ListSessionPresentation', array($parameters));
+    public function ListSessionPresentation(ListSessionContent $parameters) {
+        return $this->__soapCall('ListSessionPresentation', array($parameters));
     }
 
     /**
      * @param SetApiCallbackUrl $parameters
      * @return SuccessResponse
      */
-    public function SetApiCallbackUrl(SetApiCallbackUrl $parameters)
-    {
-      return $this->__soapCall('SetApiCallbackUrl', array($parameters));
+    public function SetApiCallbackUrl(SetApiCallbackUrl $parameters) {
+        return $this->__soapCall('SetApiCallbackUrl', array($parameters));
     }
 
     /**
      * @param SetSessionMultimediaContent $parameters
      * @return SuccessResponse
      */
-    public function SetSessionMultimedia(SetSessionMultimediaContent $parameters)
-    {
-      return $this->__soapCall('SetSessionMultimedia', array($parameters));
+    public function SetSessionMultimedia(SetSessionMultimediaContent $parameters) {
+        return $this->__soapCall('SetSessionMultimedia', array($parameters));
     }
 
     /**
      * @param SetSessionPresentationContent $parameters
      * @return SuccessResponse
      */
-    public function SetSessionPresentation(SetSessionPresentationContent $parameters)
-    {
-      return $this->__soapCall('SetSessionPresentation', array($parameters));
+    public function SetSessionPresentation(SetSessionPresentationContent $parameters) {
+        return $this->__soapCall('SetSessionPresentation', array($parameters));
     }
 
     /**
      * @param RemoveSessionMultimediaContent $parameters
      * @return SuccessResponse
      */
-    public function RemoveSessionMultimedia(RemoveSessionMultimediaContent $parameters)
-    {
-      return $this->__soapCall('RemoveSessionMultimedia', array($parameters));
+    public function RemoveSessionMultimedia(RemoveSessionMultimediaContent $parameters) {
+        return $this->__soapCall('RemoveSessionMultimedia', array($parameters));
     }
 
     /**
      * @param RemoveSessionPresentationContent $parameters
      * @return SuccessResponse
      */
-    public function RemoveSessionPresentation(RemoveSessionPresentationContent $parameters)
-    {
-      return $this->__soapCall('RemoveSessionPresentation', array($parameters));
+    public function RemoveSessionPresentation(RemoveSessionPresentationContent $parameters) {
+        return $this->__soapCall('RemoveSessionPresentation', array($parameters));
     }
 
     /**
      * @param ListRecordingFiles $parameters
      * @return ListRecordingFileResponseCollection
      */
-    public function ListRecordingFiles(ListRecordingFiles $parameters)
-    {
-      return $this->__soapCall('ListRecordingFiles', array($parameters));
+    public function ListRecordingFiles(ListRecordingFiles $parameters) {
+        return $this->__soapCall('ListRecordingFiles', array($parameters));
     }
 
     /**
      * @param ListRecordings $parameters
      * @return RecordingResponseCollection
      */
-    public function ListRecordings(ListRecordings $parameters)
-    {
-      return $this->__soapCall('ListRecordings', array($parameters));
+    public function ListRecordings(ListRecordings $parameters) {
+        return $this->__soapCall('ListRecordings', array($parameters));
     }
 
     /**
      * @param ListRecordingLong $parameters
      * @return RecordingLongResponseCollection
      */
-    public function ListRecordingLong(ListRecordingLong $parameters)
-    {
-      return $this->__soapCall('ListRecordingLong', array($parameters));
+    public function ListRecordingLong(ListRecordingLong $parameters) {
+        return $this->__soapCall('ListRecordingLong', array($parameters));
     }
 
     /**
      * @param RecordingShort $parameters
      * @return RecordingShortResponseCollection
      */
-    public function ListRecordingShort(RecordingShort $parameters)
-    {
-      return $this->__soapCall('ListRecordingShort', array($parameters));
+    public function ListRecordingShort(RecordingShort $parameters) {
+        return $this->__soapCall('ListRecordingShort', array($parameters));
     }
 
     /**
      * @param HtmlSessionRecording $parameters
      * @return HtmlSessionRecordingResponseCollection
      */
-    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters)
-    {
-      return $this->__soapCall('ListHtmlSessionRecording', array($parameters));
+    public function ListHtmlSessionRecording(HtmlSessionRecording $parameters) {
+        return $this->__soapCall('ListHtmlSessionRecording', array($parameters));
     }
 
     /**
      * @param ListSession $parameters
      * @return SessionResponseCollection
      */
-    public function ListSession(ListSession $parameters)
-    {
-      return $this->__soapCall('ListSession', array($parameters));
+    public function ListSession(ListSession $parameters) {
+        return $this->__soapCall('ListSession', array($parameters));
     }
 
     /**
      * @param SessionAttendance $parameters
      * @return SessionAttendanceResponseCollection
      */
-    public function ListSessionAttendance(SessionAttendance $parameters)
-    {
-      return $this->__soapCall('ListSessionAttendance', array($parameters));
+    public function ListSessionAttendance(SessionAttendance $parameters) {
+        return $this->__soapCall('ListSessionAttendance', array($parameters));
     }
 
     /**
      * @param HtmlSessionAttendance $parameters
      * @return HtmlRoomCollection
      */
-    public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters)
-    {
-      return $this->__soapCall('ListHtmlSessionAttendance', array($parameters));
+    public function ListHtmlSessionAttendance(HtmlSessionAttendance $parameters) {
+        return $this->__soapCall('ListHtmlSessionAttendance', array($parameters));
     }
 
     /**
      * @param HtmlSessionOccurrence $parameters
      * @return HtmlSessionOccurrenceCollection
      */
-    public function ListHtmlSessionOccurrences(HtmlSessionOccurrence $parameters)
-    {
-      return $this->__soapCall('ListHtmlSessionOccurrences', array($parameters));
+    public function ListHtmlSessionOccurrences(HtmlSessionOccurrence $parameters) {
+        return $this->__soapCall('ListHtmlSessionOccurrences', array($parameters));
     }
 
     /**
      * @param RemoveHtmlSessionOccurrence $parameters
      * @return SuccessResponse
      */
-    public function RemoveHtmlSessionOccurrence(RemoveHtmlSessionOccurrence $parameters)
-    {
-      return $this->__soapCall('RemoveHtmlSessionOccurrence', array($parameters));
+    public function RemoveHtmlSessionOccurrence(RemoveHtmlSessionOccurrence $parameters) {
+        return $this->__soapCall('RemoveHtmlSessionOccurrence', array($parameters));
     }
 
     /**
      * @param UpdateHtmlSessionOccurrence $parameters
      * @return SuccessResponse
      */
-    public function UpdateHtmlSessionOccurrence(UpdateHtmlSessionOccurrence $parameters)
-    {
-      return $this->__soapCall('UpdateHtmlSessionOccurrence', array($parameters));
+    public function UpdateHtmlSessionOccurrence(UpdateHtmlSessionOccurrence $parameters) {
+        return $this->__soapCall('UpdateHtmlSessionOccurrence', array($parameters));
     }
 
     /**
      * @param SetSession $parameters
      * @return SessionResponseCollection
      */
-    public function SetSession(SetSession $parameters)
-    {
-      return $this->__soapCall('SetSession', array($parameters));
+    public function SetSession(SetSession $parameters) {
+        return $this->__soapCall('SetSession', array($parameters));
     }
 
     /**
      * @param UpdateSession $parameters
      * @return SessionResponseCollection
      */
-    public function UpdateSession(UpdateSession $parameters)
-    {
-      return $this->__soapCall('UpdateSession', array($parameters));
+    public function UpdateSession(UpdateSession $parameters) {
+        return $this->__soapCall('UpdateSession', array($parameters));
     }
 
     /**
      * @param UpdateSessionAttendees $parameters
      * @return UrlResponse
      */
-    public function UpdateSessionAttendee(UpdateSessionAttendees $parameters)
-    {
-      return $this->__soapCall('UpdateSessionAttendee', array($parameters));
+    public function UpdateSessionAttendee(UpdateSessionAttendees $parameters) {
+        return $this->__soapCall('UpdateSessionAttendee', array($parameters));
     }
 
     /**
      * @param UpdateHtmlSessionAttendee $parameters
      * @return UrlResponse
      */
-    public function UpdateHtmlSessionAttendee(UpdateHtmlSessionAttendee $parameters)
-    {
-      return $this->__soapCall('UpdateHtmlSessionAttendee', array($parameters));
+    public function UpdateHtmlSessionAttendee(UpdateHtmlSessionAttendee $parameters) {
+        return $this->__soapCall('UpdateHtmlSessionAttendee', array($parameters));
     }
 
     /**
      * @param UpdateHtmlSessionDetails $parameters
      * @return HtmlSessionCollection
      */
-    public function UpdateHtmlSession(UpdateHtmlSessionDetails $parameters)
-    {
-      return $this->__soapCall('UpdateHtmlSession', array($parameters));
+    public function UpdateHtmlSession(UpdateHtmlSessionDetails $parameters) {
+        return $this->__soapCall('UpdateHtmlSession', array($parameters));
     }
 
     /**
      * @param SetHtmlSession $parameters
      * @return HtmlSessionCollection
      */
-    public function SetHtmlSession(SetHtmlSession $parameters)
-    {
-      return $this->__soapCall('SetHtmlSession', array($parameters));
+    public function SetHtmlSession(SetHtmlSession $parameters) {
+        return $this->__soapCall('SetHtmlSession', array($parameters));
     }
 
     /**
      * @param BuildHtmlSessionUrl $parameters
      * @return UrlResponse
      */
-    public function BuildHtmlSessionUrl(BuildHtmlSessionUrl $parameters)
-    {
-      return $this->__soapCall('BuildHtmlSessionUrl', array($parameters));
+    public function BuildHtmlSessionUrl(BuildHtmlSessionUrl $parameters) {
+        return $this->__soapCall('BuildHtmlSessionUrl', array($parameters));
     }
 
     /**
      * @param ListHtmlSession $parameters
      * @return HtmlSessionCollection
      */
-    public function ListHtmlSession(ListHtmlSession $parameters)
-    {
-      return $this->__soapCall('ListHtmlSession', array($parameters));
+    public function ListHtmlSession(ListHtmlSession $parameters) {
+        return $this->__soapCall('ListHtmlSession', array($parameters));
     }
 
     /**
      * @param RemoveHtmlSession $parameters
      * @return SuccessResponse
      */
-    public function RemoveHtmlSession(RemoveHtmlSession $parameters)
-    {
-      return $this->__soapCall('RemoveHtmlSession', array($parameters));
+    public function RemoveHtmlSession(RemoveHtmlSession $parameters) {
+        return $this->__soapCall('RemoveHtmlSession', array($parameters));
     }
 
     /**
      * @param SendEmail $parameters
      * @return SuccessResponse
      */
-    public function SendEmail(SendEmail $parameters)
-    {
-      return $this->__soapCall('SendEmail', array($parameters));
+    public function SendEmail(SendEmail $parameters) {
+        return $this->__soapCall('SendEmail', array($parameters));
     }
 
     /**
      * @param RemoveSession $parameters
      * @return SuccessResponse
      */
-    public function RemoveSession(RemoveSession $parameters)
-    {
-      return $this->__soapCall('RemoveSession', array($parameters));
+    public function RemoveSession(RemoveSession $parameters) {
+        return $this->__soapCall('RemoveSession', array($parameters));
     }
 
     /**
      * @param RemoveRecording $parameters
      * @return SuccessResponse
      */
-    public function RemoveRecording(RemoveRecording $parameters)
-    {
-      return $this->__soapCall('RemoveRecording', array($parameters));
+    public function RemoveRecording(RemoveRecording $parameters) {
+        return $this->__soapCall('RemoveRecording', array($parameters));
     }
 
     /**
      * @param RemoveHtmlSessionRecording $parameters
      * @return SuccessResponse
      */
-    public function RemoveHtmlSessionRecording(RemoveHtmlSessionRecording $parameters)
-    {
-      return $this->__soapCall('RemoveHtmlSessionRecording', array($parameters));
+    public function RemoveHtmlSessionRecording(RemoveHtmlSessionRecording $parameters) {
+        return $this->__soapCall('RemoveHtmlSessionRecording', array($parameters));
     }
 
     /**
      * @param SetTelephony $parameters
      * @return TelephonyResponseItemCollection
      */
-    public function SetTelephony(SetTelephony $parameters)
-    {
-      return $this->__soapCall('SetTelephony', array($parameters));
+    public function SetTelephony(SetTelephony $parameters) {
+        return $this->__soapCall('SetTelephony', array($parameters));
     }
 
     /**
      * @param GetTelephony $parameters
      * @return TelephonyResponseItemCollection
      */
-    public function GetTelephony(GetTelephony $parameters)
-    {
-      return $this->__soapCall('GetTelephony', array($parameters));
+    public function GetTelephony(GetTelephony $parameters) {
+        return $this->__soapCall('GetTelephony', array($parameters));
     }
 
     /**
      * @param GetTelephonyLicenseInfo $parameters
      * @return GetTelephonyLicenseInfoResponse
      */
-    public function GetTelephonyLicenseInfo(GetTelephonyLicenseInfo $parameters)
-    {
-      return $this->__soapCall('GetTelephonyLicenseInfo', array($parameters));
+    public function GetTelephonyLicenseInfo(GetTelephonyLicenseInfo $parameters) {
+        return $this->__soapCall('GetTelephonyLicenseInfo', array($parameters));
     }
 
     /**
      * @param SetSessionTelephony $parameters
      * @return SessionTelephonyResponseCollection
      */
-    public function SetSessionTelephony(SetSessionTelephony $parameters)
-    {
-      return $this->__soapCall('SetSessionTelephony', array($parameters));
+    public function SetSessionTelephony(SetSessionTelephony $parameters) {
+        return $this->__soapCall('SetSessionTelephony', array($parameters));
     }
 
     /**
      * @param SessionTelephony $parameters
      * @return SessionTelephonyResponseCollection
      */
-    public function ListSessionTelephony(SessionTelephony $parameters)
-    {
-      return $this->__soapCall('ListSessionTelephony', array($parameters));
+    public function ListSessionTelephony(SessionTelephony $parameters) {
+        return $this->__soapCall('ListSessionTelephony', array($parameters));
     }
 
     /**
      * @param SessionTelephony $parameters
      * @return SuccessResponse
      */
-    public function RemoveSessionTelephony(SessionTelephony $parameters)
-    {
-      return $this->__soapCall('RemoveSessionTelephony', array($parameters));
+    public function RemoveSessionTelephony(SessionTelephony $parameters) {
+        return $this->__soapCall('RemoveSessionTelephony', array($parameters));
     }
 
     /**
      * @param RecordingSecureSignOn $parameters
      * @return SuccessResponse
      */
-    public function SetRecordingSecureSignOn(RecordingSecureSignOn $parameters)
-    {
-      return $this->__soapCall('SetRecordingSecureSignOn', array($parameters));
+    public function SetRecordingSecureSignOn(RecordingSecureSignOn $parameters) {
+        return $this->__soapCall('SetRecordingSecureSignOn', array($parameters));
     }
 
     /**
      * @param ClearSessionUserList $parameters
      * @return SuccessResponse
      */
-    public function ClearSessionChairList(ClearSessionUserList $parameters)
-    {
-      return $this->__soapCall('ClearSessionChairList', array($parameters));
+    public function ClearSessionChairList(ClearSessionUserList $parameters) {
+        return $this->__soapCall('ClearSessionChairList', array($parameters));
     }
 
     /**
      * @param ClearSessionUserList $parameters
      * @return SuccessResponse
      */
-    public function ClearSessionNonChairList(ClearSessionUserList $parameters)
-    {
-      return $this->__soapCall('ClearSessionNonChairList', array($parameters));
+    public function ClearSessionNonChairList(ClearSessionUserList $parameters) {
+        return $this->__soapCall('ClearSessionNonChairList', array($parameters));
     }
 
 }

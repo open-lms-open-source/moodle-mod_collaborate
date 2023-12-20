@@ -87,7 +87,7 @@ class sessionlink_test extends \advanced_testcase {
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
             'course'    => $course->id,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
         $linkscreated = sessionlink::apply_session_links($collaborate);
@@ -119,7 +119,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
 
@@ -169,7 +169,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
 
@@ -220,7 +220,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
 
@@ -269,7 +269,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
 
@@ -326,7 +326,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
         list($course, $cm) = get_course_and_cm_from_instance($collaborate, 'collaborate');
@@ -360,7 +360,7 @@ class sessionlink_test extends \advanced_testcase {
         $link = $DB->get_record('collaborate_sessionlink',
                 [
                     'collaborateid' => $collaborate->id,
-                    'groupid'       => $group1->id
+                    'groupid'       => $group1->id,
                 ]
         );
         $link->deletionattempted = 1;
@@ -393,7 +393,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
         list($course, $cm) = get_course_and_cm_from_instance($collaborate, 'collaborate');
@@ -435,7 +435,7 @@ class sessionlink_test extends \advanced_testcase {
         $link = $DB->get_record('collaborate_sessionlink',
             [
                 'collaborateid' => $collaborate->id,
-                'groupid'       => $group1->id
+                'groupid'       => $group1->id,
             ]
         );
         $link->deletionattempted = 1;
@@ -462,7 +462,7 @@ class sessionlink_test extends \advanced_testcase {
             'course'    => $course->id,
             'sessionid' => null,
             'groupmode' => SEPARATEGROUPS,
-            'name' => 'Z Collaborate test' // Z is for checking ordering.
+            'name' => 'Z Collaborate test', // Z is for checking ordering.
         ];
         $collaborate = $modgen->create_instance($collabdata);
         list($course, $cm) = get_course_and_cm_from_instance($collaborate, 'collaborate');
@@ -500,7 +500,7 @@ class sessionlink_test extends \advanced_testcase {
         $object = (object) [
             'collaborateid' => 1,
             'sessionid' => 1234,
-            'sessionuid' => 'ABCD'
+            'sessionuid' => 'ABCD',
         ];
         $DB->insert_record('collaborate_sessionlink', $object);
         if ($sessionid) {
@@ -533,7 +533,7 @@ class sessionlink_test extends \advanced_testcase {
         $collabdata = (object) [
             'course'    => $course->id,
             'sessionid' => null,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
         $collaborateidbad = null;
@@ -544,7 +544,7 @@ class sessionlink_test extends \advanced_testcase {
         // Add a recording.
         $linkobj = $DB->get_record('collaborate_sessionlink', ['collaborateid' => $collaborateidgood]);
         $recrecord = ['instanceid' => $collaborate->id, 'sessionlinkid' => $linkobj->id,
-            'recordingid' => 'exampleid123', 'action' => 5];
+            'recordingid' => 'exampleid123', 'action' => 5, ];
         $DB->insert_record('collaborate_recording_info', (object) $recrecord);
 
         // Records with return empty.

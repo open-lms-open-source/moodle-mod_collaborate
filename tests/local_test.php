@@ -139,7 +139,7 @@ class local_test extends \advanced_testcase {
         $record = [
             'instanceid'  => $collab->id,
             'recordingid' => $rec1->getRecordingId(),
-            'action'      => \mod_collaborate\recording_counter::VIEW
+            'action'      => \mod_collaborate\recording_counter::VIEW,
         ];
         // Delete the cached recording counts.
         \cache::make('mod_collaborate', 'recordingcounts')->delete($collab->id);

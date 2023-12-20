@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionOccurrence
-{
+class HtmlSessionOccurrence {
 
     /**
      * @var int $sessionId
@@ -42,79 +41,72 @@ class HtmlSessionOccurrence
     protected $endTime = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
-      return $this->sessionId;
+    public function getSessionId() {
+        return $this->sessionId;
     }
 
     /**
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrence
      */
-    public function setSessionId($sessionId)
-    {
-      $this->sessionId = $sessionId;
-      return $this;
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+    public function getStartTime() {
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrence
      */
-    public function setStartTime(\DateTime $startTime)
-    {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setStartTime(\DateTime $startTime) {
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getEndTime()
-    {
-      if ($this->endTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->endTime);
-        } catch (\Exception $e) {
-          return false;
+    public function getEndTime() {
+        if ($this->endTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->endTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $endTime
      * @return \mod_collaborate\soap\generated\HtmlSessionOccurrence
      */
-    public function setEndTime(\DateTime $endTime)
-    {
-      $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setEndTime(\DateTime $endTime) {
+        $this->endTime = $endTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
 }

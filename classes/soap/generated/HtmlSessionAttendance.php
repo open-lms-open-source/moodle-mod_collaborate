@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionAttendance
-{
+class HtmlSessionAttendance {
 
     /**
      * @var int $sessionId
@@ -40,54 +39,49 @@ class HtmlSessionAttendance
      * @param int $sessionId
      * @param \DateTime $startTime
      */
-    public function __construct($sessionId, \DateTime $startTime)
-    {
-      $this->sessionId = $sessionId;
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+    public function __construct($sessionId, \DateTime $startTime) {
+        $this->sessionId = $sessionId;
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
-      return $this->sessionId;
+    public function getSessionId() {
+        return $this->sessionId;
     }
 
     /**
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\HtmlSessionAttendance
      */
-    public function setSessionId($sessionId)
-    {
-      $this->sessionId = $sessionId;
-      return $this;
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getStartTime()
-    {
-      if ($this->startTime == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->startTime);
-        } catch (\Exception $e) {
-          return false;
+    public function getStartTime() {
+        if ($this->startTime == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->startTime);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $startTime
      * @return \mod_collaborate\soap\generated\HtmlSessionAttendance
      */
-    public function setStartTime(\DateTime $startTime)
-    {
-      $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setStartTime(\DateTime $startTime) {
+        $this->startTime = $startTime->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
 }

@@ -39,7 +39,7 @@ class setting_trimmed_configtext extends \admin_setting_configtext {
     }
 
     public function write_setting($data) {
-        if ($this->paramtype === PARAM_INT and $data === '') {
+        if ($this->paramtype === PARAM_INT && $data === '') {
             // Do not complain if '' used instead of 0.
             $data = 0;
         }

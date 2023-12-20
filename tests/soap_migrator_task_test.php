@@ -236,7 +236,7 @@ class soap_migrator_task_test extends \advanced_testcase {
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
             'course'    => $course->id,
-            'groupmode' => SEPARATEGROUPS
+            'groupmode' => SEPARATEGROUPS,
         ];
         $collaborate = $modgen->create_instance($collabdata);
         $linkscreated = sessionlink::apply_session_links($collaborate);

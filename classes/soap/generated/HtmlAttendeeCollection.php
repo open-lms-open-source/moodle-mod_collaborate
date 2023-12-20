@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlAttendeeCollection
-{
+class HtmlAttendeeCollection {
 
     /**
      * @var HtmlAttendee[] $HtmlAttendee
@@ -32,27 +31,24 @@ class HtmlAttendeeCollection
     protected $HtmlAttendee = null;
 
     
-    public function __construct()
-    {
+    public function __construct() {
     
     }
 
     /**
      * @return HtmlAttendee[]
      */
-    public function getHtmlAttendee()
-    {
-      return $this->HtmlAttendee;
+    public function getHtmlAttendee() {
+        return $this->HtmlAttendee;
     }
 
     /**
      * @param HtmlAttendee[] $HtmlAttendee
      * @return \mod_collaborate\soap\generated\HtmlAttendeeCollection
      */
-    public function setHtmlAttendee(array $HtmlAttendee)
-    {
-      $this->HtmlAttendee = $HtmlAttendee;
-      return $this;
+    public function setHtmlAttendee(array $HtmlAttendee) {
+        $this->HtmlAttendee = $HtmlAttendee;
+        return $this;
     }
 
 }

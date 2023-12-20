@@ -70,7 +70,7 @@ $generator->generate(
         'inputFile' => $localwsdl,
         'outputDir' => $outputdir,
         'namespaceName' => 'mod_collaborate\soap\generated',
-        'classNames' => implode(',' , $soapclasses)
+        'classNames' => implode(',' , $soapclasses),
     ))
 );
 

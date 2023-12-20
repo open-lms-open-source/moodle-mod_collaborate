@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlSessionRecordingResponse
-{
+class HtmlSessionRecordingResponse {
 
     /**
      * @var int $recordingId
@@ -76,160 +75,143 @@ class HtmlSessionRecordingResponse
      * @param string $displayName
      * @param int $sessionId
      */
-    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId)
-    {
-      $this->recordingId = $recordingId;
-      $this->createdTs = $createdTs;
-      $this->startTs = $startTs;
-      $this->endTs = $endTs;
-      $this->durationMillis = $durationMillis;
-      $this->recordingUrl = $recordingUrl;
-      $this->displayName = $displayName;
-      $this->sessionId = $sessionId;
+    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId) {
+        $this->recordingId = $recordingId;
+        $this->createdTs = $createdTs;
+        $this->startTs = $startTs;
+        $this->endTs = $endTs;
+        $this->durationMillis = $durationMillis;
+        $this->recordingUrl = $recordingUrl;
+        $this->displayName = $displayName;
+        $this->sessionId = $sessionId;
     }
 
     /**
      * @return int
      */
-    public function getRecordingId()
-    {
-      return $this->recordingId;
+    public function getRecordingId() {
+        return $this->recordingId;
     }
 
     /**
      * @param int $recordingId
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setRecordingId($recordingId)
-    {
-      $this->recordingId = $recordingId;
-      return $this;
+    public function setRecordingId($recordingId) {
+        $this->recordingId = $recordingId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getCreatedTs()
-    {
-      return $this->createdTs;
+    public function getCreatedTs() {
+        return $this->createdTs;
     }
 
     /**
      * @param string $createdTs
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setCreatedTs($createdTs)
-    {
-      $this->createdTs = $createdTs;
-      return $this;
+    public function setCreatedTs($createdTs) {
+        $this->createdTs = $createdTs;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getStartTs()
-    {
-      return $this->startTs;
+    public function getStartTs() {
+        return $this->startTs;
     }
 
     /**
      * @param string $startTs
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setStartTs($startTs)
-    {
-      $this->startTs = $startTs;
-      return $this;
+    public function setStartTs($startTs) {
+        $this->startTs = $startTs;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getEndTs()
-    {
-      return $this->endTs;
+    public function getEndTs() {
+        return $this->endTs;
     }
 
     /**
      * @param string $endTs
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setEndTs($endTs)
-    {
-      $this->endTs = $endTs;
-      return $this;
+    public function setEndTs($endTs) {
+        $this->endTs = $endTs;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getDurationMillis()
-    {
-      return $this->durationMillis;
+    public function getDurationMillis() {
+        return $this->durationMillis;
     }
 
     /**
      * @param int $durationMillis
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setDurationMillis($durationMillis)
-    {
-      $this->durationMillis = $durationMillis;
-      return $this;
+    public function setDurationMillis($durationMillis) {
+        $this->durationMillis = $durationMillis;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getRecordingUrl()
-    {
-      return $this->recordingUrl;
+    public function getRecordingUrl() {
+        return $this->recordingUrl;
     }
 
     /**
      * @param string $recordingUrl
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setRecordingUrl($recordingUrl)
-    {
-      $this->recordingUrl = $recordingUrl;
-      return $this;
+    public function setRecordingUrl($recordingUrl) {
+        $this->recordingUrl = $recordingUrl;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getDisplayName()
-    {
-      return $this->displayName;
+    public function getDisplayName() {
+        return $this->displayName;
     }
 
     /**
      * @param string $displayName
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setDisplayName($displayName)
-    {
-      $this->displayName = $displayName;
-      return $this;
+    public function setDisplayName($displayName) {
+        $this->displayName = $displayName;
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
-      return $this->sessionId;
+    public function getSessionId() {
+        return $this->sessionId;
     }
 
     /**
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\HtmlSessionRecordingResponse
      */
-    public function setSessionId($sessionId)
-    {
-      $this->sessionId = $sessionId;
-      return $this;
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
 }

@@ -46,7 +46,7 @@ list($options, $unrecognized) = cli_get_params(
         't' => 'test',
         'r' => 'reset',
         's' => 'schedule',
-        'z' => 'zerodelay'
+        'z' => 'zerodelay',
     ]
 );
 
@@ -104,7 +104,7 @@ if (!empty($options['reset'])) {
     echo '[INFO] Proceeding to delete migration data from config_plugins table' . PHP_EOL;
     $parameters = [
         'plugin' => 'collaborate',
-        'name' => 'migrationstatus'
+        'name' => 'migrationstatus',
     ];
     $delrecord = $DB->get_record('config_plugins', $parameters);
     if (!empty($delrecord)) {
@@ -113,7 +113,7 @@ if (!empty($options['reset'])) {
     }
     $parameterstwo = [
         'plugin' => 'collaborate',
-        'name' => 'migrationoffset'
+        'name' => 'migrationoffset',
     ];
     $delrecordtwo = $DB->get_record('config_plugins', $parameterstwo);
     if (!empty($delrecordtwo)) {
@@ -137,7 +137,7 @@ if (!empty($options['schedule'])) {
         'timestarted' => null,
         'hostname' => null,
         'pid' => null,
-        'timecreated' => time() - 100
+        'timecreated' => time() - 100,
     ];
     $migrationtask = (object)$migratortask;
     $result = $DB->insert_record('task_adhoc', $migrationtask);
@@ -151,7 +151,7 @@ if (!empty($options['zerodelay'])) {
     echo '[INFO] Proceeding to reset the fail delay on the migration task' . PHP_EOL;
     $params = [
         'component' => 'mod_collaborate',
-        'classname' => '\mod_collaborate\task\soap_migrator_task'
+        'classname' => '\mod_collaborate\task\soap_migrator_task',
     ];
     $updaterecord = $DB->get_record('task_adhoc', $params);
     if (!empty($updaterecord)) {

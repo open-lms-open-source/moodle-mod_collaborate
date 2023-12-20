@@ -58,7 +58,7 @@ class recent_activity_test extends \advanced_testcase {
         $event = session_launched::create([
             'objectid' => $collab->id,
             'context' => $collabcontext,
-            'other' => ['session' => '22222222dwqdw']
+            'other' => ['session' => '22222222dwqdw'],
         ]);
         $event->trigger();
 

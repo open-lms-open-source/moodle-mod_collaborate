@@ -22,7 +22,7 @@
 
 namespace mod_collaborate\privacy;
 
-use \core_privacy\local\metadata\collection;
+use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
@@ -48,7 +48,7 @@ class provider implements \core_privacy\local\metadata\provider,
             'userid' => 'privacy:metadata:collaborate:userid',
             'avatarurl' => 'privacy:metadata:collaborate:avatarurl',
             'fullname' => 'privacy:metadata:collaborate:fullname',
-            'role' => 'privacy:metadata:collaborate:role'
+            'role' => 'privacy:metadata:collaborate:role',
         ], 'privacy:metadata:collaborate');
 
         $collection->add_database_table('collaborate_launched_log', [

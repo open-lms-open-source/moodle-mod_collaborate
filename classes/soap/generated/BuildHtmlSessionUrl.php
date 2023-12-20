@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class BuildHtmlSessionUrl
-{
+class BuildHtmlSessionUrl {
 
     /**
      * @var int $sessionId
@@ -59,117 +58,104 @@ class BuildHtmlSessionUrl
     /**
      * @param int $sessionId
      */
-    public function __construct($sessionId)
-    {
-      $this->sessionId = $sessionId;
+    public function __construct($sessionId) {
+        $this->sessionId  = $sessionId;
     }
 
     /**
      * @return int
      */
-    public function getSessionId()
-    {
-      return $this->sessionId;
+    public function getSessionId() {
+        return $this->sessionId;
     }
 
     /**
      * @param int $sessionId
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setSessionId($sessionId)
-    {
-      $this->sessionId = $sessionId;
-      return $this;
+    public function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getUserId()
-    {
-      return $this->userId;
+    public function getUserId() {
+        return $this->userId;
     }
 
     /**
      * @param string $userId
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setUserId($userId)
-    {
-      $this->userId = $userId;
-      return $this;
+    public function setUserId($userId) {
+        $this->userId = $userId;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getLocale()
-    {
-      return $this->locale;
+    public function getLocale() {
+        return $this->locale;
     }
 
     /**
      * @param string $locale
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setLocale($locale)
-    {
-      $this->locale = $locale;
-      return $this;
+    public function setLocale($locale) {
+        $this->locale = $locale;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getReturnUrl()
-    {
-      return $this->returnUrl;
+    public function getReturnUrl() {
+        return $this->returnUrl;
     }
 
     /**
      * @param string $returnUrl
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setReturnUrl($returnUrl)
-    {
-      $this->returnUrl = $returnUrl;
-      return $this;
+    public function setReturnUrl($returnUrl) {
+        $this->returnUrl = $returnUrl;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getReconnectUrl()
-    {
-      return $this->reconnectUrl;
+    public function getReconnectUrl() {
+        return $this->reconnectUrl;
     }
 
     /**
      * @param string $reconnectUrl
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setReconnectUrl($reconnectUrl)
-    {
-      $this->reconnectUrl = $reconnectUrl;
-      return $this;
+    public function setReconnectUrl($reconnectUrl) {
+        $this->reconnectUrl = $reconnectUrl;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getOriginDomain()
-    {
-      return $this->originDomain;
+    public function getOriginDomain() {
+        return $this->originDomain;
     }
 
     /**
      * @param string $originDomain
      * @return \mod_collaborate\soap\generated\BuildHtmlSessionUrl
      */
-    public function setOriginDomain($originDomain)
-    {
-      $this->originDomain = $originDomain;
-      return $this;
+    public function setOriginDomain($originDomain) {
+        $this->originDomain = $originDomain;
+        return $this;
     }
 
 }

@@ -23,8 +23,7 @@
  */
 namespace mod_collaborate\soap\generated;
 
-class HtmlAttendeeLog
-{
+class HtmlAttendeeLog {
 
     /**
      * @var \DateTime $joined
@@ -40,62 +39,57 @@ class HtmlAttendeeLog
      * @param \DateTime $joined
      * @param \DateTime $left
      */
-    public function __construct(\DateTime $joined, \DateTime $left)
-    {
-      $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
-      $this->left = $left->format('Y-m-d\TH:i:s\Z');
+    public function __construct(\DateTime $joined, \DateTime $left) {
+        $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
+        $this->left = $left->format('Y-m-d\TH:i:s\Z');
     }
 
     /**
      * @return \DateTime
      */
-    public function getJoined()
-    {
-      if ($this->joined == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->joined);
-        } catch (\Exception $e) {
-          return false;
+    public function getJoined() {
+        if ($this->joined == null) {
+            return null;
+        }else {
+            try {
+                return new \DateTime($this->joined);
+            } catch (\Exception $e) {
+                return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $joined
      * @return \mod_collaborate\soap\generated\HtmlAttendeeLog
      */
-    public function setJoined(\DateTime $joined)
-    {
-      $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setJoined(\DateTime $joined) {
+        $this->joined = $joined->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getLeft()
-    {
-      if ($this->left == null) {
-        return null;
-      } else {
-        try {
-          return new \DateTime($this->left);
-        } catch (\Exception $e) {
-          return false;
+    public function getLeft() {
+        if ($this->left == null) {
+            return null;
+        } else {
+            try {
+                return new \DateTime($this->left);
+            } catch (\Exception $e) {
+                  return false;
+            }
         }
-      }
     }
 
     /**
      * @param \DateTime $left
      * @return \mod_collaborate\soap\generated\HtmlAttendeeLog
      */
-    public function setLeft(\DateTime $left)
-    {
-      $this->left = $left->format('Y-m-d\TH:i:s\Z');
-      return $this;
+    public function setLeft(\DateTime $left) {
+        $this->left = $left->format('Y-m-d\TH:i:s\Z');
+        return $this;
     }
 
 }

@@ -87,13 +87,13 @@ class testapi_service {
             $config = (object) [
                 'server'   => $this->server,
                 'username' => $this->username,
-                'password' => $this->password
+                'password' => $this->password,
             ];
         } else if ($restdetscomplete) {
             $config = (object) [
                 'restserver'   => $this->server,
                 'restkey' => $this->key,
-                'restsecret' => $this->secret
+                'restsecret' => $this->secret,
             ];
         }
 
