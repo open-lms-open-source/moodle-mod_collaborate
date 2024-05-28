@@ -440,7 +440,7 @@ final class Iconv
             return false;
         }
 
-        return strlen(utf8_decode($s));
+        return mb_strlen($s, 'UTF-8');
     }
 
     public static function strlen2($s, $encoding = null)
