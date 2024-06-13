@@ -203,9 +203,9 @@ class mod_collaborate_mod_form extends moodleform_mod {
      */
     public function add_completion_rules() {
         $mform =& $this->_form;
-
-        $mform->addElement('checkbox', 'completionlaunch', '', get_string('completionlaunch', 'collaborate'));
-        return array('completionlaunch');
+        $suffix = $this->get_suffix();
+        $mform->addElement('checkbox', 'completionlaunch' . $suffix, '', get_string('completionlaunch', 'collaborate'));
+        return array('completionlaunch' . $suffix);
     }
 
     /**
@@ -215,7 +215,8 @@ class mod_collaborate_mod_form extends moodleform_mod {
      * @return bool
      */
     public function completion_rule_enabled($data) {
-        return !empty($data['completionlaunch']);
+        $suffix = $this->get_suffix();
+        return !empty($data['completionlaunch' . $suffix]);
     }
 
     /**
