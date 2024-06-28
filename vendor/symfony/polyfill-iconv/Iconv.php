@@ -440,7 +440,8 @@ final class Iconv
             return false;
         }
 
-        return strlen(utf8_decode($s));
+        // Open LMS patch for INT-19700 (1 line).
+        return strlen(\core_text::convert($s, 'UTF-8', 'ISO-8859-1'));
     }
 
     public static function strlen2($s, $encoding = null)
