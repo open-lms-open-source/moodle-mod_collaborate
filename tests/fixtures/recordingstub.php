@@ -32,6 +32,8 @@
  */
 class mod_collaborate_recordingstub {
 
+    public $id;
+
     /**
      * mod_collaborate_recordingstub constructor.
      * @param int $id

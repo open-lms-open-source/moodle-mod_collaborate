@@ -66,6 +66,11 @@ class HtmlSessionRecordingResponse {
     protected $sessionId = null;
 
     /**
+     * @var int $sessionId
+     */
+    public $parentid = null;
+
+    /**
      * @param int $recordingId
      * @param string $createdTs
      * @param string $startTs
@@ -75,15 +80,16 @@ class HtmlSessionRecordingResponse {
      * @param string $displayName
      * @param int $sessionId
      */
-    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId) {
-        $this->recordingId = $recordingId;
-        $this->createdTs = $createdTs;
-        $this->startTs = $startTs;
-        $this->endTs = $endTs;
-        $this->durationMillis = $durationMillis;
-        $this->recordingUrl = $recordingUrl;
-        $this->displayName = $displayName;
-        $this->sessionId = $sessionId;
+    public function __construct($recordingId, $createdTs, $startTs, $endTs, $durationMillis, $recordingUrl, $displayName, $sessionId, $parentid) {
+      $this->recordingId = $recordingId;
+      $this->createdTs = $createdTs;
+      $this->startTs = $startTs;
+      $this->endTs = $endTs;
+      $this->durationMillis = $durationMillis;
+      $this->recordingUrl = $recordingUrl;
+      $this->displayName = $displayName;
+      $this->sessionId = $sessionId;
+      $this->parentid = $parentid;
     }
 
     /**

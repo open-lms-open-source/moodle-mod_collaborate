@@ -83,6 +83,11 @@ class recording_counter {
     private $db;
 
     /**
+     * @var \cache
+     */
+    private $cache;
+
+    /**
      * recording_counter constructor.
      * @param \cm_info $cm
      * @param recording[] $recordings

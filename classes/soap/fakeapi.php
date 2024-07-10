@@ -379,7 +379,7 @@ class fakeapi extends api {
         $url->param('original_media_url', $param);
         $durationms = (strtotime($endtime) - strtotime($starttime)) * 1000;
         $object = new HtmlSessionRecordingResponse(
-            $id, $createdtime, $starttime, $endtime, $durationms, $url->out(false), $recordingname, $sessionid
+            $id, $createdtime, $starttime, $endtime, $durationms, $url->out(false), $recordingname, $sessionid, null
         );
         $this->setobject($object, $id, $sessionid);
         return $object;
