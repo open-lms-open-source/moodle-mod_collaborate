@@ -66,12 +66,12 @@ foreach ($htmlels as $htmlel) {
 $localwsdl = $CFG->wwwroot.'/mod/collaborate/wsdl.xml';
 $generator = new \Wsdl2PhpGenerator\Generator();
 $generator->generate(
-    new \Wsdl2PhpGenerator\Config(array(
+    new \Wsdl2PhpGenerator\Config([
         'inputFile' => $localwsdl,
         'outputDir' => $outputdir,
         'namespaceName' => 'mod_collaborate\soap\generated',
         'classNames' => implode(',' , $soapclasses),
-    ))
+    ])
 );
 
 // Remove the autoloader, we don't need it!

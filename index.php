@@ -29,19 +29,19 @@ require_once(__DIR__.'/lib.php');
 
 $id = required_param('id', PARAM_INT); // Course.
 
-$course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 
 require_course_login($course);
 
-$params = array(
+$params = [
     'context' => context_course::instance($course->id),
-);
+];
 $event = course_module_instance_list_viewed::create($params);
 $event->add_record_snapshot('course', $course);
 $event->trigger();
 
 $strname = get_string('modulenameplural', 'mod_collaborate');
-$PAGE->set_url('/mod/collaborate/index.php', array('id' => $id));
+$PAGE->set_url('/mod/collaborate/index.php', ['id' => $id]);
 $PAGE->navbar->add($strname);
 $PAGE->set_title("$course->shortname: $strname");
 $PAGE->set_heading($course->fullname);
@@ -51,7 +51,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($strname);
 
 if (! $collaborates = get_all_instances_in_course('collaborate', $course)) {
-    notice(get_string('nocollaborates', 'collaborate'), new moodle_url('/course/view.php', array('id' => $course->id)));
+    notice(get_string('nocollaborates', 'collaborate'), new moodle_url('/course/view.php', ['id' => $course->id]));
 }
 
 $renderer = $PAGE->get_renderer('mod_collaborate');

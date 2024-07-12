@@ -19,6 +19,7 @@
  * @author    gthomas2
  * @copyright Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 
 namespace mod_collaborate\renderables;

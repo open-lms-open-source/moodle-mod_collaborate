@@ -17,7 +17,7 @@
 /**
  * Privacy Subsystem implementation for mod_collab.
  *
- * @package    mod_collab
+ * @package    mod_collaborate
  */
 
 namespace mod_collaborate\privacy;
@@ -43,7 +43,7 @@ class provider implements \core_privacy\local\metadata\provider,
      * @param   collection     $collection The initialised collection to add items to.
      * @return  collection     A listing of user data stored through this system.
      */
-    public static function get_metadata(collection $collection) : collection {
+    public static function get_metadata(collection $collection): collection {
         $collection->add_external_location_link('collaborate', [
             'userid' => 'privacy:metadata:collaborate:userid',
             'avatarurl' => 'privacy:metadata:collaborate:avatarurl',
@@ -59,7 +59,7 @@ class provider implements \core_privacy\local\metadata\provider,
         return $collection;
     }
 
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         return new contextlist();
     }
 

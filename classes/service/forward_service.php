@@ -91,11 +91,11 @@ class forward_service extends base_visit_service {
      * @throws \coding_exception
      */
     protected function log_viewed_event() {
-        $event = event\session_launched::create(array(
+        $event = event\session_launched::create([
             'objectid' => $this->cm->instance,
             'context' => $this->context,
             'other' => ['session' => local::get_sessionid_or_sessionuid($this->collaborate)],
-        ));
+        ]);
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot($this->cm->modname, $this->collaborate);
         $event->trigger();
@@ -186,10 +186,10 @@ class forward_service extends base_visit_service {
             $sessionid = $this->collaborate->$sessionidkey;
         }
 
-        $PAGE->set_url('/mod/collaborate/view.php', array(
+        $PAGE->set_url('/mod/collaborate/view.php', [
             'id' => $this->cm->id,
             'action'    => 'view',
-        ));
+        ]);
 
         $this->log_viewed_event();
         $forcelegacyapi = $sessionidkey === 'sessionid';

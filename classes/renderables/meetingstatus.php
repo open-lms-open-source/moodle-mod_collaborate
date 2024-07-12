@@ -19,6 +19,7 @@
  * @author    Guy Thomas
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 
 namespace mod_collaborate\renderables;
@@ -36,27 +37,27 @@ class meetingstatus implements \renderable, \templatable {
     public $meetingtimes;
 
     /**
-     * @var boolean|\stdClass
+     * @var bool|\stdClass
      */
     public $statusunrestored = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $statusjoinmeeting = false;
 
     /**
-     * @var boolean|\stdClass
+     * @var bool|\stdClass
      */
     public $statuswarnnoguest = false;
 
     /**
-     * @var boolean|\stdClass
+     * @var bool|\stdClass
      */
     public $statusmeetingtimepassed = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     public $statuslistgroups = false;
 

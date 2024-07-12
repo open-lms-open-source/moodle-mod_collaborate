@@ -47,69 +47,69 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Modify capabilities as needed and remove this comment.
-$capabilities = array(
-    'mod/collaborate:addinstance' => array(
+$capabilities = [
+    'mod/collaborate:addinstance' => [
         'riskbitmask' => RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        ),
+        ],
         'clonepermissionsfrom' => 'moodle/course:manageactivities',
-    ),
+    ],
 
-    'mod/collaborate:deleterecordings' => array(
+    'mod/collaborate:deleterecordings' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        ),
+        ],
         'clonepermissionsfrom' => 'moodle/course:manageactivities',
-    ),
+    ],
 
-    'mod/collaborate:view' => array(
+    'mod/collaborate:view' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_MODULE,
-        'legacy' => array(
+        'legacy' => [
             'guest' => CAP_ALLOW,
             'student' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        ),
-    ),
+        ],
+    ],
 
-    'mod/collaborate:moderate' => array(
+    'mod/collaborate:moderate' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
-        ),
-    ),
+        ],
+    ],
 
-    'mod/collaborate:participate' => array(
+    'mod/collaborate:participate' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'student' => CAP_ALLOW,
-        ),
-    ),
+        ],
+    ],
 
-    'mod/collaborate:downloadrecordings' => array(
+    'mod/collaborate:downloadrecordings' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW,
-        ),
+        ],
         'clonepermissionsfrom' => 'moodle/course:manageactivities',
-    ),
-);
+    ],
+];

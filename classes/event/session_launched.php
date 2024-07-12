@@ -76,7 +76,7 @@ class session_launched extends base {
      * @return \moodle_url
      */
     public function get_url() {
-        return new \moodle_url('/mod/collaborate/view.php', array('id' => $this->contextinstanceid, 'action' => 'forward'));
+        return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->contextinstanceid, 'action' => 'forward']);
     }
 
     /**

@@ -76,10 +76,10 @@ class view_service extends base_visit_service {
         global $PAGE;
         $PAGE->requires->js_call_amd('mod_collaborate/collaborate', 'init');
 
-        $event = course_module_viewed::create(array(
+        $event = course_module_viewed::create([
             'objectid' => $this->cm->instance,
             'context' => $this->context,
-        ));
+        ]);
         $event->add_record_snapshot('course', $this->course);
         $event->add_record_snapshot($this->cm->modname, $this->collaborate);
         $event->trigger();

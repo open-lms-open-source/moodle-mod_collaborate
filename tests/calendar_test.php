@@ -71,7 +71,7 @@ class calendar_test extends \advanced_testcase {
         local::update_calendar($collabactivity);
 
         // Capture the calendar event created.
-        $params = array('modulename' => 'collaborate', 'instance' => $collabactivity->id);
+        $params = ['modulename' => 'collaborate', 'instance' => $collabactivity->id];
         $eventid = $DB->get_field('event', 'id', $params);
         $calendarevent = \calendar_event::load($eventid);
 
@@ -168,7 +168,7 @@ class calendar_test extends \advanced_testcase {
         local::update_calendar($collabactivity);
 
         // Capture the calendar event created.
-        $params = array('modulename' => 'collaborate', 'instance' => $collabactivity->id);
+        $params = ['modulename' => 'collaborate', 'instance' => $collabactivity->id];
         $eventid = $DB->get_field('event', 'id', $params);
         $calendarevent = \calendar_event::load($eventid);
 

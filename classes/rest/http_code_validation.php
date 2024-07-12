@@ -20,6 +20,7 @@
  * @author    Guy Thomas
  * @copyright Copyright (c) 2017 Open LMS
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 
 namespace mod_collaborate\rest;

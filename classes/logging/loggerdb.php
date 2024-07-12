@@ -38,7 +38,7 @@ class loggerdb extends loggerbase {
      * @param array $context
      * @return null
      */
-    public function log($level, $message, array $context = array()) {
+    public function log($level, $message, array $context = []) {
         global $DB;
         $data = '';
         foreach ($context as $key => $val) {

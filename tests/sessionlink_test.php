@@ -19,6 +19,7 @@
  * @author    Guy Thomas
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 namespace mod_collaborate;
 use mod_collaborate\testables\sessionlink;
@@ -81,8 +82,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -112,8 +113,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -162,8 +163,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -213,8 +214,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -262,8 +263,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -319,8 +320,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -386,8 +387,8 @@ class sessionlink_test extends \advanced_testcase {
 
         $gen = $this->getDataGenerator();
         $course = $gen->create_course();
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $modgen = $gen->get_plugin_generator('mod_collaborate');
         $collabdata = (object) [
@@ -467,8 +468,8 @@ class sessionlink_test extends \advanced_testcase {
         $collaborate = $modgen->create_instance($collabdata);
         list($course, $cm) = get_course_and_cm_from_instance($collaborate, 'collaborate');
 
-        $group1 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group1'));
-        $group2 = $gen->create_group(array('courseid' => $course->id, 'name' => 'group2'));
+        $group1 = $gen->create_group(['courseid' => $course->id, 'name' => 'group1']);
+        $group2 = $gen->create_group(['courseid' => $course->id, 'name' => 'group2']);
 
         $linkscreated = sessionlink::apply_session_links($collaborate);
         $this->assertTrue($linkscreated);

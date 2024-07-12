@@ -19,6 +19,7 @@
  * @author    Jonathan Garcia Gomez <jonathan.garcia@openlms.net>
  * @copyright Copyright (c) 2016 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 namespace mod_collaborate;
 defined('MOODLE_INTERNAL') || die();
@@ -32,7 +33,7 @@ class mod_form_collab_time_zones_test extends \advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
 
-        $teacherrole = $DB->get_record('role', array('shortname' => 'teacher'));
+        $teacherrole = $DB->get_record('role', ['shortname' => 'teacher']);
         $course = $this->getDataGenerator()->create_course();
         $teacher = $this->getDataGenerator()->create_user();
         $this->getDataGenerator()->enrol_user($teacher->id, $course->id, $teacherrole->id);

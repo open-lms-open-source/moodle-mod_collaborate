@@ -19,6 +19,7 @@
  * @author    Guy Thomas
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 namespace mod_collaborate\controller;
 
@@ -72,8 +73,8 @@ class recordings_controller extends controller_abstract {
 
         $c  = required_param('c', PARAM_INT);  // Collaborate instance ID.
 
-        $this->collaborate = $DB->get_record('collaborate', array('id' => $c), '*', MUST_EXIST);
-        $this->course = $DB->get_record('course', array('id' => $this->collaborate->course), '*', MUST_EXIST);
+        $this->collaborate = $DB->get_record('collaborate', ['id' => $c], '*', MUST_EXIST);
+        $this->course = $DB->get_record('course', ['id' => $this->collaborate->course], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance(
                 'collaborate', $this->collaborate->id, $this->course->id, false, MUST_EXIST
         );
@@ -221,12 +222,12 @@ class recordings_controller extends controller_abstract {
         // Set up the page header.
         $PAGE->set_title(format_string($this->collaborate->name));
         $PAGE->set_heading(format_string($this->course->fullname));
-        $PAGE->set_url('/mod/collaborate/recordings.php', array(
+        $PAGE->set_url('/mod/collaborate/recordings.php', [
             'c' => $this->cm->id,
             'action' => 'delete_confirmation',
             'rid' => $recordingid,
             'rname' => $recordingname,
-        ));
+        ]);
 
         local::delete_recording($recordingid, $recordingname, $this->cm);
 

@@ -19,10 +19,11 @@
  * @author    Guy Thomas
  * @copyright Copyright (c) 2017 Open LMS
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package mod_collaborate
  */
 defined('MOODLE_INTERNAL') || die();
 
-$observers = array(
+$observers = [
     [
         'eventname' => '\core\event\group_deleted',
         'callback'  => '\mod_collaborate\event_handlers::group_deleted',
@@ -31,4 +32,4 @@ $observers = array(
         'eventname' => '\core\event\group_updated',
         'callback'  => '\mod_collaborate\event_handlers::group_updated',
     ],
-);
+];

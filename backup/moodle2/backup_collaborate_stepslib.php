@@ -39,18 +39,18 @@ class backup_collaborate_activity_structure_step extends backup_activity_structu
     protected function define_structure() {
 
         // Define the root element describing the collaborate instance.
-        $collaborate = new backup_nested_element('collaborate', array('id'), array(
+        $collaborate = new backup_nested_element('collaborate', ['id'], [
             'name', 'intro', 'introformat', 'grade', 'timestart', 'timeend',
             'duration', 'boundaryminutes', 'sessionid', 'completionlaunch',
             'guestaccessenabled', 'guestrole', 'guesturl', 'canpostmessages',
             'canannotatewhiteboard', 'cansharevideo', 'canshareaudio',
             'candownloadrecordings', 'largesessionenable',
-        ));
+        ]);
 
         // If we had more elements, we would build the tree here.
 
         // Define data sources.
-        $collaborate->set_source_table('collaborate', array('id' => backup::VAR_ACTIVITYID));
+        $collaborate->set_source_table('collaborate', ['id' => backup::VAR_ACTIVITYID]);
 
         // If we were referring to other tables, we would annotate
         // the relation with the element's annotate_ids() method.

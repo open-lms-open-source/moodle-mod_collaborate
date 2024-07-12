@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$tasks = array(
-    array(
+$tasks = [
+    [
         'classname' => '\mod_collaborate\task\cleanup_sessions_task',
         'blocking' => 0,
         'minute' => 'R',
@@ -33,5 +33,5 @@ $tasks = array(
         'day' => '*',
         'month' => '*',
         'dayofweek' => '*',
-    ),
-);
+    ],
+];

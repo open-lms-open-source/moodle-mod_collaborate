@@ -77,11 +77,11 @@ class view_controller extends controller_abstract {
 
         if ($id) {
             $cm         = get_coursemodule_from_id('collaborate', $id, 0, false, MUST_EXIST);
-            $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-            $collaborate  = $DB->get_record('collaborate', array('id' => $cm->instance), '*', MUST_EXIST);
+            $course     = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+            $collaborate  = $DB->get_record('collaborate', ['id' => $cm->instance], '*', MUST_EXIST);
         } else if ($n) {
-            $collaborate  = $DB->get_record('collaborate', array('id' => $n), '*', MUST_EXIST);
-            $course     = $DB->get_record('course', array('id' => $collaborate->course), '*', MUST_EXIST);
+            $collaborate  = $DB->get_record('collaborate', ['id' => $n], '*', MUST_EXIST);
+            $course     = $DB->get_record('course', ['id' => $collaborate->course], '*', MUST_EXIST);
             $cm         = get_coursemodule_from_instance('collaborate', $collaborate->id, $course->id, false, MUST_EXIST);
         } else {
             throw new \moodle_exception('error:invalidmoduleid', 'mod_collaborate');
@@ -113,10 +113,10 @@ class view_controller extends controller_abstract {
         // Set up the page header.
         $PAGE->set_title(format_string($this->collaborate->name));
         $PAGE->set_heading(format_string($this->course->fullname));
-        $PAGE->set_url('/mod/collaborate/view.php', array(
+        $PAGE->set_url('/mod/collaborate/view.php', [
             'id' => $PAGE->cm->id,
             'action'    => 'view',
-        ));
+        ]);
 
         // We get the content of the page before we output the header - otherwise set_module_viewed does not work.
         $view = $viewservice->handle_view();

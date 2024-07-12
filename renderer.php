@@ -62,8 +62,8 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $visualtime .= ' ' . calendar_time_representation($time);
         }
 
-        return html_writer::tag('time', $visualtime, array(
-            'datetime' => date('c', $time), )
+        return html_writer::tag('time', $visualtime, [
+            'datetime' => date('c', $time), ]
         );
     }
 
@@ -338,17 +338,17 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
         if ($usesections) {
             $strsectionname = get_string('sectionname', 'format_'.$course->format);
-            $table->head  = array ($strsectionname, $strname);
-            $table->align = array ('center', 'left');
+            $table->head  = [$strsectionname, $strname];
+            $table->align = ['center', 'left'];
         } else {
-            $table->head  = array ($strname);
-            $table->align = array ('left');
+            $table->head  = [$strname];
+            $table->align = ['left'];
         }
 
         $modinfo = get_fast_modinfo($course);
         $currentsection = '';
         foreach ($modinfo->instances['collaborate'] as $cm) {
-            $row = array();
+            $row = [];
             if ($usesections) {
                 if ($cm->sectionnum !== $currentsection) {
                     if ($cm->sectionnum) {
@@ -365,9 +365,9 @@ class mod_collaborate_renderer extends plugin_renderer_base {
                 }
             }
 
-            $class = $cm->visible ? null : array('class' => 'dimmed');
+            $class = $cm->visible ? null : ['class' => 'dimmed'];
 
-            $row[] = html_writer::link(new moodle_url('view.php', array('id' => $cm->id)),
+            $row[] = html_writer::link(new moodle_url('view.php', ['id' => $cm->id]),
                 $cm->get_formatted_name(), $class);
             $table->data[] = $row;
         }

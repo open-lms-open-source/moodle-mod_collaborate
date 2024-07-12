@@ -63,7 +63,7 @@ class migration_status {
      * @return bool
      * @throws \dml_exception
      */
-    public function show_migration_notification ($message) {
+    public function show_migration_notification($message) {
         $shown = false;
         // Check if REST migration is on course.
         $migrationstatus = $this->get_migration_status();

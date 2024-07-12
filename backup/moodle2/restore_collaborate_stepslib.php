@@ -38,7 +38,7 @@ class restore_collaborate_activity_structure_step extends restore_activity_struc
      */
     protected function define_structure() {
 
-        $paths = array();
+        $paths = [];
         $paths[] = new restore_path_element('collaborate', '/activity/collaborate');
 
         // Return the paths wrapped into standard activity structure.

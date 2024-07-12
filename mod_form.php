@@ -64,7 +64,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('collaboratename', 'collaborate'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('collaboratename', 'collaborate'), ['size' => '64']);
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
         } else {
@@ -109,12 +109,12 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->setDefault('duration', HOURSECS);
 
         $mform->addElement('advcheckbox', 'hideduration',
-            get_string('hideduration', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('hideduration', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('hideduration', get_config('collaborate', 'hideduration'));
 
         // Guest access enabled yes / no.
         $mform->addElement('checkbox', 'guestaccessenabled',
-                get_string('guestaccessenabled', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+                get_string('guestaccessenabled', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
 
         // Guest role.
         $options = [
@@ -137,27 +137,27 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform->addHelpButton('instructorsettings:allow', 'instructorsettings:allow', 'mod_collaborate');
 
         $mform->addElement('advcheckbox', 'canpostmessages',
-            get_string('canpostmessages', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('canpostmessages', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('canpostmessages', get_config('collaborate', 'canpostmessages'));
         $mform->disabledIf('canpostmessages', 'instructorsettingstoggle', 0);
 
         $mform->addElement('advcheckbox', 'canannotatewhiteboard',
-            get_string('canannotatewhiteboard', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('canannotatewhiteboard', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('canannotatewhiteboard', get_config('collaborate', 'canannotatewhiteboard'));
         $mform->disabledIf('canannotatewhiteboard', 'instructorsettingstoggle', 0);
 
         $mform->addElement('advcheckbox', 'cansharevideo',
-            get_string('cansharevideo', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('cansharevideo', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('cansharevideo', get_config('collaborate', 'cansharevideo'));
         $mform->disabledIf('cansharevideo', 'instructorsettingstoggle', 0);
 
         $mform->addElement('advcheckbox', 'canshareaudio',
-            get_string('canshareaudio', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('canshareaudio', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('canshareaudio', get_config('collaborate', 'canshareaudio'));
         $mform->disabledIf('canshareaudio', 'instructorsettingstoggle', 0);
 
         $mform->addElement('advcheckbox', 'candownloadrecordings',
-            get_string('candownloadrecordings', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('candownloadrecordings', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('candownloadrecordings', get_config('collaborate', 'candownloadrecordings'));
         $mform->disabledIf('candownloadrecordings', 'instructorsettingstoggle', 0);
 
@@ -167,7 +167,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
             'instructorsettings:largesession', 'mod_collaborate');
 
         $mform->addElement('advcheckbox', 'largesessionenable',
-            get_string('largesessionenable', 'mod_collaborate'), '', array('group' => 1), array(0, 1));
+            get_string('largesessionenable', 'mod_collaborate'), '', ['group' => 1], [0, 1]);
         $mform->setDefault('largesessionenable', 0);
         $mform->disabledIf('largesessionenable', 'instructorsettingstoggle', 0);
         $mform->disabledIf('largesessionenable', 'groupmode', 'neq', NOGROUPS);
@@ -205,7 +205,7 @@ class mod_collaborate_mod_form extends moodleform_mod {
         $mform =& $this->_form;
         $suffix = $this->get_suffix();
         $mform->addElement('checkbox', 'completionlaunch' . $suffix, '', get_string('completionlaunch', 'collaborate'));
-        return array('completionlaunch' . $suffix);
+        return ['completionlaunch' . $suffix];
     }
 
     /**
