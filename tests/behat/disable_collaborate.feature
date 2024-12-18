@@ -35,7 +35,7 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
       | teacher1 | C1     | editingteacher |
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
+    And I add a "collaborate" activity to course "Course 1" section "1" and I fill the form with:
       | Session name | Test collab  |
     Then I log out
 
@@ -45,7 +45,7 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
       | migrationstatus | <Status> | collaborate |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1"
+    And I add a "collaborate" activity to course "Course 1" section "1"
     Then I should see "Edition of collaborate sessions is disabled. Migration to REST in course"
     And "#page-mod-collaborate-mod section#region-main div[role='main']" "css_element" should not be visible
     Examples:
@@ -61,7 +61,7 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
       | migrationstatus | 5 | collaborate |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1"
+    And I add a "collaborate" activity to course "Course 1" section "1"
     And I set the field "Session name" to "Test collab"
     Then I should not see "Edition of collaborate sessions is disabled. Migration to REST in course"
     And "#page-mod-collaborate-mod section#region-main div[role='main']" "css_element" should be visible
