@@ -180,14 +180,3 @@
 .path-mod-collaborate .container {
     margin-bottom: 2em;
 }
-
-/** Icon color for the activities. **/
-li.activity.modtype_collaborate .activityiconcontainer,
-.modchoosercontainer div[data-internal="collaborate"] .modicon_collaborate {
-    background-color: #ce46b3;
-}
-
-li.activity.modtype_collaborate .activityiconcontainer img.activityicon,
-.modchoosercontainer div[data-internal="collaborate"] .modicon_collaborate img.activityicon {
-    filter: brightness(0) invert(1);
-}
