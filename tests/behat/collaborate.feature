@@ -325,7 +325,7 @@ Feature: Collaborate instances can be created by teachers and joined by students
       | candownloadrecordings    | 0 | collaborate |
     And I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    And I add a "Collaborate" to section "1" and I fill the form with:
+    And I add a "collaborate" activity to course "Course 1" section "1" and I fill the form with:
       | Session name | Test collab Instructor settings |
     And I click on "span[data-value='Test collab Instructor settings'] .stretched-link" "css_element"
     And I navigate to "Settings" in current page administration
