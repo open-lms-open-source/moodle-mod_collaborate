@@ -64,7 +64,7 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
     And I add a "collaborate" activity to course "Course 1" section "1"
     And I set the field "Session name" to "Test collab"
     Then I should not see "Edition of collaborate sessions is disabled. Migration to REST in course"
-    And "#page-mod-collaborate-mod section#region-main div[role='main']" "css_element" should be visible
+    And "#page-mod-collaborate-mod div#region-main div[role='main']" "css_element" should be visible
 
   @javascript
   Scenario Outline: Collaborate instance cannot be managed when REST migration is on course.
@@ -74,7 +74,7 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
     Then I am on "Course 1" course homepage
     And I click on ".modtype_collaborate a" "css_element"
     Then I should see "Management of collaborate sessions is disabled. Migration to REST in course"
-    And "#page-mod-collaborate-view section#region-main div[role='main'] div.container" "css_element" should not be visible
+    And "#page-mod-collaborate-view div#region-main div[role='main'] div.container" "css_element" should not be visible
     Examples:
       | Status |
       | 1      |
@@ -90,4 +90,4 @@ Feature: Collaborate instances cannot be created when REST migration is on cours
     Then I am on "Course 1" course homepage
     And I click on ".modtype_collaborate a" "css_element"
     Then I should not see "Management of collaborate sessions is disabled. Migration to REST in course"
-    And "#page-mod-collaborate-view section#region-main div[role='main'] div.container" "css_element" should be visible
+    And "#page-mod-collaborate-view div#region-main div[role='main'] div.container" "css_element" should be visible
