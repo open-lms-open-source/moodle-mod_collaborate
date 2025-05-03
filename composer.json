@@ -4,6 +4,6 @@
     },
     "require": {
         "psr/log": "~1.0",
-        "firebase/php-jwt":"3.0.0"
+        "firebase/php-jwt":"6.0.0"
     }
 }
