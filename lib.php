@@ -412,7 +412,7 @@ function collaborate_cm_info_view(cm_info $cm) {
     $hideduration = $DB->get_field('collaborate', 'hideduration', ['id' => $cm->instance]);
     if (empty($hideduration)) {
         $times = local::get_times($cm->instance);
-        $o = html_writer::tag('span', $renderer->meeting_times($times), ['class' => 'label label-info']);
+        $o = \core\output\html_writer::tag('span', $renderer->meeting_times($times), ['class' => 'label label-info']);
         $cm->set_after_link($o);
     }
 }

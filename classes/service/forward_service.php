@@ -117,7 +117,7 @@ class forward_service extends base_visit_service {
             return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
         }
 
-        $avatar = new \user_picture($this->user);
+        $avatar = new \core\output\user_picture($this->user);
         // This was modified so the user picture in Collaborate have an adequate size,
         // since Collaborate avatar container have 200px width.
         $avatar->size = 200;

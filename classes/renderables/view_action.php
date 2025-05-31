@@ -24,7 +24,7 @@
 
 namespace mod_collaborate\renderables;
 
-class view_action implements \renderable {
+class view_action implements \core\output\renderable {
 
     /**
      * @var \stdClass

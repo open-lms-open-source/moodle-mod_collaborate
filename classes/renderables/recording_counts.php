@@ -31,7 +31,7 @@ namespace mod_collaborate\renderables;
  * @copyright  Copyright (c) 2016 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class recording_counts implements \renderable {
+class recording_counts implements \core\output\renderable {
     /**
      * @var int
      */

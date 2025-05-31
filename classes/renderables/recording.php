@@ -23,7 +23,7 @@
  */
 namespace mod_collaborate\renderables;
 
-class recording implements \renderable {
+class recording implements \core\output\renderable {
 
     /**
      * @var string

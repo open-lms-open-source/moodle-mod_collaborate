@@ -24,7 +24,7 @@
 
 namespace mod_collaborate\renderables;
 
-class copyablelink implements \renderable {
+class copyablelink implements \core\output\renderable {
     public $links; // Open LMS patch INT-20934.
     public function __construct($label, $id, $groups) {
         $nogrouplabel = get_string('nogroup', 'mod_collaborate');

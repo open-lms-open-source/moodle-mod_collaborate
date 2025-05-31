@@ -27,7 +27,7 @@ namespace mod_collaborate\renderables;
 use mod_collaborate\local;
 use mod_collaborate\traits\exportable;
 
-class meetingstatus implements \renderable, \templatable {
+class meetingstatus implements \core\output\renderable, \core\output\templatable {
 
     use exportable;
 

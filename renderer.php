@@ -39,7 +39,7 @@ use mod_collaborate\local;
 use mod_collaborate\sessionlink;
 use mod_collaborate\migration_status;
 
-class mod_collaborate_renderer extends plugin_renderer_base {
+class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
 
     /**
      * HTML5 time element.
@@ -62,7 +62,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
             $visualtime .= ' ' . calendar_time_representation($time);
         }
 
-        return html_writer::tag('time', $visualtime, [
+        return \core\output\html_writer::tag('time', $visualtime, [
             'datetime' => date('c', $time), ]
         );
     }
@@ -333,7 +333,7 @@ class mod_collaborate_renderer extends plugin_renderer_base {
     public function render_instance_table($course, $strname) {
         $usesections = course_format_uses_sections($course->format);
 
-        $table = new html_table();
+        $table = new \core_table\output\html_table();
         $table->attributes['class'] = 'generaltable mod_index';
 
         if ($usesections) {
@@ -367,11 +367,11 @@ class mod_collaborate_renderer extends plugin_renderer_base {
 
             $class = $cm->visible ? null : ['class' => 'dimmed'];
 
-            $row[] = html_writer::link(new moodle_url('view.php', ['id' => $cm->id]),
+            $row[] = \core\output\html_writer::link(new moodle_url('view.php', ['id' => $cm->id]),
                 $cm->get_formatted_name(), $class);
             $table->data[] = $row;
         }
-        return html_writer::table($table);
+        return \core\output\html_writer::table($table);
     }
 
     /**
