@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $definitions = [
     'recordingcounts' => [
-        'mode' => cache_store::MODE_APPLICATION,
+        'mode' => \core_cache\store::MODE_APPLICATION,
         'simplekeys' => true,
     ],
 ];
