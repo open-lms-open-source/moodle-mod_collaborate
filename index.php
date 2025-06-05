@@ -51,7 +51,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($strname);
 
 if (! $collaborates = get_all_instances_in_course('collaborate', $course)) {
-    notice(get_string('nocollaborates', 'collaborate'), new moodle_url('/course/view.php', ['id' => $course->id]));
+    notice(get_string('nocollaborates', 'collaborate'), new \core\url('/course/view.php', ['id' => $course->id]));
 }
 
 $renderer = $PAGE->get_renderer('mod_collaborate');

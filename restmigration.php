@@ -26,14 +26,14 @@ require_once(__DIR__.'/../../config.php');
 
 require_login();
 $context = context_system::instance();
-$url = new moodle_url('/mod/collaborate/restmigration.php');
+$url = new \core\url('/mod/collaborate/restmigration.php');
 $PAGE->set_url($url);
 $PAGE->set_context($context);
 require_capability('moodle/site:config', $context);
 
 $confirm = optional_param('confirm', null, PARAM_BOOL);
 
-$settingurl = new \moodle_url('/admin/settings.php', ['section' => 'modsettingcollaborate']);
+$settingurl = new \core\url('/admin/settings.php', ['section' => 'modsettingcollaborate']);
 $migrationtask = \core\task\manager::get_adhoc_tasks('\\mod_collaborate\\task\\soap_migrator_task');
 if (!empty($migrationtask)) {
     redirect($settingurl);
@@ -47,7 +47,7 @@ if ($confirm !== null && confirm_sesskey()) {
 
 echo $OUTPUT->header();
 $confirmstring = get_string('soapmigrationconfirmation', 'mod_collaborate');
-$confirmurl = new \moodle_url($PAGE->url, ['confirm' => 1]);
-$cancelurl = new \moodle_url($PAGE->url);
+$confirmurl = new \core\url($PAGE->url, ['confirm' => 1]);
+$cancelurl = new \core\url($PAGE->url);
 echo $OUTPUT->confirm($confirmstring, $confirmurl, $cancelurl);
 echo $OUTPUT->footer();

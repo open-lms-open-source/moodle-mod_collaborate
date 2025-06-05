@@ -55,7 +55,7 @@ class recordings_controller extends controller_abstract {
 
         $this->set_properties();
 
-        $PAGE->set_url(new \moodle_url('/mod/collaborate/recordings.php', ['id' => $this->cm->id, 'action' => $this->action]));
+        $PAGE->set_url(new \core\url('/mod/collaborate/recordings.php', ['id' => $this->cm->id, 'action' => $this->action]));
 
         parent::init();
 
@@ -202,8 +202,8 @@ class recordings_controller extends controller_abstract {
 
         echo $OUTPUT->header();
         $continueparams = $baseparams + ['action' => 'delete_confirmation'];
-        $continueurl = new \moodle_url('/mod/collaborate/recordings.php', $continueparams);
-        $cancelurl = new \moodle_url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
+        $continueurl = new \core\url('/mod/collaborate/recordings.php', $continueparams);
+        $cancelurl = new \core\url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
 
         $confmsg = get_string('deleterecordingconfirmation', 'mod_collaborate', format_string($recordingname));
         echo $OUTPUT->confirm($confmsg, $continueurl, $cancelurl);
@@ -232,7 +232,7 @@ class recordings_controller extends controller_abstract {
         local::delete_recording($recordingid, $recordingname, $this->cm);
 
         $message = get_string('recordingdeleted', 'mod_collaborate', format_string($recordingname));
-        $redirecturl = new \moodle_url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
+        $redirecturl = new \core\url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
 
         redirect($redirecturl, $message, null, notification::NOTIFY_SUCCESS);
     }

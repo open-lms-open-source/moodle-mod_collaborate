@@ -63,10 +63,10 @@ class recording_downloaded extends base {
     /**
      * Get URL related to the action
      *
-     * @return \moodle_url
+     * @return \core\url
      */
     public function get_url() {
-        return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->contextinstanceid, 'action' => 'view']);
+        return new \core\url('/mod/collaborate/view.php', ['id' => $this->contextinstanceid, 'action' => 'view']);
     }
 
     /**

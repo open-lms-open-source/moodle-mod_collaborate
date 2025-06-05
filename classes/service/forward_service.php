@@ -114,7 +114,7 @@ class forward_service extends base_visit_service {
         } else if (has_capability('mod/collaborate:participate', $this->context)) {
             $role = 'participant';
         } else {
-            return new \moodle_url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
+            return new \core\url('/mod/collaborate/view.php', ['id' => $this->cm->id]);
         }
 
         $avatar = new \core\output\user_picture($this->user);

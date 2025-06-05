@@ -62,7 +62,7 @@ class meetingstatus implements \core\output\renderable, \core\output\templatable
     public $statuslistgroups = false;
 
     /**
-     * @var \moodle_url|null to be used for link or form action
+     * @var \core\url|null to be used for link or form action
      */
     public $fwdurl = null;
 
@@ -104,7 +104,7 @@ class meetingstatus implements \core\output\renderable, \core\output\templatable
         }
 
         $params = ['action' => 'forward', 'id' => $cm->id, 'sesskey' => sesskey()];
-        $this->fwdurl = new \moodle_url('view.php', $params);
+        $this->fwdurl = new \core\url('view.php', $params);
 
         $boundarytime = local::boundary_time() * 60;
 

@@ -81,7 +81,7 @@ class mod_collaborate_generator_test extends \advanced_testcase {
         $this->assertEquals('pa', $collab->guestrole);
 
         // Test valid guest URL.
-        $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
+        $url = new \core\url('/mod/collaborate/tests/fixtures/fakeurl.php');
         $collab = $generator->create_instance(['course' => $course->id, 'guestaccessenabled' => 1, 'guestrole' => 'pa',
             'guesturl' => $url->out(), ]);
         $this->assertEquals('', $collab->guesturl);

@@ -346,7 +346,7 @@ class fakeapi extends api {
     public function UpdateHtmlSessionAttendee(UpdateHtmlSessionAttendee $parameters) {
         $sessid = $parameters->getSessionId();
         $userid = $parameters->getHtmlAttendee()->getUserId();
-        $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php', ['id' => $sessid, 'userid' => $userid]);
+        $url = new \core\url('/mod/collaborate/tests/fixtures/fakeurl.php', ['id' => $sessid, 'userid' => $userid]);
 
         return new UrlResponse($url->out(false));
     }
@@ -374,7 +374,7 @@ class fakeapi extends api {
             $dti->add(new \DateInterval('PT1H'));
             $endtime = $dti->format(\DateTime::ATOM);
         }
-        $url = new \moodle_url('/mod/collaborate/tests/fixtures/fakeurl.php');
+        $url = new \core\url('/mod/collaborate/tests/fixtures/fakeurl.php');
         $param = urlencode($url->out(false));
         $url->param('original_media_url', $param);
         $durationms = (strtotime($endtime) - strtotime($starttime)) * 1000;

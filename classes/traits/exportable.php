@@ -43,7 +43,7 @@ trait exportable {
     }
 
     /**
-     * Makes an object suitable for exporting - converts objects to string where necessary - e.g. moodle_urls.
+     * Makes an object suitable for exporting - converts objects to string where necessary - e.g. \core\url.
      * @param array|object $object
      * @return mixed
      */
@@ -89,7 +89,7 @@ trait exportable {
                     $object->$key = $this->convert_object_for_export($val);
                     continue;
                 }
-                if ($val instanceof \moodle_url) {
+                if ($val instanceof \core\url) {
                     $object->$key = $this->convert_object_for_export($val);
                     continue;
                 }

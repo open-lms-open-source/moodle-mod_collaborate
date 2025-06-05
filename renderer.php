@@ -281,7 +281,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
                     'sessionlinkid' => $sessionlinkrow->id,
                 ];
 
-                $viewurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+                $viewurl = new \core\url('/mod/collaborate/recordings.php', $params);
 
                 $output .= '<li class="collab-recording-list-item">';
                 $output .= '<a alt="' . s($viewstr) . '" href="' . $viewurl . '" target="_blank">' .
@@ -295,7 +295,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
                         'url' => urlencode($recording->downloadurl), 'sesskey' => sesskey(),
                         'sessionlinkid' => $sessionlinkrow->id,
                     ];
-                    $dlurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+                    $dlurl = new \core\url('/mod/collaborate/recordings.php', $params);
                     $output .= '<a aria-label="' . s($downloadstr) . '" title="'.s($downloadstr).'"'.
                         '" class="mod-collaborate-download" href="' . $dlurl . '" target="_blank" role="button"></a>';
                 }
@@ -305,7 +305,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
                         'url' => urlencode($recording->viewurl), 'sesskey' => sesskey(),
                         'sessionlinkid' => $sessionlinkrow->id, 'action' => 'delete', 'rname' => $name,
                     ];
-                    $deleteurl = new moodle_url('/mod/collaborate/recordings.php', $params);
+                    $deleteurl = new \core\url('/mod/collaborate/recordings.php', $params);
 
                     $deldesc = s(get_string('deleterecording', 'mod_collaborate', $name));
                     $output .= '<a aria-label="' . $deldesc . '" title="' . $deldesc .
@@ -367,7 +367,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
 
             $class = $cm->visible ? null : ['class' => 'dimmed'];
 
-            $row[] = \core\output\html_writer::link(new moodle_url('view.php', ['id' => $cm->id]),
+            $row[] = \core\output\html_writer::link(new \core\url('view.php', ['id' => $cm->id]),
                 $cm->get_formatted_name(), $class);
             $table->data[] = $row;
         }
