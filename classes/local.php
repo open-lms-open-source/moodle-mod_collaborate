@@ -255,7 +255,7 @@ class local {
         } else if (soapapi::configured($config)) {
             return 'mod_collaborate\soap\api';
         }
-        throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
+        throw new \core\exception\moodle_exception('error:noconfiguration', 'mod_collaborate');
     }
 
     /**

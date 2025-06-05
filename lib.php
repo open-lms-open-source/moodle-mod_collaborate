@@ -277,7 +277,7 @@ function collaborate_scale_used_anywhere($scaleid) {
  * @param bool $reset reset grades in the gradebook
  *
  * @return void
- * @throws coding_exception
+ * @throws \core\exception\coding_exception
  */
 function collaborate_grade_item_update(stdClass $collaborate, $reset=false) {
     global $CFG;
@@ -385,7 +385,7 @@ function collaborate_get_file_info($browser, $areas, $course, $cm, $context, $fi
  * @param bool $forcedownload whether or not force download
  * @param array $options additional options affecting the file serving
  *
- * @throws moodle_exception
+ * @throws \core\exception\moodle_exception
  * @package mod_collaborate
  * @category files
  */
@@ -451,7 +451,7 @@ function collaborate_print_recent_mod_activity($activity, $courseid, $detail, $m
  * @param int $userid Optional user ID
  * @param int $groupid Optional group ID
  *
- * @throws dml_exception | moodle_exception
+ * @throws dml_exception | \core\exception\moodle_exception
  */
 function collaborate_get_recent_mod_activity(&$activities, &$index, $timestart, $courseid,
                                              $cmid, $userid=0, $groupid=0) {

@@ -93,7 +93,7 @@ class recording_counter {
      * @param recording[] $recordings
      * @param \moodle_database|null $db
      * @param \cache|null $cache
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function __construct($cm, $recordings, \moodle_database $db = null, \cache $cache = null) {
         global $DB;
@@ -132,7 +132,7 @@ class recording_counter {
 
     /**
      * @return recording_counts[]
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     protected function query_counts() {
         $recordingcounts = [];

@@ -70,7 +70,7 @@ class view_service extends base_visit_service {
      * Handle view action.
      *
      * @return string
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function handle_view() {
         global $PAGE;

@@ -38,5 +38,5 @@ if ($action == 'view') {
 } else if ($action == 'forward') {
     $vc->forward_action();
 } else {
-    throw new moodle_exception('error:unknownaction', 'mod_collaborate');
+    throw new \core\exception\moodle_exception('error:unknownaction', 'mod_collaborate');
 }

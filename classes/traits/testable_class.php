@@ -34,7 +34,7 @@ trait testable_class {
      * Magic method for getting protected / private properties.
      * @param string $name
      * @return mixed
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     // @codingStandardsIgnoreLine
     public function __get($name) {
@@ -50,7 +50,7 @@ trait testable_class {
      * @param string $name
      * @param mixed $value
      * @return mixed
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     // @codingStandardsIgnoreLine
     public function __set($name, $value) {

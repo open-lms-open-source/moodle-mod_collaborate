@@ -83,10 +83,10 @@ class fakeapi extends api {
      * @param null $input_headers
      * @param null $output_headers
      * @return mixed
-     * @throws \moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null): mixed {
-        throw new \coding_exception('Soap calls should not be made with the fake api.'.
+        throw new \core\exception\coding_exception('Soap calls should not be made with the fake api.'.
                 'Possibly you are trying to test a function that has not been implemented in the fake api.');
     }
 
@@ -213,14 +213,14 @@ class fakeapi extends api {
      *
      * @param object $objecta
      * @param object $objectb
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     protected function updateclass($objecta, $objectb) {
         if (!is_object($objecta)) {
-            throw new \coding_exception('$objecta must be an object', var_export($objecta, true));
+            throw new \core\exception\coding_exception('$objecta must be an object', var_export($objecta, true));
         }
         if (!is_object($objectb)) {
-            throw new \coding_exception('$objectb must be an object', var_export($objectb, true));
+            throw new \core\exception\coding_exception('$objectb must be an object', var_export($objectb, true));
         }
         $reflect = new \ReflectionClass($objecta);
         $aprops = $reflect->getProperties();

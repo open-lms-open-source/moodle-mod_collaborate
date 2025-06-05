@@ -65,8 +65,8 @@ class view_controller extends controller_abstract {
     /**
      * Set class properties from params.
      *
-     * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws \core\exception\coding_exception
+     * @throws \core\exception\moodle_exception
      */
     protected function set_properties() {
         global $DB;
@@ -84,7 +84,7 @@ class view_controller extends controller_abstract {
             $course     = $DB->get_record('course', ['id' => $collaborate->course], '*', MUST_EXIST);
             $cm         = get_coursemodule_from_instance('collaborate', $collaborate->id, $course->id, false, MUST_EXIST);
         } else {
-            throw new \moodle_exception('error:invalidmoduleid', 'mod_collaborate');
+            throw new \core\exception\moodle_exception('error:invalidmoduleid', 'mod_collaborate');
         }
 
         $this->cm = $cm;

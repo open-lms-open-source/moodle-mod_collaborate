@@ -35,7 +35,7 @@ interface api_session {
      * @param stdClass $sessionlink
      * @param stdClass|null $course
      * @return string sessionid
-     * @throws \moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public function create_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null);
 
@@ -55,8 +55,8 @@ interface api_session {
      * @param stdClass|null $course
      * @return int
      * @throws \dml_exception
-     * @throws \moodle_exception
-     * @throws coding_exception
+     * @throws \core\exception\moodle_exception
+     * @throws \core\exception\coding_exception
      */
     public function update_session(stdClass $collaborate, stdClass $sessionlink, stdClass $course = null);
 

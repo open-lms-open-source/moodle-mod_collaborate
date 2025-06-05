@@ -25,7 +25,7 @@ class collaborate_update_manager {
      * Migrates instanceids to sessionlinkids.
      * Note, we do not create the group sessions + links here as that could be too expensive time wise - we can do those
      * on the fly instead.
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function migrate_recording_info_instanceid_to_sessionlink() {
         global $DB;
@@ -70,13 +70,13 @@ class collaborate_update_manager {
                     ]);
                     $slrow = $DB->get_record('collaborate_sessionlink', ['sessionid' => $instance->sessionid]);
                     if (!$slrow) {
-                        throw new coding_exception('Failed to create session link record', var_export($slrow, true));
+                        throw new \core\exception\coding_exception('Failed to create session link record', var_export($slrow, true));
                     }
                 }
                 $row->sessionlinkid = $slrow->id;
                 $updateok = $DB->update_record('collaborate_recording_info', $row);
                 if (!$updateok) {
-                    throw new coding_exception('Failed link collaborate recording info (id = '.$row->id.') to ' .
+                    throw new \core\exception\coding_exception('Failed link collaborate recording info (id = '.$row->id.') to ' .
                         'session link record', var_export($slrow, true));
                 }
             }

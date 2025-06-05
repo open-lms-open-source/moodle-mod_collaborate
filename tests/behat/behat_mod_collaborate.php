@@ -140,7 +140,7 @@ class behat_mod_collaborate extends behat_base {
             if (!empty($row->group)) {
                 $groupid = groups_get_group_by_name($instancerow->course, $row->group);
                 if (empty($groupid)) {
-                    throw new coding_exception('Invalid group: '.$row->group);
+                    throw new \core\exception\coding_exception('Invalid group: '.$row->group);
                 }
                 $sessionlink = sessionlink::get_group_session_link($instancerow, $groupid);
                 $sessionid = $sessionlink->sessionid;

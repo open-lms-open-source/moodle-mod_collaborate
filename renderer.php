@@ -71,7 +71,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
      * Render meeting status.
      * @param meetingstatus $meetingstatus
      * @return bool|string
-     * @throws moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public function render_meetingstatus(meetingstatus $meetingstatus) {
         return $this->render_from_template('collaborate/meetingstatus', $meetingstatus->export_for_template($this));
@@ -148,7 +148,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
      * @param stdClass $collaborate
      * @param stdClass $cm
      * @return string
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function view_action($collaborate, $cm) {
         $actionview = new view_action($collaborate, $cm);
@@ -158,7 +158,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
     /**
      * @param view_action $viewaction
      * @return string
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function render_view_action(view_action $viewaction) {
         // Check if REST migration is on course.
@@ -212,7 +212,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
      * @param \cm_info $cm
      * @param boolean $canmoderate
      * @return string
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function render_recordings(stdClass $collaborate, array $sessionrecordings, $cm, $canmoderate) {
         global $DB;
@@ -255,7 +255,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
             }
 
             if (!$sessionlinkrow) {
-                throw new coding_exception('Unable to get session link row for sessionid '.$sessionid);
+                throw new \core\exception\coding_exception('Unable to get session link row for sessionid '.$sessionid);
             }
 
             // Only segregate by titles if there are multiple sessions per this instance.
@@ -418,7 +418,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
     /**
      * @param $url
      * @return bool|string
-     * @throws moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public function render_copyablelink(copyablelink $clink) {
         return $this->render_from_template('collaborate/copyablelink', $clink);
@@ -456,7 +456,7 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
      * @param  int $candownloadrecordings
      * @param  context $context
      * @return bool $showdownload
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function user_show_download_recordings(int $candownloadrecordings, $context): bool {
         $showdownload = false;

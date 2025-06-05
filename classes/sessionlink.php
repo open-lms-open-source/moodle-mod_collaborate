@@ -34,7 +34,7 @@ class sessionlink {
      * @param stdClass $sessionlink session link fields and values
      * @param stdClass $course moodle course
      * @return mixed
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     private static function ensure_session_link_soap(stdClass $collaborate, stdClass $sessionlink, stdClass $course) {
         global $DB;
@@ -47,7 +47,7 @@ class sessionlink {
         }
 
         if (!isset($sessionlink->collaborateid)) {
-            throw new \coding_exception('The collaborateid must be set for a sessionlink', var_export($sessionlink, true));
+            throw new \core\exception\coding_exception('The collaborateid must be set for a sessionlink', var_export($sessionlink, true));
         }
         if (!isset($sessionlink->groupid)) {
             $sessionlink->groupid = null;
@@ -136,7 +136,7 @@ class sessionlink {
      * @param stdClass $sessionlink session link fields and values
      * @param stdClass $course moodle course
      * @return mixed
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     private static function ensure_session_link($collaborate, $sessionlink, $course) {
         global $DB;
@@ -158,7 +158,7 @@ class sessionlink {
         $sessionlink->deletionattempted = 0;
 
         if (!isset($sessionlink->collaborateid)) {
-            throw new \coding_exception('The collaborateid must be set for a sessionlink', var_export($sessionlink, true));
+            throw new \core\exception\coding_exception('The collaborateid must be set for a sessionlink', var_export($sessionlink, true));
         }
 
         $existinglink = self::get_session_link_row($collaborate, $sessionlink);
@@ -198,7 +198,7 @@ class sessionlink {
     /**
      * @param \stdClass $collaborate db record
      * @param \int $groupid
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     public static function get_group_session_link($collaborate, $groupid) {
         global $DB;
@@ -297,7 +297,7 @@ class sessionlink {
      * Attempt to delete sessions.
      * @param array $sessionlinks hashed by session link id.
      * @return bool were all session deletions successful?
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      * @throws \dml_exception
      * @throws \dml_transaction_exception
      */
@@ -472,7 +472,7 @@ class sessionlink {
         }
         if (empty($gpsqlarr)) {
             // This should not happen.
-            throw new \coding_exception('group sql cannot be empty');
+            throw new \core\exception\coding_exception('group sql cannot be empty');
         }
         $gpsql = ' ('.implode(' OR ', $gpsqlarr).')';
 

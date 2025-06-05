@@ -38,7 +38,7 @@ class recent_activity_test extends \advanced_testcase {
     /**
      * Recent activity in Collab only works if standard log is enabled.
      *
-     * @throws \coding_exception | \ConfigException
+     * @throws \core\exception\coding_exception | \ConfigException
      */
     public function test_recent_activity_enable_disable() {
 

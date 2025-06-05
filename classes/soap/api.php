@@ -233,7 +233,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
      * @param null $input_headers
      * @param null $output_headers
      * @return mixed
-     * @throws \moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null): mixed {
 
@@ -468,7 +468,7 @@ class api extends generated\SASDefaultAdapter implements api_session, api_attend
             $msg .= 'Should have been either mod_collaborate\\soap\\generated\\SetHtmlSession OR ';
             $msg .= 'mod_collaborate\\soap\\generated\\UpdateHtmlSessionDetails. ';
             $msg .= 'Returned: '.var_export($htmlsession, true);
-            throw new coding_exception($msg);
+            throw new \core\exception\coding_exception($msg);
         }
 
         if (!$result) {

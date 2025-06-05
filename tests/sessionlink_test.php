@@ -311,7 +311,7 @@ class sessionlink_test extends \advanced_testcase {
 
     /**
      * Test active links for someone who can access all groups.
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function test_my_active_links_aag() {
         global $DB;
@@ -378,7 +378,7 @@ class sessionlink_test extends \advanced_testcase {
 
     /**
      * Test active links for someone who cant access all groups.
-     * @throws coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function test_my_active_links_no_aag() {
         global $DB;

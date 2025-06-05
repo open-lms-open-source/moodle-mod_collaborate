@@ -69,7 +69,7 @@ class soap_migrator_task_test extends \advanced_testcase {
         $task = new soap_migrator_task();
         $count = $DB->count_records('task_adhoc');
         $this->assertEquals(0, $count);
-        $this->expectException(\moodle_exception::class);
+        $this->expectException(\core\exception\moodle_exception::class);
         // Should fail because REST API has wrong credentials and the task should queue itself.
         $task->execute();
         $count = $DB->count_records('task_adhoc');
@@ -122,7 +122,7 @@ class soap_migrator_task_test extends \advanced_testcase {
         $this->assertEquals(0, $countrecords);
         $data = time(); // Random data.
         $task = new soap_migrator_task();
-        $this->expectException(\coding_exception::class);
+        $this->expectException(\core\exception\coding_exception::class);
         $this->expectExceptionMessage('non-traversable object');
         $task->handle_migration_records($data);
     }

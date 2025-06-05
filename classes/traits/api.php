@@ -55,11 +55,11 @@ trait api {
 
     /**
      * Make sure module is configured for API or throw error.
-     * @throws \moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public static function require_configured() {
         if (!self::configured() && !local::duringtesting()) {
-            throw new \moodle_exception('error:noconfiguration', 'mod_collaborate');
+            throw new \core\exception\moodle_exception('error:noconfiguration', 'mod_collaborate');
         }
     }
 
@@ -117,8 +117,8 @@ trait api {
      * @param string $errorlevel
      * @param string $debuginfo
      * @param array $errorarr
-     * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws \core\exception\coding_exception
+     * @throws \core\exception\moodle_exception
      */
     public function process_error($errorkey, $errorlevel, $debuginfo = '', array $errorarr = []) {
         global $COURSE;
@@ -172,6 +172,6 @@ trait api {
                 $debuginfo = var_export($errorarr, true);
             }
         }
-        throw new \moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
+        throw new \core\exception\moodle_exception($errorkey, 'mod_collaborate', $url, null, $debuginfo);
     }
 }

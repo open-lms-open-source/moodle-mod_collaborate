@@ -53,8 +53,8 @@ trait loggable {
      * @param string|null $a - value to go into errorcode string
      * @param string $debuginfo
      * @param array $errorarr
-     * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws \core\exception\coding_exception
+     * @throws \core\exception\moodle_exception
      */
     public function process_error($errorcode, $errorlevel, $a = null, $debuginfo = '', array $errorarr = []) {
         global $COURSE;
@@ -112,6 +112,6 @@ trait loggable {
                 $debuginfo = var_export($errorarr, true);
             }
         }
-        throw new \moodle_exception($errorcode, 'mod_collaborate', $url, null, $debuginfo);
+        throw new \core\exception\moodle_exception($errorcode, 'mod_collaborate', $url, null, $debuginfo);
     }
 }

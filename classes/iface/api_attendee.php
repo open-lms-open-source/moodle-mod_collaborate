@@ -36,7 +36,7 @@ interface api_attendee {
      * @param string $displayname
      * @param string $role
      *
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      *
      * @return $string url
      */

@@ -202,12 +202,12 @@ class soap_migrator_task extends adhoc_task {
     public function handle_migration_records($dataobjects) {
         global $DB;
         if (!is_array($dataobjects) && !($dataobjects instanceof Traversable)) {
-            throw new \coding_exception('records passed are non-traversable object');
+            throw new \core\exception\coding_exception('records passed are non-traversable object');
         }
 
         foreach ($dataobjects as $dataobject) {
             if (!is_array($dataobject) && !is_object($dataobject)) {
-                throw new \coding_exception('record passed is invalid');
+                throw new \core\exception\coding_exception('record passed is invalid');
             }
             $dataobject->sessionid = $dataobject->sId;
             $dataobject->sessionuid = $dataobject->sUid;
@@ -267,7 +267,7 @@ class soap_migrator_task extends adhoc_task {
 
                 $transaction->allow_commit();
                 $this->log_migration_entry('Collaborate session records have been updated.');
-            } catch (\moodle_exception $e) {
+            } catch (\core\exception\moodle_exception $e) {
                 throw new soap_migration_exception("An error occurred while updating collaborate session records: "
                     . $e->getMessage());
             }

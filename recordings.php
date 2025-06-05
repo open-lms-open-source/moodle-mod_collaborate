@@ -39,7 +39,7 @@ if ($action === 'download') {
 } else if ($action === 'delete_confirmation') {
     $vc->delete_confirmation_action();
 } else {
-    throw new moodle_exception('generalexceptionmessage', 'error', '', get_string('error:unknownaction', 'mod_collaborate'));
+    throw new \core\exception\moodle_exception('generalexceptionmessage', 'error', '', get_string('error:unknownaction', 'mod_collaborate'));
 }
 
 

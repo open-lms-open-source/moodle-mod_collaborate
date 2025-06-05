@@ -85,7 +85,7 @@ abstract class base_visit_service {
     /**
      * Ensure a session exists for moderators.
      *
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     protected function moderator_ensure_session() {
 

@@ -230,7 +230,7 @@ class api {
      * @param requestoptions $requestoptions
      * @param http_code_validation | null $validation
      * @return response
-     * @throws \moodle_exception
+     * @throws \core\exception\moodle_exception
      */
     public function rest_call($verb, $resourcepath, requestoptions $requestoptions,
                               http_code_validation $validation = null) {
@@ -242,12 +242,12 @@ class api {
         }
         if (($resourcepath != 'token') && !$this->is_usable()) {
             if (!self::configured()) {
-                throw new \moodle_exception('error:noconfiguration', 'collaborate');
+                throw new \core\exception\moodle_exception('error:noconfiguration', 'collaborate');
             } else {
                 if (!$this->test_service_reachable($this->config->restserver)) {
-                    throw new \moodle_exception('error:restapiunreachable', 'collaborate');
+                    throw new \core\exception\moodle_exception('error:restapiunreachable', 'collaborate');
                 } else {
-                    throw new \moodle_exception('error:restapiunusable', 'collaborate');
+                    throw new \core\exception\moodle_exception('error:restapiunusable', 'collaborate');
                 }
             }
         }
@@ -256,14 +256,14 @@ class api {
         if ($resourcepath != 'token') {
             // Because the deletion may be due to invalid credentials, we omit validation in the activity deletion.
             if (!self::configured()  && $verb != self::DELETE) {
-                throw new \moodle_exception('error:noconfiguration', 'collaborate');
+                throw new \core\exception\moodle_exception('error:noconfiguration', 'collaborate');
             }
             if ($this->accesstokenexpires < time()) {
                 // Token has expired, get a new one!
                 $this->set_accesstoken();
             }
             if (empty($this->accesstoken) || empty($this->accesstoken->access_token)) {
-                throw new \moodle_exception('error:restapifailedtocreateaccesstoken', 'collaborate');
+                throw new \core\exception\moodle_exception('error:restapifailedtocreateaccesstoken', 'collaborate');
             }
             $headers[] = 'Authorization: Bearer '.$this->accesstoken->access_token;
         }
@@ -477,7 +477,7 @@ class api {
         // doing it here (users get enrolled on the fly when they click "join").
 
         if (empty($collaborate->sessionuid)) {
-            throw new \coding_exception('Collaborate row must have a sessionuid property for an update to be possible');
+            throw new \core\exception\coding_exception('Collaborate row must have a sessionuid property for an update to be possible');
         }
 
         if (empty($collaborate->sessionid)) {
@@ -835,12 +835,12 @@ class api {
         if ($resourcepath != 'token') {
             if (!$this->is_usable()) {
                 if (!self::configured()) {
-                    throw new \moodle_exception('error:noconfiguration', 'collaborate');
+                    throw new \core\exception\moodle_exception('error:noconfiguration', 'collaborate');
                 } else {
                     if (!$this->test_service_reachable($this->config->restserver)) {
-                        throw new \moodle_exception('error:restapiunreachable', 'collaborate');
+                        throw new \core\exception\moodle_exception('error:restapiunreachable', 'collaborate');
                     } else {
-                        throw new \moodle_exception('error:restapiunusable', 'collaborate');
+                        throw new \core\exception\moodle_exception('error:restapiunusable', 'collaborate');
                     }
                 }
             }
@@ -849,14 +849,14 @@ class api {
         $headers = [];
         if ($resourcepath != 'token') {
             if (!self::configured()) {
-                throw new \moodle_exception('error:noconfiguration', 'collaborate');
+                throw new \core\exception\moodle_exception('error:noconfiguration', 'collaborate');
             }
             if ($this->accessmigrationtokenexpires < time()) {
                 // Token has expired, get a new one!
                 $this->set_migration_accesstoken();
             }
             if (empty($this->accessmigrationtoken) || empty($this->accessmigrationtoken->access_token)) {
-                throw new \moodle_exception('error:restapifailedtocreateaccesstoken', 'collaborate');
+                throw new \core\exception\moodle_exception('error:restapifailedtocreateaccesstoken', 'collaborate');
             }
             $headers[] = 'Authorization: Bearer '.$this->accessmigrationtoken->access_token;
         }

@@ -123,7 +123,7 @@ class testapi_service {
      * Handle testing api.
      *
      * @return string|array
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function handle_testapi() {
         if (AJAX_SCRIPT) {

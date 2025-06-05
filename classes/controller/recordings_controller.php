@@ -65,8 +65,8 @@ class recordings_controller extends controller_abstract {
     /**
      * Set class properties from params.
      *
-     * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws \core\exception\coding_exception
+     * @throws \core\exception\moodle_exception
      */
     protected function set_properties() {
         global $DB;
@@ -93,7 +93,7 @@ class recordings_controller extends controller_abstract {
     /**
      * View or download a recording based on params.
      * @param bool $view
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     private function view_or_download($view = true) {
         global $DB;
@@ -130,7 +130,7 @@ class recordings_controller extends controller_abstract {
                 $event = recording_downloaded::create($data);
             }
         } else {
-            throw new \coding_exception('Only action of type ' . $actioncheck . ' is allowed for type, action of type ' .
+            throw new \core\exception\coding_exception('Only action of type ' . $actioncheck . ' is allowed for type, action of type ' .
                 $action . ' provided');
         }
 

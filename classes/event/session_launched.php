@@ -82,14 +82,14 @@ class session_launched extends base {
     /**
      * Custom validation.
      *
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      * @return void
      */
     protected function validate_data() {
         parent::validate_data();
 
         if (empty($this->other['session'])) {
-            throw new \coding_exception('The \'session\' value must be set in other.');
+            throw new \core\exception\coding_exception('The \'session\' value must be set in other.');
         }
     }
 

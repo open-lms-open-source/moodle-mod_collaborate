@@ -58,8 +58,8 @@ class forward_service extends base_visit_service {
      * @param \stdClass $collaborate
      * @param \cm_info $cm
      * @param \stdClass $user;
-     * @throws \coding_exception
-     * @throws \require_login_exception
+     * @throws \core\exception\coding_exception
+     * @throws \core\exception\require_login_exception
      */
     public function __construct(\stdClass $collaborate,
                                 \cm_info $cm,
@@ -72,11 +72,11 @@ class forward_service extends base_visit_service {
 
     /**
      * Get url
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     public function handle_forward() {
         if (!confirm_sesskey()) {
-            throw new \moodle_exception('confirmsesskeybad', 'error');
+            throw new \core\exception\moodle_exception('confirmsesskeybad', 'error');
         }
 
         // If a collaborate session hasn't been created yet and we can moderate or add, then create it now.
@@ -88,7 +88,7 @@ class forward_service extends base_visit_service {
     /**
      * Log event.
      *
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     protected function log_viewed_event() {
         $event = event\session_launched::create([
@@ -106,7 +106,7 @@ class forward_service extends base_visit_service {
      * @param int $sessionid
      * @param bool $forcelegacyapi
      *
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      */
     protected function api_update_attendee($sessionid, $forcelegacyapi = false) {
         if (has_capability('mod/collaborate:moderate', $this->context)) {
@@ -145,7 +145,7 @@ class forward_service extends base_visit_service {
     /**
      * Get url for forwarding to meeting room.
      *
-     * @throws \coding_exception
+     * @throws \core\exception\coding_exception
      * @return bool|string
      */
     protected function forward() {
@@ -172,7 +172,7 @@ class forward_service extends base_visit_service {
                 if (isset($groups[$groupid])) {
                     $group = $groups[$groupid];
                 } else {
-                    throw new \coding_exception('Request for invalid group id', $groupid);
+                    throw new \core\exception\coding_exception('Request for invalid group id', $groupid);
                 }
             }
         }

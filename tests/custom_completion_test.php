@@ -27,9 +27,9 @@ namespace mod_collaborate;
 
 use advanced_testcase;
 use cm_info;
-use coding_exception;
+use \core\exception\coding_exception;
 use mod_collaborate\completion\custom_completion;
-use moodle_exception;
+use \core\exception\moodle_exception;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -51,10 +51,10 @@ class custom_completion_test extends advanced_testcase {
     public function get_state_provider(): array {
         return [
             'Undefined rule' => [
-                'somenonexistentrule', COMPLETION_DISABLED, false, null, coding_exception::class,
+                'somenonexistentrule', COMPLETION_DISABLED, false, null, \core\exception\coding_exception::class,
             ],
             'Rule not available' => [
-                'completionlaunch', COMPLETION_DISABLED, false, null, moodle_exception::class,
+                'completionlaunch', COMPLETION_DISABLED, false, null, \core\exception\moodle_exception::class,
             ],
             'Rule available, user has not launched a session' => [
                 'completionlaunch', COMPLETION_ENABLED, false, COMPLETION_INCOMPLETE, null,
