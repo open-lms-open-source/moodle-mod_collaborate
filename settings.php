@@ -59,21 +59,21 @@ if ($ADMIN->fulltree) {
     $settings->add($setting);
 
     $name = 'collaborate/server';
-    $title = new \lang_string('configserver', 'collaborate');
-    $description = new \lang_string('configserverdesc', 'collaborate');
+    $title = new \core\lang_string('configserver', 'collaborate');
+    $description = new \core\lang_string('configserverdesc', 'collaborate');
     $default = '';
     $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/username';
-    $title = new \lang_string('configusername', 'collaborate');
+    $title = new \core\lang_string('configusername', 'collaborate');
     $description = '';
     $default = '';
     $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/password';
-    $title = new \lang_string('configpassword', 'collaborate');
+    $title = new \core\lang_string('configpassword', 'collaborate');
     $description = '';
     $default = '';
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
@@ -92,21 +92,21 @@ if ($ADMIN->fulltree) {
     $settings->add($setting);
 
     $name = 'collaborate/restserver';
-    $title = new \lang_string('configrestserver', 'collaborate');
-    $description = new \lang_string('configrestserverdesc', 'collaborate');
+    $title = new \core\lang_string('configrestserver', 'collaborate');
+    $description = new \core\lang_string('configrestserverdesc', 'collaborate');
     $default = '';
     $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/restkey';
-    $title = new \lang_string('configrestkey', 'collaborate');
+    $title = new \core\lang_string('configrestkey', 'collaborate');
     $description = '';
     $default = '';
     $setting = new setting_trimmed_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
     $name = 'collaborate/restsecret';
-    $title = new \lang_string('configrestsecret', 'collaborate');
+    $title = new \core\lang_string('configrestsecret', 'collaborate');
     $description = '';
     $default = '';
     $setting = new \admin_setting_configpasswordunmask($name, $title, $description, $default);
@@ -182,8 +182,8 @@ if ($ADMIN->fulltree) {
     $settings->add($setting);
 
     $name = 'collaborate/wsdebug';
-    $title = new lang_string('configwsdebug', 'collaborate');
-    $description = new lang_string('configwsdebugdesc', 'collaborate');
+    $title = new \core\lang_string('configwsdebug', 'collaborate');
+    $description = new \core\lang_string('configwsdebugdesc', 'collaborate');
     $checked = '1';
     $unchecked = '0';
     $default = $unchecked;
@@ -192,8 +192,8 @@ if ($ADMIN->fulltree) {
 
     // Add log range.
     $name = 'collaborate/logrange';
-    $title = new \lang_string('configlogging', 'collaborate');
-    $description = new \lang_string('configloggingdesc', 'collaborate');
+    $title = new \core\lang_string('configlogging', 'collaborate');
+    $description = new \core\lang_string('configloggingdesc', 'collaborate');
     $options = [
         constants::RANGE_NONE => get_string('log:none', 'mod_collaborate'),
         constants::RANGE_LIGHT => get_string('log:light', 'mod_collaborate'),
@@ -209,60 +209,60 @@ if ($ADMIN->fulltree) {
     $unchecked = 0;
 
     $name = 'collaborate/instructorsettings';
-    $information = new lang_string('instructorsettings:toggledesc', 'collaborate');
+    $information = new \core\lang_string('instructorsettings:toggledesc', 'collaborate');
     $setting = new \admin_setting_heading($name, get_string('instructorsettings', 'mod_collaborate'), $information);
     $settings->add($setting);
 
     $name = 'collaborate/instructorsettingstoggle';
-    $title = new lang_string('instructorsettings:toggle', 'collaborate');
+    $title = new \core\lang_string('instructorsettings:toggle', 'collaborate');
     $default = $checked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
     $name = 'collaborate/defaultsettings';
-    $heading = new lang_string('instructorsettings:defaultsettings', 'mod_collaborate');
-    $information = new lang_string('instructorsettings:defaultsettingsdesc', 'collaborate');
+    $heading = new \core\lang_string('instructorsettings:defaultsettings', 'mod_collaborate');
+    $information = new \core\lang_string('instructorsettings:defaultsettingsdesc', 'collaborate');
     $setting = new \admin_setting_heading($name, $heading, $information);
     $settings->add($setting);
 
     $name = 'collaborate/canpostmessages';
-    $title = new lang_string('canpostmessages', 'collaborate');
-    $description = new lang_string('canpostmessages', 'collaborate');
+    $title = new \core\lang_string('canpostmessages', 'collaborate');
+    $description = new \core\lang_string('canpostmessages', 'collaborate');
     $default = $checked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
     $name = 'collaborate/candownloadrecordings';
-    $title = new lang_string('candownloadrecordings', 'collaborate');
-    $description = new lang_string('candownloadrecordings', 'collaborate');
+    $title = new \core\lang_string('candownloadrecordings', 'collaborate');
+    $description = new \core\lang_string('candownloadrecordings', 'collaborate');
     $default = $checked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
     $name = 'collaborate/canannotatewhiteboard';
-    $title = new lang_string('canannotatewhiteboard', 'collaborate');
-    $description = new lang_string('canannotatewhiteboard', 'collaborate');
+    $title = new \core\lang_string('canannotatewhiteboard', 'collaborate');
+    $description = new \core\lang_string('canannotatewhiteboard', 'collaborate');
     $default = $unchecked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
     $name = 'collaborate/cansharevideo';
-    $title = new lang_string('cansharevideo', 'collaborate');
-    $description = new lang_string('cansharevideo', 'collaborate');
+    $title = new \core\lang_string('cansharevideo', 'collaborate');
+    $description = new \core\lang_string('cansharevideo', 'collaborate');
     $default = $unchecked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
     $name = 'collaborate/canshareaudio';
-    $title = new lang_string('canshareaudio', 'collaborate');
-    $description = new lang_string('canshareaudio', 'collaborate');
+    $title = new \core\lang_string('canshareaudio', 'collaborate');
+    $description = new \core\lang_string('canshareaudio', 'collaborate');
     $default = $unchecked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
 
     $name = 'collaborate/hideduration';
-    $title = new lang_string('hideduration', 'collaborate');
-    $description = new lang_string('hideduration', 'collaborate');
+    $title = new \core\lang_string('hideduration', 'collaborate');
+    $description = new \core\lang_string('hideduration', 'collaborate');
     $default = $unchecked;
     $setting = new \admin_setting_configcheckbox($name, $title, '', $default, $checked, $unchecked);
     $settings->add($setting);
@@ -273,10 +273,10 @@ if ($ADMIN->fulltree) {
     $settings->add($setting);
 
     $name = 'collaborate/overridegroupmode';
-    $title = new lang_string('overridegroupmode', 'collaborate');
-    $description = new lang_string('overridegroupmode', 'collaborate');
+    $title = new \core\lang_string('overridegroupmode', 'collaborate');
+    $description = new \core\lang_string('overridegroupmode', 'collaborate');
     $default = $unchecked;
-    $description = new lang_string('overridegroupmodedesc', 'collaborate');
+    $description = new \core\lang_string('overridegroupmodedesc', 'collaborate');
     $setting = new \admin_setting_configcheckbox($name, $title, $description, $default, $checked, $unchecked);
     $settings->add($setting);
 
@@ -286,8 +286,8 @@ if ($ADMIN->fulltree) {
     $settings->add($setting);
 
     $name = 'collaborate/disablerecentactivity';
-    $title = new lang_string('disablerecentactivity:toggle', 'collaborate');
-    $description = new lang_string('disablerecentactivity:desc', 'collaborate');
+    $title = new \core\lang_string('disablerecentactivity:toggle', 'collaborate');
+    $description = new \core\lang_string('disablerecentactivity:desc', 'collaborate');
     $default = $unchecked;
     $setting = new \admin_setting_configcheckbox($name, $title, $description, $default, $checked, $unchecked);
     $settings->add($setting);
