@@ -36,9 +36,9 @@ class loggerdb extends loggerbase {
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
-    public function log($level, $message, array $context = []) {
+    public function log($level, $message, array $context = []): void {
         global $DB;
         $data = '';
         foreach ($context as $key => $val) {
@@ -52,6 +52,6 @@ class loggerdb extends loggerbase {
 
         $record = (object) ['time' => time(), 'level' => $level, 'message' => $message, 'data' => $data];
 
-        return $DB->insert_record('collaborate_log', $record);
+        $DB->insert_record('collaborate_log', $record);
     }
 }
