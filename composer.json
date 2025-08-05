@@ -3,7 +3,6 @@
         "wsdl2phpgenerator/wsdl2phpgenerator": "~3.1"
     },
     "require": {
-        "psr/log": "~1.0",
-        "firebase/php-jwt":"3.0.0"
+        "psr/log": "~1.0"
     }
 }
