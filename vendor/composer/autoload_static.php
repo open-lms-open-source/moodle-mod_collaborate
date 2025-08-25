@@ -24,10 +24,6 @@ class ComposerStaticInit49a901289792a64c8f04c81fbaa6a786
         array (
             'Psr\\Log\\' => 8,
         ),
-        'F' => 
-        array (
-            'Firebase\\JWT\\' => 13,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -48,10 +44,10 @@ class ComposerStaticInit49a901289792a64c8f04c81fbaa6a786
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Firebase\\JWT\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
-        ),
+    );
+
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -59,6 +55,7 @@ class ComposerStaticInit49a901289792a64c8f04c81fbaa6a786
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit49a901289792a64c8f04c81fbaa6a786::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit49a901289792a64c8f04c81fbaa6a786::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit49a901289792a64c8f04c81fbaa6a786::$classMap;
 
         }, null, ClassLoader::class);
     }

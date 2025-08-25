@@ -1,264 +1,267 @@
-[
-    {
-        "name": "symfony/polyfill-iconv",
-        "version": "v1.5.0",
-        "version_normalized": "1.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/polyfill-iconv.git",
-            "reference": "1ea0e08453819ecc7130e1fb0ee10862c2f33ed0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/1ea0e08453819ecc7130e1fb0ee10862c2f33ed0",
-            "reference": "1ea0e08453819ecc7130e1fb0ee10862c2f33ed0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "suggest": {
-            "ext-iconv": "For best performance"
-        },
-        "time": "2017-06-14T15:44:48+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Polyfill\\Iconv\\": ""
-            },
-            "files": [
-                "bootstrap.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
+{
+        "packages": [
+                {
+                        "name": "psr/log",
+                        "version": "1.1.4",
+                        "version_normalized": "1.1.4.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/php-fig/log.git",
+                                "reference": "d49695b909c3b7628b6289db5479a1c204601f11"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/php-fig/log/zipball/d49695b909c3b7628b6289db5479a1c204601f11",
+                                "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=5.3.0"
+                        },
+                        "time": "2021-05-03T11:20:27+00:00",
+                        "type": "library",
+                        "extra": {
+                                "branch-alias": {
+                                        "dev-master": "1.1.x-dev"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Psr\\Log\\": "Psr/Log/"
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "PHP-FIG",
+                                        "homepage": "https://www.php-fig.org/"
+                                }
+                        ],
+                        "description": "Common interface for logging libraries",
+                        "homepage": "https://github.com/php-fig/log",
+                        "keywords": [
+                                "log",
+                                "psr",
+                                "psr-3"
+                        ],
+                        "support": {
+                                "source": "https://github.com/php-fig/log/tree/1.1.4"
+                        },
+                        "install-path": "../psr/log"
+                },
+                {
+                        "name": "symfony/options-resolver",
+                        "version": "v3.4.47",
+                        "version_normalized": "3.4.47.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/symfony/options-resolver.git",
+                                "reference": "c7efc97a47b2ebaabc19d5b6c6b50f5c37c92744"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/c7efc97a47b2ebaabc19d5b6c6b50f5c37c92744",
+                                "reference": "c7efc97a47b2ebaabc19d5b6c6b50f5c37c92744",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": "^5.5.9|>=7.0.8"
+                        },
+                        "time": "2020-10-24T10:57:07+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Symfony\\Component\\OptionsResolver\\": ""
+                                },
+                                "exclude-from-classmap": [
+                                        "/Tests/"
+                                ]
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Fabien Potencier",
+                                        "email": "fabien@symfony.com"
+                                },
+                                {
+                                        "name": "Symfony Community",
+                                        "homepage": "https://symfony.com/contributors"
+                                }
+                        ],
+                        "description": "Symfony OptionsResolver Component",
+                        "homepage": "https://symfony.com",
+                        "keywords": [
+                                "config",
+                                "configuration",
+                                "options"
+                        ],
+                        "support": {
+                                "source": "https://github.com/symfony/options-resolver/tree/v3.4.47"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://symfony.com/sponsor",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/fabpot",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "../symfony/options-resolver"
+                },
+                {
+                        "name": "symfony/polyfill-iconv",
+                        "version": "v1.32.0",
+                        "version_normalized": "1.32.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/symfony/polyfill-iconv.git",
+                                "reference": "5f3b930437ae03ae5dff61269024d8ea1b3774aa"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/5f3b930437ae03ae5dff61269024d8ea1b3774aa",
+                                "reference": "5f3b930437ae03ae5dff61269024d8ea1b3774aa",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "php": ">=7.2"
+                        },
+                        "provide": {
+                                "ext-iconv": "*"
+                        },
+                        "suggest": {
+                                "ext-iconv": "For best performance"
+                        },
+                        "time": "2024-09-17T14:58:18+00:00",
+                        "type": "library",
+                        "extra": {
+                                "thanks": {
+                                        "url": "https://github.com/symfony/polyfill",
+                                        "name": "symfony/polyfill"
+                                }
+                        },
+                        "installation-source": "dist",
+                        "autoload": {
+                                "files": [
+                                        "bootstrap.php"
+                                ],
+                                "psr-4": {
+                                        "Symfony\\Polyfill\\Iconv\\": ""
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "authors": [
+                                {
+                                        "name": "Nicolas Grekas",
+                                        "email": "p@tchwork.com"
+                                },
+                                {
+                                        "name": "Symfony Community",
+                                        "homepage": "https://symfony.com/contributors"
+                                }
+                        ],
+                        "description": "Symfony polyfill for the Iconv extension",
+                        "homepage": "https://symfony.com",
+                        "keywords": [
+                                "compatibility",
+                                "iconv",
+                                "polyfill",
+                                "portable",
+                                "shim"
+                        ],
+                        "support": {
+                                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.32.0"
+                        },
+                        "funding": [
+                                {
+                                        "url": "https://symfony.com/sponsor",
+                                        "type": "custom"
+                                },
+                                {
+                                        "url": "https://github.com/fabpot",
+                                        "type": "github"
+                                },
+                                {
+                                        "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                                        "type": "tidelift"
+                                }
+                        ],
+                        "install-path": "../symfony/polyfill-iconv"
+                },
+                {
+                        "name": "wsdl2phpgenerator/wsdl2phpgenerator",
+                        "version": "3.4.0",
+                        "version_normalized": "3.4.0.0",
+                        "source": {
+                                "type": "git",
+                                "url": "https://github.com/wsdl2phpgenerator/wsdl2phpgenerator.git",
+                                "reference": "558c8a66677c117de2db5f5a4ae7f327c4b67f67"
+                        },
+                        "dist": {
+                                "type": "zip",
+                                "url": "https://api.github.com/repos/wsdl2phpgenerator/wsdl2phpgenerator/zipball/558c8a66677c117de2db5f5a4ae7f327c4b67f67",
+                                "reference": "558c8a66677c117de2db5f5a4ae7f327c4b67f67",
+                                "shasum": ""
+                        },
+                        "require": {
+                                "ext-soap": "*",
+                                "php": ">=5.3.0",
+                                "symfony/options-resolver": "~2.6|~3.0",
+                                "symfony/polyfill-iconv": "^1.2"
+                        },
+                        "require-dev": {
+                                "kasperg/phing-github": "0.2.*",
+                                "phing/phing": "~2.7",
+                                "php-vcr/php-vcr": "1.2 - 1.2.7|^1.3.1",
+                                "php-vcr/phpunit-testlistener-vcr": "~1.1.2",
+                                "phpunit/phpunit": "~4.4",
+                                "psr/log": "~1.0",
+                                "symfony/yaml": "~2.1"
+                        },
+                        "time": "2016-10-30T21:02:36+00:00",
+                        "type": "library",
+                        "installation-source": "dist",
+                        "autoload": {
+                                "psr-4": {
+                                        "Wsdl2PhpGenerator\\": [
+                                                "src/",
+                                                "lib/"
+                                        ]
+                                }
+                        },
+                        "notification-url": "https://packagist.org/downloads/",
+                        "license": [
+                                "MIT"
+                        ],
+                        "description": "Simple class library for generating php classes from a wsdl file.",
+                        "keywords": [
+                                "soap",
+                                "wsdl"
+                        ],
+                        "install-path": "../wsdl2phpgenerator/wsdl2phpgenerator"
+                }
         ],
-        "authors": [
-            {
-                "name": "Nicolas Grekas",
-                "email": "p@tchwork.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony polyfill for the Iconv extension",
-        "homepage": "https://symfony.com",
-        "keywords": [
-            "compatibility",
-            "iconv",
-            "polyfill",
-            "portable",
-            "shim"
+        "dev": true,
+        "dev-package-names": [
+                "symfony/options-resolver",
+                "symfony/polyfill-iconv",
+                "wsdl2phpgenerator/wsdl2phpgenerator"
         ]
-    },
-    {
-        "name": "symfony/options-resolver",
-        "version": "v3.3.10",
-        "version_normalized": "3.3.10.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/options-resolver.git",
-            "reference": "ee4e22978fe885b54ee5da8c7964f0a5301abfb6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/options-resolver/zipball/ee4e22978fe885b54ee5da8c7964f0a5301abfb6",
-            "reference": "ee4e22978fe885b54ee5da8c7964f0a5301abfb6",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.5.9|>=7.0.8"
-        },
-        "time": "2017-07-29T21:54:42+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.3-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Symfony\\Component\\OptionsResolver\\": ""
-            },
-            "exclude-from-classmap": [
-                "/Tests/"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "https://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony OptionsResolver Component",
-        "homepage": "https://symfony.com",
-        "keywords": [
-            "config",
-            "configuration",
-            "options"
-        ]
-    },
-    {
-        "name": "wsdl2phpgenerator/wsdl2phpgenerator",
-        "version": "3.4.0",
-        "version_normalized": "3.4.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/wsdl2phpgenerator/wsdl2phpgenerator.git",
-            "reference": "558c8a66677c117de2db5f5a4ae7f327c4b67f67"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/wsdl2phpgenerator/wsdl2phpgenerator/zipball/558c8a66677c117de2db5f5a4ae7f327c4b67f67",
-            "reference": "558c8a66677c117de2db5f5a4ae7f327c4b67f67",
-            "shasum": ""
-        },
-        "require": {
-            "ext-soap": "*",
-            "php": ">=5.3.0",
-            "symfony/options-resolver": "~2.6|~3.0",
-            "symfony/polyfill-iconv": "^1.2"
-        },
-        "require-dev": {
-            "kasperg/phing-github": "0.2.*",
-            "phing/phing": "~2.7",
-            "php-vcr/php-vcr": "1.2 - 1.2.7|^1.3.1",
-            "php-vcr/phpunit-testlistener-vcr": "~1.1.2",
-            "phpunit/phpunit": "~4.4",
-            "psr/log": "~1.0",
-            "symfony/yaml": "~2.1"
-        },
-        "time": "2016-10-30T21:02:36+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Wsdl2PhpGenerator\\": [
-                    "src/",
-                    "lib/"
-                ]
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Simple class library for generating php classes from a wsdl file.",
-        "keywords": [
-            "soap",
-            "wsdl"
-        ]
-    },
-    {
-        "name": "firebase/php-jwt",
-        "version": "v3.0.0",
-        "version_normalized": "3.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/firebase/php-jwt.git",
-            "reference": "fa8a06e96526eb7c0eeaa47e4f39be59d21f16e1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/fa8a06e96526eb7c0eeaa47e4f39be59d21f16e1",
-            "reference": "fa8a06e96526eb7c0eeaa47e4f39be59d21f16e1",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2015-07-22T18:31:08+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Firebase\\JWT\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Neuman Vong",
-                "email": "neuman+pear@twilio.com",
-                "role": "Developer"
-            },
-            {
-                "name": "Anant Narayanan",
-                "email": "anant@php.net",
-                "role": "Developer"
-            }
-        ],
-        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
-        "homepage": "https://github.com/firebase/php-jwt"
-    },
-    {
-        "name": "psr/log",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/php-fig/log.git",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-            "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "time": "2016-10-10T12:19:37+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Psr\\Log\\": "Psr/Log/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "PHP-FIG",
-                "homepage": "http://www.php-fig.org/"
-            }
-        ],
-        "description": "Common interface for logging libraries",
-        "homepage": "https://github.com/php-fig/log",
-        "keywords": [
-            "log",
-            "psr",
-            "psr-3"
-        ]
-    }
-]
+}
