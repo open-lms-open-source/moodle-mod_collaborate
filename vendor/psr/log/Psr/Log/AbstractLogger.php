@@ -19,7 +19,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function emergency($message, array $context = array())
+    public function emergency(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -35,7 +35,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function alert($message, array $context = array())
+    public function alert(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -50,7 +50,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function critical($message, array $context = array())
+    public function critical(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -64,7 +64,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function error($message, array $context = array())
+    public function error(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -80,7 +80,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function warning($message, array $context = array())
+    public function warning(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -93,7 +93,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function notice($message, array $context = array())
+    public function notice(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -108,7 +108,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function info($message, array $context = array())
+    public function info(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
@@ -121,7 +121,7 @@ abstract class AbstractLogger implements LoggerInterface
      *
      * @return void
      */
-    public function debug($message, array $context = array())
+    public function debug(string|\Stringable $message, array $context = array())
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
