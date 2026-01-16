@@ -48,7 +48,7 @@ class custom_completion_test extends advanced_testcase {
      *
      * @return array[]
      */
-    public function get_state_provider(): array {
+    public static function get_state_provider(): array {
         return [
             'Undefined rule' => [
                 'somenonexistentrule', COMPLETION_DISABLED, false, null, \core\exception\coding_exception::class,
@@ -175,7 +175,7 @@ class custom_completion_test extends advanced_testcase {
      *
      * @return array[]
      */
-    public function get_available_custom_rules_provider(): array {
+    public static function get_available_custom_rules_provider(): array {
         return [
             'Completion launch available' => [
                 COMPLETION_ENABLED, ['completionlaunch'],
