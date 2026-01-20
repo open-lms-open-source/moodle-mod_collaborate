@@ -1,0 +1,234 @@
+
+3.4.0 / 2016-10-30 
+==================
+
+ * Support for UTF8 strings on names (attributes, operations etc.)
+ * Classify elements with max occurs > 1 as arrays
+ * Detect more PHP keywords
+ * Support setting array values without offset
+ * Add support for Symfony 3.x
+
+3.3.1 / 2016-01-13 
+==================
+
+ * Fix array interfaces implementation
+
+3.3.0 / 2016-01-05
+==================
+
+ * Make array types implement ArrayAccess and Iterator
+ * Allow constructor overloading without loss of default WSDL URL
+ * Added support basic authentication.
+ * Speed up service operation filtration.
+
+3.2.1 / 2015-08-21 
+==================
+
+ * Fix detection of nullable members where minOccurs = 0
+ * Fixed issues with latest symfony throwing deprecated errors at runtime
+ * Allow setting nullable typed members to null using setter.
+ * Fix code generation when generate() is called multiple times
+ * Allow dots in wsdl function signatures
+
+3.2.0 / 2015-05-13 
+==================
+
+ * Eliminate infinite recursion caused by self-referencing type.
+ * Create a class abstract when defined in the wsdl.
+
+3.1.2 / 2015-01-15 
+==================
+
+ * Fix enum generation on operationName filter.
+
+3.1.1 / 2015-01-12 
+==================
+
+ * More flexible conversion of dateTime values to DateTime objects
+
+3.1.0 / 2015-01-02 
+==================
+
+ * Add new proxy setting to use with SoapClient and when loading XSDs
+ * Add ability to filter generated types by operation names.
+
+3.0.1 / 2014-12-12 
+==================
+
+ * Fix null pointer exception when combining DateTime attributes and constructorParamsDefaultToNull configuration.
+ * Fix simple type inheritance.
+
+3.0.0 / 2014-11-25 
+==================
+
+For a walkthrough of the changes in 3.x see https://github.com/wsdl2phpgenerator/wsdl2phpgenerator/blob/3.x/docs/whats-new-in-3.0.md.
+
+ * Convert to PSR4 file structure.
+ * Update Generator interface.
+ * Removed @todo and @deprecated elements.
+ * Enable SOAP_SINGLE_ELEMENT_ARRAYS by default.
+ * ArrayOf* types ganeration as separate classes
+ * Refactor SoapClient options
+ * Add support for custom SoapClient implementations.
+ * Replace noIncludes configuration option with generated autoloader.
+ * Remove the oneFile configuration options.
+ * Remove prefix and suffix configuration options.
+ * Remove noTypeConstructor config option.
+ * Remove createAccessors configuration option.
+ * Remove the classExists option.
+ * Type name generation respects namespace.
+ * Add type hinting for array parameters.
+ * Use DateTime parameters and return values for date properties.
+ * Fix identifier when loading dependencies.
+ * Remove @access
+ * Refactor the project to be used as a library only.
+ * Refactored Config and ConfigInterface to use an OptionsResolver instead of fixed string inputs.
+ * Members are protected if accessor methods are being used
+
+2.5.5 / 2014-11-17 
+==================
+
+ * Ensure that values are unique for Enums.
+ * Fix syntax error when service contains no types to map.
+
+2.5.4 / 2014-11-06 
+==================
+
+ * Fix phar file generation.
+ * Fix calling parent constructor in class inheritance. The first parameters should be parent ones.
+
+2.5.3 / 2014-11-03 
+==================
+
+ * Fix constructor creation for multilevel inheritance.
+
+2.5.2 / 2014-10-22 
+==================
+
+ * Fix making parent::__construct params with --constructorNull option
+ * Fix extracting information from XSD includes.
+
+2.5.1 / 2014-09-11 
+==================
+
+ * Fix autoloading in Phar files.
+
+2.5.0 / 2014-09-09 
+==================
+
+ * Support method chaining for setters when using the createAccessors option.
+ * Avoid empty comments and unnecessary new line after description.
+ * Fixed path to composer autoloader when included in a composer.json from another project.
+
+2.4.2 / 2014-08-13 
+==================
+
+ * Fixed default null value for subclass constructors when using the ConstructorParamsDefaultToNull configuration option.
+ * Disable PHP WSDL cache when extracting information.
+
+2.4.1 / 2014-07-24 
+==================
+
+ * Fix generation of accessors for nillable properties.
+
+2.4.0 / 2014-04-22 
+==================
+
+ * Add support for base types
+ * Updated PHPUnit to 4.0.x and other dependencies.
+ * Fix location of type nodes if no prefix is used.
+ * Fix description for CLI option to set default value of construction parameters to null.
+ * Fix kherge/Amend dependency
+ 
+2.3.0 / 2014-02-23
+==================
+
+ * Configuration is no longer a singleton
+ * Fix XML generation due to namespace backslash
+ * Fix missing namespace for PHP code generation
+ * Fix handling of operations named after PHP keywords.
+ * Fix element/type nameclash
+ * Fix operations initialization for services
+ * Use PHP VCR for mocking HTTP requests.
+ * Code and documentation cleanup
+
+2.2.2 / 2014-01-08 
+==================
+
+ * Convert <anyXML> to string
+
+2.2.1 / 2014-01-01 
+==================
+
+ * Fix imports with relative URLs.
+ * Fix generation of Enum constants which resolve to PHP primitives.
+ * Fix support for non-standard WSDL namespace aliases.
+ * Fix setting Symfony Console application version when releasing.
+
+2.2.0 / 2013-12-13 
+==================
+
+ * Support all minor releases of Symfony Console 2.*.
+
+2.1.0 / 2013-12-09 
+==================
+
+ * Create a GitHub release and upload resulting phar file when releasing.
+ * Replace Coveralls with Scrutinizer for code coverage.
+ * Use box to build phar file of project.
+ * Add Phing build script to automate releases.
+ * Refactor to use Symfony Console component instead of custom CLI code.
+
+2.0.3 / 2013-10-30 
+==================
+
+ * Remove leftover usage of gettext functions.
+
+2.0.2 / 2013-10-29 
+==================
+
+ * Correct way to use composer autoloader.
+
+2.0.1 / 2013-10-28
+==================
+
+ * Remove conf dir as it's not used anymore.
+
+2.0.0 / 2013-10-26
+==================
+
+ * Extract interfaces to define public API.
+ * Improve PSR2 compatability. Remove side effects/requires from classes.
+ * Remove translation support.
+ * Allow project to be packaged by Composer.
+ * PHP 5.5 support. Move entire library to namespaces to avoid conflict with new Generator class. Thanks to chriskl.
+
+Version 1.4.2
+==================
+
+ * The generator's soap client doesn't use caching any more
+
+Version 1.4.1
+==================
+
+ * Fixed issue #20 with the generation of classes not working if simple type is not enum or pattern. Thanks to rc.poison
+ * Fixed issue #21 with the classmap listing the classnames in the wrong way. Thanks to rc.poison
+ * Fixed issue #22 with the php classname being used as comparison instead of the real classname. Thanks to rc.poison
+
+Version 1.4
+==================
+
+ * Improved the phpdoc generated
+ * Added support for enumerated values issue #13
+ * Added support for generating phpdoc from the documentation blocks in the wsdl issue #18
+
+Version 1.3
+==================
+
+ * Adding the -v verbose flag
+ * Adding the -p prefix and -q suffix flags
+ * Improving code coverage with tests
+ * Improving tests
+ * Fixing fatal error in 5.3 version issue #14
+ * Added the autoload parameter to class_exists calls issue #10
+

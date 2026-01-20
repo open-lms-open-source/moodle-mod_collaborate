@@ -1,0 +1,33 @@
+{
+    "name": "wsdl2phpgenerator/wsdl2phpgenerator",
+    "description": "Simple class library for generating php classes from a wsdl file.",
+    "keywords": ["soap", "wsdl"],
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Wsdl2PhpGenerator\\": ["src/", "lib/"]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Wsdl2PhpGenerator\\Tests\\": ["tests/src"]
+        }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "ext-soap": "*",
+        "symfony/options-resolver": "~2.6|~3.0",
+        "symfony/polyfill-iconv": "^1.2"
+    },
+    "require-dev": {
+        "kasperg/phing-github": "0.2.*",
+        "phing/phing": "~2.7",
+        "php-vcr/php-vcr": "1.2 - 1.2.7|^1.3.1",
+        "php-vcr/phpunit-testlistener-vcr": "~1.1.2",
+        "phpunit/phpunit": "~4.4",
+        "psr/log": "~1.0",
+        "symfony/yaml": "~2.1"
+    }
+}

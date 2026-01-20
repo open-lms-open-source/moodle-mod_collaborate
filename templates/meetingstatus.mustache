@@ -1,0 +1,82 @@
+{{!
+  This file is part of Moodle - http://moodle.org/
+
+  Moodle is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Moodle is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+
+{{!
+  @copyright Blackboard Ltd 2017
+  @author Guy Thomas
+  @package mod_collaborate
+}}
+
+{{#usetabs}}
+<ul class="nav nav-tabs" role="tablist">
+    <li id="maintab" class="nav-item">
+        <a class="nav-link active" href="#maininfo" data-toggle="tab"
+           role="tab"> {{# str }} session, mod_collaborate {{/ str}} </a> </li>
+    <li id="guesttab" class="nav-item">
+        <a class="nav-link" href="#guestlinks" data-toggle="tab"
+           role="tab"> {{# str }} guestlinks, mod_collaborate {{/ str}} </a> </li>
+</ul>
+{{/usetabs}}
+
+<div class="tab-pane active" id="maininfo" role="tabpanel">
+    <div class = "path-mod-collaborate__meetingstatus">
+        {{#meetingtimes}}
+            <div class = "path-mod-collaborate__meetingstatus_times">{{{meetingtimes}}}</div>
+        {{/meetingtimes}}
+        {{#statusunrestored}}
+            {{> core/notification_info}}
+        {{/statusunrestored}}
+
+        {{#statuswarnnoguest}}
+            {{> core/notification_warning}}
+        {{/statuswarnnoguest}}
+
+        {{#statusmeetingtimepassed}}
+            <p>{{message}}</p>
+        {{/statusmeetingtimepassed}}
+
+        {{#statusjoinmeeting}}
+            {{^statuslistgroups}}
+                <a href="{{{fwdurl}}}" class="btn btn-success" target="_blank">
+                    {{# str }} meetingtimejoin, mod_collaborate {{/ str }}
+                </a>
+            {{/statuslistgroups}}
+            {{#statuslistgroups}}
+                <form target="_blank" class="mod-collaborate-group-selector" action="{{{fwdurl}}}" method="post">
+                    <select name="group" class="custom-select">
+                        {{#aag}}
+                        {{! People with access to all groups can choose to enter the session for the module instance
+                            instead of a group. }}
+                            <option type="radio" name="group" value="0">
+                                {{# str }} nogroup, enrol {{/ str }}
+                            </option>
+                        {{/aag}}
+                        {{#groups}}
+                            <option name="group" data-group-name="{{name}}" value="{{id}}">
+                                {{name}}
+                            </option>
+                        {{/groups}}
+                    </select>
+                    <div>
+                        <input class="btn btn-success" type="submit" value="{{# str }} meetingtimejoin, mod_collaborate {{/ str }}" />
+                    </div>
+                </form>
+            {{/statuslistgroups}}
+
+        {{/statusjoinmeeting}}
+    </div>
+</div>
