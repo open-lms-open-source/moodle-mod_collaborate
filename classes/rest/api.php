@@ -206,11 +206,11 @@ class api {
         $this->logger->info('Testing service availability: '.$serviceuri);
 
         $options = [
-            CURLOPT_TIMEOUT => 15,
-            CURLOPT_CONNECTTIMEOUT => 15,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_SSL_VERIFYPEER => 0,
+            'CURLOPT_TIMEOUT' => 15,
+            'CURLOPT_CONNECTTIMEOUT' => 15,
+            'CURLOPT_RETURNTRANSFER' => true,
+            'CURLOPT_SSL_VERIFYHOST' => 0,
+            'CURLOPT_SSL_VERIFYPEER' => 0,
         ];
         $curl = new \curl();
         $curl->setopt($options);
