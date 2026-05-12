@@ -27,9 +27,8 @@ namespace mod_collaborate;
 
 use advanced_testcase;
 use cm_info;
-use \core\exception\coding_exception;
 use mod_collaborate\completion\custom_completion;
-use \core\exception\moodle_exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -68,13 +67,13 @@ class custom_completion_test extends advanced_testcase {
     /**
      * Test for get_state().
      *
-     * @dataProvider get_state_provider
      * @param string $rule The custom completion rule.
      * @param int $available Whether this rule is available.
      * @param bool $launched
      * @param int|null $status Expected status.
      * @param string|null $exception Expected exception.
      */
+    #[DataProvider('get_state_provider')]
     public function test_get_state(string $rule, int $available, ?bool $launched, ?int $status, ?string $exception) {
         global $DB;
 
@@ -98,10 +97,10 @@ class custom_completion_test extends advanced_testcase {
         // Mock the return of the magic getter method when fetching the cm_info object's customdata and instance values.
         $mockcminfo->expects($this->any())
             ->method('__get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['customdata', $customdataval],
                 ['instance', 1],
-            ]));
+            ]);
 
         // Mock the DB calls.
         $DB = $this->createMock(get_class($DB));
@@ -189,10 +188,10 @@ class custom_completion_test extends advanced_testcase {
     /**
      * Test for get_available_custom_rules().
      *
-     * @dataProvider get_available_custom_rules_provider
      * @param int $status
      * @param array $expected
      */
+    #[DataProvider('get_available_custom_rules_provider')]
     public function test_get_available_custom_rules(int $status, array $expected) {
 
         $customdataval = [
