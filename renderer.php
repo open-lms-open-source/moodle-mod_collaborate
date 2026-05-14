@@ -27,8 +27,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/calendar/lib.php');
-
 use mod_collaborate\renderables\view_action;
 use mod_collaborate\renderables\copyablelink;
 use mod_collaborate\renderables\meetingstatus;
@@ -57,9 +55,11 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
         }
 
         if ($visualtime === null) {
-            // Note the calendar_day_representation function automatically adjusts to take into account user timezone.
-            $visualtime = calendar_day_representation($time);
-            $visualtime .= ' ' . calendar_time_representation($time);
+            $humandate = \core_calendar\output\humandate::create_from_timestamp(
+                timestamp: $time,
+                near: null,
+            );
+            $visualtime = $this->output->render($humandate);
         }
 
         return \core\output\html_writer::tag('time', $visualtime, [
@@ -85,9 +85,15 @@ class mod_collaborate_renderer extends \core\output\plugin_renderer_base {
      */
     public function meeting_times($times) {
 
-        $startday = calendar_day_representation($times->start);
-        $endday = calendar_day_representation($times->end);
-        $endtime = calendar_time_representation($times->end);
+        $shortformat = get_string('strftimedayshort');
+        $startday = userdate($times->start, $shortformat);
+        $endday = userdate($times->end, $shortformat);
+        $humanendtime = \core_calendar\output\humandate::create_from_timestamp(
+            timestamp: $times->end,
+            near: null,
+            timeonly: true,
+        );
+        $endtime = $this->output->render($humanendtime);
         $startyear = userdate($times->start, '%y');
         $endyear = userdate($times->end, '%y');
         $startmonth = userdate($times->start, '%m');
