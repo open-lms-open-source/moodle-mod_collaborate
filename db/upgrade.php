@@ -460,5 +460,18 @@ function xmldb_collaborate_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022020301, 'collaborate');
     }
 
+    if ($oldversion < 2026091501) {
+
+        // Changing precision of field name on table collaborate to (1333).
+        $table = new xmldb_table('collaborate');
+        $field = new xmldb_field('name', XMLDB_TYPE_CHAR, '1333', null, XMLDB_NOTNULL, null, null, 'course');
+
+        // Launch change of precision for field name.
+        $dbman->change_field_precision($table, $field);
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2026091501, 'collaborate');
+    }
+
     return true;
 }
